@@ -232,9 +232,6 @@ pip install pandas numpy scikit-learn matplotlib yfinance
 - [ ] Dashboard and documentation for full workflow
 
 ---
-
-**This Markdown is structured for reference alongside your repo, VS Code project, and GitHub WORKFLOW.md, supporting you through each daily task of the 90-day roadmap.**
-
 ---
 
 <!-- Reference Links -->
