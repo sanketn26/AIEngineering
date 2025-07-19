@@ -155,5 +155,3 @@ Develop, from first principles, a custom deep learning model that fuses Transfor
 | 90   | Final polish, repo public, write-up/share               |
 
 ---
-
-**This markdown is copy-paste ready for your own repo, project log, or as a checklist. Every step is beginner-friendly, with direct reference links throughout. If you get stuck, explore the “Official Tutorials” links for code samples and troubleshooting!**
