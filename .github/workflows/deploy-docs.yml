@@ -26,6 +26,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Node.js 24+
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Verify Node.js version
+        run: |
+          node --version
+          node -e 'const v = Number(process.versions.node.split(".")[0]); if (v < 24) { throw new Error(`Node ${process.versions.node} is below required 24`); }'
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
@@ -76,6 +89,16 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
+      - name: Setup Node.js 24+
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Verify Node.js version
+        run: |
+          node --version
+          node -e 'const v = Number(process.versions.node.split(".")[0]); if (v < 24) { throw new Error(`Node ${process.versions.node} is below required 24`); }'
+
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
