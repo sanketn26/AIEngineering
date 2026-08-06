@@ -48,13 +48,16 @@ jobs:
             SITE_URL="https://${OWNER}.github.io/${REPO}/"
           fi
           echo "Using site_url=$SITE_URL"
+          export SITE_URL
           # Portable in-place edit
           python - <<PY
+          import os
           from pathlib import Path
           p = Path("mkdocs.yml")
           text = p.read_text()
           import re
-          text = re.sub(r'(?m)^site_url:.*$', f'site_url: "{SITE_URL}"', text)
+          site_url = os.environ["SITE_URL"]
+          text = re.sub(r'(?m)^site_url:.*$', f'site_url: "{site_url}"', text)
           p.write_text(text)
           PY
 
