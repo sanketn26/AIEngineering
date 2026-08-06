@@ -1,32 +1,15 @@
-"""
-Example module for AI Engineering project.
-"""
+"""Small utilities used in early setup smoke tests."""
+
+from __future__ import annotations
 
 
 def hello_world(name: str = "World") -> str:
-    """
-    Return a greeting message.
-
-    Args:
-        name: The name to greet
-
-    Returns:
-        A greeting message
-    """
+    """Return a greeting message."""
     return f"Hello, {name}!"
 
 
 def add_numbers(a: int, b: int) -> int:
-    """
-    Add two numbers together.
-
-    Args:
-        a: First number
-        b: Second number
-
-    Returns:
-        The sum of a and b
-    """
+    """Add two numbers together."""
     return a + b
 
 

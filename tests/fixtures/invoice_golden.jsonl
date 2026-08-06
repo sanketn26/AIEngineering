@@ -1,0 +1,3 @@
+{"id": "inv-001", "input": "Acme Corp invoiced us $12,400", "expect": {"company": "Acme Corp", "amount": 12400}}
+{"id": "inv-002", "input": "Payment of 900 to Globex", "expect": {"company": "Globex", "amount": 900}}
+{"id": "inv-003", "input": "No company here", "expect": {"company": null, "amount": null}}

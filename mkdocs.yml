@@ -1,0 +1,128 @@
+site_name: AI Engineering Course
+site_description: From prompt engineering to production agents — restructured curriculum with specialization tracks
+site_author: AIEngineering contributors
+# Update to your GitHub Pages URL after first deploy, e.g.:
+# https://<user>.github.io/AIEngineering/
+site_url: ""
+repo_url: https://github.com/sanketnaik/AIEngineering
+repo_name: AIEngineering
+edit_uri: edit/main/docs/
+copyright: Copyright &copy; AIEngineering contributors — educational material
+
+docs_dir: docs
+site_dir: site
+
+theme:
+  name: material
+  language: en
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: indigo
+      accent: teal
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.tabs
+    - navigation.tabs.sticky
+    - navigation.sections
+    - navigation.expand
+    - navigation.top
+    - navigation.footer
+    - search.suggest
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.code.annotate
+    - content.tabs.link
+    - toc.follow
+  icon:
+    repo: fontawesome/brands/github
+
+plugins:
+  - search:
+      lang: en
+  - tags
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - tables
+  - toc:
+      permalink: true
+      toc_depth: 3
+  - pymdownx.details
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.tasklist:
+      custom_checkbox: true
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/sanketnaik/AIEngineering
+  generator: false
+
+nav:
+  - Home: index.md
+  - Getting started:
+      - Setup: getting-started/setup.md
+      - Learning paths: getting-started/paths.md
+  - Core modules:
+      - 01 Prompt engineering: core/01-prompt-engineering.md
+      - 02 Security & privacy: core/02-security-privacy.md
+      - 03 Advanced prompting: core/03-advanced-prompting.md
+      - 04 Testing & evals: core/04-testing-evals.md
+      - 05 Context engineering: core/05-context-engineering.md
+      - 06 Fine-tuning: core/06-fine-tuning.md
+      - 07 Tools & basic RAG: core/07-tools-and-rag.md
+      - 08 Model Context Protocol: core/08-model-context-protocol.md
+      - 09 Advanced RAG: core/09-advanced-rag.md
+      - 10 Cost optimization: core/10-cost-optimization.md
+      - 11 Single agents: core/11-single-agents.md
+      - 12 Multi-agent systems: core/12-multi-agents.md
+      - 13 Production: core/13-production.md
+      - 14 Compliance: core/14-compliance.md
+      - 15 Domain apps: core/15-domain-apps.md
+      - 16 Integration patterns: core/16-integration-patterns.md
+      - 17 Small & local models: core/17-small-models.md
+  - Tracks:
+      - Overview: tracks/index.md
+      - Stock recommender: tracks/stock-recommender.md
+      - Hybrid models: tracks/hybrid-models.md
+      - Agentic editor plugin: tracks/agentic-plugin.md
+  - Reference:
+      - Progression: reference/progression.md
+      - Exercises: reference/exercises.md
+      - Assessment rubrics: reference/assessment.md
+      - Troubleshooting: reference/troubleshooting.md
+      - Resources: reference/resources.md
+  - Review analysis: review/analysis.md
