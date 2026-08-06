@@ -26,16 +26,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v7
 
-      - name: Setup Node.js 24+
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-
-      - name: Verify Node.js version
-        run: |
-          node --version
-          node -e 'const v = Number(process.versions.node.split(".")[0]); if (v < 24) { throw new Error(`Node ${process.versions.node} is below required 24`); }'
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
@@ -49,7 +39,8 @@ jobs:
       - name: Install docs dependencies
         run: pip install -r requirements-docs.txt
 
-      - name: Configure site_url for project Pages
+      - name: Compute site_url for project Pages
+        id: site
         run: |
           REPO="${{ github.event.repository.name }}"
           OWNER="${{ github.repository_owner }}"
@@ -61,21 +52,10 @@ jobs:
             SITE_URL="https://${OWNER}.github.io/${REPO}/"
           fi
           echo "Using site_url=$SITE_URL"
-          export SITE_URL
-          # Portable in-place edit
-          python - <<PY
-          import os
-          from pathlib import Path
-          p = Path("mkdocs.yml")
-          text = p.read_text()
-          import re
-          site_url = os.environ["SITE_URL"]
-          text = re.sub(r'(?m)^site_url:.*$', f'site_url: "{site_url}"', text)
-          p.write_text(text)
-          PY
+          echo "site_url=$SITE_URL" >> "$GITHUB_OUTPUT"
 
       - name: Build MkDocs
-        run: mkdocs build --strict
+        run: mkdocs build --strict --site-url "${{ steps.site.outputs.site_url }}"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v5
@@ -89,16 +69,6 @@ jobs:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - name: Setup Node.js 24+
-        uses: actions/setup-node@v4
-        with:
-          node-version: "24"
-
-      - name: Verify Node.js version
-        run: |
-          node --version
-          node -e 'const v = Number(process.versions.node.split(".")[0]); if (v < 24) { throw new Error(`Node ${process.versions.node} is below required 24`); }'
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v5

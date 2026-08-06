@@ -26,6 +26,11 @@ black = "^23.0.0"
 isort = "^5.12.0"
 flake8 = "^6.0.0"
 
+[tool.poetry.group.docs.dependencies]
+mkdocs = ">=1.6.0"
+mkdocs-material = ">=9.5.0"
+pymdown-extensions = ">=10.0"
+
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["."]

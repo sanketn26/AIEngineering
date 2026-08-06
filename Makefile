@@ -26,6 +26,7 @@ setup:
 	@command -v python3.11 >/dev/null && poetry env use python3.11 || true
 	poetry install --with dev
 	@echo "✅ Core + dev installed. For stock/data track: poetry install -E track-data"
+	@echo "✅ For docs via Poetry: poetry install --with docs"
 	@echo "✅ Run tests: make test"
 
 install:
