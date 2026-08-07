@@ -323,6 +323,13 @@
     }
   }
 
+  function onClickOnce(el, handler) {
+    // Material instant navigation re-runs init(); avoid stacking listeners.
+    if (el._aiengBound) return;
+    el._aiengBound = true;
+    el.addEventListener("click", handler);
+  }
+
   function wireQuizzes(state) {
     var quizzes = document.querySelectorAll(".aieng-quiz[data-quiz-id]");
     quizzes.forEach(function (quiz) {
@@ -345,7 +352,12 @@
       }
 
       opts.forEach(function (btn) {
-        btn.addEventListener("click", function () {
+        onClickOnce(btn, function () {
+          if (btn.disabled) return;
+          // Re-load state so multi-tab / re-init stays consistent
+          state = load();
+          if (state.quizzes && state.quizzes[qid]) return;
+
           var correct = btn.getAttribute("data-correct") === "true";
           opts.forEach(function (b) {
             b.disabled = true;
@@ -368,7 +380,7 @@
                 "Not quite — read the explainer above and try the next quiz.";
               feedback.classList.add("bad");
             }
-            // partial credit once for attempting? No — only correct awards XP
+            // No XP on wrong; no retry this session (answers stay revealed).
             save(state);
             renderHud(state);
           }
@@ -392,7 +404,8 @@
         return;
       }
 
-      btn.addEventListener("click", function () {
+      onClickOnce(btn, function () {
+        state = load();
         if (state.modules[mid]) return;
         state.modules[mid] = { at: new Date().toISOString(), xp: xp };
         btn.disabled = true;
@@ -406,8 +419,11 @@
     // Small XP for revealing a "Think about it" answer once
     document.querySelectorAll(".aieng-think details[data-think-id]").forEach(function (det) {
       var tid = det.getAttribute("data-think-id");
+      if (det._aiengBound) return;
+      det._aiengBound = true;
       det.addEventListener("toggle", function () {
         if (!det.open) return;
+        state = load();
         if (state.thinks && state.thinks[tid]) return;
         state.thinks = state.thinks || {};
         state.thinks[tid] = new Date().toISOString();
