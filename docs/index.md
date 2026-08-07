@@ -87,11 +87,13 @@ All state is **browser `localStorage`**. No accounts, no analytics backend, work
 
 ## Specialization tracks (90 days)
 
+Full tutorials (architecture, code, traps, phase exits) — not bare phase tables. Start at [Tracks overview](tracks/index.md).
+
 | Track | Focus |
 |-------|--------|
-| [Stock recommender](tracks/stock-recommender.md) | Data → classical ML → Phi/SLM → RAG → compression → deploy |
+| [Stock recommender](tracks/stock-recommender.md) | Data → classical ML → SLM → RAG → compression → deploy |
 | [Hybrid models from scratch](tracks/hybrid-models.md) | Transformer + MLP fusion in PyTorch |
-| [Agentic editor plugin](tracks/agentic-plugin.md) | VS Code extension + local agents |
+| [Agentic editor plugin](tracks/agentic-plugin.md) | VS Code extension + agent backend + local models |
 
 ---
 

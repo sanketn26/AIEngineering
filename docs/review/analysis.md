@@ -171,7 +171,7 @@ src/ + tests/               # Learner sandbox (Poetry)
 | Multi-version docs (`mike`) | **Optional** | Add when yearly curriculum forks exist |
 | Full notebooks / GPU fine-tune CI | **Future** | Local GPU optional; not required for the site |
 | Server-side leaderboards / accounts | **Out of scope** | Static GitHub Pages; progress is `localStorage` |
-| Track pages at same tutorial depth as core | **Nice-to-have** | Tracks are coherent phase plans; core holds deep teaching |
+| Track pages at same tutorial depth as core | **Done** | All three tracks expanded with stories, mermaid, explainers, code, traps, exits |
 
 No open **must-fix** defects remain from the 2026-08-06 diagnostic.
 
