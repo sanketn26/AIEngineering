@@ -24,6 +24,12 @@
 
 ## Why this matters (CS engineer)
 
+<div class="aieng-story" markdown>
+
+Product wants “chat that researches the whole corpus.” Engineering puts a multi-tool agent behind `POST /chat` with a 120s gateway timeout. Users refresh when the spinner stalls; each refresh starts a **new** agent run. Load balancers kill connections mid-flight; workers keep spending tokens; support cannot find which run belongs to which ticket because `request_id` dies at the first hop. Fixing it is not “a faster model” — it is **jobs, queues, and progressive delivery**, the same patterns you use for video encoding or report generation.
+
+</div>
+
 A single FastAPI handler that calls the model synchronously is fine for demos and low-QPS chat. Real platforms have **spikes**, **multi-minute agents**, **tenant isolation**, and **data residency**. If you bolt an LLM into a monolith request thread, you will hit: worker exhaustion, double-billing on retries, cross-tenant data leaks in shared caches, and “the API felt down” when only the model was slow.
 
 Integration design is classic distributed systems — queues, backpressure, bulkheads, contracts — applied to stochastic generators and retrieval.
@@ -50,6 +56,16 @@ flowchart LR
 ```
 
 **Invariant:** long work is async; data class influences routing; service contracts are versioned; every hop carries `request_id`.
+
+<div class="aieng-intuition" markdown>
+
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** a long agent is a **background job**, not an HTTP handshake that hopes the client stays on the line. **`data_class` routes like security zones** (restricted traffic never crosses into the public-model lane). **Streaming** is progressive delivery of partial work — not a license to skip validation or durable state.
+
+<p class="kill"><strong>Kill this idea:</strong> “Just raise the load balancer timeout to 15 minutes.” Timeouts hide the wrong architecture; users refresh, mobiles drop, and you still lack job status, cancel, and idempotency.</p>
+
+</div>
 
 ---
 
@@ -188,6 +204,14 @@ def route_request(req: dict) -> str:
 - CMEK / customer-managed keys when contracts require them.  
 - Separate caches per tenant and class — no shared Redis keyspace for confidential completions.
 
+<div class="aieng-explainer" markdown>
+
+<p class="label">Explainer · security zones, not GPU shopping</p>
+
+Hybrid routing fails when teams treat it as “pick the cheapest GPU.” The first question is **where this payload is allowed to go**. A public cloud mini model can be smarter and still be the wrong endpoint for restricted data. Encode the allowed-destination table (Module 14) in the router; measure cost and latency *within* each allowed lane.
+
+</div>
+
 ---
 
 ## 4. Microservice boundaries
@@ -321,28 +345,28 @@ Load-test **p95 latency** and **error rate** separately for API tier vs worker t
 
 ## Quizzes
 
-<div class="aieng-quiz" data-quiz-id="16-q1" data-xp="25" data-success="Correct — long, variable work belongs on jobs/queues, not a single blocking HTTP request." data-fail="Re-read sync vs async: multi-minute agents need job UX or streaming+durability.">
+<div class="aieng-quiz" data-quiz-id="16-q1" data-xp="25" data-success="Correct — long, variable work belongs on jobs/queues, not a single blocking HTTP request." data-fail="Re-read sync vs async: multi-minute agents need job UX or streaming+durability." markdown>
 
 <p class="label">Quiz · 25 XP</p>
 <p class="quiz-prompt">A research agent may run 3–12 minutes with multiple tool calls. What integration pattern should the public API use by default?</p>
 <div class="quiz-options">
-<button class="quiz-opt" data-correct="false">One synchronous HTTP request with a 15-minute load balancer timeout</button>
-<button class="quiz-opt" data-correct="true">Async job (queue + status API), optionally with streaming progress</button>
-<button class="quiz-opt" data-correct="false">Only batch overnight — never allow interactive research</button>
-<button class="quiz-opt" data-correct="false">Call the model directly from the mobile app SDK</button>
+<button type="button" class="quiz-opt" data-correct="false">One synchronous HTTP request with a 15-minute load balancer timeout</button>
+<button type="button" class="quiz-opt" data-correct="true">Async job (queue + status API), optionally with streaming progress</button>
+<button type="button" class="quiz-opt" data-correct="false">Only batch overnight — never allow interactive research</button>
+<button type="button" class="quiz-opt" data-correct="false">Call the model directly from the mobile app SDK</button>
 </div>
 <div class="quiz-feedback"></div>
 </div>
 
-<div class="aieng-quiz" data-quiz-id="16-q2" data-xp="25" data-success="Yes — data class is a policy input that must be enforced server-side." data-fail="Hybrid routing is about where data is allowed to go, not only about GPU availability.">
+<div class="aieng-quiz" data-quiz-id="16-q2" data-xp="25" data-success="Yes — data class is a policy input that must be enforced server-side." data-fail="Hybrid routing is about where data is allowed to go, not only about GPU availability." markdown>
 
 <p class="label">Quiz · 25 XP</p>
 <p class="quiz-prompt">In a hybrid cloud design, what is the primary reason to route `restricted` data to an on-prem generator?</p>
 <div class="quiz-options">
-<button class="quiz-opt" data-correct="false">On-prem models always have higher accuracy</button>
-<button class="quiz-opt" data-correct="true">Policy and data residency/control requirements limit where that data may be sent</button>
-<button class="quiz-opt" data-correct="false">Queues do not work with cloud providers</button>
-<button class="quiz-opt" data-correct="false">SSE streaming is impossible in the cloud</button>
+<button type="button" class="quiz-opt" data-correct="false">On-prem models always have higher accuracy</button>
+<button type="button" class="quiz-opt" data-correct="true">Policy and data residency/control requirements limit where that data may be sent</button>
+<button type="button" class="quiz-opt" data-correct="false">Queues do not work with cloud providers</button>
+<button type="button" class="quiz-opt" data-correct="false">SSE streaming is impossible in the cloud</button>
 </div>
 <div class="quiz-feedback"></div>
 </div>
@@ -368,7 +392,7 @@ Load-test **p95 latency** and **error rate** separately for API tier vs worker t
 - [ ] Contracts between orchestrator, retriever, tools, and generator are versioned  
 - [ ] `request_id` survives gateway → worker → model client  
 
-<div class="aieng-complete" data-module-id="16" data-xp="100">
+<div class="aieng-complete" data-module-id="16" data-xp="100" markdown>
 <p>Mark Module 16 complete when you have either a job pipeline or hybrid router working end-to-end.</p>
 <button type="button">Complete module · +100 XP</button>
 </div>

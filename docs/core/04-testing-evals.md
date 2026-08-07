@@ -18,11 +18,15 @@
 
 ## Why this matters (CS engineer view)
 
-You would not merge a pricing service without tests. LLM features often ship on a demo: five happy-path chats, a thumbs-up from a stakeholder, and a prompt edited live in production. Two weeks later a “small wording tweak” drops extraction accuracy from 92% to 71% and no alarm fires—because nothing measured it.
+<div class="aieng-story" markdown>
 
-Evals are how you give stochastic systems **engineering feedback loops**. Unit tests protect the code *around* the model (parsers, redactors, routers, authz). Eval suites protect the **behavior** of prompts, models, and retrieval under a fixed dataset. Confusing the two produces brittle tests (`assert reply == "Hello, Jane!"`) or, worse, no tests at all.
+Sprint review looked green: five happy-path chats, a thumbs-up, a “tiny wording tweak” merged Friday. Two weeks later billing extraction accuracy sits at 71% instead of 92%. No CI red. No pager. Customers just filed tickets about wrong amounts. Nothing measured the model path—so the regression was silent until finance noticed.
 
-You will use this module whenever you change a prompt, swap `gpt-4o-mini` for Claude/Gemini/Ollama, add few-shots, or tune RAG. CI should fail closed on deterministic layers always, and on golden-set thresholds when you opt into model-in-the-loop pipelines (with cost controls).
+</div>
+
+You would not merge a pricing service without tests. LLM features still often ship on demos. Evals are how you give stochastic systems **engineering feedback loops**. Unit tests protect the code *around* the model (parsers, redactors, routers, authz). Eval suites protect the **behavior** of prompts, models, and retrieval under a fixed dataset. Confusing the two produces brittle tests (`assert reply == "Hello, Jane!"`) or, worse, no tests at all.
+
+You will use this module whenever you change a prompt, swap models, add few-shots, or tune RAG. CI should fail closed on deterministic layers always, and on golden-set thresholds when you opt into model-in-the-loop pipelines (with cost controls).
 
 ---
 
@@ -59,6 +63,18 @@ flowchart TB
 - Safety refusals or flags on fixed injects  
 - Retriever returns expected doc IDs  
 - Golden-set **aggregate** metrics above a threshold  
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** Unit tests are a flight checklist—same steps, pass/fail, no weather report needed. Model evals are closer to a **weather forecast**: you score many flights on a fixed route (golden set) and ask whether accuracy stayed above threshold. The golden set is your **regression suite** for behavior. LLM-as-judge is a **noisy senior reviewer**—useful on open-ended work, dangerous if you treat one score as ground truth without calibration.
+
+<div class="kill" markdown>
+
+**Kill this idea:** “If the demo chat looks good, the feature is tested.” → **Replace with:** Demos are anecdotes; ship only when deterministic layers are green and golden-set metrics clear an explicit bar.
+
+</div>
+</div>
 
 ---
 
@@ -160,11 +176,11 @@ def run_suite(rows, predict_fn, fields, input_key="input", expect_key="expect") 
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>
 
-**Question:** Your golden set has 12 near-duplicate “Acme billed $X” rows and zero adversarial cases. Accuracy is 100%. Are you safe to ship a prompt change?
+**Question:** Release train is in two hours. Dashboard shows 100% on the golden set—12 near-duplicate “Acme billed $X” rows, zero adversarial cases, zero nulls. PM is already writing “evals green” in the changelog. Are you safe to ship, or are you about to invent confidence?
 
 <details data-think-id="04-t1"><summary>Reveal a strong answer</summary>
 
-No. You measured **in-distribution redundancy**, not robustness. Coverage beats count: missing fields, multiple entities, currency variants, injection-like text, empty input, and the null cases (`inv-003` style). A tiny diverse set outperforms a large clone army. Add slices (tags per row: `edge`, `adversarial`, `pii`) and track per-slice accuracy so you do not average away a critical failure mode.
+Not safe—you measured **in-distribution redundancy**, not robustness. Coverage beats count: missing fields, multi-entity, currency variants, injection-like text, empty input, null cases (`inv-003` style). A tiny diverse set beats a clone army. Tag slices (`edge`, `adversarial`, `pii`) and track per-slice accuracy so one happy path cannot average away a critical miss.
 </details>
 </div>
 
@@ -192,6 +208,8 @@ Store **raw** model outputs (redacted) for replay when debugging—do not only s
 | Generation | Human rubrics, anchored LLM-as-judge |
 | Agents | Task success rate, tool error rate, steps-to-success |
 | Safety | Refuse rate on inject suite; false positive rate on clean traffic |
+
+Pick metrics like sensors on a dashboard, not trophies. Field exact match is a hard sensor; “sounds helpful” is not. If you cannot name what moves the number when the prompt breaks, the metric will not save you on the next silent regression.
 
 Ecosystem tools worth knowing:
 

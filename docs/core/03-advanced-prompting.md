@@ -18,7 +18,13 @@
 
 ## Why this matters (CS engineer view)
 
-Module 01 got you a clear contract. Advanced prompting is about **reliability under complexity**: multi-step policy decisions, messy extraction, and outputs that must plug into typed code. The trap is collecting techniques like trading cards—CoT for every call, fifteen few-shots, self-consistency on every FAQ—until latency and cost explode and quality barely moves.
+<div class="aieng-story" markdown>
+
+2:14am: on-call gets paged because the invoice pipeline can’t `json.loads` again. Yesterday’s “quality” PR stacked CoT + eight few-shots + self-consistency on every ticket “to be safe.” Latency 3×, bill spike, parse rate still broken—because nobody measured which lever fixed the real failure. Techniques without a decision map are load-bearing cargo cult.
+
+</div>
+
+Module 01 got you a clear contract. Advanced prompting is about **reliability under complexity**: multi-step policy decisions, messy extraction, and outputs that must plug into typed code. The trap is collecting techniques like trading cards until latency and cost explode and quality barely moves.
 
 Think in terms of **optimization under constraints**. Each technique is a lever with a cost:
 
@@ -60,6 +66,18 @@ flowchart TD
 
 **Important:** Prefer **explicit steps in your code** (classify → extract → decide) over a single omniscient prompt when you need logs, retries, and unit tests per stage.
 
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** Chain-of-Thought is **scratch paper**—extra desk space for multi-step work, not a IQ upgrade. Few-shots are **unit-test examples** the model can pattern-match: great when they match production, poisonous when stale. Structured output is your **type system**: schema in, validated object out. Self-consistency is re-running the exam and taking majority vote—powerful, expensive, rarely the first dial to turn.
+
+<div class="kill" markdown>
+
+**Kill this idea:** “More advanced techniques stacked together always mean higher quality.” → **Replace with:** Start from the failure mode; apply the cheapest lever that moves a measured metric; escalate only when quality plateaus.
+
+</div>
+</div>
+
 ---
 
 ## Core tutorial
@@ -91,11 +109,11 @@ If uncertain, say UNCERTAIN and list what is missing.
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>
 
-**Question:** Your extractor’s field accuracy is 94% without CoT and 93% with CoT, but token use is 2.4×. Product wants “more reasoning for quality.” What do you do?
+**Question:** Finance just got the monthly LLM invoice. Field accuracy is 94% without CoT and 93% with CoT, but token use is 2.4×. Product still wants “more reasoning for quality” on *every* extract so the deck looks smart. What do you do before the next PR merges?
 
 <details data-think-id="03-t1"><summary>Reveal a strong answer</summary>
 
-Refuse the free CoT add-on for this path. Show the numbers: quality flat/down, cost up. Offer alternatives that match real failures—e.g. two few-shot edge cases for multi-currency invoices, structured outputs, or a second-pass only on low-confidence parses. Reserve CoT for the subset of tickets that fail multi-hop policy checks, not the entire volume.
+Refuse the free CoT add-on for this path. Show the numbers: quality flat/down, cost up. Offer levers that match *real* failures—e.g. two few-shot edge cases for multi-currency invoices, structured outputs, or a second-pass only on low-confidence parses. Scratch paper helps multi-hop policy; it is expensive wallpaper on pure field copy.
 </details>
 </div>
 
@@ -126,6 +144,12 @@ Output:
 - **Dynamic few-shot:** embed a library of exemplars; retrieve top-k by similarity to the query (bridge to RAG in Module 07).  
 
 Security note (Module 02): exemplars are trusted content you wrote—do not pull “examples” from untrusted user traffic without review.
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Picture few-shots as fixtures.** If your test suite’s expected JSON still uses `amt` after the schema renamed the field to `amount`, CI teaches the wrong contract forever. Same here: every exemplar is a live fixture the model will imitate. Review them when the schema moves—or you will “pass” demos that fail production parsers.
+</div>
 
 ### 3. Role-based prompting
 

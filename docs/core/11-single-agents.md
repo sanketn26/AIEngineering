@@ -20,6 +20,12 @@ By the end of this module you will be able to:
 
 ## Why this matters (CS engineer)
 
+<div class="aieng-story" markdown>
+
+Overnight, a “helpful research agent” leaves 400+ tool calls in the logs: same `search` query, same empty hits, same optimistic retry. No `max_steps`. No repeated-signature abort. Morning bill: four figures for zero tickets closed. The demo had a charming persona and a ReAct prompt. It did not have a **state machine with circuit breakers**. Personality does not terminate; code does.
+
+</div>
+
 An “agent” is not a personality. It is a **state machine** that repeatedly:
 
 1. Chooses an action (tool call, final answer, ask user)  
@@ -59,6 +65,16 @@ stateDiagram-v2
 **State** is explicit: goal, scratchpad, steps[], done, result, abort_reason.  
 **Policy** is the LLM (or rules) that emits the next decision.  
 **Runtime** is your code: tools, limits, logging.
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** An agent is a **state machine**, not a personality. **`max_steps` is a circuit breaker.** Tool allowlists are **capability tokens** — if the name isn’t in the bag, it doesn’t run, no matter how confident the model sounds.
+
+<div class="kill" markdown>
+**Kill this idea:** “Agents are autonomous coworkers; give them freedom and they’ll figure it out.” → **Replace with:** Bounded decide→act→observe with allowlisted tools, hard stops, structured decisions, and replayable logs.
+</div>
+</div>
 
 ---
 
@@ -250,6 +266,12 @@ Rules:
 
 Reflection is a **product choice**, not a default for autocomplete.
 
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Reflection is another edge in the state machine**, not a vibe of self-awareness. Encode it as: if `validate(draft)` fails and `reflect_count < 2`, append critique notes and decide again; else final or abort. Without a counter, “think harder” becomes an infinite loop with better prose. Use it where mistakes are expensive; skip it for autocomplete and classification.
+</div>
+
 ---
 
 ### 7. Tool-use discipline
@@ -264,6 +286,17 @@ Reflection is a **product choice**, not a default for autocomplete.
 | No raw shell without sandbox | Security |
 
 Tool design tip: one tool = one clear side effect. Avoid god-tools like `do_anything(command: str)`.
+
+<div class="aieng-think" markdown>
+<p class="label">Think about it</p>
+
+**Question:** Product wants one tool: `run(cmd: str)` so the agent can “do anything in the shell.” You push back with capability tokens. What’s the concrete redesign?
+
+<details data-think-id="11-t3"><summary>Reveal a strong answer</summary>
+
+Split into **narrow allowlisted tools**: `read_file(path)`, `list_dir(path)`, `run_tests()`, `git_diff()` — each with path sandboxes, timeouts, and arg schemas. Destructive ones (`git_push`, `rm`) require human approval. The model still *proposes* which tool; the runtime maps names to fixed code paths. One free-form shell string is an unbounded capability token and an injection magnet.
+</details>
+</div>
 
 ---
 

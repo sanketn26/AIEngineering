@@ -55,21 +55,20 @@ Progression tables: [Capability summary](reference/progression.md) · [Exercises
 
 ---
 
-## What “tutorial depth” means here
+## How these modules teach (intuition first)
 
-Each core module aims for:
+Each core module is built so you **picture the system**, not only collect vocabulary:
 
-| Element | Purpose |
-|---------|---------|
-| **Why it matters** | Map the topic to systems you already build |
-| **Mental model** | Diagram of control/data flow before code |
-| **Explainers** | Short deep-dives that stop skim-mode |
-| **Think about it** | Questions with revealable strong answers (+XP) |
-| **Quizzes** | Interactive checks (+XP, local only) |
-| **Lab** | Small shippable artifact |
-| **OSS materials** | Curated repos/guides, not link dumps |
+| Element | What it does in your head |
+|---------|---------------------------|
+| **Incident story** | A Friday-afternoon failure you can feel before the theory |
+| **Mental model** | Mermaid of control/data flow — where trust and tokens move |
+| **Intuition lock** | One sticky analogy + the wrong idea to kill |
+| **Explainers** | Why a design exists, not only how to type it |
+| **Think about it** | Tradeoffs that force re-reading, not skim checkboxes |
+| **Lab + quizzes** | Prove the picture works under a small shippable artifact |
 
-If a page still feels like a checklist, open an issue — that is a bug in the curriculum.
+If a page still feels like a bland outline, that is a curriculum bug — open an issue.
 
 ---
 

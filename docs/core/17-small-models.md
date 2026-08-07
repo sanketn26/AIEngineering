@@ -23,6 +23,12 @@
 
 ## Why this matters (CS engineer)
 
+<div class="aieng-story" markdown>
+
+Finance wants the bill cut in half. The team swaps every call to a 3B local model “because demos looked fine,” then quantizes to Q4 so it fits on a laptop GPU. Schema pass rate on extraction collapses; the agent loops on tools the small model cannot plan. There was no **router**, no **re-eval after quant**, and no list of tasks the SLM actually owns. Cost went down; product quality and on-call load went up. The fix was not “bigger GPU” — it was **specialist first-line + escalate**, with golden metrics as the gate.
+
+</div>
+
 Not every token deserves a frontier model. Most production traffic is **classification, routing, extraction, short rewrite, and retrieval-augmented lookup** — tasks where a 1B–8B-class model (or a “mini” cloud tier) wins on **latency, cost, and privacy**. CS engineers who only know one cloud chat API overspend and cannot ship air-gapped or VPC-only features.
 
 SLMs are not “GPT but free.” They need **tighter prompts, harder validation, and honest evals**. Treated as specialized workers in a system (Module 10 routing, Module 16 hybrid), they are one of the highest-ROI tools in the stack.
@@ -46,6 +52,16 @@ flowchart TB
 ```
 
 **Invariant:** choose SLMs by **task fit + measured quality**, not by parameter count marketing. Always re-run golden evals after quantization or prompt changes.
+
+<div class="aieng-intuition" markdown>
+
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** an SLM is a **specialist intern** — fast, cheap, great on narrow labeled work. A frontier model is the **senior consultant** you escalate to when confidence is low or the schema fails. **Quantize, then re-eval** (never blog-trust a quant level). Privacy and latency economics often justify local run even when raw accuracy is a few points lower *on the right tasks*.
+
+<p class="kill"><strong>Kill this idea:</strong> “Small model = free GPT for everything.” Parameter count marketing is not a task assignment. Without routing and validation you only move failure modes around.</p>
+
+</div>
 
 ---
 
@@ -236,6 +252,19 @@ def generate_with_escalation(task: str, prompt: str, llms: dict, router: ModelRo
 
 Combine with Module 10 cost ledgers: track **% escalated**, **$ per successful task**, and **quality** on a fixed eval set.
 
+<div class="aieng-think" markdown>
+
+<p class="label">Think · economics of escalate</p>
+
+<details data-think-id="17-t2">
+<summary>Reveal: when is a high escalate rate still a win?</summary>
+
+If 80% of traffic is cheap classify/extract that the SLM nails, and 20% escalates to a large model, blended **$ per success** and p95 can still beat “always large” — *if* escalate catches the hard tail and quality SLOs hold. A 90% escalate rate means your router is noise: fix task labels, prompts, or stop pretending the SLM owns the hard path. Track escalate rate next to quality; optimize the blend, not “never call large.”
+
+</details>
+
+</div>
+
 ---
 
 ## 6. SLMs + RAG + privacy
@@ -281,28 +310,28 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 
 ## Quizzes
 
-<div class="aieng-quiz" data-quiz-id="17-q1" data-xp="25" data-success="Correct — quantization is a product decision only after evals say quality is still good enough." data-fail="Re-read §4: always re-run golden evals after quantizing.">
+<div class="aieng-quiz" data-quiz-id="17-q1" data-xp="25" data-success="Correct — quantization is a product decision only after evals say quality is still good enough." data-fail="Re-read §4: always re-run golden evals after quantizing." markdown>
 
 <p class="label">Quiz · 25 XP</p>
 <p class="quiz-prompt">You quantize a local model from Q8 to Q4 to fit on a laptop. What must you do before shipping?</p>
 <div class="quiz-options">
-<button class="quiz-opt" data-correct="false">Nothing — Q4 is always within 1% of FP16</button>
-<button class="quiz-opt" data-correct="true">Re-run your golden evals and compare task metrics / failure modes</button>
-<button class="quiz-opt" data-correct="false">Only check that `ollama run` still prints text</button>
-<button class="quiz-opt" data-correct="false">Switch temperature to 1.0 to compensate</button>
+<button type="button" class="quiz-opt" data-correct="false">Nothing — Q4 is always within 1% of FP16</button>
+<button type="button" class="quiz-opt" data-correct="true">Re-run your golden evals and compare task metrics / failure modes</button>
+<button type="button" class="quiz-opt" data-correct="false">Only check that `ollama run` still prints text</button>
+<button type="button" class="quiz-opt" data-correct="false">Switch temperature to 1.0 to compensate</button>
 </div>
 <div class="quiz-feedback"></div>
 </div>
 
-<div class="aieng-quiz" data-quiz-id="17-q2" data-xp="25" data-success="Yes — routers + validation capture most of the economic win." data-fail="Think about Module 10/17: SLMs as first-line workers with escalate paths.">
+<div class="aieng-quiz" data-quiz-id="17-q2" data-xp="25" data-success="Yes — routers + validation capture most of the economic win." data-fail="Think about Module 10/17: SLMs as first-line workers with escalate paths." markdown>
 
 <p class="label">Quiz · 25 XP</p>
 <p class="quiz-prompt">What is usually the highest-ROI production pattern involving SLMs?</p>
 <div class="quiz-options">
-<button class="quiz-opt" data-correct="false">Replace every frontier call with the smallest model that fits in RAM, no validation</button>
-<button class="quiz-opt" data-correct="true">Use an SLM (or rules) to handle easy tasks and route hard/low-confidence work to a larger model</button>
-<button class="quiz-opt" data-correct="false">Always ensemble five SLMs and majority vote</button>
-<button class="quiz-opt" data-correct="false">Fine-tune a 70B model on a laptop overnight</button>
+<button type="button" class="quiz-opt" data-correct="false">Replace every frontier call with the smallest model that fits in RAM, no validation</button>
+<button type="button" class="quiz-opt" data-correct="true">Use an SLM (or rules) to handle easy tasks and route hard/low-confidence work to a larger model</button>
+<button type="button" class="quiz-opt" data-correct="false">Always ensemble five SLMs and majority vote</button>
+<button type="button" class="quiz-opt" data-correct="false">Fine-tune a 70B model on a laptop overnight</button>
 </div>
 <div class="quiz-feedback"></div>
 </div>
@@ -329,7 +358,7 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 - [ ] Quantization (if any) is eval-backed  
 - [ ] A router or validation-escalation path exists on paper or in code  
 
-<div class="aieng-complete" data-module-id="17" data-xp="100">
+<div class="aieng-complete" data-module-id="17" data-xp="100" markdown>
 <p>Mark Module 17 complete when local run + eval comparison are done honestly.</p>
 <button type="button">Complete module · +100 XP</button>
 </div>

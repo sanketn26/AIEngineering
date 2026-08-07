@@ -14,6 +14,12 @@
 
 ## Why this matters (CS engineer view)
 
+<div class="aieng-story" markdown>
+
+An engineer installs a trendy “productivity” MCP server from a public list so the IDE can “see the monorepo.” Auto-approve is on. By lunch the server has listed `~/.ssh`, read `.env`, and shipped a “helpful summary” of secrets into the model context — which then lands in provider logs. Nobody wrote malware. They plugged a **peripheral** into the host without a permission model. Same day, a PM deck still labels MCP as “our multi-model load balancer.” Two confusions, one theme: **protocol without host policy is just a nicer way to run untrusted code**.
+
+</div>
+
 Without a shared protocol, every IDE, desktop agent, and chat host reinvents connectors: one filesystem integration for App A, another for App B, N auth stories, N schema formats. That is classic **N×M integration** cost.
 
 **Model Context Protocol (MCP)** standardizes how hosts discover and call external capabilities so the same server can plug into multiple clients. For engineers, MCP is an **interface and process boundary** problem — closer to LSP (Language Server Protocol) for tools/context than to “another prompt trick.”
@@ -61,6 +67,16 @@ Capability types:
 | **Tools** | Invocable actions (often side-effecting) | `search_issues`, `run_query` |
 | **Resources** | Readable data blobs / URIs | `file://...`, `db://schema` |
 | **Prompts** | Reusable prompt templates from the server | “Commit message helper” template |
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** MCP is **USB-C for AI tools**. The **host** is the OS (auth, UX, “do you allow this device?”). **Servers** are peripherals (filesystem, tickets, git). The cable standard does not make a malicious USB stick safe — and it is **not** a multi-model load balancer.
+
+<div class="kill" markdown>
+**Kill this idea:** “MCP routes GPT vs Claude” or “MCP means the model is secure.” → **Replace with:** MCP standardizes how hosts discover/call tools, resources, and prompts; **policy and routing stay in the host** (and in Modules 10/13/16).
+</div>
+</div>
 
 ## Core tutorial
 
@@ -174,6 +190,12 @@ CI:          no filesystem write; tickets read-only; no browser tools
 prod agent:  internal MCP only; all writes require approval ticket id
 ```
 
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**USB-C is not antivirus.** The protocol only standardizes discovery and invocation. Every dangerous capability still needs host-side gates: which servers may connect, which tools auto-run, which args are scrubbed, which results enter the model window. A “read-only” resource that returns a 2MB paste of production dumps is still a context and privacy incident. Scope the **peripheral**, then scope what the **OS** allows it to do.
+</div>
+
 <div class="aieng-quiz" data-quiz-id="08-q1" data-xp="25" data-success="Correct — MCP is the tools/resources/prompts protocol, not model routing." data-fail="MCP ≠ load balancer. Routing lives in production/integration modules." markdown>
 <p class="label">Quiz · +25 XP</p>
 <p class="quiz-prompt">Which definition of MCP is correct?</p>
@@ -200,6 +222,17 @@ def route_model(task: str) -> str:
 ```
 
 See Module 10 (cost) and 13 (production) for caching, fallbacks, and load shedding. MCP may *supply tools* to whichever model you routed to; it does not *perform* the routing.
+
+<div class="aieng-think" markdown>
+<p class="label">Think about it</p>
+
+**Question:** A slide says “we use MCP to pick Claude for hard tasks and a mini model for extract.” What two systems did they conflate, and where does each live?
+
+<details data-think-id="08-t3"><summary>Reveal a strong answer</summary>
+
+They conflated **tool/context plumbing** (MCP: host ↔ servers for tools/resources/prompts) with **model routing** (which model id receives the sampling call). Routing lives in your app / gateway (Modules 10, 13, 16). MCP may expose the *same* ticket tools to either model after you route; it does not choose the model. Rename the slide before it becomes architecture.
+</details>
+</div>
 
 ### 7. Operational checklist for teams
 

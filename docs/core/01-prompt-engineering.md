@@ -18,9 +18,15 @@
 
 ## Why this matters (CS engineer view)
 
-As a software engineer, you already ship APIs with schemas, retries, and contracts. An LLM call is another dependency with a soft contract: same input does not guarantee bit-identical output. Prompt engineering is how you tighten that contract enough that the rest of your system can stay boring.
+<div class="aieng-story" markdown>
 
-Production failures rarely look like “the model is dumb.” They look like: a support bot invents a refund policy; a classifier emits free text instead of a label; a nightly job burns 10× tokens because the prompt pasted entire ticket histories; two engineers rewrite the same system message in two services and drift apart. Those are systems problems: unclear interfaces, missing validation, no ownership of config.
+Friday 4:47pm: a support bot ships after a “quick prompt polish.” By Monday, finance is chasing three refunds the bot invented—no policy snippet in context, no “don’t invent money rules” constraint, no output check. The model wasn’t “evil”; the interface was soft and nobody validated the response before it hit the customer.
+
+</div>
+
+As a software engineer, you already ship APIs with schemas, retries, and contracts. An LLM call is another dependency with a **soft contract**: same input does not guarantee bit-identical output. Prompt engineering is how you tighten that contract enough that the rest of your system can stay boring.
+
+Production failures rarely look like “the model is dumb.” They look like: a classifier emits free text instead of a label; a nightly job burns 10× tokens because the prompt pasted entire ticket histories; two engineers rewrite the same system message in two services and drift apart. Those are systems problems: unclear interfaces, missing validation, no ownership of config.
 
 You will use this module whenever you build a single-turn or lightly multi-turn feature—email drafts, ticket triage, extraction, routing, summarization. Later modules add security boundaries, structured decoding, and evals. Start here: make one prompt **specific, role-separated, and testable**.
 
@@ -52,6 +58,18 @@ flowchart LR
 ```
 
 **Roles are privilege levels.** `system` (or provider equivalent) carries policy and product rules. `user` carries untrusted task data. `assistant` is model output—never treat it as ground truth without checks. Mixing user text into the system slot is how injection and policy bypasses start (Module 02).
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** A prompt is a soft API contract—like a REST endpoint that returns prose instead of JSON. Message roles are privilege levels on a shared wire: `system` is the root policy plane; `user` is an untrusted request body; `assistant` is a draft response you must still validate before it becomes a side effect. Temperature is a **randomness dial** on the decoder, not a “creativity magic” slider—turn it down when you need stable labels, not vibes.
+
+<div class="kill" markdown>
+
+**Kill this idea:** “A good prompt is clever wording that makes the model smart.” → **Replace with:** A good prompt is a maintainable contract—role, task, context, constraints, format—tight enough that two engineers can grade pass/fail the same way.
+
+</div>
+</div>
 
 ---
 
@@ -113,11 +131,11 @@ Ask yourself: *Could two engineers independently grade whether the output is cor
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>
 
-**Question:** Your PM says “make the bot friendlier.” Is that a prompt change, a product rule, or both? Where would you put it, and how would you know it worked?
+**Question:** Friday, a VP screenshots one “cold” reply and slacks “make the bot friendlier” before a board demo Monday. Is that a prompt change, a product rule, or both? Where do you put it so you’re not rewriting tone in three services under a deadline—and how do you prove it worked without another screenshot war?
 
 <details data-think-id="01-t1"><summary>Reveal a strong answer</summary>
 
-“Friendlier” is an underspecified product rule. Encode it as **observable constraints** in system policy (e.g. greet by name when present, avoid sarcasm, offer one clear next step, under 120 words). Measure with a small rubric on fixed tickets (tone checklist + length + “has next step”), not vibes in a single demo chat. Keep the rule in versioned prompt config so product can change tone without engineers hunting string literals.
+“Friendlier” is an underspecified product rule, not a vibe you chase in one chat. Encode it as **observable constraints** in versioned system policy (e.g. greet by name when present, avoid sarcasm, offer one clear next step, under 120 words). Measure with a small rubric on fixed tickets (tone checklist + length + “has next step”), not a single demo. One config path beats three hardcoded strings so product can change tone without a scavenger hunt.
 </details>
 </div>
 
@@ -147,6 +165,12 @@ Temperature (and related sampling knobs) trade **determinism for diversity**. Lo
 | Extraction, classification, routing | 0–0.2 |
 | Support replies, summaries | 0.2–0.5 |
 | Brainstorming, marketing variants | 0.7–1.0 |
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Picture the dial, not the muse.** At low temperature the model keeps sampling near the peak of the next-token distribution—good when you need the same invoice total twice. Crank it up and you sample longer tails: more variety, more chance of a weird label or invented fact. Turning the dial does not repair a vague task; it only changes how loudly the model explores once the contract is set.
+</div>
 
 Rules of thumb:
 

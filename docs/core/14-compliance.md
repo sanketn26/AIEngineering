@@ -26,6 +26,12 @@
 
 ## Why this matters (CS engineer)
 
+<div class="aieng-story" markdown>
+
+Enterprise security questionnaire, week before renewal. They ask: *Where does customer text go? How long do you keep it? Which model version answered ticket #88421 last Tuesday?* Your team discovers prompts in the default log stream, no data inventory for the vector index, and a system prompt last changed by “someone on-call” with no PR. Legal cannot answer “are we allowed to send this field to Vendor X?” because engineering never drew the map. The deal stalls — not because the model is weak, but because **controls and provenance** were an afterthought.
+
+</div>
+
 You already version APIs and database migrations. LLM systems introduce **new artifact types** that change behavior without a classic “code deploy”:
 
 - Prompt templates and system policies  
@@ -56,6 +62,16 @@ flowchart TB
 ```
 
 **Invariant:** every high-impact action is attributable (`actor`, `request_id`, `policy_version`, `model_id`) without dumping raw secrets into the default log stream.
+
+<div class="aieng-intuition" markdown>
+
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** **map the data first** (every store that touches user content). Audit is a **black-box recorder**: hashes and metadata in the default stream, full transcripts only in a restricted hangar when policy requires them. Engineers **build the controls**; counsel **owns the legal determination**.
+
+<p class="kill"><strong>Kill this idea:</strong> “If we hash prompts and add a privacy policy page, we’re GDPR compliant.” Hashing is an engineering control. Compliance is a legal conclusion over the whole system — not a checkbox you invent in a PR description.</p>
+
+</div>
 
 ---
 
@@ -228,6 +244,19 @@ Map each class to **allowed model destinations** (public cloud mini vs private V
 - [ ] RBAC on indexes, traces, and transcript stores  
 - [ ] Customer data never used for provider training without contract  
 
+<div class="aieng-think" markdown>
+
+<p class="label">Think · the store you forgot</p>
+
+<details data-think-id="14-t2">
+<summary>Reveal: which LLM-adjacent stores are most often missing from the first inventory?</summary>
+
+Teams list “app DB” and “vendor API” and stop. Common misses: **embedding / vector indexes** (chunk text is still personal data), **prompt caches**, **eval golden sets** with real tickets, **browser or CDN logs**, **support tooling exports**, **fine-tune datasets**, and **replay buffers** for agents. If it can reconstruct what the user said or what you retrieved, it belongs on the map with classification, retention, and access control.
+
+</details>
+
+</div>
+
 ---
 
 ## 4. Change management for prompts & models
@@ -303,28 +332,28 @@ Wire routing in code (Module 16) so the table is enforced, not a wiki wish.
 
 ## Quizzes
 
-<div class="aieng-quiz" data-quiz-id="14-q1" data-xp="25" data-success="Right — this module builds engineering controls; counsel owns legal determinations." data-fail="Re-read the warning and explainer: engineers implement controls; they do not self-certify law.">
+<div class="aieng-quiz" data-quiz-id="14-q1" data-xp="25" data-success="Right — this module builds engineering controls; counsel owns legal determinations." data-fail="Re-read the warning and explainer: engineers implement controls; they do not self-certify law." markdown>
 
 <p class="label">Quiz · 25 XP</p>
 <p class="quiz-prompt">A teammate asks you to “sign off that our chatbot is GDPR compliant.” What is the most appropriate engineering response?</p>
 <div class="quiz-options">
-<button class="quiz-opt" data-correct="false">Add a GDPR badge to the README and ship</button>
-<button class="quiz-opt" data-correct="true">Provide the data map, retention, and audit controls; escalate legal determination to counsel/privacy</button>
-<button class="quiz-opt" data-correct="false">Hash all user IDs and declare compliance complete</button>
-<button class="quiz-opt" data-correct="false">Only use open-source models so GDPR does not apply</button>
+<button type="button" class="quiz-opt" data-correct="false">Add a GDPR badge to the README and ship</button>
+<button type="button" class="quiz-opt" data-correct="true">Provide the data map, retention, and audit controls; escalate legal determination to counsel/privacy</button>
+<button type="button" class="quiz-opt" data-correct="false">Hash all user IDs and declare compliance complete</button>
+<button type="button" class="quiz-opt" data-correct="false">Only use open-source models so GDPR does not apply</button>
 </div>
 <div class="quiz-feedback"></div>
 </div>
 
-<div class="aieng-quiz" data-quiz-id="14-q2" data-xp="25" data-success="Correct — hashes + policy version + actor support traceability without default plaintext dumps." data-fail="Look at make_event: we store input_hash and policy_version, not the raw secret in the event body.">
+<div class="aieng-quiz" data-quiz-id="14-q2" data-xp="25" data-success="Correct — hashes + policy version + actor support traceability without default plaintext dumps." data-fail="Look at make_event: we store input_hash and policy_version, not the raw secret in the event body." markdown>
 
 <p class="label">Quiz · 25 XP</p>
 <p class="quiz-prompt">Why does `make_event` store `input_hash` instead of the raw prompt by default?</p>
 <div class="quiz-options">
-<button class="quiz-opt" data-correct="false">SHA-256 compresses prompts for cheaper storage</button>
-<button class="quiz-opt" data-correct="true">It supports integrity/attribution while reducing sensitive content in general-purpose logs</button>
-<button class="quiz-opt" data-correct="false">Vendors reject requests that include audit metadata</button>
-<button class="quiz-opt" data-correct="false">Hashes make model outputs deterministic</button>
+<button type="button" class="quiz-opt" data-correct="false">SHA-256 compresses prompts for cheaper storage</button>
+<button type="button" class="quiz-opt" data-correct="true">It supports integrity/attribution while reducing sensitive content in general-purpose logs</button>
+<button type="button" class="quiz-opt" data-correct="false">Vendors reject requests that include audit metadata</button>
+<button type="button" class="quiz-opt" data-correct="false">Hashes make model outputs deterministic</button>
 </div>
 <div class="quiz-feedback"></div>
 </div>
@@ -350,7 +379,7 @@ Wire routing in code (Module 16) so the table is enforced, not a wiki wish.
 - [ ] Prompt/model changes are versioned with an eval-backed rollback path  
 - [ ] You treat this module as engineering controls — not legal certification  
 
-<div class="aieng-complete" data-module-id="14" data-xp="80">
+<div class="aieng-complete" data-module-id="14" data-xp="80" markdown>
 <p>Mark Module 14 complete when your data map and audit path exist for a real (even small) app.</p>
 <button type="button">Complete module · +80 XP</button>
 </div>

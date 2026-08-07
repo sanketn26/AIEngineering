@@ -14,19 +14,20 @@
 
 ## Why this matters (CS engineer view)
 
+<div class="aieng-story" markdown>
+
+Day 19 of a “simple” support chat: the system policy still says never invent account IDs. The window is 90% old tool JSON and small talk. The model invents an account ID anyway—not because the policy vanished from the product, but because it drowned under clutter on the desk. Cost per turn climbed; nobody owned the packer.
+
+</div>
+
 You already budget CPU, memory, and bandwidth. The LLM context window is the same class of resource: finite, ordered, and expensive.
 
-In production, models rarely fail only because the *instruction* was poorly worded. They fail because:
-
-- Safety policy is buried under a 40-turn chat log
-- Tool dumps (JSON, HTML, stack traces) crowd out the user question
-- Yesterday’s retrieved docs are stale, but still in the window
-- “Memory” is an unbounded array of messages with no summary or write path
+In production, models rarely fail only because the *instruction* was poorly worded. They fail because safety policy is buried under a 40-turn log, tool dumps crowd out the user question, stale RAG chunks linger, or “memory” is an unbounded array with no summary path.
 
 **Prompt engineering** shapes *how* the model is instructed.  
 **Context engineering** decides *what enters the window, in what order, at what fidelity, under what budget*.
 
-If you ship multi-turn chat, agents, or RAG without a packing policy, you will eventually hit: ignored instructions, rising cost per turn, and silent constraint loss.
+Ship multi-turn chat or agents without a packing policy and you get ignored instructions, rising cost per turn, and silent constraint loss.
 
 ## Mental model
 
@@ -55,6 +56,18 @@ flowchart TB
 | Tools / RAG | Hot cache of facts | Cap size; refresh |
 | Session memory | Working set summary | Compress |
 | Raw history / dumps | Cold storage spill | First to drop |
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** The context window is a **desk surface**—working memory with hard edges, not an infinite backpack. You cannot leave every sticky note, PDF, and tool printout on it and still find the safety card. Packing is a **priority queue under a token budget**: pin policy and this turn’s task first, cap RAG/tools, compress session memory, spill raw dumps first. Headroom is empty space reserved for the answer so the model isn’t forced to whisper a truncated reply.
+
+<div class="kill" markdown>
+
+**Kill this idea:** “Bigger window means I can paste everything and the model will figure it out.” → **Replace with:** Order and fidelity under budget are product policy; more room without a packer just delays a more expensive mess.
+
+</div>
+</div>
 
 ## Core tutorial
 
@@ -134,11 +147,11 @@ def fit_budget(parts: list[tuple[str, str]], budget: int) -> list[tuple[str, str
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>
 
-**Question:** Your window is 128k tokens. A support agent includes: 2k system policy, 500 tokens of task, 80k of past tickets “just in case,” and the user’s 200-token question. What fails first — accuracy, cost, or both — and what is the minimal packing fix?
+**Question:** Your window is 128k. A support agent ships with 2k system policy, 500 tokens of task, **80k of past tickets “just in case,”** and a 200-token user question. Latency feels like molasses; the bot still invents a policy clause. What fails first—accuracy, cost, or both—and what is the minimal packing fix before finance and trust both melt?
 
 <details data-think-id="05-t1"><summary>Reveal a strong answer</summary>
 
-Both fail. Cost scales with input tokens every turn; accuracy fails because attention and instruction priority are diluted by low-signal dumps. Minimal fix: cap retrieved tickets (e.g. top-k by embedding + recency), keep a rolling summary of the session, pin system policy first, and reserve completion headroom. Never treat “paste the CRM export” as a product strategy.
+Both fail. Cost scales with input tokens every turn; accuracy fails as attention and instruction priority drown under low-signal dumps—the desk is full of junk mail. Minimal fix: cap tickets (top-k by embedding + recency), rolling session summary, pin system policy first, reserve completion headroom. “Paste the CRM export” is not a product strategy.
 </details>
 </div>
 
@@ -157,6 +170,12 @@ Rules of thumb:
 - **Session** must compress — unbounded chat history is a cost and quality bug.
 - **User profile** is *written* only when the product intends it (settings, confirmed facts) — not every model guess.
 - **World / RAG** is the database of truth for private knowledge; the window only holds *retrieved slices*.
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Librarian, not a hoarder.** Session summary is the index card: goals, decisions, constraints. Profile is the card catalog entry you deliberately file. RAG is the closed stacks—you fetch a few volumes per turn, you do not wheel the whole library onto the desk. If every guess the model makes becomes “memory,” you will re-feed hallucinations as if they were user preferences.
+</div>
 
 ### 5. SessionMemory (course package)
 

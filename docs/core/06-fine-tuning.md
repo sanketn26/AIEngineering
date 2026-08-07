@@ -14,9 +14,15 @@
 
 ## Why this matters (CS engineer view)
 
+<div class="aieng-story" markdown>
+
+Leadership wanted the bot to “know the catalog.” The team fine-tuned on last quarter’s PDF dump. Train loss looked great. Three product launches later the model still confidently recommends retired SKUs—because weekly facts were baked into weights instead of fetched. Rollback meant another training cycle, not a config flip.
+
+</div>
+
 Fine-tuning is a product decision with ops cost: data pipelines, GPU time, eval gates, versioning, and regression risk. Many teams fine-tune because it feels “more ML,” then discover that **prompting + RAG + tools** would have shipped faster with fresher facts.
 
-You fine-tune when you need **sticky behavior** that is expensive or unreliable to re-specify every call: domain tone at high volume, specialized formats, or on-device skills. You do **not** fine-tune to inject a weekly-changing knowledge base — that is RAG/tools.
+You fine-tune when you need **sticky behavior** that is expensive or unreliable to re-specify every call: domain tone at high volume, specialized formats, or on-device skills. You do **not** fine-tune to inject a weekly-changing knowledge base—that is RAG/tools.
 
 Default bias for this course:
 
@@ -52,6 +58,18 @@ flowchart TD
 | Tools | Live actions & data | Safety and loop design |
 | Fine-tune | Sticky behavior, shorter prompts | Data cost, drift, eval burden |
 | Distill | Cheap student model | Teacher quality ceiling |
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** Weights are **muscle memory**—how you swing after ten thousand reps (tone, format, reflexes). RAG is **open-book**: you look up the current chapter when the fact must be right today. Tools are hands that touch live systems. Fine-tune when the *style or skill* should stick without re-teaching every call; keep open-book for facts that move weekly. LoRA is a thin skill layer you can swap or peel off without rewiring the whole athlete.
+
+<div class="kill" markdown>
+
+**Kill this idea:** “Fine-tuning is how we put our documents into the model.” → **Replace with:** Fine-tune sticky behavior; retrieve or tool-call for changing knowledge—and always score the adapter like a release, not by train loss alone.
+
+</div>
+</div>
 
 ## Core tutorial
 
@@ -91,11 +109,11 @@ Write a one-page decision note before spending GPU hours: baseline metrics, fail
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>
 
-**Question:** Your legal team wants the model to “know” every policy PDF. Leadership suggests fine-tuning on the PDF corpus. What do you recommend and why?
+**Question:** Legal wants the model to “know” every policy PDF. Leadership already booked GPU time and is pitching “we fine-tuned on compliance” to the board. What do you recommend—and what fails first if you bake the corpus into weights anyway?
 
 <details data-think-id="06-t1"><summary>Reveal a strong answer</summary>
 
-Recommend **RAG + strict citation + evals**, not FT-as-knowledge-dump. Policies change; auditors need provenance; FT on PDFs does not guarantee faithful recall and can invent plausible-but-wrong clauses. Use FT only later for *style* of answers (tone, structure) once retrieval is solid — and still ground claims in retrieved text.
+Recommend **RAG + strict citation + evals**, not FT-as-knowledge-dump. Policies change; auditors need provenance; FT on PDFs does not guarantee faithful recall and can invent plausible-but-wrong clauses that look official. Use FT later only for *style* (tone, structure) once retrieval is solid—and still ground claims in retrieved text. First failure mode: confident outdated policy after the PDF moves.
 </details>
 </div>
 
@@ -151,6 +169,12 @@ LoRA adapters (trainable: A, B on q_proj, v_proj, ...)
         =
 Effective behavior for your task
 ```
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Thermostat, not a gut remodel.** Full fine-tuning rewires a lot of the house; LoRA is a small control panel—low-rank adapters you train, swap, or merge. QLoRA keeps the base cold (quantized) so a single GPU can still learn the dial settings. You still measure room temperature with **task metrics**, not how hard the furnace hummed (train loss).
+</div>
 
 Hyperparameters you will actually touch:
 

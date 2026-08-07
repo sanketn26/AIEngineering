@@ -20,6 +20,12 @@ By the end of this module you will be able to:
 
 ## Why this matters (CS engineer)
 
+<div class="aieng-story" markdown>
+
+Finance screenshots a 40% token drop after “routing everything to mini.” Leadership celebrates thrift. Support reopen rate doubles. The mini model fails validators, retries three times, then escalates to humans who eat the savings. `cost_per_success` barely moved — sometimes rose. Separately, a cache keyed only on user text serves Alice Bob’s invoice answer. Tokens were never the product. **Successful outcomes under a budget** were.
+
+</div>
+
 LLM spend is not a fixed SaaS seat license. It is closer to **pay-per-request compute** with a heavy tail: one agent loop or RAG dump can cost 100× a classifier call.
 
 If you only watch “total tokens this month”:
@@ -52,6 +58,16 @@ flowchart TB
 ```
 
 Optimize the **path**, not a single hyperparameter. A smaller model that needs 8 retries can lose to one strong call.
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** Optimize **`cost_per_success`**, not thrift theater. The **router is a triage nurse** — cheap path first, escalate when criteria fail. **Cache keys must version meaning** (model + template + tenant), not just the user’s sentence.
+
+<div class="kill" markdown>
+**Kill this idea:** “Lower tokens / always use the smallest model = winning.” → **Replace with:** Minimize $ per successful business outcome under quality and latency SLOs; put gates on the hot path.
+</div>
+</div>
 
 ---
 
@@ -233,6 +249,12 @@ Layers:
 | Tool HTTP cache | Idempotent GET with cache headers |
 | Retrieval cache | Query hash → chunk ids (short TTL) |
 
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**A cache key is a claim about equivalence.** If two requests hash the same but would produce different *correct* answers (different tenants, new prompt template, new model, personalized data), the key is a bug. Version the **meaning** of the generation: `namespace:model:template_ver:tenant?:payload_hash`. High hit rate with wrong keys is an incident generator with good dashboards.
+</div>
+
 ---
 
 ### 5. Usage ledgers and spend guardrails
@@ -307,6 +329,17 @@ Controls:
 | Plan-then-execute with short plans | Fewer exploratory calls |
 
 Never give an agent an uncapped browse loop in production without a $ budget tied to the ledger.
+
+<div class="aieng-think" markdown>
+<p class="label">Think about it</p>
+
+**Question:** A single-turn chat feature costs ~$0.003 median. The new “research agent” averages $0.18 with the same user question. List three architectural multipliers before you blame the model price list.
+
+<details data-think-id="10-t3"><summary>Reveal a strong answer</summary>
+
+(1) **Step count** — each decide+act is another full prompt with growing scratchpad. (2) **Context growth** — tool dumps re-enter every later step (input tokens dominate). (3) **Retries / thrash** — same search args, failed validators, or multi-sample. Also: always-on strong model, no retrieve cache, no max_steps. Fix path cost before negotiating list prices.
+</details>
+</div>
 
 ---
 

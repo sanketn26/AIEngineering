@@ -20,6 +20,12 @@ By the end of this module you will be able to:
 
 ## Why this matters (CS engineer)
 
+<div class="aieng-story" markdown>
+
+Hackathon energy: “CEO, engineer, designer, critic” agents write a README. Each persona re-reads the whole repo context. Critic and writer debate for six uncapped rounds. Final doc is worse than a single agent with `read_file` + one pass. Cost: ~10×. Latency: painful. The team shipped a **microservice mesh for a 200-line CRUD app** — theater, not topology. The fix was not more personas; it was **one agent + tools**, then maybe a capped writer→critic contract if metrics demand it.
+
+</div>
+
 Multi-agent systems are distributed systems with **nondeterministic workers**. Every extra agent adds:
 
 - Latency (serial) or coordination overhead (parallel)  
@@ -53,6 +59,16 @@ flowchart TB
 
 **Charter per role:** goal, inputs schema, outputs schema, tools allowed, max steps, success metric.  
 **No charter → no second agent.**
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** Multi-agent is **microservices for cognition**. **Default to one agent.** Message contracts are **APIs between roles** — schemas, versions, validation — not free-form personality chat.
+
+<div class="kill" markdown>
+**Kill this idea:** “More agents / personas = smarter system.” → **Replace with:** Add a role only with a written charter, structured I/O, budgets, and a measured win over single-agent (or a hard separation constraint).
+</div>
+</div>
 
 ---
 
@@ -105,6 +121,12 @@ Peer graph:    Agents message on channels / shared store
 | **Router + specialists** | Good when intent classes are stable | Needs solid classification upfront |
 
 Frameworks to **study** (concepts first): **LangGraph**, **CrewAI**, **AutoGen/AG2**, provider agent SDKs. Adopt a framework when the topology is clear — not to discover the topology.
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Pick topology like you pick RPC vs pub/sub** — from data flow, not from blog aesthetics. Sequential = pipeline stages with typed handoffs. Manager–worker = fan-out when subtasks are independent. Peer graphs = last resort when you accept debugging pain. If you cannot draw the graph and name stop conditions before coding, you are not ready for a multi-agent framework.
+</div>
 
 ---
 
@@ -283,6 +305,17 @@ Rules:
 - One **owner** for the final artifact  
 - Append-only message logs when possible  
 - Summarize shared boards; do not paste every scratchpad into every agent  
+
+<div class="aieng-think" markdown>
+<p class="label">Think about it</p>
+
+**Question:** Researcher and writer both “own” a shared Markdown file and rewrite it each turn. What’s the distributed-systems bug, and what’s the multi-agent fix?
+
+<details data-think-id="12-t3"><summary>Reveal a strong answer</summary>
+
+**Multi-writer clobber** / lost update: last agent wins, intermediate facts vanish, no merge policy. Fix: **single writer** for the artifact (usually writer); researcher emits structured `facts[]` messages only; optional merge function with conflict flags; append-only message log for audit. Same rule as microservices: one service owns the table.
+</details>
+</div>
 
 ---
 

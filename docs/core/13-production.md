@@ -23,6 +23,12 @@
 
 ## Why this matters (CS engineer)
 
+<div class="aieng-story" markdown>
+
+Friday 16:40. Support chat p95 jumps from 1.2s to “hung.” The provider is rate-limiting; your SDK default has **no timeout**. Workers pile up, health checks still pass (process is “up”), autoscaler adds pods that also hang, and the bill spikes from retries without jitter. Nobody can answer “what did user X see?” because logs have no shared `request_id` — only “the bot was weird.” Someone had also hot-edited the system prompt in the dashboard that morning; there is no version pin to roll back.
+
+</div>
+
 In class, a notebook cell that calls an LLM “works.” In production, that same call is a **distributed dependency**: network timeouts, rate limits, model outages, prompt regressions, secret leaks in logs, and unbounded token spend. Your job is not “call the model” — it is to put a **contracted, observable, fail-soft service** around stochastic generation.
 
 Treat the LLM like any other unreliable remote system (payment gateway, search index), with three extra twists:
@@ -49,6 +55,16 @@ flowchart LR
 ```
 
 **Invariant:** every egress call has a timeout; every public route has authz + rate limits; every request has a `request_id` you can grep from UI ticket → logs → provider span.
+
+<div class="aieng-intuition" markdown>
+
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** an LLM call is **remote I/O** (like a payment gateway), not a local function. **Timeouts** are blast-radius walls. A **prompt version** is deployable config (same as a feature flag). A **`request_id`** is the flight recorder that ties UI complaint → your logs → provider span.
+
+<p class="kill"><strong>Kill this idea:</strong> “It works in the notebook, so we just need a public HTTP route.” Without timeouts, pins, and request IDs you have a demo endpoint, not a production service.</p>
+
+</div>
 
 ---
 
@@ -296,6 +312,19 @@ FALLBACK_MODEL = "claude-haiku"
 
 **Canary idea:** route 5% of traffic to `support_reply@v4`; compare eval score + human thumbs + error rate; promote or roll back by flipping config, not redeploying code if the template is externalized.
 
+<div class="aieng-think" markdown>
+
+<p class="label">Think · prompt as release artifact</p>
+
+<details data-think-id="13-t2">
+<summary>Reveal: what must travel with a prompt version when you roll back?</summary>
+
+Rollback is not “paste the old string into the dashboard.” You need the **template id/version**, the **model id**, decoding defaults (temperature, max tokens), and any **tool allowlist / policy version** that template assumed. If v4 added a new tool and you only revert the prose, the agent still has the wider blast radius. Treat the pin as a small **config bundle**, canaried and rolled back together.
+
+</details>
+
+</div>
+
 ---
 
 ## 5. Docker sketch
@@ -350,29 +379,29 @@ Capture: p95 latency under a small load script, and a greppable `request_id` fro
 
 ## Quizzes
 
-<div class="aieng-quiz" data-quiz-id="13-q1" data-xp="25" data-success="Yes — timeouts contain blast radius on every egress dependency." data-fail="Re-read §2: production LLM calls are remote I/O and must be bounded.">
+<div class="aieng-quiz" data-quiz-id="13-q1" data-xp="25" data-success="Yes — timeouts contain blast radius on every egress dependency." data-fail="Re-read §2: production LLM calls are remote I/O and must be bounded." markdown>
 
 <p class="label">Quiz · 25 XP</p>
 <p class="quiz-prompt">What is the single most important default for every LLM provider call in production?</p>
 <div class="quiz-options">
-<button class="quiz-opt" data-correct="false">Temperature = 0 so outputs are deterministic</button>
-<button class="quiz-opt" data-correct="true">An explicit client timeout (and mapped failure handling)</button>
-<button class="quiz-opt" data-correct="false">Logging the full prompt body for every request</button>
-<button class="quiz-opt" data-correct="false">Retrying infinitely until the provider responds</button>
+<button type="button" class="quiz-opt" data-correct="false">Temperature = 0 so outputs are deterministic</button>
+<button type="button" class="quiz-opt" data-correct="true">An explicit client timeout (and mapped failure handling)</button>
+<button type="button" class="quiz-opt" data-correct="false">Logging the full prompt body for every request</button>
+<button type="button" class="quiz-opt" data-correct="false">Retrying infinitely until the provider responds</button>
 </div>
 <div class="quiz-feedback"></div>
 <p class="quiz-meta">One attempt grades immediately. Correct answers award XP.</p>
 </div>
 
-<div class="aieng-quiz" data-quiz-id="13-q2" data-xp="25" data-success="Correct — prompts and model IDs need version pins and rollback paths." data-fail="Think about how you roll back a bad release when the ‘code’ is a prompt string.">
+<div class="aieng-quiz" data-quiz-id="13-q2" data-xp="25" data-success="Correct — prompts and model IDs need version pins and rollback paths." data-fail="Think about how you roll back a bad release when the ‘code’ is a prompt string." markdown>
 
 <p class="label">Quiz · 25 XP</p>
 <p class="quiz-prompt">Why pin prompt template versions and model IDs in config rather than hardcoding them only in scattered call sites?</p>
 <div class="quiz-options">
-<button class="quiz-opt" data-correct="false">Providers require config files for billing</button>
-<button class="quiz-opt" data-correct="true">So you can reproduce, canary, and roll back behavior without archaeology</button>
-<button class="quiz-opt" data-correct="false">Config files make the model more accurate</button>
-<button class="quiz-opt" data-correct="false">It removes the need for evals in CI</button>
+<button type="button" class="quiz-opt" data-correct="false">Providers require config files for billing</button>
+<button type="button" class="quiz-opt" data-correct="true">So you can reproduce, canary, and roll back behavior without archaeology</button>
+<button type="button" class="quiz-opt" data-correct="false">Config files make the model more accurate</button>
+<button type="button" class="quiz-opt" data-correct="false">It removes the need for evals in CI</button>
 </div>
 <div class="quiz-feedback"></div>
 </div>
@@ -398,7 +427,7 @@ Capture: p95 latency under a small load script, and a greppable `request_id` fro
 - [ ] Deploy is reproducible from a git SHA (image + config pins)  
 - [ ] At least a small golden eval runs before promote  
 
-<div class="aieng-complete" data-module-id="13" data-xp="120">
+<div class="aieng-complete" data-module-id="13" data-xp="120" markdown>
 <p>Mark Module 13 complete when the lab and checkpoint are honest — not when you only skimmed.</p>
 <button type="button">Complete module · +120 XP</button>
 </div>

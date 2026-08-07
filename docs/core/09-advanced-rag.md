@@ -20,6 +20,12 @@ By the end of this module you will be able to:
 
 ## Why this matters (CS engineer)
 
+<div class="aieng-story" markdown>
+
+Ops bot answers “what does `ERR_INV_88421` mean?” with a confident essay about inventory philosophy. The gold runbook title *is* `ERR_INV_88421` — never retrieved. Dense-only search mapped the question to “inventory errors” prose and missed the rare token. Support escalates. Team “fixes quality” by switching to a larger generator. Bill goes up. Hit@5 stays flat. The crime scene was **retrieval**, not eloquence.
+
+</div>
+
 Basic RAG is a vector nearest-neighbor lookup plus a prompt. Production RAG is closer to a **search system**: inverted indices, multi-stage ranking, query understanding, freshness, and offline metrics.
 
 If you treat embeddings as magic:
@@ -52,6 +58,16 @@ flowchart LR
 **First stage** optimizes *recall* (get the right docs in a shortlist).  
 **Second stage** optimizes *precision* (put the best spans in the window).  
 **Generation** should only *compose* what retrieval already supports.
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** Hybrid search is **keyword cop + semantic cop** on the same case — one chases exact IDs, the other chases paraphrase. **RRF fuses rankings, not scores** (you don’t average Fahrenheit and Celsius). **Agentic RAG** is a detective with a **step budget**, not an infinite coffee tab.
+
+<div class="kill" markdown>
+**Kill this idea:** “Better embeddings (or a bigger LLM) fix all RAG failures.” → **Replace with:** Diagnose the path — sparse miss, bad chunk, packing drop, multi-hop need, or generator ignoring context — and measure retrieval separately from generation.
+</div>
+</div>
 
 ---
 
@@ -196,6 +212,12 @@ def rrf(rank_lists: list[list[str]], k: int = 60) -> list[str]:
 
 **Weighted RRF** (multiply a list’s contribution by \(w\)) is fine once you have offline Hit@k data. Do not invent weights without a labeled set.
 
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Why ranks, not scores?** Cosine 0.82 and BM25 12.4 are not comparable — calibrating them is a research project. Rank position *is* comparable: “this doc was #3 for dense and #1 for BM25.” RRF is a cheap agreement vote. If you min-max both score lists into \([0,1]\) without offline labels, you are inventing a fusion that only looks scientific.
+</div>
+
 ---
 
 ### 5. Reranking (second stage)
@@ -303,6 +325,17 @@ Hard rules (same spirit as Module 11 agents):
 - Prefer “I don’t know” over another expensive hop when notes are empty  
 
 Agentic RAG **multiplies cost**. Gate it: only when a cheap single-shot retrieve scores low confidence or the query is classified multi-hop.
+
+<div class="aieng-think" markdown>
+<p class="label">Think about it</p>
+
+**Question:** Your agentic RAG loop has `max_steps=8` and no memory of prior queries. On step 3–7 it re-embeds the same paraphrase of the original question and re-pulls the same empty shortlist. What two controls stop this class of burn?
+
+<details data-think-id="09-t3"><summary>Reveal a strong answer</summary>
+
+(1) **Repeated-query abort** (normalize query text / embedding near-duplicates) so thrash ends after 1–2 identical retrieves. (2) **Early exit on empty evidence** — if notes stay empty, answer “I don’t know” or escalate instead of spending remaining steps. Bonus: cache retrieve(query)→ids, lower max_steps for single-fact classifiers, and log intermediate queries so offline eval can see the loop.
+</details>
+</div>
 
 ---
 

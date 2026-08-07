@@ -76,10 +76,14 @@ Tracks can run **in parallel** with later core modules if you already code comfo
 ## Daily cadence (any path)
 
 1. **Review** (10–15 min) — previous notes / `PROGRESS.md` + [Progress dashboard](progress.md)
-2. **Concept** (25–35 min) — read explainers; answer every **Think about it** before revealing
-3. **Hands-on** (20–30 min) — lab artifact (smallest thing that can fail in CI)
-4. **Check** (5–10 min) — quizzes + checkpoint; mark module complete only if honest
-5. **Log** (5 min) — what failed, what you’d redesign, next question
+2. **Story → picture** (5 min) — read the opening incident and the **Intuition lock** first; say the sticky picture out loud
+3. **Concept** (20–30 min) — explainers and mental model; answer every **Think about it** *before* revealing
+4. **Hands-on** (20–30 min) — lab artifact (smallest thing that can fail in CI)
+5. **Check** (5–10 min) — quizzes + checkpoint; mark module complete only if you can teach the kill-this-idea line
+6. **Log** (5 min) — what failed, what you’d redesign, next question
+
+!!! tip "Anti-skim rule"
+    If you only remember the **sticky picture** and the **kill this idea** line from a module, you still own the core intuition. Vocabulary without those is bland memorization.
 
 ---
 
