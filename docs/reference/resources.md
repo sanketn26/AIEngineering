@@ -1,6 +1,21 @@
 # Curated Resources
 
-Prefer primary documentation over random blogs. Links verified as commonly stable entry points; always check for updates.
+Prefer primary documentation and high-signal open-source curricula over random blogs. Links are entry points — always check for updates.
+
+---
+
+## Open-source curricula (start here)
+
+| Resource | Best for | How to use with this course |
+|----------|----------|------------------------------|
+| [DAIR.AI Prompt Engineering Guide](https://github.com/dair-ai/Prompt-Engineering-Guide) · [promptingguide.ai](https://www.promptingguide.ai/) | Prompts, CoT, ReAct, agents overview | Modules **01–03**, skim before building agents |
+| [mlabonne/llm-course](https://github.com/mlabonne/llm-course) | LLM engineer track (RAG, deploy, quant) | Modules **06–07, 09, 13, 17** — take “Engineer” not full “Scientist” unless training is your job |
+| [rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) | Attention, GPT training loop | Hybrid track + mental model for **06 / 17** |
+| [huggingface/agents-course](https://github.com/huggingface/agents-course) | smolagents, LangGraph, agentic RAG | Modules **11–12**, agentic pieces of **09** |
+| [humanlayer/12-factor-agents](https://github.com/humanlayer/12-factor-agents) | Production agent design principles | Modules **05, 11–13** |
+| [Anthropic / MCP](https://modelcontextprotocol.io/) | Tools, resources, prompts protocol | Module **08** (authoritative) |
+
+---
 
 ## Models & providers
 
@@ -10,6 +25,8 @@ Prefer primary documentation over random blogs. Links verified as commonly stabl
 - [Hugging Face Hub](https://huggingface.co/models)
 - [Ollama](https://ollama.com)
 
+---
+
 ## RAG & embeddings
 
 - [FAISS](https://github.com/facebookresearch/faiss)
@@ -17,16 +34,24 @@ Prefer primary documentation over random blogs. Links verified as commonly stabl
 - [Qdrant](https://qdrant.tech/documentation/)
 - [Pinecone docs](https://docs.pinecone.io/)
 - Sentence-transformers / provider embedding guides
+- LlamaIndex & LangChain retrieval docs (orchestration patterns)
+
+---
 
 ## Agents & orchestration
 
 - [LangGraph](https://langchain-ai.github.io/langgraph/)
 - [CrewAI](https://docs.crewai.com/)
+- [AutoGen / AG2](https://github.com/microsoft/autogen)
 - Provider agent / tool-calling guides (OpenAI, Anthropic)
+
+---
 
 ## MCP
 
-- [Model Context Protocol](https://modelcontextprotocol.io/)
+- [Model Context Protocol](https://modelcontextprotocol.io/) — **not** a load balancer; tools/resources/prompts over a standard host↔server protocol
+
+---
 
 ## Fine-tuning
 
@@ -34,10 +59,24 @@ Prefer primary documentation over random blogs. Links verified as commonly stabl
 - [TRL](https://huggingface.co/docs/trl)
 - QLoRA paper: https://arxiv.org/abs/2305.14314
 
+---
+
 ## Evals & observability
 
-- RAGAS, promptfoo, DeepEval (project sites / GitHub)
+- [promptfoo](https://github.com/promptfoo/promptfoo)
+- [DeepEval](https://github.com/confident-ai/deepeval)
+- [RAGAS](https://github.com/explodinggradients/ragas)
 - Langfuse, Arize Phoenix, OpenTelemetry
+
+---
+
+## Security
+
+- OWASP LLM Top 10 (search current version)
+- Prompt injection write-ups from major vendors (treat as living docs)
+- Microsoft Presidio (PII detection) for production redaction
+
+---
 
 ## MLOps & serving
 
@@ -46,10 +85,14 @@ Prefer primary documentation over random blogs. Links verified as commonly stabl
 - [GitHub Actions](https://docs.github.com/en/actions)
 - vLLM / Text Generation Inference docs
 
+---
+
 ## Deep learning (hybrid track)
 
 - [PyTorch tutorials](https://pytorch.org/tutorials/)
 - [PyTorch nn.Transformer](https://pytorch.org/docs/stable/generated/torch.nn.Transformer.html)
+
+---
 
 ## Classic data / ML
 
@@ -57,7 +100,10 @@ Prefer primary documentation over random blogs. Links verified as commonly stabl
 - [scikit-learn user guide](https://scikit-learn.org/stable/user_guide.html)
 - [yfinance](https://pypi.org/project/yfinance/)
 
+---
+
 ## Course provenance
 
 Pre-restructure originals: `archive/source/` in this repository.  
-Diagnostic: [Review analysis](../review/analysis.md).
+Diagnostic: [Review analysis](../review/analysis.md).  
+Progress (local XP): [Progress & gamification](../getting-started/progress.md).

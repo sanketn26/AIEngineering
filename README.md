@@ -8,6 +8,7 @@ This repository is optimized to publish as a **GitHub Pages** site via [MkDocs M
 |---|---|
 | **Docs (local)** | `mkdocs serve` → http://127.0.0.1:8000 |
 | **Curriculum source** | [`docs/`](docs/) |
+| **Progress / XP** | [docs/getting-started/progress.md](docs/getting-started/progress.md) (localStorage gamification) |
 | **Review of old materials** | [docs/review/analysis.md](docs/review/analysis.md) |
 | **Originals (archived)** | [`archive/source/`](archive/source/) |
 | **Python sandbox** | [`src/`](src/) + Poetry (`pyproject.toml`) |
@@ -23,6 +24,8 @@ This repository is optimized to publish as a **GitHub Pages** site via [MkDocs M
 | “MCP” misused (load balancer / compression) | Correct Model Context Protocol + clear compression naming |
 | gpt-3.5-centric examples | Provider-agnostic, 2026-oriented stack |
 | Flat root markdown | MkDocs Material + GitHub Actions Pages |
+| Outline-style modules | CS-engineer tutorials (explainers, quizzes, labs, diagrams) |
+| No progress UX | Static gamification (XP, badges, HUD) via `localStorage` |
 
 Full diagnostic: **[Review analysis](docs/review/analysis.md)**.
 

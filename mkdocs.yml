@@ -90,12 +90,18 @@ extra:
     - icon: fontawesome/brands/github
       link: https://github.com/sanketnaik/AIEngineering
   generator: false
+  # Client-side gamification (localStorage) — works on static GitHub Pages
+extra_css:
+  - assets/css/gamify.css
+extra_javascript:
+  - assets/js/gamify.js
 
 nav:
   - Home: index.md
   - Getting started:
       - Setup: getting-started/setup.md
       - Learning paths: getting-started/paths.md
+      - Progress & XP: getting-started/progress.md
   - Core modules:
       - 01 Prompt engineering: core/01-prompt-engineering.md
       - 02 Security & privacy: core/02-security-privacy.md

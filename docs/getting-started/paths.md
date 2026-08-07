@@ -75,13 +75,15 @@ Tracks can run **in parallel** with later core modules if you already code comfo
 
 ## Daily cadence (any path)
 
-1. **Review** (10–15 min) — previous notes / `PROGRESS.md`
-2. **Concept** (25–35 min) — module section
-3. **Hands-on** (20–30 min) — smallest runnable artifact
-4. **Log** (5 min) — what worked, what failed, next question
+1. **Review** (10–15 min) — previous notes / `PROGRESS.md` + [Progress dashboard](progress.md)
+2. **Concept** (25–35 min) — read explainers; answer every **Think about it** before revealing
+3. **Hands-on** (20–30 min) — lab artifact (smallest thing that can fail in CI)
+4. **Check** (5–10 min) — quizzes + checkpoint; mark module complete only if honest
+5. **Log** (5 min) — what failed, what you’d redesign, next question
 
 ---
 
 ## Capability checkpoints
 
-See [Progression summary](../reference/progression.md) for “what you can build” after each module.
+See [Progression summary](../reference/progression.md) for “what you can build” after each module.  
+Optional XP is a motivator, not a grade — production judgment still comes from evals and reviews.

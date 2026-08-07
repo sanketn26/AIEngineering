@@ -1,85 +1,132 @@
 # Module 08 — Model Context Protocol (MCP)
 
-**Time:** 3–5 days · **Depends on:** 07 · **Next:** [Advanced RAG](09-advanced-rag.md)
+**Time:** 3–5 days · **Depends on:** [Tools & RAG](07-tools-and-rag.md) · **Next:** [Advanced RAG](09-advanced-rag.md)
 
-!!! important "Correct definition (industry)"
-    **MCP** (Model Context Protocol) is an open standard—originating from Anthropic and now broadly adopted—for connecting AI applications (hosts/clients) to external **tools**, **resources**, and **prompts** via MCP servers.
-
-    It is **not** a multi-model load balancer. Routing and load balancing belong in [Production](13-production.md) and [Integration patterns](16-integration-patterns.md). Earlier drafts of this course mislabeled those topics as MCP; that is corrected here.
-
----
+<span data-module-id="08" hidden></span>
 
 ## Learning objectives
 
-- Explain hosts, clients, and servers in MCP
-- Know tools vs resources vs prompts
-- Reason about security when installing MCP servers
+- Define **MCP** correctly: Anthropic-originated open standard for connecting AI apps to **tools**, **resources**, and **prompts**
+- Explain **host / client / server** roles and transports at a systems level
+- Contrast **MCP servers** with **in-process tools** (Module 07)
+- Apply a **security bar** for third-party MCP servers (supply chain, scope, approvals)
+- Know that MCP is **not** a multi-model load balancer
 
-## What you can build
+## Why this matters (CS engineer view)
 
-- An assistant that reads local project files through an MCP filesystem server
-- A custom MCP server exposing a small internal API as tools
-- Policy for which servers are allowed in dev vs prod
+Without a shared protocol, every IDE, desktop agent, and chat host reinvents connectors: one filesystem integration for App A, another for App B, N auth stories, N schema formats. That is classic **N×M integration** cost.
 
----
+**Model Context Protocol (MCP)** standardizes how hosts discover and call external capabilities so the same server can plug into multiple clients. For engineers, MCP is an **interface and process boundary** problem — closer to LSP (Language Server Protocol) for tools/context than to “another prompt trick.”
 
-## Architecture
+!!! important "Correct definition (industry)"
+    **MCP** is an open standard—originating from Anthropic and now broadly adopted—for connecting AI applications (hosts/clients) to external **tools**, **resources**, and **prompts** via MCP servers.
 
-```text
-┌──────────────┐     ┌─────────────┐     ┌──────────────────┐
-│ Host app     │────▶│ MCP Client  │────▶│ MCP Server(s)    │
-│ (IDE, chat,  │     │ (session,   │     │ tools/resources  │
-│  agent)      │     │  sampling)  │     │ prompts          │
-└──────────────┘     └─────────────┘     └──────────────────┘
+    It is **not** a multi-model load balancer. Routing and load balancing belong in [Production](13-production.md) and [Integration patterns](16-integration-patterns.md). Earlier course drafts mislabeled those topics as MCP; that error is corrected here.
+
+Primary reference: [modelcontextprotocol.io](https://modelcontextprotocol.io/)
+
+## Mental model
+
+```mermaid
+flowchart LR
+  subgraph Host["Host application"]
+    UX[UX / auth / policy]
+    Orch[Orchestration / sampling]
+  end
+  subgraph Client["MCP Client"]
+    Sess[Session / capability negotiation]
+  end
+  subgraph Servers["MCP Server(s)"]
+    T[Tools]
+    R[Resources]
+    P[Prompts]
+  end
+  UX --> Orch
+  Orch --> Sess
+  Sess -->|stdio / HTTP-SSE / etc.| T
+  Sess --> R
+  Sess --> P
 ```
 
-| Role | Responsibility |
-|------|----------------|
-| **Host** | UX, auth, orchestration (Claude Desktop, VS Code, your agent) |
-| **Client** | Protocol session with servers |
-| **Server** | Exposes capabilities over stdio or HTTP/SSE transports |
+| Role | Responsibility | Examples |
+|------|----------------|----------|
+| **Host** | UX, user auth, orchestration, approval UI | Claude Desktop, VS Code / Cursor-style hosts, your agent product |
+| **Client** | Protocol session with one or more servers | Embedded MCP client library in the host |
+| **Server** | Exposes tools, resources, prompts | Filesystem, git, DB, internal ticket API |
 
-### Capability types
+Capability types:
 
-| Type | Use |
-|------|-----|
-| **Tools** | Side-effecting or computed actions (`search_issues`, `run_query`) |
-| **Resources** | Readable data blobs (`file://`, `db://schema`) |
-| **Prompts** | Reusable prompt templates distributed by the server |
+| Type | Meaning | Example |
+|------|---------|---------|
+| **Tools** | Invocable actions (often side-effecting) | `search_issues`, `run_query` |
+| **Resources** | Readable data blobs / URIs | `file://...`, `db://schema` |
+| **Prompts** | Reusable prompt templates from the server | “Commit message helper” template |
 
----
+## Core tutorial
 
-## Why MCP exists
+### 1. Why MCP exists
 
-Before MCP, every IDE/agent reinvented N integrations. MCP standardizes:
+Before MCP (and similar standards), each agent host shipped bespoke plugins. Costs:
 
-- Discovery of tools/resources  
-- Schema for tool arguments  
-- A path to consistent auth and auditing in the host  
+- Duplicate schema definitions per host  
+- Inconsistent auth and logging  
+- No shared discovery story for tools/resources  
 
-Your app becomes **model-agnostic at the tool boundary**: swap models without rewriting every connector.
+MCP aims to make the **tool boundary model-agnostic**: swap models or hosts without rewriting every connector. Your internal `acme-tickets` server can serve both a desktop assistant and a CI agent (with different host policies).
 
----
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
 
-## Security model (non-negotiable)
+**Protocol vs product.** MCP specifies how hosts and servers talk about capabilities. It does not replace your product’s authn/z, multi-tenant isolation, or eval suite. A secure host can still make unsafe product choices (auto-approve `rm -rf`). Treat MCP as plumbing; **policy stays in the host**.
+</div>
 
-MCP servers can be as powerful as local code execution.
+### 2. End-to-end call flow
 
-| Risk | Control |
-|------|---------|
-| Malicious server | Install only reviewed sources; pin versions |
-| Over-broad filesystem | Scope roots; read-only where possible |
-| Secret exfiltration | Host approval for tool calls; redact logs |
-| Confused deputy | Per-tenant credentials; never share user tokens blindly |
-| Supply chain | Lockfiles; SBOM; internal registry for prod |
+Conceptual sequence (details evolve — read the live spec):
 
-**Human-in-the-loop** for destructive tools (delete, pay, email send).
+```text
+1. Host starts / connects MCP client to server (stdio subprocess or network transport)
+2. Client and server negotiate protocol version & capabilities
+3. Client lists tools / resources / prompts
+4. Model (via host) selects a tool + arguments
+5. Host applies policy (allow / deny / ask user)
+6. Client invokes tool on server
+7. Server returns result
+8. Host inserts result into model context (Module 05 packing still applies!)
+```
 
----
+MCP does **not** remove the need for context engineering: tool results still consume tokens and can drown instructions.
 
-## Conceptual custom tool server
+### 3. Relation to Module 07 in-process tools
 
-Pseudocode — use the official MCP SDKs for Python/TypeScript in real projects:
+| Module 07 tools | MCP tools |
+|-----------------|-----------|
+| In-process Python (or same runtime) functions | Out-of-process servers, reusable across hosts |
+| App-specific wiring | Shareable across IDE, desktop, agents |
+| You own the entire loop | Host may own sampling + UI approvals |
+| Fastest path for a single app | Best when portability / ecosystem connectors matter |
+
+**Rule of thumb:**
+
+- **In-process tools** — simple products, tight latency, single deployable  
+- **MCP** — portable connectors, IDE integration, multi-host reuse, clear process isolation  
+
+You can use both: core product tools in-process; optional editor integrations via MCP.
+
+<div class="aieng-think" markdown>
+<p class="label">Think about it</p>
+
+**Question:** Your team already has a solid in-process `get_ticket` tool in a FastAPI agent. When would you wrap the same backend as an MCP server?
+
+<details data-think-id="08-t1"><summary>Reveal a strong answer</summary>
+
+When a **second host** needs the same capability (e.g. IDE assistant + web agent), or when you want process isolation and standardized discovery without shipping your Python functions into every client. If there is only one host and no reuse, in-process is simpler — do not protocol for protocol’s sake.
+</details>
+</div>
+
+### 4. Conceptual custom tool server
+
+Pseudocode — use official MCP SDKs (Python / TypeScript / etc.) for real servers; APIs change with the spec.
 
 ```python
 # Conceptual — follow current MCP SDK docs for real servers
@@ -93,60 +140,160 @@ Resources:
 """
 
 def list_tickets(status: str = "open") -> list[dict]:
-    # query internal API with service credentials
+    # query internal API with service credentials — never with raw user tokens blindly
     return [{"id": "T-1", "title": "Login timeout", "status": status}]
+
+def get_ticket(ticket_id: str) -> dict:
+    return {"id": ticket_id, "title": "Login timeout", "status": "open"}
 ```
 
 Hosts list tools → model selects tool + args → host/client invokes server → result returns to model context.
 
----
+Resources differ from tools: they are often **read** as context (file contents, schemas) rather than “actions.” Prompts package reusable instruction templates distributed with the server.
 
-## Relation to Module 07 tools
+### 5. Security model (non-negotiable)
 
-| Module 07 tools | MCP tools |
-|-----------------|-----------|
-| In-process Python functions | Out-of-process, reusable across hosts |
-| App-specific | Shareable across IDE, desktop, agents |
-| You own the loop | Host may own sampling + UI approvals |
+MCP servers can be as powerful as **local code execution**. Installing a random server is closer to installing a binary than to adding a pure npm types package.
 
-Use **in-process tools** for simple apps; use **MCP** when you want portable connectors or IDE integration.
+| Risk | Control |
+|------|---------|
+| Malicious server | Install only reviewed sources; pin versions; prefer internal registry in prod |
+| Over-broad filesystem | Scope roots; read-only where possible |
+| Secret exfiltration | Host approval for tool calls; redact logs; least-privilege credentials |
+| Confused deputy | Per-tenant credentials; never share end-user tokens blindly with servers |
+| Supply chain | Lockfiles; SBOM; signed artifacts where available |
+| Prompt injection via resources | Treat resource text as untrusted data (Module 02 / 07) |
 
----
+**Human-in-the-loop** for destructive tools (delete, pay, email send, production writes).
 
-## Multi-model routing (not MCP)
+Host policy examples:
 
-Still important — just correctly named:
+```text
+dev laptop:  filesystem (repo root only), git read, tickets read
+CI:          no filesystem write; tickets read-only; no browser tools
+prod agent:  internal MCP only; all writes require approval ticket id
+```
+
+<div class="aieng-quiz" data-quiz-id="08-q1" data-xp="25" data-success="Correct — MCP is the tools/resources/prompts protocol, not model routing." data-fail="MCP ≠ load balancer. Routing lives in production/integration modules." markdown>
+<p class="label">Quiz · +25 XP</p>
+<p class="quiz-prompt">Which definition of MCP is correct?</p>
+<div class="quiz-options">
+<button type="button" class="quiz-opt" data-correct="false">A multi-model load balancer that picks GPT vs Claude per request</button>
+<button type="button" class="quiz-opt" data-correct="true">An open standard for connecting AI hosts/clients to external tools, resources, and prompts via servers</button>
+<button type="button" class="quiz-opt" data-correct="false">A fine-tuning format for chat JSONL datasets</button>
+<button type="button" class="quiz-opt" data-correct="false">A vector database wire protocol replacing FAISS</button>
+</div>
+<p class="quiz-feedback"></p>
+</div>
+
+### 6. Multi-model routing (not MCP)
+
+Still important — just correctly named. Keep it out of your MCP mental model:
 
 ```python
 def route_model(task: str) -> str:
     if task in {"classify", "extract"}:
-        return "gpt-4o-mini"  # or local SLM
+        return "small-fast-model"  # API id or local SLM
     if task == "deep_reason":
-        return "claude-sonnet-4-20250514"
-    return "gpt-4o"
+        return "large-reasoner"
+    return "default-mid"
 ```
 
-See Module 10 (cost) and 13 (production) for caching, fallbacks, and load shedding.
+See Module 10 (cost) and 13 (production) for caching, fallbacks, and load shedding. MCP may *supply tools* to whichever model you routed to; it does not *perform* the routing.
 
----
+### 7. Operational checklist for teams
 
-## Exercise
+- [ ] Inventory approved MCP servers (name, version, owner, risk tier)  
+- [ ] Separate allowlists for **dev / CI / prod**  
+- [ ] Document which tools are auto-run vs approval-required  
+- [ ] Log tool name, arg hash, user/tenant, success/failure  
+- [ ] Incident plan: revoke server, rotate credentials, disable host integration  
 
-1. Install a reputable MCP filesystem or git server in a **dev-only** host.  
-2. List tools/resources; perform one read-only operation.  
-3. Write a policy doc: which servers are allowed in CI vs laptop vs prod.
+## Common failure modes
 
----
+| Symptom | Likely cause | Fix |
+|---------|--------------|-----|
+| “MCP = load balancer” confusion | Outdated internal docs | Use this module’s definition; rename routing docs |
+| Shadow IT servers on laptops | No inventory | Approved list + install policy |
+| Token blow-ups after MCP | Unbounded resource reads | Cap resource size; summarize (Module 05) |
+| Secrets in tool results | Server returns env dumps | Redact; scope tools; never log raw |
+| Works in IDE, fails in prod agent | Different hosts/policies | Explicit env matrix |
+| Over-protocolization | MCP for a single in-app function | Prefer Module 07 in-process tools |
+
+## Lab
+
+<div class="aieng-lab" markdown>
+<p class="label">Lab · Dev-only MCP reconnaissance</p>
+
+**Goal:** Use MCP safely as a consumer, then write policy.
+
+1. Read the current overview/spec at [modelcontextprotocol.io](https://modelcontextprotocol.io/).
+2. In a **dev-only** host (not production credentials), install a **reputable** filesystem or git MCP server from a reviewed source.
+3. List tools and resources the server exposes. Perform **one read-only** operation (e.g. list files under a sandbox directory).
+4. Write a short policy doc (`mcp-policy.md` in your notes — not required in this repo):
+   - Servers allowed on laptop vs CI vs prod  
+   - Tools that require human approval  
+   - Version pinning and update process  
+5. **Stretch:** Sketch (or implement with the official SDK) a tiny read-only MCP server wrapping one internal HTTP GET you already trust. Do not expose shell.
+</div>
+
+## Knowledge check
+
+<div class="aieng-quiz" data-quiz-id="08-q2" data-xp="25" data-success="Yes — tools act, resources read, prompts template." data-fail="Revisit capability types: tools vs resources vs prompts." markdown>
+<p class="label">Quiz · +25 XP</p>
+<p class="quiz-prompt">In MCP, which capability is best for “read the contents of ticket://T-1 as context”?</p>
+<div class="quiz-options">
+<button type="button" class="quiz-opt" data-correct="false">Only a prompt template</button>
+<button type="button" class="quiz-opt" data-correct="true">A resource (and/or a read-only tool, depending on design)</button>
+<button type="button" class="quiz-opt" data-correct="false">Model fine-tuning on that ticket</button>
+<button type="button" class="quiz-opt" data-correct="false">A load balancer weight</button>
+</div>
+<p class="quiz-feedback"></p>
+</div>
+
+<div class="aieng-quiz" data-quiz-id="08-q3" data-xp="25" data-success="Correct — third-party servers need the same distrust as untrusted binaries." data-fail="Security is a first-class host responsibility for MCP." markdown>
+<p class="label">Quiz · +25 XP</p>
+<p class="quiz-prompt">What is the strongest default stance toward a new third-party MCP server?</p>
+<div class="quiz-options">
+<button type="button" class="quiz-opt" data-correct="false">Install immediately — the protocol guarantees safety</button>
+<button type="button" class="quiz-opt" data-correct="true">Treat it like untrusted code: review source, pin version, scope permissions, require approvals for dangerous tools</button>
+<button type="button" class="quiz-opt" data-correct="false">Only worry if it uses HTTP instead of stdio</button>
+<button type="button" class="quiz-opt" data-correct="false">Trust any server listed in a public registry without review</button>
+</div>
+<p class="quiz-feedback"></p>
+</div>
+
+<div class="aieng-think" markdown>
+<p class="label">Think about it</p>
+
+**Question:** How does MCP interact with context packing when a filesystem server returns a 200k-token file?
+
+<details data-think-id="08-t2"><summary>Reveal a strong answer</summary>
+
+The host must still enforce budgets: refuse oversized reads, truncate, or summarize before the model call. MCP delivers capabilities; **Module 05 packing** decides what enters the window. Unlimited resource injection is a product bug, not a protocol feature to embrace blindly.
+</details>
+</div>
+
+## Open source materials
+
+1. [Model Context Protocol — official site & spec](https://modelcontextprotocol.io/) — **primary**  
+2. [MCP GitHub organization / servers & SDKs](https://github.com/modelcontextprotocol) — reference servers and SDKs (verify before install)  
+3. Anthropic / ecosystem docs on MCP hosts — how desktop and API products attach servers  
+4. Module 07 course patterns: in-process tools for comparison ([Tools & RAG](07-tools-and-rag.md))  
+5. Module 02 threat model: injection and tool abuse ([Security](02-security-privacy.md))  
+6. Supply-chain hygiene: pin versions, private registries, SBOM practices for any executable connector  
 
 ## Checkpoint
 
-- [ ] You can define MCP without saying “load balancer”  
-- [ ] You know tools vs resources  
-- [ ] You have a security bar for third-party servers  
+- [ ] You can define MCP **without** saying “load balancer”  
+- [ ] You can name host, client, and server responsibilities  
+- [ ] You know tools vs resources vs prompts  
+- [ ] You have a security bar for third-party servers (dev vs prod)  
+- [ ] You know when to stay with in-process tools instead  
+
+<div class="aieng-complete" data-module-id="08" data-xp="120" markdown>
+<p>When the definition, architecture, and security policy are clear in your notes, mark complete.</p>
+<button type="button">Complete module · +120 XP</button>
+</div>
 
 **Next:** [Module 09 — Advanced RAG](09-advanced-rag.md)
-
-### Primary references
-
-- [Model Context Protocol specification](https://modelcontextprotocol.io/)  
-- Anthropic / ecosystem MCP server registries (verify before install)

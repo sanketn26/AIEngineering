@@ -2,13 +2,16 @@
 
 **Build LLM applications from first prompt to production agents.**
 
-This site is a restructured, relevance-updated curriculum for AI engineering: prompt design, security, RAG, agents, local/small models, and MLOps — plus three optional 90-day specialization tracks.
+This site is a restructured curriculum for **CS and software engineers**: prompt design, security, RAG, agents, local/small models, and production MLOps — plus three optional 90-day specialization tracks.
+
+Modules are written as **tutorials**, not a table of contents: mental models, explainers, inquisitive questions, labs, and interactive quizzes. Optional **client-side gamification** (XP, badges, progress HUD) works on static GitHub Pages via `localStorage` — no backend required.
 
 !!! tip "How to use this site"
     1. Complete [Setup](getting-started/setup.md)  
     2. Pick a [learning path](getting-started/paths.md)  
-    3. Work through **Core modules** in order (or jump where the path allows)  
-    4. Optionally commit to a [specialization track](tracks/index.md)
+    3. Open the [Progress dashboard](getting-started/progress.md) (optional XP)  
+    4. Work through **Core modules** — read explainers, answer “Think about it”, ship the lab  
+    5. Optionally commit to a [specialization track](tracks/index.md)
 
 ---
 
@@ -21,6 +24,8 @@ This site is a restructured, relevance-updated curriculum for AI engineering: pr
 | Systems / platform | Multi-agent, compliance, hybrid deploy | Enterprise |
 | Researcher / ML | Fine-tuning, advanced RAG, SLMs | Researcher |
 | Project-focused | Stock system, hybrid DL, or IDE agent | Specialization tracks |
+
+**Primary audience:** engineers who already ship APIs, services, and tests — and need to treat models as unreliable components with budgets, security boundaries, and eval gates.
 
 ---
 
@@ -46,7 +51,38 @@ This site is a restructured, relevance-updated curriculum for AI engineering: pr
 | [16](core/16-integration-patterns.md) | Integration | Events, hybrid cloud, services |
 | [17](core/17-small-models.md) | Small / local models | SLMs, Ollama, quantization |
 
-Progression tables: [Capability summary](reference/progression.md) · [Exercises](reference/exercises.md) · [Assessment rubrics](reference/assessment.md).
+Progression tables: [Capability summary](reference/progression.md) · [Exercises](reference/exercises.md) · [Assessment rubrics](reference/assessment.md) · [Open-source resources](reference/resources.md).
+
+---
+
+## What “tutorial depth” means here
+
+Each core module aims for:
+
+| Element | Purpose |
+|---------|---------|
+| **Why it matters** | Map the topic to systems you already build |
+| **Mental model** | Diagram of control/data flow before code |
+| **Explainers** | Short deep-dives that stop skim-mode |
+| **Think about it** | Questions with revealable strong answers (+XP) |
+| **Quizzes** | Interactive checks (+XP, local only) |
+| **Lab** | Small shippable artifact |
+| **OSS materials** | Curated repos/guides, not link dumps |
+
+If a page still feels like a checklist, open an issue — that is a bug in the curriculum.
+
+---
+
+## Gamification (GitHub Pages–safe)
+
+| Feature | How it works |
+|---------|----------------|
+| Progress HUD | Fixed panel on every page |
+| XP & levels | Quizzes, reflections, module complete |
+| Badges | Foundations, Retrieval Pro, Ship It, Full Core, … |
+| Dashboard | [Progress & XP](getting-started/progress.md) |
+
+All state is **browser `localStorage`**. No accounts, no analytics backend, works on static hosting.
 
 ---
 
@@ -64,6 +100,7 @@ Progression tables: [Capability summary](reference/progression.md) · [Exercises
 
 ```text
 docs/                 # This site (source of truth for the course)
+  assets/             # Gamification CSS/JS
 archive/source/       # Pre-restructure originals (provenance)
 src/                  # Optional Python sandbox (Poetry)
 tests/                # Unit tests for sandbox code
@@ -77,4 +114,4 @@ mkdocs.yml            # Site config
 
 A full diagnostic of the prior materials — scrambled sections, outdated APIs, incorrect MCP definition, and publishing gaps — lives in the [Review analysis](review/analysis.md).
 
-**Last curriculum refresh:** 2026-08.
+**Last curriculum refresh:** 2026-08 (tutorial depth + static gamification).

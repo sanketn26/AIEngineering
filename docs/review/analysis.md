@@ -254,8 +254,11 @@ docs/
 | Assessment rubrics for modules + day-90 tracks | **Done** — [Assessment](../reference/assessment.md) |
 | Prefer primary vendor docs in resource lists | **Done** — [Resources](../reference/resources.md) |
 | Legal/domain content remains educational only | **Accepted** — warnings retained in modules 14–15 |
+| Tutorial depth (explainers, questions, diagrams) vs TOC feel | **Done** — core modules ~300–500 lines each with mermaid, labs, OSS refs |
+| Static gamification (XP, badges, quizzes, HUD) | **Done** — `docs/assets/{js,css}/gamify.*`, [Progress](../getting-started/progress.md); GitHub Pages–safe |
 | Multi-version docs with `mike` | **Optional** — add when yearly forks exist |
 | Full notebooks per module / real GPU fine-tune CI | **Future** — local GPU optional; not required for course site |
+| Server-side leaderboards / accounts | **Out of scope** — static hosting only; localStorage progress |
 
 ---
 

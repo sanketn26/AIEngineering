@@ -1,0 +1,431 @@
+/* AI Engineering Course — client-side gamification (static GitHub Pages safe) */
+
+:root {
+  --xp-accent: #14b8a6;
+  --xp-warn: #f59e0b;
+  --xp-bad: #ef4444;
+  --xp-ok: #22c55e;
+  --xp-panel: rgba(15, 23, 42, 0.92);
+  --xp-border: rgba(20, 184, 166, 0.35);
+}
+
+[data-md-color-scheme="default"] {
+  --xp-panel: rgba(255, 255, 255, 0.96);
+  --xp-text: #0f172a;
+  --xp-muted: #475569;
+  --xp-card: #f8fafc;
+  --xp-shadow: 0 8px 28px rgba(15, 23, 42, 0.12);
+}
+
+[data-md-color-scheme="slate"] {
+  --xp-text: #e2e8f0;
+  --xp-muted: #94a3b8;
+  --xp-card: #1e293b;
+  --xp-shadow: 0 8px 28px rgba(0, 0, 0, 0.35);
+}
+
+/* Fixed progress HUD */
+#aieng-hud {
+  position: fixed;
+  right: 1rem;
+  bottom: 1rem;
+  z-index: 100;
+  width: min(280px, calc(100vw - 2rem));
+  background: var(--xp-panel);
+  color: var(--xp-text);
+  border: 1px solid var(--xp-border);
+  border-radius: 12px;
+  box-shadow: var(--xp-shadow);
+  font-size: 0.78rem;
+  line-height: 1.35;
+  backdrop-filter: blur(8px);
+  overflow: hidden;
+}
+
+#aieng-hud.collapsed .aieng-hud-body {
+  display: none;
+}
+
+#aieng-hud .aieng-hud-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  user-select: none;
+  background: linear-gradient(90deg, rgba(20, 184, 166, 0.18), transparent);
+}
+
+#aieng-hud .aieng-hud-title {
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+#aieng-hud .aieng-hud-body {
+  padding: 0 0.75rem 0.75rem;
+}
+
+#aieng-hud .aieng-row {
+  display: flex;
+  justify-content: space-between;
+  margin: 0.25rem 0;
+  color: var(--xp-muted);
+}
+
+#aieng-hud .aieng-row strong {
+  color: var(--xp-text);
+}
+
+#aieng-hud .aieng-bar {
+  height: 8px;
+  background: rgba(148, 163, 184, 0.25);
+  border-radius: 999px;
+  overflow: hidden;
+  margin: 0.45rem 0 0.2rem;
+}
+
+#aieng-hud .aieng-bar > span {
+  display: block;
+  height: 100%;
+  width: 0%;
+  background: linear-gradient(90deg, #0d9488, var(--xp-accent));
+  transition: width 0.35s ease;
+}
+
+#aieng-hud .aieng-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem;
+  margin-top: 0.5rem;
+}
+
+#aieng-hud .aieng-badge-chip {
+  font-size: 0.68rem;
+  padding: 0.15rem 0.4rem;
+  border-radius: 999px;
+  background: rgba(20, 184, 166, 0.15);
+  border: 1px solid var(--xp-border);
+  color: var(--xp-text);
+}
+
+#aieng-hud .aieng-links {
+  display: flex;
+  gap: 0.6rem;
+  margin-top: 0.55rem;
+}
+
+#aieng-hud a {
+  color: var(--xp-accent);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+#aieng-hud a:hover {
+  text-decoration: underline;
+}
+
+/* Toast */
+#aieng-toast {
+  position: fixed;
+  left: 50%;
+  bottom: 5.5rem;
+  transform: translateX(-50%) translateY(20px);
+  z-index: 110;
+  background: var(--xp-panel);
+  color: var(--xp-text);
+  border: 1px solid var(--xp-border);
+  border-radius: 10px;
+  padding: 0.65rem 1rem;
+  box-shadow: var(--xp-shadow);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  max-width: min(420px, calc(100vw - 2rem));
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+#aieng-toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* Think / Explainer cards */
+.aieng-think,
+.aieng-explainer,
+.aieng-lab,
+.aieng-quiz,
+.aieng-complete {
+  border-radius: 10px;
+  padding: 0.9rem 1rem;
+  margin: 1.1rem 0;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  background: var(--xp-card, #f8fafc);
+}
+
+[data-md-color-scheme="slate"] .aieng-think,
+[data-md-color-scheme="slate"] .aieng-explainer,
+[data-md-color-scheme="slate"] .aieng-lab,
+[data-md-color-scheme="slate"] .aieng-quiz,
+[data-md-color-scheme="slate"] .aieng-complete {
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.aieng-think {
+  border-left: 4px solid var(--xp-warn);
+}
+
+.aieng-explainer {
+  border-left: 4px solid #6366f1;
+}
+
+.aieng-lab {
+  border-left: 4px solid var(--xp-accent);
+}
+
+.aieng-think > .label,
+.aieng-explainer > .label,
+.aieng-lab > .label,
+.aieng-quiz > .label {
+  font-weight: 800;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 0 0 0.4rem;
+  color: var(--xp-muted);
+}
+
+.aieng-think details,
+.aieng-explainer details {
+  margin-top: 0.4rem;
+}
+
+.aieng-think summary,
+.aieng-explainer summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: var(--xp-accent);
+}
+
+/* Interactive quiz */
+.aieng-quiz {
+  border-left: 4px solid #ec4899;
+}
+
+.aieng-quiz .quiz-prompt {
+  font-weight: 600;
+  margin: 0.2rem 0 0.7rem;
+}
+
+.aieng-quiz .quiz-options {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.aieng-quiz button.quiz-opt {
+  text-align: left;
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  background: transparent;
+  color: inherit;
+  border-radius: 8px;
+  padding: 0.55rem 0.7rem;
+  cursor: pointer;
+  font: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.aieng-quiz button.quiz-opt:hover:not(:disabled) {
+  border-color: var(--xp-accent);
+  background: rgba(20, 184, 166, 0.08);
+}
+
+.aieng-quiz button.quiz-opt.correct {
+  border-color: var(--xp-ok);
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.aieng-quiz button.quiz-opt.wrong {
+  border-color: var(--xp-bad);
+  background: rgba(239, 68, 68, 0.1);
+}
+
+.aieng-quiz button.quiz-opt:disabled {
+  cursor: default;
+  opacity: 0.95;
+}
+
+.aieng-quiz .quiz-feedback {
+  margin-top: 0.65rem;
+  font-size: 0.9rem;
+  color: var(--xp-muted);
+  min-height: 1.2em;
+}
+
+.aieng-quiz .quiz-feedback.ok {
+  color: var(--xp-ok);
+}
+
+.aieng-quiz .quiz-feedback.bad {
+  color: var(--xp-bad);
+}
+
+.aieng-quiz .quiz-meta {
+  margin-top: 0.35rem;
+  font-size: 0.75rem;
+  color: var(--xp-muted);
+}
+
+/* Module complete */
+.aieng-complete {
+  border-left: 4px solid var(--xp-ok);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.aieng-complete p {
+  margin: 0;
+  flex: 1 1 200px;
+}
+
+.aieng-complete button {
+  border: none;
+  border-radius: 8px;
+  padding: 0.55rem 0.9rem;
+  font-weight: 700;
+  cursor: pointer;
+  background: linear-gradient(135deg, #0d9488, #14b8a6);
+  color: #fff;
+  font: inherit;
+}
+
+.aieng-complete button:disabled {
+  opacity: 0.65;
+  cursor: default;
+  background: #64748b;
+}
+
+/* Progress dashboard page */
+.aieng-dash {
+  display: grid;
+  gap: 1rem;
+}
+
+.aieng-dash-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
+}
+
+.aieng-stat {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 10px;
+  padding: 0.85rem;
+  background: var(--xp-card, #f8fafc);
+}
+
+[data-md-color-scheme="slate"] .aieng-stat {
+  background: rgba(30, 41, 59, 0.65);
+}
+
+.aieng-stat .k {
+  font-size: 0.75rem;
+  color: var(--xp-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.aieng-stat .v {
+  font-size: 1.45rem;
+  font-weight: 800;
+  margin-top: 0.2rem;
+}
+
+.aieng-module-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.aieng-module-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.45rem 0;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.aieng-module-list .dot {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 50%;
+  background: #94a3b8;
+  flex: 0 0 auto;
+}
+
+.aieng-module-list .dot.done {
+  background: var(--xp-ok);
+}
+
+.aieng-module-list .dot.partial {
+  background: var(--xp-warn);
+}
+
+.aieng-badge-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.65rem;
+}
+
+.aieng-badge-card {
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 10px;
+  padding: 0.75rem;
+  opacity: 0.45;
+  filter: grayscale(0.8);
+}
+
+.aieng-badge-card.earned {
+  opacity: 1;
+  filter: none;
+  border-color: var(--xp-border);
+  box-shadow: 0 0 0 1px rgba(20, 184, 166, 0.15);
+}
+
+.aieng-badge-card .icon {
+  font-size: 1.4rem;
+}
+
+.aieng-badge-card .name {
+  font-weight: 700;
+  margin-top: 0.25rem;
+}
+
+.aieng-badge-card .desc {
+  font-size: 0.8rem;
+  color: var(--xp-muted);
+}
+
+.aieng-reset {
+  margin-top: 1rem;
+}
+
+.aieng-reset button {
+  border: 1px solid rgba(239, 68, 68, 0.5);
+  background: transparent;
+  color: var(--xp-bad);
+  border-radius: 8px;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+  font: inherit;
+}
+
+@media (max-width: 720px) {
+  #aieng-hud {
+    right: 0.5rem;
+    bottom: 0.5rem;
+  }
+}
