@@ -1,5 +1,5 @@
 site_name: AI Engineering Course
-site_description: From prompt engineering to production agents — restructured curriculum with specialization tracks
+site_description: A practical curriculum for building reliable AI systems, from prompt engineering to production agents
 site_author: AIEngineering contributors
 # Update to your GitHub Pages URL after first deploy, e.g.:
 # https://<user>.github.io/AIEngineering/
@@ -46,6 +46,8 @@ theme:
     - content.code.annotate
     - content.tabs.link
     - toc.follow
+    - content.action.edit
+    - content.action.view
   icon:
     repo: fontawesome/brands/github
 

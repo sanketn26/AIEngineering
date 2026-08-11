@@ -1,118 +1,131 @@
-# AI Engineering Course
-
-**Build LLM applications from first prompt to production agents.**
-
-This site is a restructured curriculum for **CS and software engineers**: prompt design, security, RAG, agents, local/small models, and production MLOps — plus three optional 90-day specialization tracks.
-
-Modules are written as **tutorials**, not a table of contents: mental models, explainers, inquisitive questions, labs, and interactive quizzes. Optional **client-side gamification** (XP, badges, progress HUD) works on static GitHub Pages via `localStorage` — no backend required.
-
-!!! tip "How to use this site"
-    1. Complete [Setup](getting-started/setup.md)  
-    2. Pick a [learning path](getting-started/paths.md)  
-    3. Open the [Progress dashboard](getting-started/progress.md) (optional XP)  
-    4. Work through **Core modules** — read explainers, answer “Think about it”, ship the lab  
-    5. Optionally commit to a [specialization track](tracks/index.md)
-
+---
+hide:
+  - toc
 ---
 
-## Who this is for
+<div class="course-hero">
+  <div class="course-hero__content">
+    <span class="course-eyebrow">Open-source · Hands-on · Production-minded</span>
+    <h1>Build reliable AI systems,<br><span>from prompt to production.</span></h1>
+    <p class="course-hero__lead">A practical engineering curriculum for building, evaluating, securing, and operating modern LLM applications.</p>
+    <div class="course-actions">
+      <a class="course-button course-button--primary" href="getting-started/setup/">Start learning <span aria-hidden="true">→</span></a>
+      <a class="course-button course-button--secondary" href="getting-started/paths/">Explore learning paths</a>
+    </div>
+    <p class="course-hero__note">17 core modules · Interactive labs and quizzes · Learn at your own pace</p>
+  </div>
+  <div class="course-terminal" aria-label="Course outcomes">
+    <div class="course-terminal__bar"><i></i><i></i><i></i><span>ai-engineering / roadmap</span></div>
+    <div class="course-terminal__body">
+      <p><span class="terminal-muted">01</span> Design prompts with measurable contracts</p>
+      <p><span class="terminal-muted">02</span> Build secure retrieval and tool workflows</p>
+      <p><span class="terminal-muted">03</span> Evaluate quality, latency, and cost</p>
+      <p><span class="terminal-muted">04</span> Ship observable production agents</p>
+      <div class="terminal-status"><span></span> Your roadmap is ready</div>
+    </div>
+  </div>
+</div>
 
-| Persona | Goal | Suggested path |
-|---------|------|----------------|
-| Curious builder | Ship a chatbot / RAG app in a weekend | Weekend Warrior |
-| Software engineer | Production-ready services with evals | Professional |
-| Systems / platform | Multi-agent, compliance, hybrid deploy | Enterprise |
-| Researcher / ML | Fine-tuning, advanced RAG, SLMs | Researcher |
-| Project-focused | Stock system, hybrid DL, or IDE agent | Specialization tracks |
+<div class="course-proof" aria-label="Course overview">
+  <div><strong>17</strong><span>Core modules</span></div>
+  <div><strong>3</strong><span>Specialization tracks</span></div>
+  <div><strong>100%</strong><span>Open source</span></div>
+  <div><strong>Local</strong><span>Private progress tracking</span></div>
+</div>
 
-**Primary audience:** engineers who already ship APIs, services, and tests — and need to treat models as unreliable components with budgets, security boundaries, and eval gates.
+## Choose the route that fits your goal
 
----
+Whether you have a weekend or want a complete engineering foundation, begin with a focused route and expand when you need to.
 
-## Core curriculum map
+<div class="path-grid">
+  <a class="path-card" href="getting-started/paths/#weekend-warrior-23-days">
+    <span class="path-card__icon">01</span>
+    <span class="path-card__time">A focused weekend</span>
+    <h3>Build your first LLM app</h3>
+    <p>Learn prompt contracts, basic retrieval, and evaluation by shipping a small working application.</p>
+    <span class="path-card__link">Follow the Weekend path →</span>
+  </a>
+  <a class="path-card path-card--featured" href="getting-started/paths/#professional-developer-12-weeks">
+    <span class="path-card__tag">Most complete</span>
+    <span class="path-card__icon">02</span>
+    <span class="path-card__time">8–12 weeks</span>
+    <h3>Become a production AI engineer</h3>
+    <p>Build dependable services with security boundaries, eval gates, observability, and cost controls.</p>
+    <span class="path-card__link">Follow the Professional path →</span>
+  </a>
+  <a class="path-card" href="tracks/">
+    <span class="path-card__icon">03</span>
+    <span class="path-card__time">90-day projects</span>
+    <h3>Develop a specialization</h3>
+    <p>Go deep on a stock recommender, hybrid neural models, or an agentic editor plugin.</p>
+    <span class="path-card__link">Explore specialization tracks →</span>
+  </a>
+</div>
 
-| Module | Topic | You will be able to |
-|--------|-------|---------------------|
-| [01](core/01-prompt-engineering.md) | Prompt engineering | Write reliable, structured prompts |
-| [02](core/02-security-privacy.md) | Security & privacy | Resist injection; handle PII |
-| [03](core/03-advanced-prompting.md) | Advanced prompting | CoT, few-shot, structured outputs |
-| [04](core/04-testing-evals.md) | Testing & evals | Regression tests and quality metrics |
-| [05](core/05-context-engineering.md) | Context engineering | Budget tokens; memory & packing |
-| [06](core/06-fine-tuning.md) | Fine-tuning | Decide when to PEFT/LoRA |
-| [07](core/07-tools-and-rag.md) | Tools & basic RAG | Tool calling + retrieve-then-generate |
-| [08](core/08-model-context-protocol.md) | Model Context Protocol | Connect tools/resources via MCP |
-| [09](core/09-advanced-rag.md) | Advanced RAG | Hybrid search, rerank, agentic RAG |
-| [10](core/10-cost-optimization.md) | Cost optimization | Route, cache, measure spend |
-| [11](core/11-single-agents.md) | Single agents | Plan–act–observe loops |
-| [12](core/12-multi-agents.md) | Multi-agent | Orchestrate specialized roles |
-| [13](core/13-production.md) | Production | Serve, observe, harden |
-| [14](core/14-compliance.md) | Compliance | Audit trails & governance basics |
-| [15](core/15-domain-apps.md) | Domain apps | Vertical patterns (not legal advice) |
-| [16](core/16-integration-patterns.md) | Integration | Events, hybrid cloud, services |
-| [17](core/17-small-models.md) | Small / local models | SLMs, Ollama, quantization |
+## A curriculum built around shipping
 
-Progression tables: [Capability summary](reference/progression.md) · [Exercises](reference/exercises.md) · [Assessment rubrics](reference/assessment.md) · [Open-source resources](reference/resources.md).
+The modules move from dependable model interactions to complete production systems. Each stage builds on the one before it.
 
----
+<div class="curriculum-grid">
+  <div class="curriculum-stage">
+    <div class="curriculum-stage__head"><span>Stage 1</span><strong>Foundations</strong></div>
+    <p>Make model behavior explicit, testable, and safe.</p>
+    <ul>
+      <li><a href="core/01-prompt-engineering/">Prompt engineering</a></li>
+      <li><a href="core/02-security-privacy/">Security & privacy</a></li>
+      <li><a href="core/03-advanced-prompting/">Advanced prompting</a></li>
+      <li><a href="core/04-testing-evals/">Testing & evals</a></li>
+    </ul>
+  </div>
+  <div class="curriculum-stage">
+    <div class="curriculum-stage__head"><span>Stage 2</span><strong>Knowledge</strong></div>
+    <p>Give models the right context, tools, and data.</p>
+    <ul>
+      <li><a href="core/05-context-engineering/">Context engineering</a></li>
+      <li><a href="core/06-fine-tuning/">Fine-tuning</a></li>
+      <li><a href="core/07-tools-and-rag/">Tools & basic RAG</a></li>
+      <li><a href="core/09-advanced-rag/">Advanced RAG</a></li>
+    </ul>
+  </div>
+  <div class="curriculum-stage">
+    <div class="curriculum-stage__head"><span>Stage 3</span><strong>Agents</strong></div>
+    <p>Design workflows that can act without losing control.</p>
+    <ul>
+      <li><a href="core/08-model-context-protocol/">Model Context Protocol</a></li>
+      <li><a href="core/11-single-agents/">Single-agent systems</a></li>
+      <li><a href="core/12-multi-agents/">Multi-agent systems</a></li>
+      <li><a href="core/16-integration-patterns/">Integration patterns</a></li>
+    </ul>
+  </div>
+  <div class="curriculum-stage">
+    <div class="curriculum-stage__head"><span>Stage 4</span><strong>Production</strong></div>
+    <p>Operate AI systems within real-world constraints.</p>
+    <ul>
+      <li><a href="core/10-cost-optimization/">Cost optimization</a></li>
+      <li><a href="core/13-production/">Production engineering</a></li>
+      <li><a href="core/14-compliance/">Compliance</a></li>
+      <li><a href="core/17-small-models/">Small & local models</a></li>
+    </ul>
+  </div>
+</div>
 
-## How these modules teach (intuition first)
+<p class="course-inline-link"><a href="reference/progression/">View the complete capability map →</a></p>
 
-Each core module is built so you **picture the system**, not only collect vocabulary:
+## Learn by building, not by collecting vocabulary
 
-| Element | What it does in your head |
-|---------|---------------------------|
-| **Incident story** | A Friday-afternoon failure you can feel before the theory |
-| **Mental model** | Mermaid of control/data flow — where trust and tokens move |
-| **Intuition lock** | One sticky analogy + the wrong idea to kill |
-| **Explainers** | Why a design exists, not only how to type it |
-| **Think about it** | Tradeoffs that force re-reading, not skim checkboxes |
-| **Lab + quizzes** | Prove the picture works under a small shippable artifact |
+<div class="method-grid">
+  <div><span>◇</span><h3>Understand the system</h3><p>Incident stories and visual mental models show where data, trust, and tokens move.</p></div>
+  <div><span>⌁</span><h3>Make the tradeoff</h3><p>Focused questions turn abstract concepts into concrete engineering decisions.</p></div>
+  <div><span>✓</span><h3>Prove it works</h3><p>Labs, tests, and interactive quizzes end in a small artifact you can actually ship.</p></div>
+</div>
 
-If a page still feels like a bland outline, that is a curriculum bug — open an issue.
+<div class="course-cta">
+  <div>
+    <span class="course-eyebrow">Ready when you are</span>
+    <h2>Start with a working environment.</h2>
+    <p>Set up the repository, run your first examples, and begin Module 01.</p>
+  </div>
+  <a class="course-button course-button--primary" href="getting-started/setup/">Get started <span aria-hidden="true">→</span></a>
+</div>
 
----
-
-## Gamification (GitHub Pages–safe)
-
-| Feature | How it works |
-|---------|----------------|
-| Progress HUD | Fixed panel on every page |
-| XP & levels | Quizzes, reflections, module complete |
-| Badges | Foundations, Retrieval Pro, Ship It, Full Core, … |
-| Dashboard | [Progress & XP](getting-started/progress.md) |
-
-All state is **browser `localStorage`**. No accounts, no analytics backend, works on static hosting.
-
----
-
-## Specialization tracks (90 days)
-
-Full tutorials (architecture, code, traps, phase exits) — not bare phase tables. Start at [Tracks overview](tracks/index.md).
-
-| Track | Focus |
-|-------|--------|
-| [Stock recommender](tracks/stock-recommender.md) | Data → classical ML → SLM → RAG → compression → deploy |
-| [Hybrid models from scratch](tracks/hybrid-models.md) | Transformer + MLP fusion in PyTorch |
-| [Agentic editor plugin](tracks/agentic-plugin.md) | VS Code extension + agent backend + local models |
-
----
-
-## Repository layout
-
-```text
-docs/                 # This site (source of truth for the course)
-  assets/             # Gamification CSS/JS
-archive/source/       # Pre-restructure originals (provenance)
-src/                  # Optional Python sandbox (Poetry)
-tests/                # Unit tests for sandbox code
-mkdocs.yml            # Site config
-.github/workflows/    # GitHub Pages deploy
-```
-
----
-
-## About the restructure
-
-A full diagnostic of the prior materials — scrambled sections, outdated APIs, incorrect MCP definition, and publishing gaps — lives in the [Review analysis](review/analysis.md).
-
-**Last curriculum refresh:** 2026-08 (tutorial depth + static gamification).
+<p class="course-footnote">Progress and XP stay in your browser via <code>localStorage</code>. No account, analytics service, or backend is required.</p>
