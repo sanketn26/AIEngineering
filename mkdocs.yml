@@ -1,10 +1,8 @@
 site_name: AI Engineering Course
 site_description: A practical curriculum for building reliable AI systems, from prompt engineering to production agents
 site_author: AIEngineering contributors
-# Update to your GitHub Pages URL after first deploy, e.g.:
-# https://<user>.github.io/AIEngineering/
-site_url: ""
-repo_url: https://github.com/sanketnaik/AIEngineering
+site_url: https://sanketn26.github.io/AIEngineering/
+repo_url: https://github.com/sanketn26/AIEngineering
 repo_name: AIEngineering
 edit_uri: edit/main/docs/
 copyright: Copyright &copy; AIEngineering contributors — educational material
@@ -90,7 +88,7 @@ markdown_extensions:
 extra:
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/sanketnaik/AIEngineering
+      link: https://github.com/sanketn26/AIEngineering
   generator: false
   # Client-side gamification (localStorage) — works on static GitHub Pages
 extra_css:

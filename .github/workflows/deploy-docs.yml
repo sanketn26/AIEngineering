@@ -3,11 +3,6 @@ name: Deploy docs to GitHub Pages
 on:
   push:
     branches: [main]
-    paths:
-      - "docs/**"
-      - "mkdocs.yml"
-      - "requirements-docs.txt"
-      - ".github/workflows/deploy-docs.yml"
   workflow_dispatch:
 
 permissions:
@@ -24,13 +19,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@v4
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
 
       - name: Setup Python
-        uses: actions/setup-python@v7
+        uses: actions/setup-python@v5
         with:
           python-version: "3.12"
           cache: pip
@@ -39,26 +34,11 @@ jobs:
       - name: Install docs dependencies
         run: pip install -r requirements-docs.txt
 
-      - name: Compute site_url for project Pages
-        id: site
-        run: |
-          REPO="${{ github.event.repository.name }}"
-          OWNER="${{ github.repository_owner }}"
-          # Project site: https://<owner>.github.io/<repo>/
-          # User/org site (repo named <owner>.github.io): https://<owner>.github.io/
-          if [ "$REPO" = "${OWNER}.github.io" ]; then
-            SITE_URL="https://${OWNER}.github.io/"
-          else
-            SITE_URL="https://${OWNER}.github.io/${REPO}/"
-          fi
-          echo "Using site_url=$SITE_URL"
-          echo "site_url=$SITE_URL" >> "$GITHUB_OUTPUT"
-
       - name: Build MkDocs
-        run: mkdocs build --strict --site-url "${{ steps.site.outputs.site_url }}"
+        run: mkdocs build --strict
 
       - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v5
+        uses: actions/upload-pages-artifact@v3
         with:
           path: site
 
@@ -71,6 +51,6 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v5
+        uses: actions/deploy-pages@v4
         with:
           timeout: 1200000

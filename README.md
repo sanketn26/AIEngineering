@@ -2,7 +2,7 @@
 
 **From first prompt to production agents** — a restructured, relevance-updated curriculum with optional 90-day specialization tracks.
 
-This repository is optimized to publish as a **GitHub Pages** site via [MkDocs Material](https://squidfunk.github.io/mkdocs-material/).
+The published course is available at **[sanketn26.github.io/AIEngineering](https://sanketn26.github.io/AIEngineering/)** and is built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/).
 
 | | |
 |---|---|
