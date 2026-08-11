@@ -241,10 +241,11 @@
     if (!hud) {
       hud = document.createElement("div");
       hud.id = "aieng-hud";
+      hud.className = "collapsed";
       hud.innerHTML =
         '<div class="aieng-hud-head" id="aieng-hud-toggle">' +
         '<span class="aieng-hud-title">AI Eng Progress</span>' +
-        '<span id="aieng-hud-chevron">▾</span></div>' +
+        '<span id="aieng-hud-chevron">▸</span></div>' +
         '<div class="aieng-hud-body">' +
         '<div class="aieng-row"><span>Level</span><strong id="aieng-level">1</strong></div>' +
         '<div class="aieng-row"><span>XP</span><strong id="aieng-xp">0</strong></div>' +
