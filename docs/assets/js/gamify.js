@@ -217,6 +217,19 @@
     if (reason) toast("+" + amount + " XP — " + reason);
   }
 
+  function getSiteRoot() {
+    // The <script> tag's resolved (absolute) src already accounts for page
+    // depth and any GitHub Pages project subpath — trust it instead of
+    // re-deriving depth from location.pathname.
+    var scripts = document.getElementsByTagName("script");
+    for (var i = 0; i < scripts.length; i++) {
+      var src = scripts[i].src || "";
+      var idx = src.indexOf("assets/js/gamify.js");
+      if (idx !== -1) return src.substring(0, idx);
+    }
+    return null;
+  }
+
   function moduleById(id) {
     for (var i = 0; i < MODULES.length; i++) {
       if (MODULES[i].id === id) return MODULES[i];
@@ -263,37 +276,16 @@
         if (ch) ch.textContent = hud.classList.contains("collapsed") ? "▸" : "▾";
       });
 
-      // Resolve dashboard link relative to site root
+      // Resolve dashboard link from this script's own resolved URL, so it's
+      // correct regardless of page nesting depth or a GitHub Pages subpath
+      // (e.g. /AIEngineering/). Guessing depth from location.pathname was
+      // off by one level for every nested page and produced a 404.
       var dash = document.getElementById("aieng-dash-link");
       if (dash) {
-        var base = document.querySelector("base");
-        var root = (base && base.href) || "/";
-        // Prefer MkDocs path; fall back to relative guess
-        var candidates = [
-          "getting-started/progress/",
-          "../getting-started/progress/",
-          "../../getting-started/progress/",
-          "getting-started/progress.html",
-          "../getting-started/progress.html"
-        ];
-        // Try from current path depth
-        var parts = location.pathname.replace(/\/+$/, "").split("/");
-        // strip filename if present
-        if (parts[parts.length - 1].indexOf(".") !== -1) parts.pop();
-        var depth = Math.max(0, parts.length - 1);
-        // Prefer absolute-from-site if repo project pages: keep relative
-        dash.href = depth <= 1 ? "getting-started/progress/" : "../getting-started/progress/";
-        if (location.pathname.indexOf("/core/") !== -1) {
-          dash.href = "../getting-started/progress/";
-        } else if (location.pathname.indexOf("/getting-started/") !== -1) {
-          dash.href = "progress/";
-        } else if (location.pathname.indexOf("/tracks/") !== -1) {
-          dash.href = "../getting-started/progress/";
-        } else if (location.pathname.indexOf("/reference/") !== -1) {
-          dash.href = "../getting-started/progress/";
-        } else {
-          dash.href = "getting-started/progress/";
-        }
+        var siteRoot = getSiteRoot();
+        dash.href = siteRoot
+          ? siteRoot + "getting-started/progress/"
+          : "getting-started/progress/"; // fallback: only correct from site root
       }
     }
 
@@ -346,7 +338,7 @@
           if (btn.getAttribute("data-correct") === "true") btn.classList.add("correct");
         });
         if (feedback) {
-          feedback.textContent = "Already solved (+" + xp + " XP saved).";
+          feedback.textContent = "Already solved.";
           feedback.classList.add("ok");
         }
         return;
@@ -367,12 +359,16 @@
           if (correct) {
             btn.classList.add("correct");
             if (feedback) {
-              feedback.textContent =
-                (quiz.getAttribute("data-success") || "Correct.") + " (+" + xp + " XP)";
+              feedback.textContent = quiz.getAttribute("data-success") || "Correct.";
               feedback.classList.add("ok");
             }
-            state.quizzes[qid] = { at: new Date().toISOString(), xp: xp };
-            addXp(state, xp, "quiz");
+            // Recorded for the Quiz Rookie/Ace badges only — quizzes no
+            // longer grant XP. Module completion is the only XP source,
+            // via the explicit "Complete module" button (wireComplete).
+            state.quizzes[qid] = { at: new Date().toISOString() };
+            awardBadges(state, false);
+            save(state);
+            renderHud(state);
           } else {
             btn.classList.add("wrong");
             if (feedback) {
@@ -381,7 +377,7 @@
                 "Not quite — read the explainer above and try the next quiz.";
               feedback.classList.add("bad");
             }
-            // No XP on wrong; no retry this session (answers stay revealed).
+            // No retry this session (answers stay revealed).
             save(state);
             renderHud(state);
           }
@@ -412,23 +408,6 @@
         btn.disabled = true;
         btn.textContent = "Completed ✓";
         addXp(state, xp, "module " + mid + " complete");
-      });
-    });
-  }
-
-  function wireThinks(state) {
-    // Small XP for revealing a "Think about it" answer once
-    document.querySelectorAll(".aieng-think details[data-think-id]").forEach(function (det) {
-      var tid = det.getAttribute("data-think-id");
-      if (det._aiengBound) return;
-      det._aiengBound = true;
-      det.addEventListener("toggle", function () {
-        if (!det.open) return;
-        state = load();
-        if (state.thinks && state.thinks[tid]) return;
-        state.thinks = state.thinks || {};
-        state.thinks[tid] = new Date().toISOString();
-        addXp(state, 5, "reflection");
       });
     });
   }
@@ -523,7 +502,6 @@
     renderHud(state);
     wireQuizzes(state);
     wireComplete(state);
-    wireThinks(state);
     renderDashboard(state);
   }
 
