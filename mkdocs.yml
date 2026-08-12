@@ -120,6 +120,8 @@ nav:
       - 15 Domain apps: core/15-domain-apps.md
       - 16 Integration patterns: core/16-integration-patterns.md
       - 17 Small & local models: core/17-small-models.md
+      - 18 Agent design patterns: core/18-agent-design-patterns.md
+      - 19 Orchestration patterns: core/19-orchestration-patterns.md
   - Tracks:
       - Overview: tracks/index.md
       - Stock recommender: tracks/stock-recommender.md

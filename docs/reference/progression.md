@@ -21,6 +21,8 @@ What you should be able to build after each module. Times are rough calendar est
 | 15 Domains | Vertical patterns | Prototypes with refuses | 7–14 days |
 | 16 Integration | Events, hybrid | Platform-style LLM I/O | 10–14 days |
 | 17 Small models | Local SLMs | Offline / cheap tiers | 5–7 days |
+| 18 Agent design patterns | Subroutine, guardrail, resampler, consensus, retriever | Composable, testable agent internals | 5–8 days |
+| 19 Orchestration patterns | Map-reduce, router, planner, ReAct, memory, duet | Large-input, multi-step, persistent workflows | 6–9 days |
 
 ## Cumulative milestones
 
@@ -30,6 +32,6 @@ What you should be able to build after each module. Times are rough calendar est
 | 05–08 | Context-aware apps with tools/RAG/MCP |
 | 09–11 | Advanced retrieval + autonomous loops |
 | 12–14 | Coordinated, observable, governable systems |
-| 15–17 | Vertical + platform + local/edge options |
+| 15–19 | Vertical + platform + local/edge + composable-pattern + orchestration options |
 
 Use this table in `PROGRESS.md` to mark completion honestly (demo > notes).

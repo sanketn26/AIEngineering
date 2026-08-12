@@ -2,7 +2,7 @@
 
 <span data-module-id="17" hidden></span>
 
-**Time:** 5–7 days · **Depends on:** 01, 05, 10 · **Pairs with:** tracks using Phi / Ollama · **Next:** [Specialization tracks](../tracks/index.md)
+**Time:** 5–7 days · **Depends on:** 01, 05, 10 · **Pairs with:** tracks using Phi / Ollama · **Next:** [Agent design patterns](18-agent-design-patterns.md)
 
 ---
 

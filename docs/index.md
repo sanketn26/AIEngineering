@@ -12,7 +12,7 @@ hide:
       <a class="course-button course-button--primary" href="getting-started/setup/">Start learning <span aria-hidden="true">→</span></a>
       <a class="course-button course-button--secondary" href="getting-started/paths/">Explore learning paths</a>
     </div>
-    <p class="course-hero__note">17 core modules · Interactive labs and quizzes · Learn at your own pace</p>
+    <p class="course-hero__note">19 core modules · Interactive labs and quizzes · Learn at your own pace</p>
   </div>
   <div class="course-terminal" aria-label="Course outcomes">
     <div class="course-terminal__bar"><i></i><i></i><i></i><span>ai-engineering / roadmap</span></div>
@@ -27,7 +27,7 @@ hide:
 </div>
 
 <div class="course-proof" aria-label="Course overview">
-  <div><strong>17</strong><span>Core modules</span></div>
+  <div><strong>19</strong><span>Core modules</span></div>
   <div><strong>3</strong><span>Specialization tracks</span></div>
   <div><strong>100%</strong><span>Open source</span></div>
   <div><strong>Local</strong><span>Private progress tracking</span></div>
@@ -95,6 +95,8 @@ The modules move from dependable model interactions to complete production syste
       <li><a href="core/11-single-agents/">Single-agent systems</a></li>
       <li><a href="core/12-multi-agents/">Multi-agent systems</a></li>
       <li><a href="core/16-integration-patterns/">Integration patterns</a></li>
+      <li><a href="core/18-agent-design-patterns/">Agent design patterns</a></li>
+      <li><a href="core/19-orchestration-patterns/">Orchestration patterns</a></li>
     </ul>
   </div>
   <div class="curriculum-stage">
