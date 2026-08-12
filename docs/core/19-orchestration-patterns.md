@@ -4,17 +4,6 @@
 
 **Time:** 6–9 days · **Depends on:** [18 Agent design patterns](18-agent-design-patterns.md) · **Pairs with:** [12 Multi-agent systems](12-multi-agents.md) · **Next:** [Specialization tracks](../tracks/index.md)
 
----
-
-## Naming notes
-
-Most of these patterns already carry the simplest name they could have — renaming them would trade recognizability for no real gain, so they're kept as-is: **Router**, **Planner**, **ReAct**, **Memory**, **Duet**. One does get a rename:
-
-| Original name | New name | Why |
-|---|---|---|
-| Decompose-Process-Recompose (DPR) | **Map-Reduce** | It *is* MapReduce — split input, process each piece independently (map), merge results (reduce). The source material even calls one of its own use cases "map-reduce document summarization." Naming it what it already is beats a bespoke acronym nobody will remember. |
-
----
 
 ## Learning objectives
 
