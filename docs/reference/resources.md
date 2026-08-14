@@ -105,5 +105,4 @@ Prefer primary documentation and high-signal open-source curricula over random b
 ## Course provenance
 
 Pre-restructure originals: `archive/source/` in this repository.  
-Diagnostic: [Review analysis](../review/analysis.md).  
 Progress (local XP): [Progress & gamification](../getting-started/progress.md).
