@@ -1,5 +1,7 @@
 # AI Engineering Course
 
+[![Buy Me A Coffee](https://img.shields.io/badge/☕-Buy%20me%20a%20coffee-FFDD00?style=flat-square)](https://buymeacoffee.com/sanketn)
+
 **From first prompt to production agents** — a restructured, relevance-updated curriculum with optional 90-day specialization tracks.
 
 The published course is available at **[sanketn26.github.io/AIEngineering](https://sanketn26.github.io/AIEngineering/)** and is built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/).
