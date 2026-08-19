@@ -28,6 +28,9 @@ theme:
       toggle:
         icon: material/brightness-4
         name: Switch to light mode
+  font:
+    text: Inter
+    code: JetBrains Mono
   features:
     - navigation.instant
     - navigation.tracking
@@ -99,10 +102,12 @@ extra_javascript:
 nav:
   - Home: index.md
   - Getting started:
+      - Overview: getting-started/index.md
       - Setup: getting-started/setup.md
       - Learning paths: getting-started/paths.md
       - Progress & XP: getting-started/progress.md
   - Core modules:
+      - Overview: core/index.md
       - 01 Prompt engineering: core/01-prompt-engineering.md
       - 02 Security & privacy: core/02-security-privacy.md
       - 03 Advanced prompting: core/03-advanced-prompting.md
@@ -128,6 +133,7 @@ nav:
       - Hybrid models: tracks/hybrid-models.md
       - Agentic editor plugin: tracks/agentic-plugin.md
   - Reference:
+      - Overview: reference/index.md
       - Progression: reference/progression.md
       - Exercises: reference/exercises.md
       - Assessment rubrics: reference/assessment.md
