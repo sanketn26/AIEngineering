@@ -11,8 +11,9 @@ hide:
     <div class="course-actions">
       <a class="course-button course-button--primary" href="getting-started/setup/">Start learning <span aria-hidden="true">→</span></a>
       <a class="course-button course-button--secondary" href="getting-started/paths/">Explore learning paths</a>
+      <a class="course-button course-button--coffee" href="https://buymeacoffee.com/sanketn">☕ Support this course</a>
     </div>
-    <p class="course-hero__note">19 core modules · Interactive labs and quizzes · Learn at your own pace · <a href="https://buymeacoffee.com/sanketn">☕ Support this course</a></p>
+    <p class="course-hero__note">19 core modules · Interactive labs and quizzes · Learn at your own pace</p>
   </div>
   <div class="course-terminal" aria-label="Course outcomes">
     <div class="course-terminal__bar"><i></i><i></i><i></i><span>ai-engineering / roadmap</span></div>
