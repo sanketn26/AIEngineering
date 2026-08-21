@@ -147,7 +147,7 @@ This course ships `ModelRouter` in `src.cost`:
 ```python
 from src.cost import ModelRouter
 
-router = ModelRouter(cheap="gpt-4o-mini", strong="gpt-4o")
+router = ModelRouter(cheap="gpt-4o-mini", strong="gpt-4o")  # placeholder ids; see Setup
 assert router.pick("classify", "short text") == "gpt-4o-mini"
 assert router.pick("complex_reason", "x") == "gpt-4o"
 assert router.pick("chat", "x" * 9000) == "gpt-4o"  # long context heuristic

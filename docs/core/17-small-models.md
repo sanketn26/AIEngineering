@@ -172,6 +172,8 @@ If a deterministic extractor works, do not pay for tokens — small or large.
 
 Quantization reduces weight precision so models fit in RAM/VRAM and run faster — **at a quality cost you must measure**.
 
+A weight that was stored as 16-bit floating point (many possible values, smooth math) is stored as 8- or 4-bit integers (a short menu of values plus a scale). Matmul still works; the numbers are just coarser. That coarseness shows up first on **brittle tasks**: multi-digit arithmetic, strict JSON, long-horizon tool plans. Sentiment and short classify often look fine until a cliff. That is why “Q4 is fine” is not a product statement until *your* golden set says so.
+
 | Approach | Notes |
 |----------|-------|
 | 8-bit / 4-bit weights | Big VRAM wins; measure task metrics |
@@ -363,4 +365,4 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 <button type="button">Complete module · +100 XP</button>
 </div>
 
-**Next:** Pick a [specialization track](../tracks/index.md) or review [Troubleshooting](../reference/troubleshooting.md)
+**Next:** [Module 18 — Agent design patterns](18-agent-design-patterns.md) · or jump to a [specialization track](../tracks/index.md)

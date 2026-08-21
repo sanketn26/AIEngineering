@@ -34,6 +34,20 @@ A team builds an agent to scan a missing person's hard drive: one big "reason an
 
 Single-agent loops (Module 11) and multi-agent topologies (Module 12) tell you *when* to split work into roles. This module is about the smaller-grained patterns you reach for **inside** a role, or at the seams between roles, once you already know a split is justified — the load-bearing engineering primitives, not the org chart.
 
+### Already taught vs this module
+
+These names are **not** new inventions. They are the same levers from earlier modules, sized as *leaf units* you can test in isolation.
+
+| Pattern here | You met it as | What is new |
+|--------------|---------------|-------------|
+| Subroutine | “One prompt per job” (01), extract-then-generate (03) | Isolated call with discarded scratch; orchestrator never sees CoT |
+| Guardrail | Sanitize + tool allowlist (02, 07, 11) | Named gate types (handoff / tool / egress) and **split internal vs user messages** |
+| Rejection Sampler | Retry-until-parse (03), self-consistency cousin (03) | **Same prompt**, no feedback; budget then escalate — not a repair loop |
+| Consensus | Self-consistency majority vote (03) | Parallel N + **deterministic** reconcile + entropy as a confidence proxy |
+| Retriever | TinyRAG (07), hybrid + RRF + rerank (09) | Two-stage funnel as an agent *primitive*, plus adaptive re-query |
+
+If you cannot name the **failure mode**, do not add a pattern. Module 19 then composes these leaves into workflow *shape* (map-reduce, planner, ReAct, …).
+
 ---
 
 ## Mental model
@@ -91,7 +105,7 @@ def extract_invoice_fields(raw_ocr_text: str) -> InvoiceFields:
     No memory of prior calls, no access to agent state, one shot in/out.
     """
     resp = client.messages.create(
-        model="claude-sonnet-5",
+        model="claude-sonnet-xxxxxx",  # placeholder
         max_tokens=300,
         system=(
             "Extract invoice fields from OCR text. "
@@ -111,6 +125,12 @@ fields = extract_invoice_fields(ocr_dump)
 ```
 
 **Trade-off:** subroutines multiply model calls, and each call re-pays the shared context (system prompt, schema, instructions). Mitigate with prompt caching when the shared portion is stable across calls.
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**A subroutine is a pure function, not a chat turn.** Input in, validated object out, memory of the call dropped. That is why it is testable: you can fixture `raw_ocr_text` and assert `total_cents` without standing up an agent loop. If the extract step needs “what we already know about this vendor,” you leaked agent state into the leaf — promote that fact to an explicit argument instead of a hidden scratchpad. Use a subroutine when the job is narrow and repeatable (one file, one field set, one label). Keep a loop (Module 11) when the *next* action depends on the last observation.
+</div>
 
 **Common uses:** formatting, classification/tagging, pass/fail judging, information extraction — see the pattern table below.
 
@@ -189,6 +209,12 @@ def execute_tool_call(sql: str, tenant_id: str, db):
 | **Streaming** | On incomplete input as it streams | Lowest latency, only safe in closed ecosystems |
 | **Resampling** | Combined with a Rejection Sampler (§3) | Retries generation instead of returning a static error |
 
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**A guardrail is a firewall rule, not a debate.** It returns allow or block. It does not rewrite the SQL to be “safer,” and it does not explain the regex to the user. The internal reason is for your logs and the orchestrator; the user message is generic on purpose. If you leak “blocked because tenant_id missing,” an attacker iterates until the string matches. If you *edit* the content instead of blocking, you have a different pattern (a sanitizer or a refiner) — useful, but no longer a gate you can prove in a unit test with two outcomes.
+</div>
+
 ---
 
 ### 3. Rejection Sampler — retry, don't repair
@@ -224,7 +250,7 @@ def rejection_sample(
 
 def worker() -> str:
     resp = client.messages.create(
-        model="claude-sonnet-5",
+        model="claude-sonnet-xxxxxx",  # placeholder
         max_tokens=200,
         temperature=1.0,
         messages=[{"role": "user", "content": "Return the extracted date range as JSON: {start, end}"}],
@@ -252,6 +278,12 @@ if not result.accepted:
 
 **Limits:** poorly suited to security (never rely on chance to plug a data leak — use a Guardrail instead) and to deep systemic errors (a model that fundamentally can't do the task won't succeed on trial 20 either — that needs a Refiner or a different model).
 
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Reroll the dice; do not coach the player.** Temperature > 0 means two calls with the identical prompt can still differ. Rejection sampling bets that *format* noise is random: the third JSON blob will parse even if the first two had a trailing comma. The moment you paste “you forgot the `end` key” into the next prompt, the model can game the checker (emit a fake key, wrap the error in valid JSON, etc.). That coaching loop is a **Refiner** — right for *content* bugs, wrong for *format* luck. Cap trials. When the budget is gone, escalate; do not return `None` into a payment path.
+</div>
+
 ---
 
 ### 4. Consensus — parallel independent runs, deterministic reconciliation
@@ -265,7 +297,7 @@ import math
 
 def solve_once(problem: str) -> str:
     resp = client.messages.create(
-        model="claude-sonnet-5",
+        model="claude-sonnet-xxxxxx",  # placeholder
         max_tokens=800,
         temperature=1.0,   # non-zero temp is required for genuine diversity
         messages=[{"role": "user", "content": f"{problem}\nEnd with 'ANSWER: <value>'"}],
@@ -308,6 +340,12 @@ if result["normalized_entropy"] > 0.7:
 The Divergent Committee variant doesn't converge on a single answer — its "consensus" is agreement that a compiled list captures every distinct finding surfaced by any member. Don't force a majority vote where a union is the right reconciliation.
 
 **Trade-off:** cost and latency multiply by N. Reserve for tasks where a wrong single-shot answer is expensive and independent errors are plausible (math, judging, safety-adjacent classification) — not for tasks with one obviously correct deterministic path.
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**N independent witnesses, one clerk.** The clerk is *code* (`Counter`, a median, a union) — never another model that “summarizes the votes.” A second model in the merge step reintroduces the same bias you were averaging out. Self-consistency in Module 03 is the same idea on one prompt; Consensus here makes the parallel fan-out and the confidence number (vote share, entropy) explicit so you can route low-agreement cases to a human. If every worker is the same model with the same blind spot, majority vote is a louder wrong answer — switch to a Committee (different models or personas) instead of raising N.
+</div>
 
 ---
 
@@ -363,6 +401,12 @@ def adaptive_retrieve(query: str, max_reformulations: int = 2) -> list[Candidate
 - **Adaptive Retriever** — wraps a Hybrid Retriever with a relevance floor and a bounded re-query loop (shown above). Distinct from the Rejection Sampler (§3): it mutates the *query* between attempts rather than resampling the same request unchanged.
 
 **Trade-off:** re-ranking and query reformulation add latency in exchange for precision. Measure retrieval hit-rate and p95 latency as their own SLI (Module 16) — don't bury vector-search latency inside "the model is slow."
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Look up the shelf, then open two books — do not read the library.** Stage 1 (BM25 + dense + RRF) optimizes *recall*: the gold doc must be in a shortlist of ~50. Stage 2 (cross-encoder) optimizes *precision*: the three passages that enter the window should actually answer the question. Adaptive re-query mutates the *search string* when that floor fails; that is different from a Rejection Sampler, which mutates nothing and hopes the *generator* rolls a valid JSON. Module 09 is the full search-system treatment. Here the retriever is a leaf the agent calls, with a budget on reformulations so it cannot become an uncapped browse loop.
+</div>
 
 ---
 
@@ -461,4 +505,4 @@ def adaptive_retrieve(query: str, max_reformulations: int = 2) -> list[Candidate
 <button type="button">Complete module · +125 XP</button>
 </div>
 
-**Next:** [Specialization tracks](../tracks/index.md)
+**Next:** [Module 19 — Orchestration patterns](19-orchestration-patterns.md)

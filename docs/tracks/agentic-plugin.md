@@ -13,7 +13,7 @@
 | When | Modules |
 |------|---------|
 | Days 1–28 | [01 Prompting](../core/01-prompt-engineering.md), [02 Security](../core/02-security-privacy.md), [03 Advanced prompts](../core/03-advanced-prompting.md), [04 Evals](../core/04-testing-evals.md), [05 Context](../core/05-context-engineering.md), [07 Tools](../core/07-tools-and-rag.md), [11 Single agents](../core/11-single-agents.md) |
-| Days 29–56 | [08 MCP](../core/08-model-context-protocol.md), [12 Multi-agents](../core/12-multi-agents.md) (orchestration patterns) |
+| Days 29–56 | [08 MCP](../core/08-model-context-protocol.md), [12 Multi-agents](../core/12-multi-agents.md); skim [19 Orchestration](../core/19-orchestration-patterns.md) if you add a planner or router |
 | Days 57–90 | [17 Small models](../core/17-small-models.md); revisit [02](../core/02-security-privacy.md), [04](../core/04-testing-evals.md) |
 
 In-repo teaching mirror: `src.agents` (`Agent`, `AgentState`) and `tests/test_agents.py`.

@@ -1,4 +1,4 @@
-# Track: Phi / SLM Stock Research Assistant (90 days)
+# Track: SLM Stock Research Assistant (90 days)
 
 **Goal:** Ship a production-minded **stock research assistant / recommender prototype**: classical ML with time-safe splits, SLM PEFT on financial text, RAG over news/filings with real citations, measured compression, versioned prompts/evals, and FastAPI + Docker + CI.
 

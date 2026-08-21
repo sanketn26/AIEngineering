@@ -49,6 +49,8 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 | 15 | Must-refuse cases tested |
 | 16 | Async/job **or** data-class routing |
 | 17 | Local model run + task fit notes |
+| 18 | At least three leaf patterns (subroutine, gate, sampler, consensus, or retriever) with a named failure each one fixes |
+| 19 | At least three orchestration patterns (map-reduce, router, planner, ReAct, memory, or duet) on one workflow |
 
 ---
 

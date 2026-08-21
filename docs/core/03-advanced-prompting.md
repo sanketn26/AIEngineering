@@ -183,6 +183,16 @@ def self_consistent(call_model, prompt: str, n: int = 5) -> str:
 
 Prefer provider **JSON schema / structured output** modes when available (OpenAI structured outputs, Anthropic tool/json modes, Gemini schema, etc.). Fallback: strict instructions + validator + retry.
 
+Do not confuse three different “make it structured” levers:
+
+| Lever | What it is | Use when |
+|-------|------------|----------|
+| JSON in the prompt | You *ask* for `{...}` in prose | Fine for labs; still validate |
+| Provider structured output | The API constrains tokens to a schema | Default for extractors |
+| Tools / function calling (Module 07) | The model fills *arguments* to a named function | Actions and typed intents, not only data extract |
+
+All three still need a parser on your side. Schema-on-the-wire is not a substitute for Pydantic (or equivalent) in your process.
+
 ```python
 from pydantic import BaseModel, ValidationError
 import json

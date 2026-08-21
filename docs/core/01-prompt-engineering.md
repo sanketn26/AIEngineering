@@ -143,7 +143,7 @@ Ask yourself: *Could two engineers independently grade whether the output is cor
 
 Include facts the model cannot know: internal IDs, policy snippets, current date, plan tier. Exclude noise: entire ticket history when one paragraph suffices; full HTML when plain text will do.
 
-Every token you send is paid twice—once in latency/cost, once in **attention dilution**: the model has a finite ability to track what matters. Over-stuffed prompts often fail *more* than tight ones.
+Every extra token has two costs: you wait and pay for it, **and** you dilute the model’s attention — it has a finite ability to track what matters in a long prompt. Over-stuffed prompts often fail *more* than tight ones. You are not billed twice; you spend quality as well as money.
 
 Later: packing and memory tiers (Module 05), retrieval (Module 07). For now, **curate** context by hand.
 
@@ -158,6 +158,18 @@ Do not parse “whatever the model felt like saying” with fragile regex in pro
 
 ### 5. Temperature matches the task
 
+#### What a token is (30 seconds)
+
+The model does not read characters or words. It reads **tokens** — chunks of text from a fixed vocabulary (a whole common word, a subword like `ing`, a punctuation mark). “Hello” is usually one token; a UUID or a CJK character may be several. Providers bill and cap **tokens**, not words.
+
+On each step the model outputs a probability distribution over the next token. **Sampling** picks from that distribution. That is the whole generation loop: tokens in → next-token distribution → sample → append → repeat until a stop token or `max_tokens`.
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Temperature sits on that distribution.** At 0 the model (almost) always takes the highest-probability next token — good for labels and JSON. At 0.8 it samples farther into the tail — more variety, more chance of a weird key name. Temperature cannot invent a task you did not specify. Some “reasoning” models ignore temperature; treat the table below as a starting point for ordinary chat models, then read your provider’s decoding docs.
+</div>
+
 Temperature (and related sampling knobs) trade **determinism for diversity**. Lower temperature concentrates probability mass; higher temperature samples more creative tails.
 
 | Task | Temperature (starting point) |
@@ -169,7 +181,7 @@ Temperature (and related sampling knobs) trade **determinism for diversity**. Lo
 <div class="aieng-explainer" markdown>
 <p class="label">Explainer</p>
 
-**Picture the dial, not the muse.** At low temperature the model keeps sampling near the peak of the next-token distribution—good when you need the same invoice total twice. Crank it up and you sample longer tails: more variety, more chance of a weird label or invented fact. Turning the dial does not repair a vague task; it only changes how loudly the model explores once the contract is set.
+**Picture the dial, not the muse.** You already know the next-token distribution from the token note above. At low temperature the sampler stays near the peak — good when you need the same invoice total twice. Crank it up and you sample longer tails: more variety, more chance of a weird label or invented fact. Turning the dial does not repair a vague task; it only changes how loudly the model explores once the contract is set.
 </div>
 
 Rules of thumb:

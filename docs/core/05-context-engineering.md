@@ -122,10 +122,17 @@ print(estimate_tokens("hello world"))
 
 How `fit_budget` works: walk the list in order, keep each part while cumulative `estimate_tokens` ≤ budget, then **stop**. So list order *is* priority.
 
+That is stricter than the diagram’s “drop from the bottom.” The diagram is the *product* rule (dumps go first). The teaching helper implements a simple greedy keep-from-the-front: if a middle part is huge, **everything after it is dropped**, even if a truncated version of that middle part plus history would have fit. Production packers hard-cap oversized parts (truncate tool JSON to 2k tokens) and then continue. The stretch lab asks you to do that.
+
 ```python
 # Sketch of the shipped logic (see src/context_memory.py)
 def estimate_tokens(text: str) -> int:
-    """Rough ~4 chars/token without external deps."""
+    """Rough ~4 chars/token without external deps.
+
+    English prose is often ~4 chars/token. Code, URLs, and CJK are denser
+    (more tokens per character). Use tiktoken or the provider usage field
+    in production — this helper is for packing *policy*, not invoices.
+    """
     if not text:
         return 0
     return max(1, (len(text) + 3) // 4)

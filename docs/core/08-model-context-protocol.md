@@ -49,7 +49,7 @@ flowchart LR
   end
   UX --> Orch
   Orch --> Sess
-  Sess -->|stdio / HTTP-SSE / etc.| T
+  Sess -->|stdio / Streamable HTTP| T
   Sess --> R
   Sess --> P
 ```
@@ -101,7 +101,7 @@ MCP aims to make the **tool boundary model-agnostic**: swap models or hosts with
 Conceptual sequence (details evolve — read the live spec):
 
 ```text
-1. Host starts / connects MCP client to server (stdio subprocess or network transport)
+1. Host starts / connects MCP client to server (stdio subprocess or Streamable HTTP; older docs mention HTTP+SSE — prefer the current spec)
 2. Client and server negotiate protocol version & capabilities
 3. Client lists tools / resources / prompts
 4. Model (via host) selects a tool + arguments

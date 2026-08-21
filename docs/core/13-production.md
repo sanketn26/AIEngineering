@@ -306,8 +306,8 @@ Pin **prompt template version** and **model id** in config (env, feature flag, o
 ```python
 # config example — load from env or remote config
 PROMPT_VERSION = "support_reply@v3"
-PRIMARY_MODEL = "gpt-4o-mini"
-FALLBACK_MODEL = "claude-haiku"
+PRIMARY_MODEL = "gpt-4o-mini"      # placeholder ids — see Setup
+FALLBACK_MODEL = "claude-haiku-xxxxxx"
 ```
 
 **Canary idea:** route 5% of traffic to `support_reply@v4`; compare eval score + human thumbs + error rate; promote or roll back by flipping config, not redeploying code if the template is externalized.

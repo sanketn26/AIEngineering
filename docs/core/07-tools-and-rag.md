@@ -202,12 +202,18 @@ What the scaffold teaches:
 | Piece | Role |
 |-------|------|
 | `Chunk(id, text, source)` | Stable IDs for citations |
-| `simple_chunks` | Naive word windows (replace with better splitters) |
+| `simple_chunks` | Naive word windows (replace with better splitters). IDs are `{source}:{word_offset}` (e.g. `notes:0`, `notes:50`), not 0, 1, 2 |
 | `bag_of_words` + `cosine` | Stand-in for embeddings |
 | `retrieve` / `retrieve_ids` | Top-k by similarity |
 | `build_prompt` | “Answer only from sources; cite ids” |
 | `validate_citations` | Reject `(cite: evil)` not in corpus |
 | `rrf` | Fuse multiple ranked lists (hybrid search later) |
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**What is an embedding?** A model maps a string to a list of numbers (a vector) so that *similar meaning* lands nearby in that space. “cat sat in the sun” and “feline napping in a sunbeam” should be close; “refund policy 30 days” should not. **Bag-of-words** (what TinyRAG uses) only counts overlapping tokens — fine for teaching cosine and citations, blind to paraphrase. **Dense embeddings** are the production stand-in: you embed each chunk once, embed the query, and take nearest neighbors. You still need stable chunk ids so citations can be checked.
+</div>
 
 #### Production upgrades (concepts)
 

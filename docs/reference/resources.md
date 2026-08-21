@@ -44,6 +44,8 @@ Prefer primary documentation and high-signal open-source curricula over random b
 - [CrewAI](https://docs.crewai.com/)
 - [AutoGen / AG2](https://github.com/microsoft/autogen)
 - Provider agent / tool-calling guides (OpenAI, Anthropic)
+- Course **Module 18** (leaf patterns) and **Module 19** (workflow shape) — read 11–12 first
+- [ReAct (Yao et al., 2022)](https://arxiv.org/abs/2210.03629) · [ReWOO (Xu et al., 2023)](https://arxiv.org/abs/2305.18323) · [Self-consistency (Wang et al., 2022)](https://arxiv.org/abs/2203.11171)
 
 ---
 

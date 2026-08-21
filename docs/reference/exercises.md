@@ -1,6 +1,6 @@
 # Hands-on exercises (repo package)
 
-These exercises use the **runnable** `src/` package. Complete them alongside the matching core module.
+Complete these alongside the matching core module. Numbered `src.*` exercises hit the teaching package; the others are the module labs (no extra library required).
 
 ```bash
 poetry install
@@ -29,6 +29,19 @@ poetry run pytest tests/ -v
 
 ---
 
+## EX-03 — Structured extract (Module 03 lab)
+
+No extra package code — use the Module 03 lab:
+
+1. Pydantic model for an invoice (or your domain).  
+2. Two few-shot edge cases.  
+3. `parse_success_rate` on ≥20 raw strings (model or hand-crafted).  
+4. Justify CoT yes/no in one paragraph.
+
+**Check:** `pytest tests/test_prompts.py -v` plus your parser tests.
+
+---
+
 ## EX-04 — Golden evals (`src.evals`)
 
 1. Open `tests/fixtures/invoice_golden.jsonl`.  
@@ -49,11 +62,37 @@ poetry run pytest tests/ -v
 
 ---
 
+## EX-06 — Fine-tune or not (Module 06 lab)
+
+1. One-page decision memo: why FT vs RAG/tools.  
+2. 30 train + 10 held-out instruction rows, no PII.  
+3. Baseline score on the 10 (API or local). GPU LoRA is optional.
+
+---
+
 ## EX-07 — Tiny RAG (`src.rag`)
 
 1. Chunk two short notes (company handbook style).  
 2. Ask an answerable and unanswerable query.  
 3. Validate citations with `validate_citations`.
+
+**Check:** `pytest tests/test_rag.py -v`
+
+---
+
+## EX-08 — MCP policy (Module 08 lab)
+
+1. Read [modelcontextprotocol.io](https://modelcontextprotocol.io/).  
+2. In **dev only**, list tools from a reviewed filesystem/git server.  
+3. Write `mcp-policy.md`: allowed servers per env, approval-required tools, pin/update process.
+
+---
+
+## EX-09 — Hybrid retrieval (Module 09 lab)
+
+1. 20 questions with `must_have` ids (include keyword/ID and multi-hop).  
+2. Dense-only vs `rrf` hybrid **Hit@5** and **MRR**.  
+3. Log intermediate queries for 5 multi-hop items.
 
 **Check:** `pytest tests/test_rag.py -v`
 
@@ -79,6 +118,22 @@ poetry run pytest tests/ -v
 
 ---
 
+## EX-12 — Multi-agent vs single (Module 12 lab)
+
+1. Researcher → writer → critic with max 2 critique rounds.  
+2. Structured payloads; reject invalid JSON.  
+3. On 10 tasks, compare success and cost to a single `src.agents.Agent`.
+
+---
+
+## EX-13 — Production endpoint (Module 13 lab)
+
+1. FastAPI `/healthz` + `/v1/generate` with `request_id`.  
+2. Timeout + fallback (stubs OK).  
+3. Dockerfile; 5-case PR eval subset.
+
+---
+
 ## EX-14 — Audit log (`src.audit`)
 
 1. Record three tool events with hashed inputs.  
@@ -86,6 +141,42 @@ poetry run pytest tests/ -v
 3. Ensure raw secrets never appear in the log file.
 
 **Check:** `pytest tests/test_audit.py -v`
+
+---
+
+## EX-15 — Vertical refuse path (Module 15 lab)
+
+1. One-page policy: allowed / refused / escalate.  
+2. 10-case eval with ≥3 must-refuse.  
+3. `policy_check` + audit event on refuse.
+
+---
+
+## EX-16 — Jobs or hybrid route (Module 16 lab)
+
+1. `POST /jobs` → worker (in-memory queue is fine).  
+2. Server-side `data_class` routing to two stub endpoints.  
+3. `request_id` in API log and worker log.
+
+---
+
+## EX-17 — Local SLM vs mini (Module 17 lab)
+
+1. Run a 3B–8B-class local model on 20 golden tasks.  
+2. Score vs a cloud mini model.  
+3. Escalate on schema fail; record which tasks the SLM owns.
+
+---
+
+## EX-18 — Leaf patterns (Module 18 lab)
+
+Apply **three** of: Subroutine (validated output), Tool Gate (split messages), Rejection Sampler (`max_trials`), Consensus (n=5 + entropy), Adaptive Retriever. Name the failure each one fixes.
+
+---
+
+## EX-19 — Orchestration shape (Module 19 lab)
+
+Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** workflow. See the Module 19 lab for the combo rule.
 
 ---
 

@@ -22,6 +22,9 @@
 - At least one LLM provider: [OpenAI](https://platform.openai.com/), [Anthropic](https://www.anthropic.com/), [Google AI](https://ai.google.dev/), or free local via [Ollama](https://ollama.com/)
 - Optional: Hugging Face, Pinecone/Weaviate/Qdrant, cloud host (Fly, Railway, AWS, Azure, GCP)
 
+!!! note "Model IDs in this course are placeholders"
+    Strings like `gpt-4o-mini`, `claude-sonnet-xxxxxx`, or `llama3.2` show **role** (cheap classifier vs stronger generator vs local SLM), not a pin you must use in 2026. The `xxxxxx` suffix marks a fill-in — it is never a real ID. Check your provider’s current catalog before you copy a snippet.
+
 ---
 
 ## Environment setup
@@ -102,7 +105,7 @@ def main():
         import anthropic
         client = anthropic.Anthropic()
         r = client.messages.create(
-            model="claude-sonnet-4-20250514",
+            model="claude-sonnet-xxxxxx",
             max_tokens=16,
             messages=[{"role": "user", "content": "Reply with exactly: ok"}],
         )

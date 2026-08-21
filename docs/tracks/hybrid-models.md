@@ -95,7 +95,9 @@ flowchart LR
 
 ## Guide
 
-You are not “starting PyTorch.” You are defining a decision problem with two feature families that should not share one naive tensor layout.
+You are not taking a full PyTorch course here — but you do need the **minimum tensor vocabulary** before the dual-path model makes sense. If `nn.Module`, `forward`, and `tensor.shape` are new, spend days 1–3 on the official [PyTorch 60-minute blitz](https://pytorch.org/tutorials/beginner/blitz/tensor_tutorial.html) (tensors, autograd, a tiny `nn.Module`) and only then write the data card. This track assumes that floor, not architecture tourism.
+
+The design job in these two weeks: a decision problem with two feature families that should not share one naive tensor layout.
 
 Pick a use case where **static** and **sequence** both matter: SKU demand (category/region + daily series), churn (demographics + transactions), IoT (device metadata + sensor window). If the dataset is pure tabular, **synthesize a sequence** (rolling windows) and document that choice so the dual-path story stays honest.
 

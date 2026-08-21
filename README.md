@@ -11,7 +11,6 @@ The published course is available at **[sanketn26.github.io/AIEngineering](https
 | **Docs (local)** | `mkdocs serve` → http://127.0.0.1:8000 |
 | **Curriculum source** | [`docs/`](docs/) |
 | **Progress / XP** | [docs/getting-started/progress.md](docs/getting-started/progress.md) (localStorage gamification) |
-| **Review of old materials** | [docs/review/analysis.md](docs/review/analysis.md) |
 | **Originals (archived)** | [`archive/source/`](archive/source/) |
 | **Python sandbox** | [`src/`](src/) + Poetry (`pyproject.toml`) |
 
@@ -21,15 +20,13 @@ The published course is available at **[sanketn26.github.io/AIEngineering](https
 
 | Before | After |
 |--------|--------|
-| 11k-line scrambled LLM guide | 17 ordered core modules |
+| 11k-line scrambled LLM guide | 19 ordered core modules |
 | Three disconnected 90-day plans | Tracks linked to shared core |
 | “MCP” misused (load balancer / compression) | Correct Model Context Protocol + clear compression naming |
 | gpt-3.5-centric examples | Provider-agnostic, 2026-oriented stack |
 | Flat root markdown | MkDocs Material + GitHub Actions Pages |
 | Outline-style modules | CS-engineer tutorials (explainers, quizzes, labs, diagrams) |
 | No progress UX | Static gamification (XP, badges, HUD) via `localStorage` |
-
-Full diagnostic: **[Review analysis](docs/review/analysis.md)**.
 
 ---
 
@@ -69,7 +66,7 @@ Exercises: [docs/reference/exercises.md](docs/reference/exercises.md) · Rubrics
 
 ## Curriculum map
 
-**Core modules:** prompting → security → advanced prompts → evals → context engineering → fine-tuning → tools/RAG → MCP → advanced RAG → cost → agents → multi-agent → production → compliance → domains → integration → small/local models.
+**Core modules:** prompting → security → advanced prompts → evals → context engineering → fine-tuning → tools/RAG → MCP → advanced RAG → cost → agents → multi-agent → production → compliance → domains → integration → small/local models → agent design patterns → orchestration patterns.
 
 **Tracks (90 days):**
 
@@ -95,10 +92,9 @@ The workflow is [`.github/workflows/deploy-docs.yml`](.github/workflows/deploy-d
 ```text
 docs/                      # Course site (source of truth)
   getting-started/
-  core/                    # Modules 01–17
+  core/                    # Modules 01–19
   tracks/                  # 90-day specializations
   reference/
-  review/analysis.md
 archive/source/            # Pre-restructure markdown (provenance)
 src/ tests/                # Optional Poetry project
 mkdocs.yml

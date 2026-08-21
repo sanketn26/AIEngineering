@@ -35,6 +35,19 @@ A compliance team asks for an agent that audits vendor contracts against 40 regu
 
 Module 18 covered the small, leaf-level primitives (Subroutine, Guardrail, Rejection Sampler, Consensus, Retriever). This module covers the **orchestration-level** patterns that decide *what runs when, in what order, and who owns which piece* — the shape of the workflow itself, not the individual calls inside it.
 
+### Already taught vs this module
+
+| Pattern here | You met it as | What is new |
+|--------------|---------------|-------------|
+| Map-Reduce | Chunking + packing (05, 07) | Split → independent process → **merge with conflict rules**, not concatenate |
+| Router | Cost/task router (10), data-class router (16) | Classifier that **does not rewrite** the payload or the answer |
+| Planner | Externalized plan list in agent state (11) | Separate “write the TODO” from “run step N,” with compressed facts between steps |
+| ReAct | Plan–act–observe JSON loop (11) | Observation-driven loop; XML/`<result>` is one encoding, JSON decisions are another — pick one contract |
+| Memory | Session / profile tiers (05) | Compulsory **read** at session start; **writes** only for durable facts |
+| Duet | Writer → critic pipeline (12) | Two objectives, two roles, shared transcript, hard done-signal |
+
+Module 18’s leaves **plug into** these shapes: a Map-Reduce “process” step is often a Subroutine; a Router’s specialist is often a Guardrail + tools; ReAct actions should still hit a Tool Gate.
+
 ---
 
 ## Mental model
@@ -76,11 +89,14 @@ flowchart TB
 
 ### 1. Map-Reduce — split, process independently, merge
 
-**Idea:** an input too large or dense for one pass (a feature-length video, a legal archive, a gigapixel image) is split into fragments, each processed independently — often in parallel — and the intermediate results are merged into one coherent output. The split must be **near-isomorphic** (little to no information lost by fragmenting), and the merge must reconcile contradictions and duplicates, not just concatenate.
+**Idea:** an input too large or dense for one pass (a feature-length video, a legal archive, a gigapixel image) is split into fragments, each processed independently — often in parallel — and the intermediate results are merged into one coherent output. The split must keep each **logical unit** intact (a clause, a scene, a heading) so the merge can still see a complete fact. If you cut a sentence in half, the reduce step cannot recover what you threw away. The merge must reconcile contradictions and duplicates, not just concatenate.
 
 ```python
+import json
 from dataclasses import dataclass
 from concurrent.futures import ThreadPoolExecutor
+
+# client = Anthropic()  # or your provider; model ids are placeholders (see Setup)
 
 @dataclass
 class Finding:
@@ -106,7 +122,7 @@ def chunk_by_section(contract_text: str, max_chars: int = 6000) -> list[str]:
 def map_find_predatory_clauses(chunk: str) -> list[Finding]:
     """Process stage: one fragment in, structured findings out. Runs in parallel."""
     resp = client.messages.create(
-        model="claude-sonnet-5",
+        model="claude-sonnet-xxxxxx",  # placeholder
         max_tokens=500,
         system="Flag predatory clauses (auto-renewal traps, unilateral fee changes, "
                "liability waivers). Return JSON list of {clause_id, section, risk, excerpt}.",
@@ -126,12 +142,19 @@ def reduce_findings(all_findings: list[list[Finding]]) -> list[Finding]:
 
 def audit_contract(contract_text: str) -> list[Finding]:
     chunks = chunk_by_section(contract_text)
-    with ThreadPoolExecutor(max_workers=len(chunks)) as pool:
+    workers = min(8, max(1, len(chunks)))  # cap — do not spawn one thread per page
+    with ThreadPoolExecutor(max_workers=workers) as pool:
         per_chunk = list(pool.map(map_find_predatory_clauses, chunks))
     return reduce_findings(per_chunk)
 ```
 
-**Split axes:** spatial (image tiles), temporal (video/audio windows), semantic (chapters, paragraphs), technical (token/file-size limits). Pick the axis that keeps a single logical unit (a clause, a scene, a paragraph) from being cut across a fragment boundary — that's what "near-isomorphic" means in practice.
+**Split axes:** spatial (image tiles), temporal (video/audio windows), semantic (chapters, paragraphs), technical (token/file-size limits). Pick the axis that keeps a single logical unit (a clause, a scene, a paragraph) from being cut across a fragment boundary.
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**This is the same MapReduce you already know from batch jobs.** `map` runs the same function on each fragment (often in parallel). `reduce` is *business logic*: dedupe, conflict-flag, keep highest risk — not `sum()` of strings. People sometimes call the same shape **decompose → process → recompose**. That is Map-Reduce with friendlier words, not a different algorithm (and it is not Dense Passage Retrieval). Cost grows with fragment count because each call re-pays the shared instructions; cache the system prefix when the provider allows it.
+</div>
 
 **Trade-off:** cost rises (constant overhead per fragment, shared context re-paid each time — mitigate with caching), but latency can *drop* if fragments process in parallel, and per-fragment attention quality goes up because each call sees less.
 
@@ -159,13 +182,16 @@ class Domain(Enum):
 
 def classify(query: str) -> Domain:
     resp = client.messages.create(
-        model="claude-haiku-4-5",  # cheap classifier — this call must stay fast
+        model="claude-haiku-xxxxxx",  # cheap classifier placeholder — this call must stay fast
         max_tokens=10,
         system="Classify as exactly one of: billing, security, general. Reply with one word.",
         messages=[{"role": "user", "content": query}],
     )
     label = resp.content[0].text.strip().lower()
-    return Domain(label) if label in Domain._value2member_map_ else Domain.GENERAL
+    try:
+        return Domain(label)
+    except ValueError:
+        return Domain.GENERAL
 
 SPECIALISTS = {
     Domain.BILLING: billing_agent,       # tuned on refund/pricing policy
@@ -181,6 +207,12 @@ def route(query: str, user_ctx: dict) -> str:
 
 **Why it exists:** a single agent with dozens of tools misroutes calls (tool choice overload) and silently blends domain rules (billing refund logic leaking into a security escalation). A Router fixes both by keeping domains behind separate, independently-tunable specialists.
 
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**A router is a `switch` statement whose condition is a classifier.** It reads only enough to pick a lane, then forwards the **original** query. If the router rewrites the question (“user probably wants a refund, ask for order id”), it has become a planner and you can no longer test specialists in isolation. Module 10’s `ModelRouter` picks *model size*. Module 16’s router picks *where data is allowed to go*. This router picks *which specialist owns the skill*. You can stack them: data-class first, then domain, then cheap vs strong model.
+</div>
+
 **Variants:**
 
 | Variant | Shape | Use when |
@@ -193,9 +225,10 @@ def route(query: str, user_ctx: dict) -> str:
 
 ### 3. Planner — decide the steps, then execute them
 
-**Idea:** two explicit phases. First, an IE with strong domain knowledge drafts an ordered plan with dependencies. Second, a dispatcher executes the plan step by step, and a context manager compresses prior steps' output into only the facts the next step actually needs — step 6 never sees the raw output of steps 1–5.
+**Idea:** two explicit phases. First, a **planner model** (strong at the domain, not necessarily the same model that executes) drafts an ordered plan with dependencies. Second, a dispatcher executes the plan step by step, and a context manager compresses prior steps' output into only the facts the next step actually needs — step 6 never sees the raw output of steps 1–5.
 
 ```python
+import json
 from dataclasses import dataclass, field
 
 @dataclass
@@ -207,7 +240,7 @@ class Step:
 
 def formulate_plan(goal: str) -> list[Step]:
     resp = client.messages.create(
-        model="claude-sonnet-5",
+        model="claude-sonnet-xxxxxx",  # placeholder
         max_tokens=600,
         system="Break the goal into an ordered JSON list of steps: "
                "{id, description, depends_on: [ids]}. Respect real-world dependencies.",
@@ -218,7 +251,7 @@ def formulate_plan(goal: str) -> list[Step]:
 def compress_context(completed: list[Step]) -> str:
     """Context manager: extract only durable facts, not raw step transcripts."""
     resp = client.messages.create(
-        model="claude-sonnet-5",
+        model="claude-sonnet-xxxxxx",  # placeholder
         max_tokens=200,
         system="Summarize completed steps into a short fact list needed by future steps only.",
         messages=[{"role": "user", "content": "\n".join(f"{s.id}: {s.result}" for s in completed)}],
@@ -237,6 +270,12 @@ def execute_plan(goal: str, step_executor) -> list[Step]:
 
 **Why the compression matters:** without it, step 6 of a 12-step relocation plan (visa → housing → bank account → school enrollment → utilities → ...) inherits the raw transcript of every prior step, and the visa deadline from step 1 quietly drifts out of the effective attention window by step 6. The context manager's whole job is making sure it doesn't.
 
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Write the TODO list before touching tools.** Module 11 already said: keep the plan as `{id, step, status}` in *code*, not as a paragraph in the scratchpad. The Planner pattern adds a hard phase split: you do not start step 1 until the whole list exists, and you do not feed step 6 the novel of steps 1–5. Compression is a Module 05 packer sitting between steps. If a step fails, you re-plan from the remaining TODOs — you do not throw the whole agent into a free-form ReAct wander (unless you chose ReAct on purpose, next section).
+</div>
+
 **Variants:**
 
 | Variant | Change |
@@ -249,7 +288,7 @@ def execute_plan(goal: str, step_executor) -> list[Step]:
 
 ### 4. ReAct — reason, act, observe, repeat
 
-**Idea:** a cyclical loop. A core IE looks at everything accumulated so far, reasons about the next move, and either emits an action or signals it's done. The action runs, its result is appended to a single growing context, and the loop repeats. Nothing is decided upfront — the path emerges from what the environment returns.
+**Idea:** a cyclical loop. A **policy model** looks at everything accumulated so far, reasons about the next move, and either emits an action or signals it's done. The action runs, its result is appended to a single growing context, and the loop repeats. Nothing is decided upfront — the path emerges from what the environment returns.
 
 ```python
 MAX_STEPS = 12
@@ -259,7 +298,7 @@ def react_loop(task: str, tools: dict) -> str:
 
     for _ in range(MAX_STEPS):
         resp = client.messages.create(
-            model="claude-sonnet-5",
+            model="claude-sonnet-xxxxxx",  # placeholder
             max_tokens=500,
             system="Reason about the next step. Emit exactly one of: "
                    '<action tool="name">args</action> or <result>final answer</result>.',
@@ -280,12 +319,20 @@ def react_loop(task: str, tools: dict) -> str:
 
 **Pure vs. impure actions matter operationally:** pure actions (search, read, calculate) are safe to retry freely; impure actions (a database write, an email send) need the Module 18 Guardrail/Tool Gate in front of them, because the loop *will* eventually retry after an unexpected observation.
 
+The XML tags above are **one** decision encoding. Module 11’s teaching agent uses JSON `{"type":"tool",...}` instead. Pick **one** contract per product and parse it strictly — do not mix `<result>` and JSON `type=final` in the same loop.
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**ReAct is a `while` loop whose condition is “the model has not emitted done.”** That is why `MAX_STEPS` is not optional: without it the loop is `while True`. Use ReAct when you cannot write the plan up front (SQL errors, unknown search hits). Use a Planner when the steps *are* knowable (visa then housing then school). Plan-and-ReAct is the hybrid: a checklist, with ReAct *inside* a single step. Module 11 is the same state machine with JSON decisions; this section names the pattern and its variants (ReWOO, ReBAct) so you can read papers and framework docs without thinking they are different products.
+</div>
+
 **Variants:**
 
 | Variant | Change | Trade-off |
 |---|---|---|
 | **Plan-and-ReAct** | A Planner runs before the loop starts | Cheaper, more reliable on standard tasks; less adaptive to surprises |
-| **ReBAct** (reflect before act) | A Reflection IE (Module 18 Rejection Sampler idea) double-checks the action before it fires | Extra latency, but catches costly/irreversible mistakes before they happen |
+| **ReBAct** (reflect before act) | A second model call double-checks the action before it fires (cousin of Module 18’s sampler/refiner, but it *does* see the proposed action) | Extra latency, but catches costly/irreversible mistakes before they happen |
 | **ReWOO** (reason without observation) | Full reasoning chain generated upfront with placeholders for observations; actions then run in parallel | Much lower latency/cost; only works when steps don't actually depend on each other's real-time results |
 | **ReSpAct** (reason, speak, act) | Adds a `<speak>` action that defers to a human | Needed whenever ambiguity or a physical step requires a person |
 
@@ -314,7 +361,7 @@ def update_memory(subject_id: str, new_info: str, store: dict[str, MemoryRecord]
     record = store.setdefault(subject_id, MemoryRecord(subject_id, summary=""))
 
     resp = client.messages.create(
-        model="claude-sonnet-5",
+        model="claude-sonnet-xxxxxx",  # placeholder
         max_tokens=300,
         system="Merge new_info into the existing summary. Keep only durable facts "
                "(preferences, level, constraints) — drop greetings and resolved one-offs.",
@@ -324,7 +371,7 @@ def update_memory(subject_id: str, new_info: str, store: dict[str, MemoryRecord]
 
     if len(record.summary) > COMPACTION_THRESHOLD:
         compact = client.messages.create(
-            model="claude-sonnet-5",
+            model="claude-sonnet-xxxxxx",  # placeholder
             max_tokens=300,
             system="Compress this summary further, preserving all durable facts.",
             messages=[{"role": "user", "content": record.summary}],
@@ -346,6 +393,12 @@ This is **Compacting Monolithic Memory** — one evolving summary, condensed on 
 | **Tiered hierarchical memory** | Short/mid/long-term layers queried in parallel | Need both "what did they just say" and "who are they" simultaneously |
 | **Shared memory** | Multi-agent write-reconciliation before update | Multiple agents could write conflicting facts about the same subject |
 
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**Load memory like a config file; save it like a database write.** Hydration is automatic so the model cannot “forget” to look. Writes are opt-in so greetings and one-off questions do not become fake user preferences (Module 05’s “librarian, not a hoarder”). Compaction on overflow is a rolling summary with a size cap — the same idea as `SessionMemory.should_summarize`. Vector (“fragmental”) memory is RAG over *this user’s* notes; do not mix it with the company wiki without a namespace.
+</div>
+
 ---
 
 ### 6. Duet — two complementary roles, one closed loop
@@ -357,34 +410,36 @@ DONE_SIGNAL = "<done>"
 MAX_TURNS = 6
 
 def duet(topic: str, agent_a_system: str, agent_b_system: str) -> str:
-    """Symmetric duet: each agent sees the other's turns as 'user' messages."""
-    transcript = [{"role": "user", "content": topic}]
-
+    """Two roles, one labeled log. Each turn the other role reads the full log."""
+    log = f"Task:\n{topic}\n"
+    reply = ""
     for turn in range(MAX_TURNS):
-        speaker_system = agent_a_system if turn % 2 == 0 else agent_b_system
+        is_a = turn % 2 == 0
+        role = "copywriter" if is_a else "fact_checker"
+        system = agent_a_system if is_a else agent_b_system
         resp = client.messages.create(
-            model="claude-sonnet-5",
+            model="claude-sonnet-xxxxxx",  # placeholder
             max_tokens=500,
-            system=speaker_system,
-            messages=transcript,
+            system=system,
+            messages=[{
+                "role": "user",
+                "content": log + f"\nYou are the {role}. Reply next. "
+                           f"If the work is finished, include {DONE_SIGNAL}.",
+            }],
         )
         reply = resp.content[0].text
-        transcript.append({"role": "assistant", "content": reply})
-
+        log += f"\n[{role}]\n{reply}\n"
         if DONE_SIGNAL in reply:
             return reply.replace(DONE_SIGNAL, "").strip()
-
-        # role-swap for the next turn: what was "assistant" becomes "user" input to the other role
-        transcript = [{"role": "user" if m["role"] == "assistant" else "assistant", "content": m["content"]}
-                      for m in transcript]
-
-    return transcript[-1]["content"]  # budget exhausted, return best-so-far
+    return reply  # budget exhausted, return best-so-far
 
 copywriter_prompt = "Write engaging marketing copy. When the fact-checker approves, end with <done>."
 fact_checker_prompt = "Flag any unverifiable claim in the copy. If everything checks out, reply <done>. Otherwise state the issue."
 
 final_copy = duet(brief, copywriter_prompt, fact_checker_prompt)
 ```
+
+Do not invert `user`/`assistant` roles on a shared OpenAI-style transcript to simulate two speakers — that scramble is hard to debug. A labeled log (or two explicit message lists) keeps the contract obvious.
 
 **Variants:**
 
@@ -394,6 +449,12 @@ final_copy = duet(brief, copywriter_prompt, fact_checker_prompt)
 | **Fully Symmetric Duet** | Same (or no) system prompt for both — diversity comes from sampling alone | Exploratory brainstorming, synthetic dialogue generation |
 | **Optimization Duet** | Opposing numeric objectives (maximize coverage vs. minimize cost) | Negotiating toward a compromise, not a single "correct" answer |
 | **Cascading Duet** | Cheap model drafts at length, expensive model only critiques briefly | Cost optimization — bulk of tokens generated by the cheap model |
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer</p>
+
+**One objective per speaker.** A single prompt that says “be witty *and* strictly factual” will hedge or hallucinate. A duet splits those jobs the way Module 12 splits writer vs critic, with a hard `<done>` and `MAX_TURNS` so they cannot debate forever. Cascading duet is also a cost move: the cheap model burns tokens on drafts; the expensive model only nits. Same idea as Module 10 routing, applied to a two-role loop.
+</div>
 
 ---
 
@@ -416,12 +477,14 @@ final_copy = duet(brief, copywriter_prompt, fact_checker_prompt)
 
 <p class="label">Lab · orchestration refactor</p>
 
-1. Take a document too long for one context window and build a **Map-Reduce** pass over it (chunk → process → reduce) with an explicit dedupe step.
-2. Build a **Router** in front of two specialist prompts/agents; measure misrouting rate on 20 test queries.
-3. Take a multi-step task and split it into **Planner** phases; verify step N never receives the raw transcript of steps 1..N-1, only a compressed fact list.
-4. Wrap a tool-using loop in **ReAct** with a hard step budget; log every reason/act/observe cycle.
-5. Add a **Memory** with compulsory read + selective write to a repeat-interaction agent; verify a second session opens already knowing prior facts.
-6. Build a **Duet** for a task with two competing objectives; compare output quality against a single-agent baseline on the same brief.
+Pick **three** of the six patterns and apply them to one workflow (do not build six products). Suggested combo: Map-Reduce **or** Planner, plus Router **or** ReAct, plus Memory **or** Duet.
+
+1. **Map-Reduce:** a document too long for one window; chunk → process → reduce with an explicit dedupe.
+2. **Router:** two specialist prompts; misrouting rate on ≥20 labeled queries.
+3. **Planner:** step N receives only a compressed fact list, never raw transcripts of 1..N-1.
+4. **ReAct:** tool loop with a hard step budget; log every reason/act/observe cycle.
+5. **Memory:** compulsory read + selective write; a second session already knows a prior fact.
+6. **Duet:** two competing objectives vs a single-agent baseline on the same brief.
 
 </div>
 
@@ -429,9 +492,9 @@ final_copy = duet(brief, copywriter_prompt, fact_checker_prompt)
 
 ## Quizzes
 
-<div class="aieng-quiz" data-quiz-id="19-q1" data-xp="25" data-success="Correct — near-isomorphic splitting is what keeps the reduce step from losing information." data-fail="Re-read Map-Reduce: fragments must not cut a logical unit in half." markdown>
+<div class="aieng-quiz" data-quiz-id="19-q1" data-xp="25" data-success="Correct — keep each logical unit intact so the reduce step still has a complete fact." data-fail="Re-read Map-Reduce: fragments must not cut a clause or scene in half." markdown>
 <p class="label">Quiz · +25 XP</p>
-<p class="quiz-prompt">Why does Map-Reduce require a "near-isomorphic" split rather than splitting at fixed token counts?</p>
+<p class="quiz-prompt">Why should a Map-Reduce split keep logical units intact rather than cutting at a fixed token count?</p>
 <div class="quiz-options">
 <button type="button" class="quiz-opt" data-correct="false">Fixed token counts are always slower to compute</button>
 <button type="button" class="quiz-opt" data-correct="true">Cutting a logical unit (a clause, a scene) across a fragment boundary loses information the reduce step can't recover</button>
@@ -481,7 +544,7 @@ final_copy = duet(brief, copywriter_prompt, fact_checker_prompt)
 
 ## Checkpoint
 
-- [ ] You can explain why DPR is functionally the same as MapReduce
+- [ ] You can explain why decompose → process → recompose is the same shape as Map-Reduce (and is **not** Dense Passage Retrieval)
 - [ ] Your Router forwards payloads and outputs unaltered — it only decides, never rewrites
 - [ ] Your Planner's step executor never receives raw prior-step transcripts, only compressed facts
 - [ ] Your ReAct loop has a hard step budget and an explicit done-signal contract

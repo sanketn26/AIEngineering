@@ -6,7 +6,7 @@ Complete [Setup](../getting-started/setup.md) first. Close core gaps listed on t
 
 | Track | Outcome | Core dependencies | Vibe |
 |-------|---------|-------------------|------|
-| [Stock recommender](stock-recommender.md) | Research assistant / recommender prototype: data → baseline ML → SLM → RAG → compression → ship | 01–07, 09–10, 13, 17 | Markets + retrieval + MLOps (**not** financial advice) |
+| [Stock recommender](stock-recommender.md) | Research assistant / recommender prototype: data → baseline ML → SLM → RAG → compression → ship | 01–07, 09–10, 13–14, 17 | Markets + retrieval + MLOps (**not** financial advice) |
 | [Hybrid models](hybrid-models.md) | Custom Transformer + MLP fusion in PyTorch, ablations, deploy | 05–06 + DL fundamentals | From-scratch architecture engineering |
 | [Agentic editor plugin](agentic-plugin.md) | VS Code extension + agent backend + local models | 01–05, 07–08, 11–12, 17 | IDE product + agent safety |
 

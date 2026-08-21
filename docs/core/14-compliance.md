@@ -216,7 +216,19 @@ Hashes prove “this exact input was processed” if you still hold the original
 
 ## 3. Data inventory (start here)
 
-Before fancy classifiers, make a table.
+Before fancy classifiers, make a table. Here is a **worked sketch** for a support chatbot — copy the columns, replace the rows with your stores.
+
+**Example flow:** user types a ticket → API redacts PII → prompt + retrieved chunks go to a cloud vendor → answer and citations return → traces land in the log pipeline → chunks sit in a vector index.
+
+| Hop | Store | Typical class | Leaves your VPC? |
+|-----|-------|---------------|------------------|
+| 1 | App DB (ticket body, user email) | confidential | no |
+| 2 | Vector index (chunk text from tickets/docs) | confidential — still personal data | no, unless hosted |
+| 3 | LLM vendor (prompt + retrieved snippets) | confidential | **yes** — this is a subprocessor |
+| 4 | APM / logs (request_id, hashes, maybe previews) | internal / confidential | maybe |
+| 5 | Eval golden set (copied real tickets) | confidential | only if you export it |
+
+If you cannot fill that table for *your* app, you are not ready for a vendor security questionnaire. Then generalize:
 
 | Data store | Contains | Classification | Retention | Who accesses | Leaves environment? |
 |------------|----------|----------------|-----------|--------------|---------------------|

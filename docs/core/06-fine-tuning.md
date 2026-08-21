@@ -35,17 +35,16 @@ Weights encode *distributional skill*. Context encodes *instance facts*. Tools e
 
 ```mermaid
 flowchart TD
-  Start([Need model to do X better]) --> Q1{Does X need private or\nfast-changing knowledge?}
-  Q1 -->|Yes| RAG[RAG / tools — not FT]
-  Q1 -->|No| Q2{Is X reliable tool formats\nor JSON schema?}
-  Q2 -->|Yes| Struct[Structured outputs +\nprompts + evals]
-  Q2 -->|No| Q3{Does base model lack\nthe capability entirely?}
-  Q3 -->|Yes| Cap[Bigger model, train/FT,\nor specialized system]
-  Q3 -->|No| Q4{Need locked tone/format\nat high volume?}
-  Q4 -->|Yes| FT[Fine-tune / LoRA adapter]
-  Q4 -->|No| Prompt[Strong system + few-shot\n+ context engineering]
-  Q5{On-device / offline\nspecialized skill?}
-  Cap --> Q5
+  Start([Need model to do X better]) --> Q1{Private or fast-changing knowledge?}
+  Q1 -->|Yes| RAG[RAG / tools — not fine-tune]
+  Q1 -->|No| Q2{Need reliable JSON / tool formats?}
+  Q2 -->|Yes| Struct[Structured outputs + prompts + evals]
+  Q2 -->|No| Q3{Base model lacks the skill entirely?}
+  Q3 -->|Yes| Bigger[Larger model, or train / fine-tune]
+  Q3 -->|No| Q4{Need locked tone or format at high volume?}
+  Q4 -->|No| Prompt[Strong system + few-shot + packing]
+  Q4 -->|Yes| FT[LoRA / adapter fine-tune]
+  Bigger --> Q5{Must run on-device or offline?}
   FT --> Q5
   Q5 -->|Yes| SLM[SLM fine-tune + quantize]
   Q5 -->|No| Serve[Serve adapter or merged weights]

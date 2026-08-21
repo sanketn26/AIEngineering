@@ -16,40 +16,43 @@ Choose intensity and depth. All paths share [Setup](setup.md). Core modules are 
 
 **Skip for now:** Fine-tuning, multi-agent, compliance deep-dives.
 
+You will not have Module 05 (context packing) yet. Cap pasted documents by hand — do not dump whole PDFs into the prompt. Treat that cap as a stand-in for the packer you will build later.
+
 ---
 
-## Professional Developer (1–2 weeks)
+## Professional Developer (8–12 weeks)
 
-**Goal:** Production-minded app with tests, caching, and observability.
+**Goal:** Production-minded app with tests, caching, and observability. Times below assume ~1 focused hour most weekdays, matching the module time boxes — not a two-week cram.
 
 | Phase | Modules |
 |-------|---------|
 | Foundations | 01 → 04 |
 | Knowledge | 05, 07, 09 |
-| Efficiency | 08, 10 |
+| Connectors & cost | 08, 10 |
 | Ship | 11 (optional), 13 |
 
 **Prerequisites:** API experience; basic cloud or container familiarity.
 
 ---
 
-## Enterprise Architect (3–4 weeks)
+## Enterprise Architect (12–16 weeks)
 
-**Goal:** Scalable, multi-component systems with governance.
+**Goal:** Scalable, multi-component systems with governance. Longer than the Professional path because it covers the rest of the core (compliance, domains, integration, local models), not because the modules are harder to skim.
 
 | Phase | Modules |
 |-------|---------|
 | Full core | 01 → 14 |
 | Integration | 15, 16 |
 | Local/hybrid | 17 |
+| Patterns (optional) | 18, 19 |
 
 **Emphasize:** Security, evals, multi-agent orchestration, audit trails, hybrid routing.
 
 ---
 
-## AI Researcher (4–6 weeks)
+## AI Researcher (4–6 weeks of core, then a 90-day track)
 
-**Goal:** Customization and advanced systems.
+**Goal:** Customization and advanced systems. The week count is **core modules only**. A specialization track is extra (~90 days) and is not folded into those 4–6 weeks.
 
 | Phase | Modules |
 |-------|---------|
@@ -65,7 +68,7 @@ Choose intensity and depth. All paths share [Setup](setup.md). Core modules are 
 
 | Track | Best after | Link |
 |-------|------------|------|
-| Stock recommender | 01–07, 09, 10, 13, 17 | [Track](../tracks/stock-recommender.md) |
+| Stock recommender | 01–07, 09, 10, 13, 14, 17 | [Track](../tracks/stock-recommender.md) |
 | Hybrid Transformer+MLP | DL basics + 05–06 | [Track](../tracks/hybrid-models.md) |
 | Agentic VS Code plugin | 01–05, 07–08, 11–12, 17 | [Track](../tracks/agentic-plugin.md) |
 

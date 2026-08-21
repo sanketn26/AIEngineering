@@ -1,6 +1,6 @@
 # Core Modules
 
-Nineteen modules, four stages. Each moves you from a working model interaction toward a system you'd actually put in front of production traffic. Complete [Setup](../getting-started/setup.md) first, then work top to bottom — later modules assume the module before it.
+Nineteen modules, four stages. Each moves you from a working model interaction toward a system you'd actually put in front of production traffic. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module’s **Depends on** line is the real prerequisite. Stages group related skills (agents 11–12 sit next to design/orchestration 18–19 even though production modules sit between them numerically).
 
 ## Stage 1 — Foundations
 

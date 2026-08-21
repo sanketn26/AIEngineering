@@ -107,6 +107,7 @@ The modules move from dependable model interactions to complete production syste
       <li><a href="core/10-cost-optimization/">Cost optimization</a></li>
       <li><a href="core/13-production/">Production engineering</a></li>
       <li><a href="core/14-compliance/">Compliance</a></li>
+      <li><a href="core/15-domain-apps/">Domain-specific applications</a></li>
       <li><a href="core/17-small-models/">Small & local models</a></li>
     </ul>
   </div>

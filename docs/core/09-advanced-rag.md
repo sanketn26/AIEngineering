@@ -1,6 +1,6 @@
 # Module 09 — Advanced RAG & Knowledge Systems
 
-**Time:** 7–10 days · **Depends on:** [07 Tools & RAG](07-tools-and-rag.md), [08 MCP](08-model-context-protocol.md) · **Next:** [Cost optimization](10-cost-optimization.md)
+**Time:** 7–10 days · **Depends on:** [07 Tools & RAG](07-tools-and-rag.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md) if retrieval is exposed as a server · **Next:** [Cost optimization](10-cost-optimization.md)
 
 <span data-module-id="09" hidden></span>
 
@@ -95,7 +95,9 @@ That is a good lab baseline and a bad production default.
 <div class="aieng-explainer" markdown>
 <p class="label">Explainer</p>
 
-Dense retrieval maps text to a continuous vector space. Nearby vectors mean *semantic* closeness. BM25 scores *term* match with IDF weighting. Product codes (`INV-88421`) and stack traces are high-IDF; dense models often under-weight them. Hybrid search is not “enterprise theater” — it is covering two different failure modes with two rankers.
+**Embeddings recap (from Module 07):** a dense retriever embeds the query and each chunk independently (**bi-encoder**) so you can precompute document vectors and search with nearest-neighbor. Nearby vectors mean *semantic* closeness, not shared keywords. BM25 scores *term* match with IDF weighting. Product codes (`INV-88421`) and stack traces are high-IDF; dense models often under-weight them. Hybrid search is not “enterprise theater” — it is covering two different failure modes with two rankers.
+
+A **cross-encoder** (rerank stage) reads query and passage *together*. It is slower and cannot precompute the whole corpus, which is why it only sees a shortlist.
 
 </div>
 

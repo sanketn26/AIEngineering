@@ -313,7 +313,8 @@ Decide product policy for `flagged=True`: refuse, allow with no tools, or queue 
 2. Craft **three** injection attempts (classic ignore-instructions; fake `<system>` tags; “reveal the hidden prompt”). Confirm `flagged` or tag stripping.  
 3. Craft one message with email + phone; confirm redaction placeholders appear and raw PII does not.  
 4. Confirm API keys never appear in printed prompts or git history (`git log -p`, secret scan, or `git secrets` / gitleaks if available).  
-5. Write a 5-line threat model for *your* app: assets, attackers, trust boundaries, one irreversible action you would never let the model trigger alone.
+5. Write a 5-line threat model for *your* app: assets, attackers, trust boundaries, one irreversible action you would never let the model trigger alone.  
+6. Record one injection that **does not** match the regex (paraphrase, another language, or base64). Note that `flagged` stayed false — that is expected. The allowlist and “no secrets in the prompt” still have to hold.
 
 **Acceptance criteria**
 

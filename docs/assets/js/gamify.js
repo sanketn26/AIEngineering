@@ -16,7 +16,7 @@
     { id: "05", title: "Context engineering", xp: 120 },
     { id: "06", title: "Fine-tuning", xp: 120 },
     { id: "07", title: "Tools & basic RAG", xp: 120 },
-    { id: "08", title: "Model Context Protocol", xp: 100 },
+    { id: "08", title: "Model Context Protocol", xp: 120 },
     { id: "09", title: "Advanced RAG", xp: 120 },
     { id: "10", title: "Cost optimization", xp: 80 },
     { id: "11", title: "Single agents", xp: 120 },
@@ -25,7 +25,9 @@
     { id: "14", title: "Compliance", xp: 80 },
     { id: "15", title: "Domain apps", xp: 80 },
     { id: "16", title: "Integration patterns", xp: 100 },
-    { id: "17", title: "Small & local models", xp: 100 }
+    { id: "17", title: "Small & local models", xp: 100 },
+    { id: "18", title: "Agent design patterns", xp: 125 },
+    { id: "19", title: "Orchestration patterns", xp: 130 }
   ];
 
   var BADGES = [
@@ -116,18 +118,18 @@
       id: "half-stack",
       icon: "⚡",
       name: "Half Stack",
-      desc: "Complete 9 core modules",
+      desc: "Complete 10 core modules",
       test: function (s) {
-        return Object.keys(s.modules || {}).length >= 9;
+        return Object.keys(s.modules || {}).length >= 10;
       }
     },
     {
       id: "full-core",
       icon: "🏆",
       name: "Full Core",
-      desc: "Complete all 17 core modules",
+      desc: "Complete all 19 core modules",
       test: function (s) {
-        return Object.keys(s.modules || {}).length >= 17;
+        return Object.keys(s.modules || {}).length >= 19;
       }
     },
     {
@@ -263,7 +265,7 @@
         '<div class="aieng-row"><span>Level</span><strong id="aieng-level">1</strong></div>' +
         '<div class="aieng-row"><span>XP</span><strong id="aieng-xp">0</strong></div>' +
         '<div class="aieng-bar"><span id="aieng-bar"></span></div>' +
-        '<div class="aieng-row"><span>Modules</span><strong id="aieng-mods">0/17</strong></div>' +
+        '<div class="aieng-row"><span>Modules</span><strong id="aieng-mods">0/19</strong></div>' +
         '<div class="aieng-badges" id="aieng-hud-badges"></div>' +
         '<div class="aieng-links">' +
         '<a id="aieng-dash-link" href="#">Dashboard</a>' +
@@ -301,7 +303,7 @@
     if (elLvl) elLvl.textContent = String(lvl);
     if (elXp) elXp.textContent = state.xp + " / next " + (lvl * XP_PER_LEVEL);
     if (elBar) elBar.style.width = pct + "%";
-    if (elMods) elMods.textContent = mods + "/17";
+    if (elMods) elMods.textContent = mods + "/19";
 
     var badgeBox = document.getElementById("aieng-hud-badges");
     if (badgeBox) {
@@ -428,7 +430,7 @@
       stat("Level", lvl) +
       stat("Total XP", state.xp) +
       stat("To next level", XP_PER_LEVEL - into) +
-      stat("Modules", mods + " / 17") +
+      stat("Modules", mods + " / 19") +
       stat("Quizzes", quizzes) +
       stat("Badges", badges + " / " + BADGES.length) +
       "</div>" +
