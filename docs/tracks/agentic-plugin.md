@@ -196,6 +196,36 @@ if __name__ == "__main__":
     main()
 ```
 
+### Without vs. with: a structured IPC envelope
+
+**❌ Without the pattern**
+
+```typescript
+const proc = spawn(pythonPath, ["-m", "core_agent"]);
+proc.stdout.on("data", (chunk) => {
+  vscode.window.showInformationMessage(chunk.toString()); // hope it's one clean line
+});
+```
+
+This works in the demo because you only ever send one request at a time and nothing ever crashes. The first time two commands overlap, or Python throws a traceback that lands on stdout, the extension shows garbage or silently hangs — and you have no `id` to know which request the noisy output belongs to.
+
+**✅ With the pattern** (what you just built)
+
+The `{v, id, method, params}` / `{v, id, result}` / `{v, id, error}` envelope above turns IPC into a real contract: every response is addressable, every error is typed, and stderr is a separate channel you can pipe to an OutputChannel instead of parsing.
+
+| Tradeoff | Without | With |
+|---|---|---|
+| Implementation cost | Zero — `print()` and read | One schema, versioned (`v: 1`) |
+| Concurrent requests | Breaks silently | Correlate by `id` |
+| Crash visibility | Traceback mixed into "response" | stderr isolated, `error.code` typed |
+| Testability | Only via the extension UI | CLI-testable JSON in/out |
+
+**Guardrails & context compaction:** not yet relevant — no model context exists in this phase. The guardrail is protocol hygiene: reject any line that isn't valid JSON rather than trying to "recover" partial output, and version the envelope now so a future breaking change doesn't have to guess what old clients sent.
+
+**Failure modes to watch in prod:** a Python process that dies mid-request leaves a `pending` promise on the extension side forever — pair the IPC client with a per-request timeout. A stdout buffer that splits a JSON object across two `data` events if you don't do line-buffered reads.
+
+This is the same discipline the incident above is really about: **every later guardrail (approval gates, allowlists, telemetry opt-in) is enforced by extension code reading a typed message — none of it works if the transport itself is "read whatever came back."**
+
 ### Hints
 
 Spawn Python via the venv absolute path; pipe `stderr` to an OutputChannel. Timeout every request. No secrets on the hello path.
@@ -354,6 +384,40 @@ class Agent:
 
 IPC `method: "run"` with `{goal, workspace, max_steps}`. CLI: `python -m core_agent "summarize src/"`.
 
+### Without vs. with: a bounded agent loop
+
+**❌ Without the pattern**
+
+```python
+def run_naive(goal, llm, tools):
+    scratchpad = ""
+    while True:  # no budget
+        decision = llm(f"{goal}\n{scratchpad}")   # no schema enforced
+        if "```" in decision:
+            decision = decision.split("```")[1]    # hope it's JSON
+        action = eval(decision)  # or: exec the "code" the model wrote
+        scratchpad += str(action)
+```
+
+This is the `while True` with an API bill from the incident. No `max_steps` means a confused model loops until you cancel the process or your bill does it for you; no schema means a stray markdown fence or a model that "explains itself first" crashes the parser; `eval`/`exec` on model output is arbitrary code execution with extra steps.
+
+**✅ With the pattern** (what you just built)
+
+`Agent.run()` enforces `max_steps`, treats malformed JSON as a **terminal** state (not a retry loop), and aborts on a repeated identical tool call instead of trusting the model to notice it's stuck.
+
+| Tradeoff | Without | With |
+|---|---|---|
+| Runaway cost | Unbounded | Hard-capped at `max_steps` |
+| Malformed output | Crash or silent misparse | Caught, `abort_reason` set, loop ends |
+| Stuck loops (same call twice) | Burns budget until cap | Aborted immediately, cheaper |
+| Debuggability | "it did something" | `state.steps` is a full audit trail |
+
+**Guardrails & context compaction:** the scratchpad concatenates every tool observation (`state.scratchpad += ...`) — over 8+ steps with 2000-char truncation per step that's still up to ~16K chars fed back into the next prompt. Cap it harder than the per-step truncation suggests: keep the last N steps verbatim and summarize (or drop) the rest, the same discipline as [Module 05 — context engineering](../core/05-context-engineering.md). Without compaction, long-running agents silently lose the budget for their own instructions to context bloat, not to `max_steps`.
+
+**Failure modes to watch in prod:** a tool that legitimately needs to be called twice with the same args (e.g. re-`read_file` after a write) now false-positives on `repeated_tool_call` — decide deliberately whether identical calls are always suspicious or only within read-only phases. A model that produces valid JSON but hallucinates a tool name should error *as an observation*, not crash the loop — confirm `_run_tool` returns `"error: unknown tool ..."` rather than raising.
+
+Back to the track's core sentence: **model proposes, runtime disposes.** `max_steps`, the allowlist, and the repeated-call abort are the runtime's first three "no."
+
 ### Hints
 
 Fake LLM in unit tests (see `tests/test_agents.py`). Reject `..` escapes. Strip markdown fences around JSON once, then fail hard.
@@ -415,6 +479,37 @@ class OllamaProvider:
         ...  # POST /api/chat
 ```
 
+### Without vs. with: secrets and provider abstraction
+
+**❌ Without the pattern**
+
+```typescript
+// settings.json — plaintext, syncs, ends up in dotfiles repos and screenshots
+"aieng.openaiApiKey": "sk-..."
+```
+
+```typescript
+const res = await fetch("https://api.openai.com/v1/chat/completions", { /* ... */ });
+// one provider hardcoded; switching means editing code
+```
+
+Settings are synced (Settings Sync), often git-tracked in dotfiles, and show up in screen-shares. A single hardcoded provider also locks every user to one vendor, and an offline-first user gets no path to Ollama without a fork.
+
+**✅ With the pattern** (what you just built)
+
+`context.secrets` is OS-keychain-backed and never round-trips through settings sync or `.vscode/settings.json`; the `LLMProvider` protocol makes the backend a config value (`aieng.provider`), not a code branch.
+
+| Tradeoff | Without | With |
+|---|---|---|
+| Key exposure surface | Settings file, sync, screenshots | OS keychain only |
+| Provider flexibility | Fork to add one | New class implementing `complete()` |
+| Offline support | None | Ollama is just another provider |
+| First-run friction | None (already there) | One `showInputBox` prompt |
+
+**Guardrails & context compaction:** cap the selection you send — not just for cost, but because an unbounded selection can carry secrets living in the file (`.env` snippets, tokens in comments) straight into a third-party API call. Treat "what's in the prompt" as part of the secrets boundary, not just "what's in SecretStorage."
+
+**Failure modes to watch in prod:** a key stored under the wrong `SECRET_KEY` namespace after a rename silently falls back to re-prompting every session — version your secret keys (`aieng.apiKey.v1`) the same way you versioned the IPC envelope. Logging the raw request for debugging is the single most common way a "SecretStorage-only" extension leaks a key anyway — redact `Authorization` at the HTTP client level, not at the call site, so no future call path can forget.
+
 ### Hints
 
 Setting `aieng.provider` = `openai | anthropic | ollama`. Redact `Authorization` in logs. Cap selection size.
@@ -448,7 +543,7 @@ stateDiagram-v2
 
 ### Explainer
 
-This phase prevents the incident. The model may invent a patch in `PROPOSE_DIFF`. The runtime may not invent disk writes. Approval is a user-mode transition: extension sends `workflow.apply` with `userApproved: true` only after a modal.
+This phase prevents the incident. The model may invent a patch in `PROPOSE_DIFF`. The agent runtime may not write it. Approval is a user-mode transition: after a modal, the extension fetches the matching pending patch and applies it through `WorkspaceEdit`.
 
 ### Code
 
@@ -467,19 +562,24 @@ async function proposeAndMaybeApply(client: AgentClient, goal: string) {
     await client.request("workflow.cancel", { patchId: proposal.patchId });
     return;
   }
-  await client.request("workflow.apply", {
+  // Fetch the exact, still-pending patch by id after the human approves it.
+  // The extension applies it with WorkspaceEdit so the change is undoable.
+  const approved = await client.request("workflow.approvedPatch", {
     patchId: proposal.patchId,
-    userApproved: true, // backend MUST require this
+    contentHash: proposal.contentHash,
   });
+  await applyWithWorkspaceEdit(approved); // reject stale/hash-mismatched patches
 }
 ```
 
 ```python
 WRITE_TOOLS = frozenset({"apply_patch", "write_file"})
 
-def run_tool(name: str, args: dict, *, user_approved: bool) -> str:
-    if name in WRITE_TOOLS and not user_approved:
-        return "error: write tool requires user approval"
+def run_tool(name: str, args: dict) -> str:
+    # Model-driven tool execution is never allowed to write. The extension
+    # applies a separately stored, human-reviewed patch through WorkspaceEdit.
+    if name in WRITE_TOOLS:
+        return "error: write tools are unavailable to the agent loop"
     ...
 
 # Minimal graph
@@ -499,6 +599,36 @@ def next_node(current: Node, event: str) -> Node:
         (Node.TEST, "fail"): Node.FAILED,
     }.get((current, event), Node.FAILED)
 ```
+
+### Without vs. with: the approval gate
+
+**❌ Without the pattern**
+
+```python
+def run_tool(name, args):
+    if name == "write_file":
+        Path(args["path"]).write_text(args["content"])  # no gate at all
+        return "written"
+```
+
+This is the incident, verbatim: the model's `ProposeDiff` output flows straight into a filesystem write because `write_file` was registered like `read_file`. There is no code path where the user's intent enters the decision — "agentic" quietly became "autonomous."
+
+**✅ With the pattern** (what you just built)
+
+`run_tool` denies writes unconditionally, so neither the model nor a caller-supplied boolean can turn a proposal into a filesystem mutation. After the modal approval, the extension fetches the exact pending patch by `patchId` and `contentHash`, rejects stale or mismatched content, and applies it through `WorkspaceEdit`. In production, keep pending patches in runtime-owned state with a short TTL; do not accept patch content or an `approved: true` claim as proof of consent.
+
+| Tradeoff | Without | With |
+|---|---|---|
+| Time to first "wow" demo | Instant | One extra click |
+| Blast radius of a bad model response | Full write access | A diff nobody applied |
+| Where trust is enforced | Nowhere explicit | Agent loop denies writes; extension owns apply |
+| Undo story | `git checkout` and hope | `WorkspaceEdit` → native undo |
+
+**Guardrails & context compaction:** the diff shown to the user must be the **same** diff the extension applies — never regenerate it between propose and apply, or you've reopened a TOCTOU gap where what was approved isn't what ran. Bind the stored patch to its id and content hash, and give it a TTL; an approval dialog left open for an hour while the workspace changed underneath it is stale consent.
+
+**Failure modes to watch in prod:** the one-shot repair loop (`RunTests --> ProposeDiff: fail once`) must not re-request approval silently on the second attempt — a repair that mutates the diff needs a fresh approve, or you've built an auto-apply loop with extra steps. Watch for a race where the user clicks "Apply" right as a second `workflow.propose` overwrites `patchId` — key pending patches by id and reject stale ones explicitly rather than applying "whatever's current."
+
+This phase *is* the fix for the 11:40 p.m. incident. Every other phase in this track exists to make that fix ship-able, not to relax it.
 
 ### Hints
 
@@ -557,6 +687,35 @@ class ModelRouter:
             return False
 ```
 
+### Without vs. with: visible, policy-aware routing
+
+**❌ Without the pattern**
+
+```python
+def complete(prompt):
+    try:
+        return ollama.complete(prompt)
+    except Exception:
+        return cloud.complete(prompt)  # silent, no reason, no consent check
+```
+
+This "works" — it's resilient to Ollama being down. But the user has no idea their code just left the laptop, `allow_escalate` (an org policy) is never consulted, and there's no signal in the UI distinguishing a private local answer from a cloud one. In a regulated or IP-sensitive codebase this is the same trust violation as the write-without-approval incident, just quieter.
+
+**✅ With the pattern** (what you just built)
+
+`ModelRouter.choose()` returns a `RouteDecision` with an explicit `reason` (`privacy_or_policy`, `long_context`, `local_down`, `default_local`) that the extension can render as status text — "Using cloud (local context too long)" — and `allow_escalate` is checked *before* any network call, not caught as a fallback after one fails.
+
+| Tradeoff | Without | With |
+|---|---|---|
+| Resilience to local outage | Same | Same |
+| User awareness of where data went | None | Status line shows provider + reason |
+| Org policy enforcement | Bypassed by try/except | Checked first, hard stop if denied |
+| Debuggability of "why cloud?" | Guess | `RouteDecision.reason` |
+
+**Guardrails & context compaction:** `prompt_chars > 24_000` is a context-compaction decision wearing a routing hat — before escalating *because* the prompt is huge, ask whether the prompt should be that huge in the first place (Module 05 truncation/summarization) rather than shipping more tokens to a more expensive, less private provider. Compact first; escalate only if the compacted prompt still doesn't fit.
+
+**Failure modes to watch in prod:** `_healthy()` with a stub that always returns `True` means "local down" routing never actually triggers until you wire the real Ollama health check — test the down-path explicitly, not just the happy path. A user who sets `allow_escalate: false` and hits a huge selection needs a clear failure ("too large for local model"), not a hang or a silent truncation that changes the answer without saying so.
+
 ### Hints
 
 Settings: local/cloud model ids, `aieng.escalate.auto` (choose enterprise-safe default). Prefer symbol-sized cloud context. Put p50 local latency in README.
@@ -596,6 +755,35 @@ def test_max_steps():
     assert st.abort_reason in {"max_steps", "repeated_tool_call"}
 ```
 
+### Without vs. with: consent-first telemetry and a real test suite
+
+**❌ Without the pattern**
+
+```typescript
+function track(event, props) {
+  fetch("https://telemetry.example.com/collect", {
+    method: "POST", body: JSON.stringify({ event, props, code: currentSelection }),
+  }); // default-on, ships the code it "explained"
+}
+```
+
+Default-on telemetry that ships whatever's in scope (selection, file path, sometimes the model's own output) is a privacy incident waiting for a security review, not a feature. With no regression tests, "the agent refused to write without approval" is a property you *remember* holding, not one you can prove holds after the next refactor.
+
+**✅ With the pattern** (what you just built)
+
+Telemetry defaults `false` and is gated on a setting the user opts into; the payload is an `event` name plus small numeric/string `props` — never code, never keys. `test_write_blocked_without_approval` and `test_max_steps` turn the two safety properties from Days 43–70 into CI assertions.
+
+| Tradeoff | Without | With |
+|---|---|---|
+| Product insight | Rich, immediate | Requires opt-in, sparser |
+| Privacy/legal risk | High (ships code) | Low (event names only) |
+| Confidence a regression didn't reopen the incident | "I re-tested by hand" | CI fails the PR |
+| Cost to add a new safety property | Manual re-check forever | One more `pytest` test |
+
+**Guardrails & context compaction:** telemetry props are the one place a "just log everything for debugging" habit reintroduces the exact leak this phase exists to prevent — treat the props schema as a boundary: enumerate the allowed keys, reject anything else at the `track()` call site rather than trusting every call site to remember to redact.
+
+**Failure modes to watch in prod:** a golden fake-LLM test that hardcodes a specific tool-call sequence will pass even after you silently loosen the allowlist check it was meant to catch — assert on the *properties* (`abort_reason in {...}`, write blocked), not "did it match this one transcript." Telemetry that's opt-in in code but defaulted `true` in a packaged VSIX build config is a shipping bug, not a code bug — check the built extension's default settings, not just the source.
+
 ### Hints
 
 Golden fake-LLM tool sequences. CI: `pytest` + `npm test`. Don’t rely on color alone for approve/reject.
@@ -630,6 +818,36 @@ async function enableMcpServer(id: string) {
 ```
 
 **Beta README must state:** no auto-apply; SecretStorage only; MCP off by default / untrusted; telemetry opt-in; allowlisted tools; workspace path sandbox.
+
+### Without vs. with: default-deny MCP
+
+**❌ Without the pattern**
+
+```typescript
+// workspace .vscode/mcp.json discovered and started automatically
+for (const server of discoverMcpServers(workspaceRoot)) {
+  spawnMcpServer(server); // no prompt, no pinning, inherits full env
+}
+```
+
+Auto-starting whatever MCP config a workspace happens to contain means opening someone else's repo can silently launch an arbitrary local process with your environment and credentials — the same class of trust violation as the original incident, just relocated from "the model writes files" to "the workspace tells your extension what to run."
+
+**✅ With the pattern** (what you just built)
+
+MCP is off by default; enabling a server is an explicit, per-server, modal-confirmed action, and its tools flow through the **same** write-approval gate as everything else — an MCP server doesn't get a shortcut around Day 43–56's policy just because it arrived later.
+
+| Tradeoff | Without | With |
+|---|---|---|
+| "Just works" on repos with MCP configs | Yes | No — explicit enable required |
+| Blast radius of a malicious workspace | Arbitrary process execution | Nothing runs unconfirmed |
+| Version pinning | Whatever's in the config | You control and pin |
+| Consistency with the write-approval story | Bypassed | Reused, not reinvented |
+
+**Guardrails & context compaction:** an MCP server can inject arbitrary tool *descriptions* into the model's context, not just handle calls — a compromised or careless server can bloat the prompt with junk tool schemas or, worse, prompt-injection-style instructions in a tool's description field. Treat tool descriptions from MCP servers as untrusted input to compact and sanity-check, the same as any other external text entering the context window.
+
+**Failure modes to watch in prod:** `workspace.isTrusted === false` must disable MCP *and* write workflows together — a partial disable that leaves MCP reachable in an untrusted workspace defeats the point. A server that's enabled once and then updates its binary out-of-band changes what code runs next launch without re-confirmation — pin by version/hash, not by name, if "confirmed once" is supposed to still mean something on relaunch.
+
+**Bring it back to the track:** by day 90 every layer — IPC, the agent loop, secrets, the approval gate, routing, telemetry, and now MCP — enforces the same one-sentence architecture: **the model proposes; the runtime disposes.** Each "without" pattern above is a different place that sentence quietly stopped being true; each "with" pattern is where you put it back.
 
 ### Hints
 
