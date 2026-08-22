@@ -6,7 +6,7 @@
 
 **Tools:** Python 3.11+, PyTorch, Jupyter/VS Code, Git. Optional: TensorBoard, Captum, FastAPI, ONNX.
 
-**Core modules (transfer):** [05 Context](../core/05-context-engineering.md), [06 Fine-tuning](../core/06-fine-tuning.md). This track is primarily from-scratch modeling.
+**Core modules (transfer):** [05 Context](../core/05-context-engineering.md), [06 Fine-tuning](../core/06-fine-tuning.md). This track is primarily from-scratch modeling. **Borrow, don’t cargo-cult:** [23](../core/23-prompt-drift.md) analog (pin **train+eval YAML** hashes), [04](../core/04-testing-evals.md)/[22](../core/22-agent-evaluation.md) `eval_regression` on MAE — not agents, worktrees, or MCP. On a tight laptop, shrink `d_model` / `max_len` / batch the way [17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware) shrinks GGUF: **fit memory**, don’t swap.
 
 **Cadence:** ~1–2 focused hours most days; heavier near training and ablations.
 
@@ -185,6 +185,7 @@ def make_loader(ds, batch_size=64, shuffle=False, num_workers=0):
 - [ ] Splits with explicit anti-leakage policy
 - [ ] One batch prints shapes: `x_tab [B,F]`, `x_seq [B,T,C]`, `y`
 - [ ] Null baseline metric recorded (train mean / majority class)
+- [ ] Hardware note: batch / `max_len` / `d_model` chosen so training **fits** (no swap). If 8 GB RAM, start tiny and scale up — do not copy a 7B recipe onto a laptop.
 
 ---
 
@@ -555,6 +556,8 @@ def build_model(cfg: dict) -> torch.nn.Module:
 
 - [ ] Ablation table (fusion + branch knockouts)
 - [ ] Frozen architecture + hyperparams in one config
+- [ ] **Config digest** recorded (`src.drift.canonical_hash` on the YAML bundle, or equivalent); day-90 tag must match
+- [ ] `eval_regression` (or a one-page table with floors) vs the previous frozen metrics — MAE/accuracy, not vibes
 - [ ] Recipe notes: hardware, time/epoch, seeds
 - [ ] No unexplained hybrid complexity
 
@@ -689,7 +692,7 @@ A public repo that cannot be reproduced is a demo, not an engineering artifact.
 
 - [ ] Hybrid **justified** vs MLP-only and Transformer-only with numbers  
 - [ ] Reproducible training + seed control  
-- [ ] Ablations documented; complexity earned  
+- [ ] Ablations documented; complexity earned; config digest matches the tag  
 - [ ] Serve/export path works on a clean machine  
 - [ ] Time-series leakage story explicit  
 - [ ] Honest failure analysis included  
@@ -711,6 +714,20 @@ A public repo that cannot be reproduced is a demo, not an engineering artifact.
 | API | [FastAPI](https://fastapi.tiangolo.com/tutorial/) |
 
 Read domain hybrid papers for *your* modality; treat fusion claims as hypotheses on **your** splits.
+
+---
+
+## Production hardening (days 70–90)
+
+Hybrids fail like agents when **config drifts** and **evals don’t gate merges**. They do **not** need MCP, CrewAI, or coding-agent worktrees.
+
+| Already in a phase | Pattern |
+|--------------------|---------|
+| Day 14 | Memory-honest `d_model` / batch (same idea as [17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware)) |
+| Day 70 | YAML digest + `eval_regression` on `val_mae` ([23](../core/23-prompt-drift.md), [22](../core/22-agent-evaluation.md) helper) |
+| Days 71–84 | `/predict` golden cases + timeouts ([13](../core/13-production.md)) |
+
+Log **params, latency, time/epoch** the way Module 26 attributes steps — not tokens, unless you bolt on an LLM head. The teaching `eval_regression` in `src.drift` works on any named metric dict.
 
 ---
 

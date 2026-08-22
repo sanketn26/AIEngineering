@@ -120,7 +120,7 @@ Peer graph:    Agents message on channels / shared store
 | **Peer / blackboards** | Flexible collaboration | Hard to debug; deadlock and conflict risk |
 | **Router + specialists** | Good when intent classes are stable | Needs solid classification upfront |
 
-Frameworks to **study** (concepts first): **LangGraph**, **CrewAI**, **AutoGen/AG2**, provider agent SDKs. Adopt a framework when the topology is clear — not to discover the topology.
+Frameworks to **study** (concepts first): **LangGraph**, **CrewAI**, **AutoGen/AG2**, provider agent SDKs. Adopt a framework when the topology is clear — not to discover the topology. Measurable trade-offs (HITL, durability, lock-in, $/step) are [Module 26](26-orchestrator-comparison.md); failure modes and sandboxes are [20](20-agent-reliability.md)–[21](21-secure-tool-use.md).
 
 <div class="aieng-explainer" markdown>
 <p class="label">Explainer</p>

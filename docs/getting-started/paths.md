@@ -30,6 +30,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Knowledge | 05, 07, 09 |
 | Connectors & cost | 08, 10 |
 | Ship | 11 (optional), 13 |
+| Production agents (optional) | 20, 21, 22 |
 
 **Prerequisites:** API experience; basic cloud or container familiarity.
 
@@ -45,8 +46,9 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Integration | 15, 16 |
 | Local/hybrid | 17 |
 | Patterns (optional) | 18, 19 |
+| Production agents | 20–26 |
 
-**Emphasize:** Security, evals, multi-agent orchestration, audit trails, hybrid routing.
+**Emphasize:** Security, evals, multi-agent orchestration, audit trails, hybrid routing, agent failure modes, sandboxes, trajectory evals.
 
 ---
 
@@ -60,6 +62,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Retrieval frontier | 09 |
 | Agents | 11, 12 |
 | SLMs | 17 |
+| Production agents (optional) | 20, 22, 24, 26 |
 | Track | Hybrid models or stock research stack |
 
 ---
@@ -68,9 +71,9 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 
 | Track | Best after | Link |
 |-------|------------|------|
-| Stock recommender | 01–07, 09, 10, 13, 14, 17 | [Track](../tracks/stock-recommender.md) |
-| Hybrid Transformer+MLP | DL basics + 05–06 | [Track](../tracks/hybrid-models.md) |
-| Agentic VS Code plugin | 01–05, 07–08, 11–12, 17 | [Track](../tracks/agentic-plugin.md) |
+| Stock recommender | 01–07, 09, 10, 13, 14, 17, 23 | [Track](../tracks/stock-recommender.md) |
+| Hybrid Transformer+MLP | DL basics + 05–06; config pins (23 analog) | [Track](../tracks/hybrid-models.md) |
+| Agentic VS Code plugin | 01–05, 07–08, 11–12, 17, 20–25 | [Track](../tracks/agentic-plugin.md) |
 
 Tracks can run **in parallel** with later core modules if you already code comfortably.
 

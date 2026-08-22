@@ -6,9 +6,9 @@ Complete [Setup](../getting-started/setup.md) first. Close core gaps listed on t
 
 | Track | Outcome | Core dependencies | Vibe |
 |-------|---------|-------------------|------|
-| [Stock recommender](stock-recommender.md) | Research assistant / recommender prototype: data → baseline ML → SLM → RAG → compression → ship | 01–07, 09–10, 13–14, 17 | Markets + retrieval + MLOps (**not** financial advice) |
-| [Hybrid models](hybrid-models.md) | Custom Transformer + MLP fusion in PyTorch, ablations, deploy | 05–06 + DL fundamentals | From-scratch architecture engineering |
-| [Agentic editor plugin](agentic-plugin.md) | VS Code extension + agent backend + local models | 01–05, 07–08, 11–12, 17 | IDE product + agent safety |
+| [Stock recommender](stock-recommender.md) | Research assistant / recommender prototype: data → baseline ML → SLM → RAG → compression → ship | 01–07, 09–10, 13–14, 17, 23; 22/24 if you add a tool loop | Markets + retrieval + MLOps (**not** financial advice) |
+| [Hybrid models](hybrid-models.md) | Custom Transformer + MLP fusion in PyTorch, ablations, deploy | 05–06 + DL fundamentals; 23 analog (config pins), 04/22 regression helper | From-scratch architecture engineering |
+| [Agentic editor plugin](agentic-plugin.md) | VS Code extension + agent backend + local models | 01–05, 07–08, 11–12, 17, 20–25 | IDE product + agent safety |
 
 ---
 
@@ -40,6 +40,8 @@ flowchart LR
 | Git from day 1 | Tracks die in “works on my laptop” folders |
 | Tests for deterministic code | Splits, tools, parsers, shapes |
 | Evals for model behavior | Golden Q&A, must-refuse, Hit@k — not vibes |
+| Agent hardening (if you ship a loop) | Failure detectors, sandbox/HITL, trajectory eval, prompt pins (modules 20–23) |
+| Hardware honesty (local models) | Size to RAM/KV ([17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware)); do not swap |
 | README with limits + ethics | Especially finance and write-capable agents |
 | No secrets in git | Keys in env / SecretStorage only |
 | Time / data leakage honesty | Shuffle is cheating on markets and sequences |
@@ -56,6 +58,22 @@ flowchart LR
 
 You may run a track **in parallel** with later core modules if you already ship Python/TS services confidently.
 
+### Which new core patterns belong where
+
+Stage 5 (20–26) and [17 §7 limited hardware](../core/17-small-models.md#7-working-effectively-on-limited-hardware) are not a tax on every track. Cargo-culting LangGraph, worktrees, or trajectory evals onto a tabular hybrid is how you get costume jewelry.
+
+| Pattern | Stock recommender | Hybrid models | Agentic plugin |
+|---------|-------------------|---------------|----------------|
+| 17 §7 RAM / one resident model | **Yes** — PEFT + lite serve | **Partial** — shrink `d_model` / `max_len` / batch, not GGUF | **Yes** — Ollama default |
+| 23 Prompt/config digest | **Yes** — research prompt pack | **Yes analog** — train YAML + metrics JSON | **Yes** — system + tool list |
+| 22 Trajectory / regression | Optional (only if you add a tool loop) | **eval_regression** on MAE, not agent traces | **Yes** — stubbed agent CI |
+| 24 Token budget / local-first | If `/research` calls an SLM in a loop | No | **Yes** |
+| 20–21 Breakers, manifests, worktrees | Quote-tool timeouts; not a coding agent | No | **Yes** — this *is* the incident |
+| 25 Durable HITL / merge gate | No | No | **Yes** — approve then apply |
+| 26 Orchestrator comparison | Optional cost-per-path | Params/latency log, not CrewAI | Written custom vs LangGraph |
+
+---
+
 ---
 
 ## Day-90 definition of done (all tracks)
@@ -65,5 +83,6 @@ You may run a track **in parallel** with later core modules if you already ship 
 - [ ] Architecture diagram in README matches the code  
 - [ ] Known failure modes written down (not hidden)  
 - [ ] Ethics / safety / non-advice notes where relevant  
+- [ ] Patterns from the table above that apply to *this* track are in the demo, not only in notes  
 
 **Next:** open a track page and start with its story + system diagram.

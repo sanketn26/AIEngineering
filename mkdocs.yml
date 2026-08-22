@@ -128,6 +128,13 @@ nav:
       - 17 Small & local models: core/17-small-models.md
       - 18 Agent design patterns: core/18-agent-design-patterns.md
       - 19 Orchestration patterns: core/19-orchestration-patterns.md
+      - 20 Agent reliability: core/20-agent-reliability.md
+      - 21 Secure tool use: core/21-secure-tool-use.md
+      - 22 Evaluating agents: core/22-agent-evaluation.md
+      - 23 Prompt & config drift: core/23-prompt-drift.md
+      - 24 Local-first agents: core/24-local-first-agents.md
+      - 25 Durable orchestration: core/25-durable-orchestration.md
+      - 26 Orchestrators in production: core/26-orchestrator-comparison.md
   - Tracks:
       - Overview: tracks/index.md
       - Stock recommender: tracks/stock-recommender.md

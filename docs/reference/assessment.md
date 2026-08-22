@@ -48,9 +48,16 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 | 14 | Audit events without raw secrets |
 | 15 | Must-refuse cases tested |
 | 16 | Async/job **or** data-class routing |
-| 17 | Local model run + task fit notes |
+| 17 | Local model run + task fit notes + hardware fit (RAM/KV, one resident model) |
 | 18 | At least three leaf patterns (subroutine, gate, sampler, consensus, or retriever) with a named failure each one fixes |
 | 19 | At least three orchestration patterns (map-reduce, router, planner, ReAct, memory, or duet) on one workflow |
+| 20 | Detector hits at least two failure modes on a stub trajectory; circuit breaker unit test |
+| 21 | Least-privilege registry + approval on a write + isolated worktree or process |
+| 22 | Process + outcome scores and a regression_delta that fails a worsened suite |
+| 23 | Prompt bundle hash; silent edit detected; eval gate on a metric drop |
+| 24 | Token budget abort + local vs strong routing stub |
+| 25 | Durable pause/resume + merge gate refusing failed tests |
+| 26 | Written orchestrator pick with ranks + per-agent cost events |
 
 ---
 
@@ -63,9 +70,9 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 | Time-safe baseline | 15% | Split description + metrics |
 | SLM or LLM path | 15% | Repro script / adapter card |
 | RAG citations | 15% | Live demo of cited answers |
-| Compression tradeoff | 10% | Size/latency/quality table |
-| Deploy/CI | 15% | Container or Actions green |
-| Evals | 15% | Golden questions Hit@k or accuracy |
+| Compression tradeoff | 10% | Size/latency/quality table; lite fits RAM |
+| Deploy/CI | 15% | Container or Actions green; prompt digest on ready |
+| Evals | 15% | Golden questions Hit@k or accuracy; `eval_regression` floor |
 | Ethics / non-advice | 15% | UX + README disclaimers |
 
 ### Hybrid Transformer+MLP
@@ -75,7 +82,7 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 | Two baselines | 15% | MLP-only + Transformer-only |
 | Hybrid design | 20% | Diagram + config |
 | Fair comparison | 20% | Same data/splits/metrics |
-| Ablations | 15% | ≥2 architecture levers |
+| Ablations | 15% | ≥2 architecture levers; frozen config **digest** |
 | Repro | 15% | One-command train/eval |
 | Deploy/export | 15% | ONNX/API/CLI |
 
@@ -85,10 +92,10 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 |-----------|-------:|----------|
 | Extension command | 15% | Installable VSIX or debug launch |
 | Agent tools | 20% | Read-only tools logged |
-| Write safety | 20% | Approval before edits |
-| Local model path | 15% | Ollama or equivalent |
-| Workflow | 15% | ≥2 steps with state |
-| Tests/docs | 15% | Agent tests + security notes |
+| Write safety | 20% | Approval before edits; worktree + merge gate; deny does not apply |
+| Local model path | 15% | Ollama sized to RAM; token budget; escalate visible |
+| Workflow | 15% | ≥2 steps with persisted HITL state |
+| Tests/docs | 15% | Trajectory eval + security notes + prompt digest |
 
 ---
 
@@ -118,6 +125,14 @@ Automated checks for teaching patterns live in the repo:
 | `src.cost` | 10 | `tests/test_cost.py` |
 | `src.agents` | 11 | `tests/test_agents.py` |
 | `src.audit` | 14 | `tests/test_audit.py` |
+| `src.reliability` | 20 | `tests/test_reliability.py` |
+| `src.sandbox` | 21 | `tests/test_sandbox.py` |
+| `src.agent_evals` | 22 | `tests/test_agent_evals.py` |
+| `src.mcp_prod` | 08 | `tests/test_mcp_prod.py` |
+| `src.drift` | 23 | `tests/test_drift.py` |
+| `src.local_agents` | 24 | `tests/test_local_agents.py` |
+| `src.durable` | 25 | `tests/test_durable.py` |
+| `src.orchestrators` | 26 | `tests/test_orchestrators.py` |
 
 ```bash
 poetry install

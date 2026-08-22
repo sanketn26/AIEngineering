@@ -75,9 +75,7 @@ class TinyRAG:
 
     def build_prompt(self, query: str, k: int = 3) -> str:
         docs = self.retrieve(query, k=k)
-        blocks = "\n\n".join(
-            f"[{c.id}] (source={c.source})\n{c.text}" for c in docs
-        )
+        blocks = "\n\n".join(f"[{c.id}] (source={c.source})\n{c.text}" for c in docs)
         return (
             "Answer using only the sources. Cite chunk ids.\n"
             "If sources are insufficient, say you do not know.\n\n"

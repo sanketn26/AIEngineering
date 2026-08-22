@@ -2,7 +2,7 @@
 
 [![Buy Me A Coffee](https://img.shields.io/badge/☕-Buy%20me%20a%20coffee-FFDD00?style=flat-square)](https://buymeacoffee.com/sanketn)
 
-**From first prompt to production agents** — a restructured, relevance-updated curriculum with optional 90-day specialization tracks.
+**From first prompt to production agents** — a restructured, relevance-updated curriculum with optional 90-day specialization tracks. Core now includes **production-agent** modules (reliability, sandboxing, trajectory evals, drift, local-first, durable orchestration, orchestrator trade-offs).
 
 The published course is available at **[sanketn26.github.io/AIEngineering](https://sanketn26.github.io/AIEngineering/)** and is built with [MkDocs Material](https://squidfunk.github.io/mkdocs-material/).
 
@@ -20,7 +20,7 @@ The published course is available at **[sanketn26.github.io/AIEngineering](https
 
 | Before | After |
 |--------|--------|
-| 11k-line scrambled LLM guide | 19 ordered core modules |
+| 11k-line scrambled LLM guide | 26 ordered core modules |
 | Three disconnected 90-day plans | Tracks linked to shared core |
 | “MCP” misused (load balancer / compression) | Correct Model Context Protocol + clear compression naming |
 | gpt-3.5-centric examples | Provider-agnostic, 2026-oriented stack |
@@ -46,7 +46,7 @@ Open the printed local URL. Navigation: Home → Getting started → Core module
 
 ## Quick start — Python sandbox
 
-Runnable teaching modules: security, prompts, context memory, RAG, evals, cost, agents, audit.
+Runnable teaching modules: security, prompts, context memory, RAG, evals, cost, agents, audit, reliability, sandbox, agent evals, MCP prod, drift, local-first agents, durable orchestration, orchestrator comparison.
 
 ```bash
 # Python 3.11–3.13 (not 3.14 yet for optional scientific stack)
@@ -66,7 +66,7 @@ Exercises: [docs/reference/exercises.md](docs/reference/exercises.md) · Rubrics
 
 ## Curriculum map
 
-**Core modules:** prompting → security → advanced prompts → evals → context engineering → fine-tuning → tools/RAG → MCP → advanced RAG → cost → agents → multi-agent → production → compliance → domains → integration → small/local models → agent design patterns → orchestration patterns.
+**Core modules:** prompting → security → advanced prompts → evals → context engineering → fine-tuning → tools/RAG → MCP → advanced RAG → cost → agents → multi-agent → production → compliance → domains → integration → small/local models → agent design patterns → orchestration patterns → **reliability → secure tool use → agent evals → prompt drift → local-first agents → durable orchestration → orchestrator comparison**.
 
 **Tracks (90 days):**
 
@@ -92,7 +92,7 @@ The workflow is [`.github/workflows/deploy-docs.yml`](.github/workflows/deploy-d
 ```text
 docs/                      # Course site (source of truth)
   getting-started/
-  core/                    # Modules 01–19
+  core/                    # Modules 01–26
   tracks/                  # 90-day specializations
   reference/
 archive/source/            # Pre-restructure markdown (provenance)

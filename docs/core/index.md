@@ -1,6 +1,6 @@
 # Core Modules
 
-Nineteen modules, four stages. Each moves you from a working model interaction toward a system you'd actually put in front of production traffic. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module’s **Depends on** line is the real prerequisite. Stages group related skills (agents 11–12 sit next to design/orchestration 18–19 even though production modules sit between them numerically).
+Twenty-six modules, five stages. Each moves you from a working model interaction toward a system you'd actually put in front of production traffic. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module’s **Depends on** line is the real prerequisite. Stages group related skills (agents 11–12 sit next to design/orchestration 18–19 even though production modules sit between them numerically). Stage 5 (20–26) is production hardening for agents: failure modes, sandboxes, evals, drift, local-first, durable graphs, and orchestrator trade-offs.
 
 ## Stage 1 — Foundations
 
@@ -24,7 +24,7 @@ Nineteen modules, four stages. Each moves you from a working model interaction t
 
 | Module | Time |
 |---|---|
-| [08 — Model Context Protocol](08-model-context-protocol.md) | 3–5 days |
+| [08 — Model Context Protocol](08-model-context-protocol.md) | 4–6 days |
 | [11 — Single-agent workflows](11-single-agents.md) | 7–10 days |
 | [12 — Multi-agent coordination](12-multi-agents.md) | 10–14 days |
 | [16 — Integration patterns](16-integration-patterns.md) | 1–2 weeks |
@@ -40,6 +40,18 @@ Nineteen modules, four stages. Each moves you from a working model interaction t
 | [14 — Compliance](14-compliance.md) | 3–5 days |
 | [15 — Domain-specific applications](15-domain-apps.md) | 1–2 weeks |
 | [17 — Small & local models](17-small-models.md) | 5–7 days |
+
+## Stage 5 — Production agents
+
+| Module | Time |
+|---|---|
+| [20 — Agent reliability & failure modes](20-agent-reliability.md) | 4–6 days |
+| [21 — Secure tool use & sandboxing](21-secure-tool-use.md) | 5–7 days |
+| [22 — Evaluating agentic systems](22-agent-evaluation.md) | 5–7 days |
+| [23 — Prompt & config drift](23-prompt-drift.md) | 3–5 days |
+| [24 — Local-first, cost-aware agents](24-local-first-agents.md) | 4–6 days |
+| [25 — Durable orchestration](25-durable-orchestration.md) | 7–10 days |
+| [26 — Orchestrators in production](26-orchestrator-comparison.md) | 5–7 days |
 
 Full skill-by-skill breakdown: [Capability progression](../reference/progression.md). Prefer a guided route instead of the full list? See [Learning paths](../getting-started/paths.md).
 

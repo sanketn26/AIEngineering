@@ -27,7 +27,14 @@
     { id: "16", title: "Integration patterns", xp: 100 },
     { id: "17", title: "Small & local models", xp: 100 },
     { id: "18", title: "Agent design patterns", xp: 125 },
-    { id: "19", title: "Orchestration patterns", xp: 130 }
+    { id: "19", title: "Orchestration patterns", xp: 130 },
+    { id: "20", title: "Agent reliability", xp: 120 },
+    { id: "21", title: "Secure tool use", xp: 120 },
+    { id: "22", title: "Evaluating agents", xp: 120 },
+    { id: "23", title: "Prompt & config drift", xp: 100 },
+    { id: "24", title: "Local-first agents", xp: 110 },
+    { id: "25", title: "Durable orchestration", xp: 130 },
+    { id: "26", title: "Orchestrators in production", xp: 120 }
   ];
 
   var BADGES = [
@@ -97,6 +104,20 @@
       }
     },
     {
+      id: "agent-hardening",
+      icon: "🧯",
+      name: "Agent Hardening",
+      desc: "Complete modules 20–22",
+      test: function (s) {
+        return (
+          s.modules &&
+          s.modules["20"] &&
+          s.modules["21"] &&
+          s.modules["22"]
+        );
+      }
+    },
+    {
       id: "ship-it",
       icon: "🚢",
       name: "Ship It",
@@ -127,9 +148,9 @@
       id: "full-core",
       icon: "🏆",
       name: "Full Core",
-      desc: "Complete all 19 core modules",
+      desc: "Complete all 26 core modules",
       test: function (s) {
-        return Object.keys(s.modules || {}).length >= 19;
+        return Object.keys(s.modules || {}).length >= 26;
       }
     },
     {

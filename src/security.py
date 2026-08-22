@@ -15,9 +15,7 @@ INJECTION_PATTERNS: list[re.Pattern[str]] = [
 
 PII_REGEX: dict[str, re.Pattern[str]] = {
     "email": re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.I),
-    "phone_us": re.compile(
-        r"\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b"
-    ),
+    "phone_us": re.compile(r"\b(?:\+?1[-.\s]?)?\(?\d{3}\)?[-.\s]?\d{3}[-.\s]?\d{4}\b"),
     "ssn_us": re.compile(r"\b\d{3}-\d{2}-\d{4}\b"),
 }
 

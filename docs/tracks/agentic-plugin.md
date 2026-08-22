@@ -12,11 +12,11 @@
 
 | When | Modules |
 |------|---------|
-| Days 1–28 | [01 Prompting](../core/01-prompt-engineering.md), [02 Security](../core/02-security-privacy.md), [03 Advanced prompts](../core/03-advanced-prompting.md), [04 Evals](../core/04-testing-evals.md), [05 Context](../core/05-context-engineering.md), [07 Tools](../core/07-tools-and-rag.md), [11 Single agents](../core/11-single-agents.md) |
-| Days 29–56 | [08 MCP](../core/08-model-context-protocol.md), [12 Multi-agents](../core/12-multi-agents.md); skim [19 Orchestration](../core/19-orchestration-patterns.md) if you add a planner or router |
-| Days 57–90 | [17 Small models](../core/17-small-models.md); revisit [02](../core/02-security-privacy.md), [04](../core/04-testing-evals.md) |
+| Days 1–28 | [01](../core/01-prompt-engineering.md)–[05](../core/05-context-engineering.md), [07](../core/07-tools-and-rag.md), [11](../core/11-single-agents.md), [20 Reliability](../core/20-agent-reliability.md) |
+| Days 29–56 | [08](../core/08-model-context-protocol.md), [12](../core/12-multi-agents.md), [21 Secure tools](../core/21-secure-tool-use.md), [25 Durable](../core/25-durable-orchestration.md) (HITL + merge gate); skim [19](../core/19-orchestration-patterns.md) / [26](../core/26-orchestrator-comparison.md) if you add a planner |
+| Days 57–90 | [17](../core/17-small-models.md) [§7](../core/17-small-models.md#7-working-effectively-on-limited-hardware), [22](../core/22-agent-evaluation.md), [23](../core/23-prompt-drift.md), [24](../core/24-local-first-agents.md); revisit [02](../core/02-security-privacy.md), [04](../core/04-testing-evals.md) |
 
-In-repo teaching mirror: `src.agents` (`Agent`, `AgentState`) and `tests/test_agents.py`.
+In-repo teaching mirrors: `src.agents`, `src.sandbox`, `src.durable`, `src.agent_evals`, `src.local_agents`.
 
 ---
 
@@ -93,10 +93,10 @@ The extension decides *whether* a write may run; the agent may only *request* it
 | 1–14 | Foundations | “Hello Agent” reaches Python |
 | 15–28 | Read-only agent | CLI lists/reads/searches with `max_steps` |
 | 29–42 | In-editor LLM | Select → Explain (SecretStorage) |
-| 43–56 | Workflow graph | explain → diff → **approve** → apply → test |
-| 57–70 | Local SLM + escalate | Ollama default; cloud on hard cases |
-| 71–80 | UX, tests, telemetry | Prompt picker, tests, **opt-in** telemetry |
-| 81–90 | MCP optional + beta | Hardened README, beta tag |
+| 43–56 | Workflow graph | explain → worktree diff → **approve** → merge gate → apply → test |
+| 57–70 | Local SLM + escalate | Ollama that **fits RAM**; cloud on hard cases |
+| 71–80 | UX, tests, telemetry | Prompt digest, trajectory tests, **opt-in** telemetry |
+| 81–90 | MCP optional + beta | Pinned MCP; engine pick; hardened README |
 
 Each phase: **Guide** · **Explainer** · **Code** · **Hints** · **Exit**.
 
@@ -240,7 +240,7 @@ Spawn Python via the venv absolute path; pipe `stderr` to an OutputChannel. Time
 
 ### Guide
 
-Implement an agent loop in the spirit of course package `src.agents.Agent` (repo root): LLM returns **JSON** (`tool` | `final` | `ask_user`); tools are an allowlist dict; hard stop on `max_steps`, bad JSON, and repeated identical calls ([11](../core/11-single-agents.md)). Ship read-only tools first: `list_files`, `read_file`, `search_text`—path-rooted to workspace, output capped. Log every call ([04](../core/04-testing-evals.md), [07](../core/07-tools-and-rag.md)). Truncate scratchpad ([05](../core/05-context-engineering.md)); enforce schema in prompts ([01](../core/01-prompt-engineering.md), [03](../core/03-advanced-prompting.md)).
+Implement an agent loop in the spirit of course package `src.agents.Agent` (repo root): LLM returns **JSON** (`tool` | `final` | `ask_user`); tools are an allowlist dict; hard stop on `max_steps`, bad JSON, and repeated identical calls ([11](../core/11-single-agents.md)). Scan the step log with `FailureDetector` ([20](../core/20-agent-reliability.md)) — runaway loop and tool hallucination are **named** modes, not “it got stuck.” Ship read-only tools first: `list_files`, `read_file`, `search_text`—path-rooted to workspace, output capped. Prefer `ToolManifest` + `Privilege.READ` ([21](../core/21-secure-tool-use.md)) over a bare dict. Log every call ([04](../core/04-testing-evals.md), [07](../core/07-tools-and-rag.md)). Truncate scratchpad ([05](../core/05-context-engineering.md)); enforce schema in prompts ([01](../core/01-prompt-engineering.md), [03](../core/03-advanced-prompting.md)).
 
 ### Explainer
 
@@ -424,7 +424,7 @@ Fake LLM in unit tests (see `tests/test_agents.py`). Reject `..` escapes. Strip 
 
 ### Exit (day 28)
 
-CLI agent summarizes a sample folder via allowlisted tools only. Steps ≤ `max_steps`. Unknown tools error safely. No write tools in the registry.
+CLI agent summarizes a sample folder via allowlisted tools only. Steps ≤ `max_steps`. Unknown tools error safely. No write tools in the registry. A stubbed looping policy is aborted and shows up as `runaway_loop` (or `max_steps`) in a detector test.
 
 ---
 
@@ -524,7 +524,7 @@ Select → Explain works in a side panel. Key survives reload without appearing 
 
 ### Guide
 
-Workflow graph (LangGraph-style or enum). Write tools only behind an **extension-owned** approval gate ([11](../core/11-single-agents.md), [12](../core/12-multi-agents.md)). Show diff preview; **Apply** is a button. After apply, run configured tests; at most one repair loop unless the user re-invokes.
+Workflow graph (thin enum first; LangGraph only if you can name HITL + checkpoints — [26](../core/26-orchestrator-comparison.md)). Write tools only behind an **extension-owned** approval gate ([11](../core/11-single-agents.md), [21](../core/21-secure-tool-use.md)). **Propose in a worktree**, not in the user’s tree: `WorktreeExecutor` → tests in the copy → `MergeGate` (tests + human + bounded diff) → then `WorkspaceEdit` ([21](../core/21-secure-tool-use.md), [25](../core/25-durable-orchestration.md)). Persist `await_approval` as a HITL event; **denial must not apply** (same bug the course `Coordinator` was reviewed for). Show diff preview; **Apply** is a button. After apply, run configured tests; at most one repair loop unless the user re-invokes — repairs need a **fresh** approve.
 
 ```mermaid
 stateDiagram-v2
@@ -636,7 +636,7 @@ Prefer extension `WorkspaceEdit` so undo works; Python authors the patch. Pendin
 
 ### Exit (day 56)
 
-Toy project: explain → diff → reject leaves tree clean; approve → apply → tests run. **No** path where one LLM response invents and writes without a human click.
+Toy project: explain → diff → reject leaves the **user** tree clean (worktree discarded). Approve → merge gate → apply → tests run. Deny does **not** run apply. **No** path where one LLM response invents and writes without a human click.
 
 ---
 
@@ -644,7 +644,7 @@ Toy project: explain → diff → reject leaves tree clean; approve → apply �
 
 ### Guide
 
-Default: **Ollama** for explain and light planning ([17](../core/17-small-models.md)). Router escalates when local is down, context is huge, or quality heuristic fails—and only if allowed. Cache repeated explains (hash path + content + model). Document RAM, models, offline behavior.
+Default: **Ollama** for explain and light planning ([17](../core/17-small-models.md)). Size it with `recommend_local_setup` ([17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware)) — an 8B that swaps is not “private-first.” Wrap the loop in `TokenBudget` ([24](../core/24-local-first-agents.md)) so local still terminates. Router escalates when local is down, context is huge, schema fails, or quality heuristic fails—and only if allowed. Cache repeated explains (hash path + content + model). Document RAM, models, offline behavior. One resident model while you work.
 
 ### Explainer
 
@@ -722,7 +722,7 @@ Settings: local/cloud model ids, `aieng.escalate.auto` (choose enterprise-safe d
 
 ### Exit (day 70)
 
-Ollama up → offline explain. Ollama down + escalate + key → cloud with reason shown. Escalate off → clear failure, not a hang.
+Ollama up → offline explain on a model that **fits RAM**. Ollama down + escalate + key → cloud with reason shown. Escalate off → clear failure, not a hang. A looping local stub aborts on token budget or `max_steps`.
 
 ---
 
@@ -730,7 +730,7 @@ Ollama up → offline explain. Ollama down + escalate + key → cloud with reaso
 
 ### Guide
 
-QuickPick prompt templates under versioned `prompts/` ([01](../core/01-prompt-engineering.md), [03](../core/03-advanced-prompting.md)). Tests: sandbox, approval flag, max_steps; extension command registration ([04](../core/04-testing-evals.md)). Telemetry **opt-in only**, no code/secrets ([02](../core/02-security-privacy.md)). Polish settings: transport, models, max_steps, escalate, write workflows.
+QuickPick prompt templates under versioned `prompts/` ([01](../core/01-prompt-engineering.md), [03](../core/03-advanced-prompting.md)); pin with `PromptConfig` digest ([23](../core/23-prompt-drift.md)). Tests: sandbox, approval flag, max_steps, **and** `evaluate_trajectory` on stubbed fixtures ([22](../core/22-agent-evaluation.md)) — process (loops, spend) not only “it said done.” Extension command registration ([04](../core/04-testing-evals.md)). Telemetry **opt-in only**, no code/secrets ([02](../core/02-security-privacy.md)). Polish settings: transport, models, max_steps, escalate, write workflows.
 
 ### Explainer
 
@@ -790,7 +790,7 @@ Golden fake-LLM tool sequences. CI: `pytest` + `npm test`. Don’t rely on color
 
 ### Exit (day 80)
 
-Green agent tests; extension packages; prompt picker changes behavior; telemetry defaults **false** and never sends source.
+Green agent tests **including a trajectory suite**; extension packages; prompt picker changes behavior and the digest in the output panel; telemetry defaults **false** and never sends source.
 
 ---
 
@@ -798,7 +798,7 @@ Green agent tests; extension packages; prompt picker changes behavior; telemetry
 
 ### Guide
 
-Optional MCP client ([08](../core/08-model-context-protocol.md)): off by default. Treat servers as **untrusted binaries**—pin versions, confirm before enable, minimal env, no silent auto-start from random workspace config. Modular commands (refactor, docify, testgen) reuse the same graph + policy. Harden: rate limits, `workspace.isTrusted`, webview CSP. Ship `v0.x-beta` with architecture mermaid, security section, GIFs, issue templates.
+Optional MCP client ([08](../core/08-model-context-protocol.md) §8): off by default. Treat servers as **untrusted binaries**—pin versions (`assert_version`), confirm before enable, wrap resources as untrusted, failover when the server dies, minimal env, no silent auto-start from random workspace config. Modular commands (refactor, docify, testgen) reuse the same graph + policy. Harden: rate limits, `workspace.isTrusted`, webview CSP. Ship `v0.x-beta` with architecture mermaid, security section, GIFs, issue templates. Write a three-line **engine pick** (custom `Agent` vs LangGraph) with [26](../core/26-orchestrator-comparison.md) ranks — do not add CrewAI for a two-node approve/apply graph.
 
 ### Explainer
 
@@ -866,21 +866,45 @@ Clean-machine install: explain + approved apply demo; offline local path documen
 | 14 | Hello extension + Python IPC |
 | 28 | Read-only CLI agent + `max_steps` |
 | 42 | Explain + SecretStorage + providers |
-| 56 | Human approve before write |
-| 70 | Ollama default + escalate docs |
-| 80 | Tests + prompt UI + opt-in telemetry |
-| 90 | Hardened beta; MCP optional/off |
+| 56 | Human approve; worktree + merge gate; deny leaves user tree clean |
+| 70 | Ollama fits RAM + escalate docs + token budget |
+| 80 | Trajectory tests + prompt digest + opt-in telemetry |
+| 90 | Hardened beta; MCP optional/off/pinned |
+
+---
+
+## Production hardening (map Stage 5 onto the plugin)
+
+These are **in the phases above**, not a day-90 shopping list:
+
+| Phase | Pattern |
+|-------|---------|
+| 15–28 | [20](../core/20-agent-reliability.md) `FailureDetector`; [21](../core/21-secure-tool-use.md) read-only `ToolManifest` |
+| 43–56 | Worktree + `MergeGate` + HITL that **does not apply on deny** ([21](../core/21-secure-tool-use.md), [25](../core/25-durable-orchestration.md)) |
+| 57–70 | [17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware) + [24](../core/24-local-first-agents.md) `TokenBudget` |
+| 71–80 | [22](../core/22-agent-evaluation.md) trajectories; [23](../core/23-prompt-drift.md) prompt digest |
+| 81–90 | [08](../core/08-model-context-protocol.md) §8 pin/wrap/failover; [26](../core/26-orchestrator-comparison.md) written engine pick |
+
+```bash
+poetry run pytest tests/test_agents.py tests/test_sandbox.py tests/test_agent_evals.py tests/test_durable.py -v
+```
+
+**Security review (day 80–90):** walk the non-negotiable checklist below with a second person; add one adversarial fixture (path escape, MCP auto-start, prompt-in-tool-description). Trajectory eval must stay green.
 
 ---
 
 ## Non-negotiable security checklist
 
 - [ ] **Never auto-apply diffs without the user**
+- [ ] Writes land in a **worktree** first; `MergeGate` + human; deny does not apply
 - [ ] Write tools require `userApproved` (or extension-side apply only)
-- [ ] Tools allowlisted; path sandbox; output caps
-- [ ] `max_steps` + repeated tool-call abort
+- [ ] Tools allowlisted (`ToolManifest`); path sandbox; output caps
+- [ ] `max_steps` + repeated tool-call abort + `FailureDetector` on traces
+- [ ] Trajectory eval in CI (process + outcome)
+- [ ] Prompt/tool-list **digest** visible; drift fails a check
+- [ ] Local model sized to RAM ([17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware)); `TokenBudget` on the loop
 - [ ] API keys **only** in SecretStorage
-- [ ] MCP servers = **untrusted binaries**; default off
+- [ ] MCP servers = **untrusted binaries**; default off; version pin + untrusted wrap
 - [ ] Telemetry **opt-in**; never source or secrets
 - [ ] Logs redacted; workspace trust respected
 
@@ -891,7 +915,7 @@ Clean-machine install: explain + approved apply demo; offline local path documen
 - [VS Code Extension API](https://code.visualstudio.com/api)
 - [Model Context Protocol](https://modelcontextprotocol.io/)
 - LangGraph conceptual guides · open agentic editors (**licenses**)
-- In-repo: `src/agents.py`, [11](../core/11-single-agents.md)–[12](../core/12-multi-agents.md), [08](../core/08-model-context-protocol.md), [17](../core/17-small-models.md)
+- In-repo: `src/agents.py`, `src/sandbox.py`, `src/durable.py`, [11](../core/11-single-agents.md)–[12](../core/12-multi-agents.md), [08](../core/08-model-context-protocol.md), [17](../core/17-small-models.md), [20](../core/20-agent-reliability.md)–[26](../core/26-orchestrator-comparison.md)
 
 ---
 

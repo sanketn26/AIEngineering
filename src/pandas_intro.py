@@ -21,9 +21,7 @@ def create_series() -> pd.Series:
 def create_dataframe(seed: int = 42) -> pd.DataFrame:
     rng = np.random.default_rng(seed)
     dates = pd.date_range("20250101", periods=6)
-    return pd.DataFrame(
-        rng.standard_normal((6, 4)), index=dates, columns=list("ABCD")
-    )
+    return pd.DataFrame(rng.standard_normal((6, 4)), index=dates, columns=list("ABCD"))
 
 
 def create_dataframe_from_dict(data: dict | None = None) -> pd.DataFrame:

@@ -13,7 +13,7 @@ hide:
       <a class="course-button course-button--secondary" href="getting-started/paths/">Explore learning paths</a>
       <a class="course-button course-button--coffee" href="https://buymeacoffee.com/sanketn">☕ Support this course</a>
     </div>
-    <p class="course-hero__note">19 core modules · Interactive labs and quizzes · Learn at your own pace</p>
+    <p class="course-hero__note">26 core modules · Interactive labs and quizzes · Learn at your own pace</p>
   </div>
   <div class="course-terminal" aria-label="Course outcomes">
     <div class="course-terminal__bar"><i></i><i></i><i></i><span>ai-engineering / roadmap</span></div>
@@ -28,7 +28,7 @@ hide:
 </div>
 
 <div class="course-proof" aria-label="Course overview">
-  <div><strong>19</strong><span>Core modules</span></div>
+  <div><strong>26</strong><span>Core modules</span></div>
   <div><strong>3</strong><span>Specialization tracks</span></div>
   <div><strong>100%</strong><span>Open source</span></div>
   <div><strong>Local</strong><span>Private progress tracking</span></div>
@@ -109,6 +109,19 @@ The modules move from dependable model interactions to complete production syste
       <li><a href="core/14-compliance/">Compliance</a></li>
       <li><a href="core/15-domain-apps/">Domain-specific applications</a></li>
       <li><a href="core/17-small-models/">Small & local models</a></li>
+    </ul>
+  </div>
+  <div class="curriculum-stage">
+    <div class="curriculum-stage__head"><span>Stage 5</span><strong>Production agents</strong></div>
+    <p>Harden agent loops: failures, sandboxes, evals, drift, and durable graphs.</p>
+    <ul>
+      <li><a href="core/20-agent-reliability/">Agent reliability</a></li>
+      <li><a href="core/21-secure-tool-use/">Secure tool use</a></li>
+      <li><a href="core/22-agent-evaluation/">Evaluating agents</a></li>
+      <li><a href="core/23-prompt-drift/">Prompt &amp; config drift</a></li>
+      <li><a href="core/24-local-first-agents/">Local-first agents</a></li>
+      <li><a href="core/25-durable-orchestration/">Durable orchestration</a></li>
+      <li><a href="core/26-orchestrator-comparison/">Orchestrators in production</a></li>
     </ul>
   </div>
 </div>

@@ -2,7 +2,7 @@
 
 <span data-module-id="19" hidden></span>
 
-**Time:** 6–9 days · **Depends on:** [18 Agent design patterns](18-agent-design-patterns.md) · **Pairs with:** [12 Multi-agent systems](12-multi-agents.md) · **Next:** [Specialization tracks](../tracks/index.md)
+**Time:** 6–9 days · **Depends on:** [18 Agent design patterns](18-agent-design-patterns.md) · **Pairs with:** [12 Multi-agent systems](12-multi-agents.md) · **Next:** [Agent reliability](20-agent-reliability.md)
 
 
 ## Learning objectives
@@ -556,4 +556,4 @@ Pick **three** of the six patterns and apply them to one workflow (do not build 
 <button type="button">Complete module · +130 XP</button>
 </div>
 
-**Next:** [Specialization tracks](../tracks/index.md)
+**Next:** [Module 20 — Agent reliability & failure modes](20-agent-reliability.md)

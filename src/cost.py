@@ -8,6 +8,9 @@ from collections import defaultdict
 from typing import Any
 
 
+DEFAULT_HARD_TASKS = {"complex_reason", "deep_reason", "plan"}
+
+
 class ModelRouter:
     def __init__(self, cheap: str, strong: str):
         self.cheap = cheap
@@ -16,7 +19,7 @@ class ModelRouter:
     def pick(
         self, task: str, prompt: str, *, hard_tasks: set[str] | None = None
     ) -> str:
-        hard = hard_tasks or {"complex_reason", "deep_reason", "plan"}
+        hard = hard_tasks or DEFAULT_HARD_TASKS
         if task in {"classify", "route", "extract_fields"}:
             return self.cheap
         if task in hard or len(prompt) > 8000:

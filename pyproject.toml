@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "aiengineering"
-version = "0.2.0"
-description = "AI Engineering course sandbox — prompts, security, RAG, agents, evals"
+version = "0.3.0"
+description = "AI Engineering course sandbox — prompts, security, RAG, agents, evals, reliability"
 authors = ["sanket"]
 readme = "README.md"
 packages = [{include = "src"}]

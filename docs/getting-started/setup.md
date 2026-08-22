@@ -14,8 +14,11 @@
 | Path | Minimum | Comfortable |
 |------|---------|-------------|
 | API-only (cloud models) | 8 GB RAM laptop | 16 GB |
-| Local 7B–8B models | 16 GB RAM | 32 GB + GPU (8 GB+ VRAM) |
+| Local 1–3B Q4 (classify / extract) | 8 GB RAM | 16 GB |
+| Local 7B–8B Q4 | 16 GB RAM | 32 GB + GPU (8 GB+ VRAM) |
 | Fine-tuning / large RAG | 16 GB + GPU | 24 GB+ VRAM |
+
+Fit weights + KV cache + OS headroom — details in [Module 17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware). A 7B that swaps is worse than a 3B that stays resident.
 
 **Accounts (pick what you need)**
 

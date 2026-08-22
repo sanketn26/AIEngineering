@@ -6,6 +6,7 @@ pytest.importorskip("pandas")
 pytest.importorskip("numpy")
 
 import pandas as pd  # noqa: E402
+
 from src.pandas_intro import (  # noqa: E402
     create_dataframe,
     create_dataframe_from_dict,

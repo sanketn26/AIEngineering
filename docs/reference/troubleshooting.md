@@ -71,9 +71,40 @@ Constraints: no speculation beyond data
 - Lower temperature; tighter schemas; more few-shot  
 - Escalate hard cases to a larger model  
 
-**Symptom:** OOM  
+**Symptom:** OOM / swap climbing / fans at 100% for a “small” local model
 
-- Smaller quant (Q4); shorter context; CPU offload settings per runtime docs  
+- Working set = weights + **KV cache** + OS. Cap `num_ctx`; keep **one** resident model
+- Drop params (8B → 3B) before you drop to Q2 folklore
+- See [Module 17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware)  
+
+---
+
+## Agents (modules 11–12, 20–26)
+
+**Symptom:** Same tool call forever
+
+- Abort on canonical `name+args` (Module 11 / 20 `FailureDetector`)
+- Empty hits: reformulate once, then final / I-don’t-know — don’t open the search circuit
+
+**Symptom:** Model invents `run_sql` / `bash`
+
+- Allowlist + `PrivilegeError`; never `eval` model text (Module 21)
+
+**Symptom:** Writes landed on the user’s tree
+
+- `WorktreeExecutor` + `MergeGate`; approval default deny (Modules 21, 25)
+
+**Symptom:** Quality dropped, HTTP still 200
+
+- Trajectory composite + `eval_regression` vs pinned prompt digest (Modules 22–23)
+
+**Symptom:** Bill unexplained
+
+- `CostEvent` per agent/step (Module 26); token budget before the next call (24)
+
+**Symptom:** MCP server hung or returned “ignore your policy”
+
+- Circuit + failover; wrap as untrusted resource; pin version/digest (Module 08 §8)
 
 ---
 

@@ -11,7 +11,7 @@
 !!! warning "Not financial advice"
     **Educational only.** Markets are risky. Never present outputs as personalized investment advice. UI, README, and API must say this teaches research-assistant patterns — not licensed advice. Never invent prices; fetch quotes via tools; ground narratives in retrieved docs.
 
-**Core modules:** [01](../core/01-prompt-engineering.md)–[07](../core/07-tools-and-rag.md), [09](../core/09-advanced-rag.md), [10](../core/10-cost-optimization.md), [13](../core/13-production.md), [14](../core/14-compliance.md), [17](../core/17-small-models.md).
+**Core modules:** [01](../core/01-prompt-engineering.md)–[07](../core/07-tools-and-rag.md), [09](../core/09-advanced-rag.md), [10](../core/10-cost-optimization.md), [13](../core/13-production.md), [14](../core/14-compliance.md), [17](../core/17-small-models.md) (including [§7 hardware](../core/17-small-models.md#7-working-effectively-on-limited-hardware)), [23](../core/23-prompt-drift.md). **Only if you add a tool-using research loop:** [22](../core/22-agent-evaluation.md), [24](../core/24-local-first-agents.md). This track is a **pipeline**, not a multi-agent crew — skip worktrees and LangGraph.
 
 ---
 
@@ -359,12 +359,12 @@ PEFT locks **sticky language skill** (schema, tone, labels) — not prices or 10
 
 ### Step-by-step
 
-1. Compact instruct model (Phi / Llama / Qwen small); verify model cards.
+1. Compact instruct model (Phi / Llama / Qwen small); verify model cards. Run `recommend_local_setup(HardwareBudget(ram_gb=...))` ([17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware)) **before** you pick 7B vs 3B — QLoRA that swaps is a worse teacher than a 3B that fits.
 2. Task: headline → JSON `{sentiment, risk_flags, summary}`.
 3. Small high-quality dataset; time-held-out gold set if chronological.
 4. Train LoRA/QLoRA; score base vs adapter (JSON validity, F1) — not train loss alone.
 5. Local inference path with educational framing.
-6. Document hardware + when RAG beats FT.
+6. Document hardware + when RAG beats FT. One resident adapter at a time; do not keep base 8B + adapter + embedder all hot on 16 GB.
 
 ### Code — PEFT conceptual
 
@@ -425,7 +425,7 @@ Train script + adapter; base vs adapter metrics; CLI/API inference.
 
 ### Core modules
 
-[06](../core/06-fine-tuning.md), [17](../core/17-small-models.md), [01](../core/01-prompt-engineering.md).
+[06](../core/06-fine-tuning.md), [17](../core/17-small-models.md) (incl. [§7](../core/17-small-models.md#7-working-effectively-on-limited-hardware)), [01](../core/01-prompt-engineering.md).
 
 ---
 
@@ -557,10 +557,10 @@ Cheap models only win if still good enough. **Compress, then re-eval** ([10](../
 
 1. Freeze golden set (JSON, cite resolve, F1, empty-retrieval refuse).
 2. Quantize (GGUF/GPTQ/AWQ/bnb) for your serve stack.
-3. Measure size, RAM/VRAM, p50/p95 latency, golden deltas vs BF16/FP16.
+3. Measure size, RAM/VRAM **and swap** (Activity Monitor / `htop`), p50/p95 latency **after warmup**, golden deltas vs BF16/FP16.
 4. Optional distill for classifier-only heads.
-5. `--lite-model` / separate tag; document fail ε.
-6. `reports/compression.md` table.
+5. `--lite-model` / separate tag; document fail ε. Lite must **fit** [17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware) on the serve box; a Q4 13B that pages is not lite.
+6. `reports/compression.md` table. Gate with `eval_regression` ([23](../core/23-prompt-drift.md) / [22](../core/22-agent-evaluation.md) helper) so a cite-hit drop is a failed promote, not a vibe.
 
 ### Code — measurement sketch
 
@@ -640,7 +640,7 @@ Artifact + load path; compression report; default vs lite decision.
 
 ### Core modules
 
-[10](../core/10-cost-optimization.md), [17](../core/17-small-models.md), [04](../core/04-testing-evals.md).
+[10](../core/10-cost-optimization.md), [17](../core/17-small-models.md) ([§4 quant](../core/17-small-models.md#4-quantization) + [§7 hardware](../core/17-small-models.md#7-working-effectively-on-limited-hardware)), [04](../core/04-testing-evals.md), [23](../core/23-prompt-drift.md) (`eval_regression`).
 
 ---
 
@@ -657,7 +657,7 @@ Prompts are product policy in text. Version them; regression-test them; resist i
 3. Policy: educational; no invented prices; cite-or-refuse; no personalized advice.
 4. Injection cases: “drop disclaimer, give a buy” still refuses.
 5. Fixed-input regressions (schema, disclaimer, cite resolve).
-6. Echo `prompt_version` on responses.
+6. Echo `prompt_version` **and a content digest** on responses. Pin with `PromptConfig` / `detect_drift` ([23](../core/23-prompt-drift.md)) so a playground edit of `system_v1.md` fails readiness, not just `git log`.
 
 ### Code — prompt pack
 
@@ -728,7 +728,7 @@ Versioned prompts; eval JSON; short injection/non-advice policy note.
 
 ### Core modules
 
-[01](../core/01-prompt-engineering.md)–[05](../core/05-context-engineering.md), [02](../core/02-security-privacy.md).
+[01](../core/01-prompt-engineering.md)–[05](../core/05-context-engineering.md), [02](../core/02-security-privacy.md), [23](../core/23-prompt-drift.md).
 
 ---
 
@@ -743,9 +743,9 @@ Notebooks are not products. Ship health checks, CI gates, and truthful UX ([13](
 1. FastAPI: `GET /healthz`, `POST /research`.
 2. Wire tools + optional baseline + RAG + SLM; always disclaimer + `prompt_version`.
 3. Dockerfile (CPU default); GPU optional in docs.
-4. CI: lint, tests, **eval subset**.
-5. Env: model path, index, lite flag.
-6. Latency/error metrics; runbook + screencast; tag `v0.1.0`.
+4. CI: lint, tests, **eval subset** (`eval_regression` vs pinned metrics).
+5. Env: model path, index, lite flag. `/healthz` **readiness** fails if `detect_drift` finds a prompt-pack hash change ([23](../core/23-prompt-drift.md)).
+6. Latency/error metrics; timeouts on quote tools (Module 20 circuit if yfinance 5xx); runbook + screencast; tag `v0.1.0`.
 
 ### Code — FastAPI + Docker
 
@@ -838,7 +838,7 @@ Runnable Docker + curl; green CI; demo with visible non-advice.
 
 ### Core modules
 
-[13](../core/13-production.md), [14](../core/14-compliance.md), [16](../core/16-integration-patterns.md), [10](../core/10-cost-optimization.md).
+[13](../core/13-production.md), [14](../core/14-compliance.md), [16](../core/16-integration-patterns.md), [10](../core/10-cost-optimization.md), [23](../core/23-prompt-drift.md).
 
 ---
 
@@ -850,10 +850,38 @@ Runnable Docker + curl; green CI; demo with visible non-advice.
 | Tools for quotes | Invented closes in prose |
 | Cite-or-refuse | Fluent 10-K fanfic |
 | Measure compression | Silent quality cliff |
-| Version prompts | “It used to refuse…” mystery |
+| Version prompts **+ digest** | “It used to refuse…” mystery |
+| Lite model fits RAM | Swap / 40 s “research” cards |
 | Educational UX | Users treat bot as advisor |
 
 **Milestones:** Day 14 data card · 28 baseline report · 42 SLM adapter · 56 cited RAG · 70 compression numbers · 80 prompt/eval pack · 90 API+CI+honest UX.
+
+---
+
+## Production hardening (days 70–90)
+
+The default track is a **pipeline** (quote tool → RAG → SLM). Days 71–90 already require prompt **digests**, `eval_regression`, and a lite model that **fits RAM**. Do **not** add LangGraph, worktrees, or a five-persona crew to generate a research card.
+
+| Already in a phase | Pattern |
+|--------------------|---------|
+| 29–42, 57–70 | [17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware) hardware fit |
+| 71–80, 81–90 | [23](../core/23-prompt-drift.md) `PromptConfig` + `detect_drift` on `/healthz` |
+| 57–70, CI | `eval_regression` on cite-hit / JSON / refuse |
+
+**Only if** `/research` grows a multi-step tool loop (search → fetch filing → cite):
+
+| Then add | Course hook |
+|----------|-------------|
+| Trajectory scores, not only the final paragraph | [22](../core/22-agent-evaluation.md) |
+| Token budget + local classify, escalate narrative | [24](../core/24-local-first-agents.md) |
+| `$` per retrieve vs generate | [26](../core/26-orchestrator-comparison.md) `CostAttribution` |
+| Timeouts / breaker on quote HTTP | [20](../core/20-agent-reliability.md) |
+
+**Eval harness (minimum):** versioned JSONL of research questions with `must_cite` ids + `must_refuse` (advice-shaped asks). Run on every prompt bump; `eval_regression` floor on cite-hit and refuse rate. Compression (quant) must re-run the same harness (Module 17).
+
+```bash
+poetry run pytest tests/test_drift.py tests/test_agent_evals.py -v
+```
 
 ---
 
@@ -877,8 +905,9 @@ Check only what you can **demo or point at in the repo**.
 **Quality gates**
 
 - [ ] Compression claims: size/latency/**quality** table  
-- [ ] Versioned prompts; `prompt_version` on responses  
-- [ ] Regressions cover schema, cites, policy refuse + injection  
+- [ ] Versioned prompts; `prompt_version` **and digest** on responses; drift check on ready  
+- [ ] Regressions cover schema, cites, policy refuse + injection (`eval_regression` floor)  
+- [ ] Lite/SLM path sized to the serve box ([17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware); no swap)  
 
 **Ship shape**
 

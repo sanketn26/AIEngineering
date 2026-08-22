@@ -20,9 +20,7 @@ def test_agent_tool_then_final():
     def llm(_prompt: str) -> str:
         calls["n"] += 1
         if calls["n"] == 1:
-            return json.dumps(
-                {"type": "tool", "name": "echo", "args": {"text": "hi"}}
-            )
+            return json.dumps({"type": "tool", "name": "echo", "args": {"text": "hi"}})
         return json.dumps({"type": "final", "content": "hi"})
 
     agent = Agent(llm=llm, tools={"echo": lambda text: text}, max_steps=5)
@@ -70,9 +68,7 @@ def test_max_steps():
 
 def test_repeated_tool_aborts():
     def llm(_prompt: str) -> str:
-        return json.dumps(
-            {"type": "tool", "name": "echo", "args": {"text": "same"}}
-        )
+        return json.dumps({"type": "tool", "name": "echo", "args": {"text": "same"}})
 
     agent = Agent(llm=llm, tools={"echo": lambda text: text}, max_steps=5)
     state = agent.run("x")

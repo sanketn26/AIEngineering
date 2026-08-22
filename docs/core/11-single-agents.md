@@ -396,7 +396,7 @@ Still keep:
 - Structured messages  
 - Tests for terminal conditions  
 
-Studying LangGraph **after** this module is ideal: you will map nodes onto decide/act/observe instead of cargo-culting demos.
+Studying LangGraph **after** this module is ideal: you will map nodes onto decide/act/observe instead of cargo-culting demos. Named failure modes, sandboxes, and trajectory evals are modules [20](20-agent-reliability.md)–[22](22-agent-evaluation.md); framework vs custom is [26](26-orchestrator-comparison.md).
 
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>

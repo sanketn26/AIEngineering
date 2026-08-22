@@ -2,7 +2,7 @@
 
 <span data-module-id="17" hidden></span>
 
-**Time:** 5–7 days · **Depends on:** 01, 05, 10 · **Pairs with:** tracks using Phi / Ollama · **Next:** [Agent design patterns](18-agent-design-patterns.md)
+**Time:** 5–7 days · **Depends on:** 01, 05, 10 · **Pairs with:** tracks using Phi / Ollama · **Next:** [Agent design patterns](18-agent-design-patterns.md) · **Agents on SLMs:** [24 Local-first](24-local-first-agents.md)
 
 ---
 
@@ -11,6 +11,7 @@
 - Match small language models (SLMs) to tasks they can actually own
 - Run local inference with Ollama, llama.cpp, and/or vLLM
 - Apply quantization deliberately and **re-eval** quality after every compress step
+- Size a model to **limited hardware** (RAM/VRAM, KV cache, one resident model) so the laptop stays out of swap
 - Build a router that sends easy work to SLMs and hard work to larger models
 
 ## What you can build
@@ -281,6 +282,123 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 
 ---
 
+## 7. Working effectively on limited hardware
+
+This course assumes a **laptop, often no discrete GPU**. That is a product constraint, not an apology. A 3B model that stays in RAM and answers in 200 ms will beat an 8B that thrashes swap and fans for 40 seconds — on quality *and* on whether you actually use it.
+
+<div class="aieng-intuition" markdown>
+<p class="label">Intuition lock</p>
+
+**Sticky picture:** RAM is a **loading dock**, not a warehouse. Weights + KV cache + OS have to stand on it at once. Swap is **shipping the dock to another city between tokens**. Context length is **rent on the dock** (KV cache grows with every token). One resident model is **one truck**; two 7Bs is a traffic jam.
+
+<div class="kill" markdown>
+**Kill this idea:** “Pull the biggest GGUF that Ollama will download; RAM will figure it out.” → **Replace with:** Fit weights + KV + ~5 GB OS headroom. Cap `num_ctx`. Keep **one** model loaded. Prefer a smaller model that is **hot in RAM** over a larger one that is **cold on disk**.
+</div>
+</div>
+
+### RAM is the limiter
+
+```text
+working set ≈ weights + KV cache + runtime + OS
+weights     ≈ params_B × (bits / 8)   GB     (Q4 ≈ 0.5 byte/param)
+KV cache    grows with context × layers × batch  (often the surprise)
+```
+
+```python
+from src.local_agents import HardwareBudget, recommend_local_setup, weight_gb
+
+assert weight_gb(8.0, bits=4) == 4.0   # 8B Q4 ≈ 4 GB of weights
+fit = recommend_local_setup(HardwareBudget(ram_gb=16))
+# LocalFit(params_b=8.0, quant="Q4", max_ctx=4096, ...)
+```
+
+`recommend_local_setup` is a **teaching table**, not a profiler. It reserves ~5 GB for macOS/Windows, the browser, and Python. Re-eval after you pick a real GGUF — cards lie about “fits in 8 GB” because they forgot KV cache and Chrome.
+
+| Machine | Honest local default | Do not |
+|---------|----------------------|--------|
+| **8 GB RAM, CPU/Metal** | 1–3B Q4, `num_ctx` 2k, one model | 7B Q4 (will swap) + a second model |
+| **16 GB** | 7–8B Q4, `num_ctx` 4k | 13B Q4 + 32k context “for RAG” |
+| **32 GB** | 8B Q8 **or** 13–14B Q4, ctx 8k if evals hold | Two 13Bs resident |
+| **6–8 GB VRAM dGPU** | Offload 7B Q4 layers to GPU; short ctx | Full 13B FP16 |
+| **No GPU, old CPU** | 1B–3B Q4; fewer threads than you think | Benchmarking while compiling Chromium |
+
+Apple Silicon: **Metal** is the reason 7–8B Q4 is pleasant. x86 laptop CPU: expect **single-digit to low tens of tok/s** — still enough for classify/extract, painful for long chat. Measure `tok/s` after the **second** prompt (first prompt pays load + compile).
+
+<div class="aieng-explainer" markdown>
+<p class="label">Explainer · why context eats RAM</p>
+
+Weights are mostly **fixed**. The KV cache is **per token of context** (keys and values for every layer). Doubling `num_ctx` can add more RAM than dropping one quant level saves. A “32k context” 7B on 16 GB often loses to a 4k context 7B that actually stays resident. Module 05 packing is a **hardware** feature here: retrieve 3 chunks, not 30.
+</div>
+
+### Knobs that matter on a laptop
+
+| Knob | What to do | Why |
+|------|------------|-----|
+| **One resident model** | `ollama stop` extras; don’t keep 8B + 3B + embedder if RAM is tight | Each model’s weights sit in RAM/VRAM |
+| **`num_ctx` / `n_ctx`** | Set to what you **use** (2k–4k for SLM tasks) | KV cache |
+| **`num_predict` / max tokens** | Cap completions (64–256 for extract/classify) | Latency and RAM |
+| **Threads** | Physical cores, not “all logical” | Oversubscription thrashes |
+| **mmap** | Keep on (llama.cpp default) | OS pages weights; don’t force a full copy |
+| **Keep-alive** | Keep the **one** model loaded while you work; unload overnight | Avoid reload tax vs RAM hog |
+| **Batch = 1** | Interactive laptop | Throughput servers (vLLM) are a different machine |
+| **Embedder** | Tiny (e.g. <100M) or hash/keyword until RAM allows | A 7B *plus* a large embedder is two models |
+
+Ollama-shaped example (names vary; check `ollama help`):
+
+```bash
+# Prefer a tag that matches your RAM (see table), then pin context
+ollama run llama3.2  # 3B-class; good 8–16 GB default
+# In a Modelfile / API options:
+# num_ctx: 2048
+# num_predict: 128
+# num_thread: 4      # set to physical cores
+```
+
+**Swap is a stop-the-line signal.** If Activity Monitor / `htop` shows swap climbing while you generate, the model is too big. Shrink params, quant, or context — do not “give it a few more minutes.” Swap-backed inference is slower than a cloud mini and wrecks the SSD.
+
+**Thermals:** laptop CPU/GPU will **throttle**. Do not publish tok/s from the first 10 seconds on a cold chassis. Steady state after a minute is the number that matters.
+
+### Prompt and system design that small hardware can survive
+
+Hardware limits and prompt limits are the same list:
+
+1. **Short system prompt.** A 2k sermon leaves no room for the user task in a 2k window.
+2. **JSON / enums**, temperature 0–0.2, few-shot of **one** compact example — not five essays (already §3).
+3. **Decompose.** Five 200-token SLM calls beat one 4k “think hard” call that OOMs the KV cache.
+4. **RAG:** top-k 2–4, chunk small, citations required (Modules 07/09). Unbounded retrieve is a RAM attack.
+5. **Agents:** `max_steps` 4–8, truncate tool dumps (Module 11/24). A small model with a god-tool will loop until the fan is the loudest component.
+6. **Escalate** (this module’s router + Module 24) when JSON fails — that is cheaper than stuffing a 70B into 16 GB.
+
+<div class="aieng-think" markdown>
+<p class="label">Think about it</p>
+
+**Question:** 16 GB Mac, Ollama, you want “repo Q&A.” You can load 8B Q4 at `num_ctx=4096` at ~15 tok/s, or 3B Q4 at `num_ctx=2048` at ~40 tok/s. Retrieval already returns the right 3 chunks. Which do you ship for classify + short answer, and what do you measure?
+
+<details data-think-id="17-t3"><summary>Reveal a strong answer</summary>
+
+Ship the **smallest model that clears the golden set** at the context you actually pack. If 3B + 3 chunks matches 8B on schema-pass and citation hit, take 3B: more headroom, less swap risk, snappier UI. Measure schema-pass, Hit@k of cites, p95 latency **after warmup**, and whether swap is zero. If 3B fails JSON, try 8B Q4 at 4k *or* escalate that 10% of calls (Module 10/24) — don’t jump to 32k context as a quality fix. Context is RAM.
+
+</details>
+</div>
+
+### What not to do on this hardware
+
+| Temptation | What happens |
+|------------|----------------|
+| 32k / 128k context “because the card says so” | KV cache evicts the OS; fans; silence |
+| LoRA-train 8B overnight on 16 GB | OOM or multi-hour swap; use PEFT on a smaller base or a rented GPU (Module 06) |
+| vLLM on a 16 GB laptop | Wrong runtime; that’s a throughput GPU server |
+| Three Ollama models idle | 12 GB of weights before the first token |
+| Fine-tune instead of retrieve | RAM + time; try RAG first (Module 07) |
+
+Fine-tunes and 13B+ still belong in this course — on **comfortable** hardware (setup table) or a rented box. The laptop path is **specialize, cap context, validate, escalate**.
+
+```bash
+poetry run pytest tests/test_local_agents.py -v
+```
+
+---
+
 ## Failure modes
 
 | Failure | Symptom | Fix |
@@ -290,6 +408,8 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 | SLM as sole agent brain | Looping tools, bad plans | Router + max steps + large-model escalate |
 | Trusting “label only” without check | Free-form prose labels | Enum validate / repair / escalate |
 | Undersized context | Lost instructions | Shorter system prompts; external memory |
+| Oversized context on 16 GB | Swap, thermal throttle, “model hung” | Cap `num_ctx`; pack (Module 05); smaller top-k |
+| Two models resident | Mystery OOM / 2 tok/s | One hot model; unload the rest |
 | Local server open to LAN | Data exposure | Bind localhost / auth / firewall |
 
 ---
@@ -304,7 +424,8 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 2. Score accuracy / schema-pass vs a cloud mini model on the same set.  
 3. Implement confidence or validation routing (schema fail → escalate).  
 4. If you quantize (e.g. compare two GGUF levels), **re-run the same 20** and record the delta.  
-5. Write a short decision: which tasks SLM owns, which escalate, and why.
+5. Write a short decision: which tasks SLM owns, which escalate, and why.  
+6. Run `recommend_local_setup(HardwareBudget(ram_gb=<yours>))`. Confirm the model you used in step 1 **fits** that row (weights + headroom). If Activity Monitor showed swap, drop a quant level or a billion parameters and re-run the 20.
 
 </div>
 
@@ -338,6 +459,19 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 <div class="quiz-feedback"></div>
 </div>
 
+<div class="aieng-quiz" data-quiz-id="17-q3" data-xp="25" data-success="Swap means the working set does not fit; shrink weights or context." data-fail="Re-read §7: swap is a stop-the-line signal, not a waiting room." markdown>
+
+<p class="label">Quiz · 25 XP</p>
+<p class="quiz-prompt">Your 16 GB laptop starts paging (swap climbing) while a local 13B Q4 generates. What is the right first move?</p>
+<div class="quiz-options">
+<button type="button" class="quiz-opt" data-correct="false">Raise `num_ctx` to 32k so the model can “see more” and finish faster</button>
+<button type="button" class="quiz-opt" data-correct="true">Unload extra models, cap context, or drop to an 8B Q4 / 7B that stays in RAM — then re-eval</button>
+<button type="button" class="quiz-opt" data-correct="false">Set temperature to 1.0 so it uses fewer tokens</button>
+<button type="button" class="quiz-opt" data-correct="false">Start vLLM to “use memory more efficiently” on the same laptop</button>
+</div>
+<div class="quiz-feedback"></div>
+</div>
+
 ---
 
 ## OSS & further materials
@@ -345,8 +479,9 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 | Resource | Why |
 |----------|-----|
 | [Ollama](https://ollama.com) | Fast local dev loop |
-| [llama.cpp](https://github.com/ggerganov/llama.cpp) | GGUF + CPU/Metal control |
-| [vLLM](https://github.com/vllm-project/vllm) | High-throughput GPU serving |
+| [llama.cpp](https://github.com/ggerganov/llama.cpp) | GGUF + CPU/Metal control; `n_ctx`, threads, mmap |
+| [vLLM](https://github.com/vllm-project/vllm) | High-throughput GPU serving (not a 16 GB laptop default) |
+| Course `src.local_agents.recommend_local_setup` | Teaching RAM fit table |
 | Hugging Face model cards | License, context length, intended use |
 | Module 10 Cost optimization | Routing and unit economics |
 | Module 04 Testing & evals | Golden sets for quant gates |
@@ -358,6 +493,7 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 - [ ] You ran at least one local model end-to-end  
 - [ ] You know which of *your* tasks SLMs can own  
 - [ ] Quantization (if any) is eval-backed  
+- [ ] You can size a model to **your** RAM (weights + KV + OS) and name the knobs (`num_ctx`, one resident model)  
 - [ ] A router or validation-escalation path exists on paper or in code  
 
 <div class="aieng-complete" data-module-id="17" data-xp="100" markdown>

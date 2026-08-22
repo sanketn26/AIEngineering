@@ -34,7 +34,8 @@ Progress is saved under `localStorage` key `aieng-progress-v1`. Clearing site da
 | 🚢 Ship It | Module 13 |
 | 🛡️ Security Mindset | Module 02 |
 | ⚡ Half Stack | 10 modules |
-| 🏆 Full Core | All 19 modules |
+| 🧯 Agent Hardening | Modules 20–22 |
+| 🏆 Full Core | All 26 modules |
 | ⭐ Level 5 | Reach level 5 |
 
 ---
