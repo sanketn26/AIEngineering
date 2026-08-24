@@ -75,22 +75,16 @@ flowchart LR
 The Mental model diagram above is the system view. Zoom into **one request** and every box is somewhere your `request_id` can stall, retry, or spend money — this is the shape [22 — Evaluating agentic systems](22-agent-evaluation.md#agent-flight-recorder) formalizes into a trace schema once tool calls enter the picture:
 
 ```mermaid
-flowchart TD
-  Req[Request] --> Router[Router]
-  Router --> PV[Prompt version]
-  PV --> Model[Model call]
+flowchart LR
+  Req[Request] --> Router[Router] --> PV[Prompt version] --> Model[Model call]
   Model --> SV{Structured validator}
   SV -->|invalid, retry budget left| Model
   SV -->|invalid, budget exhausted| Fail[Fail closed]
   SV -->|valid| Tool{Tool call requested?}
-  Tool -->|no| Resp[Response]
+  Tool -->|no| FV[Final validator] --> Out[Response to caller]
   Tool -->|yes| Authz{Authorization}
   Authz -->|denied| Fail
-  Authz -->|approved| ToolCall[Tool]
-  ToolCall --> ToolResult[Tool result]
-  ToolResult --> Model
-  Resp --> FV[Final validator]
-  FV --> Out[Response to caller]
+  Authz -->|approved| Call[Tool] --> Result[Tool result] --> Model
 ```
 
 Every hop on this path carries four numbers you should be logging per `request_id`, not just per service:

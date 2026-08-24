@@ -59,14 +59,15 @@ flowchart TB
 
 Before the taxonomy below names the six failure modes, look at what one of them — `runaway_loop` — actually looks like as a step sequence. This is the shape a `FailureDetector` scans for:
 
-```text
-step 1   model → search_docs(query="refund policy")
-step 2   model → search_docs(query="refund policy")
-step 3   model → search_docs(query="refund policy")
-step 4   model → search_docs(query="refund policy")
-                 ↑
-              LOOP — same tool, same arguments, no new
-              information between steps, no exit condition hit
+```mermaid
+sequenceDiagram
+  participant Model
+  participant Tool as search_docs
+  loop steps 1-4 — no new info, no exit condition
+    Model->>Tool: search_docs(query="refund policy")
+    Tool-->>Model: same result
+  end
+  Note over Model: runaway_loop — detector should trip here
 ```
 
 Compare against the controls that turn this from an incident into a bounded, logged event:

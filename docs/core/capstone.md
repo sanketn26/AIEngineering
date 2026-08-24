@@ -4,6 +4,16 @@ The five gates are learned in sequence; the capstone proves you can hold all fiv
 
 For the oral defense format (architecture sketch, live happy path, failure demo, Q&A), see [Assessment rubrics → Capstone oral](../reference/assessment.md#capstone-oral-optional-15-min). This page is the **build spec**; that section is the **defense format**.
 
+```mermaid
+flowchart TB
+  CS[Core service] --> Svc(("One production<br/>AI service"))
+  Ev[Evaluation] --> Svc
+  Kn[Knowledge] --> Svc
+  Ag[Agent] --> Svc
+  Op[Operations] --> Svc
+  Sec[Security] --> Svc
+```
+
 ## The six parts
 
 | Part | You must ship | Gate(s) it proves | Modules to have completed |

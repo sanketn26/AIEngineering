@@ -2,6 +2,14 @@
 
 Twenty-six modules, five **gates**. Each gate is a working-system exit criterion: you don't advance because you finished reading, you advance because the previous gate's residual failure mode forced the next capability. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module's **Depends on** line is the real prerequisite — gates group modules by *which production failure they close*, not by topic family, so a module you'd expect to sit elsewhere (cost optimization, MCP) may be grouped by the failure it actually prevents rather than the technology it uses.
 
+```mermaid
+flowchart LR
+  G1["Gate 1<br/>Dependable model service"] -->|"schema-valid ≠ correct"| G2["Gate 2<br/>Measurable quality"]
+  G2 -->|"tested ≠ grounded"| G3["Gate 3<br/>External knowledge"]
+  G3 -->|"grounded ≠ safe to act"| G4["Gate 4<br/>Actions and agents"]
+  G4 -->|"works on a laptop ≠ survives production"| G5["Gate 5<br/>Operate it"]
+```
+
 ## The running app
 
 One thread ties the five gates together: a support-ticket triage service. Each gate is what the *previous* gate's failure forced the team to add.
