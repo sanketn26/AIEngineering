@@ -88,6 +88,32 @@ assert report.composite == 1.0
 
 Wire this to `src.agents.Agent` by appending a `StepRecord` per loop iteration (tokens/cost if you have them; zeros are honest in CI stubs).
 
+#### Agent Flight Recorder
+
+`StepRecord` above is this repo's minimal version of a more complete trace schema — the **Agent Flight Recorder** — worth logging in full once an agent is calling tools in production, because it's the only thing that turns "the agent did something weird" into a diagnosable incident:
+
+```text
+request_id
+timestamp
+model
+model_version
+prompt_version
+input_tokens
+output_tokens
+step
+tool_requested
+tool_arguments
+authorization_result
+tool_result
+latency
+cost
+retry_count
+validation_result
+final_status
+```
+
+Every field earns its place: `request_id` is the join key back to [13 — Production](13-production.md#execution-flow-with-cost-and-latency-overlaid)'s logs and traces; `prompt_version`/`model_version` are what [23 — Prompt & config drift](23-prompt-drift.md) diffs against; `authorization_result` is the auditable proof that a tool call was actually checked (not just requested); `tool_arguments` + `tool_result` are what let you replay a run offline against a new detector without re-calling the real tool. A trajectory report (`report` in the example above) is this schema aggregated across every step of one run — the dashboard in §4 is this schema aggregated across every *run*.
+
 ---
 
 ### 2. Process vs outcome
@@ -159,6 +185,24 @@ print(dashboard(reports))
 ```
 
 Put these next to Module 10 unit economics. A quality win that 4×’s p95 and 10×’s $ is a product decision, not an automatic merge.
+
+`dashboard()` above returns a slice of this; the fuller reliability/cost picture — reused verbatim as the ops dashboard in [13 — Production](13-production.md#3-observability-metrics-traces-logs) — is:
+
+| Metric | Source | Why it's on the dashboard |
+|---|---|---|
+| Success rate | Outcome score | The headline number, and the one most likely to hide the rest |
+| Schema-valid rate | Structured validator (Gate 1) | Separates "wrong answer" from "broken contract" |
+| p50 / p95 / p99 latency | Per-request timing | Tail latency is what pages you, not the median |
+| Input / output tokens | Model call metadata | Cost driver #1, independent of $/token pricing changes |
+| Cost / request | Tokens × pricing + tool costs | The number finance actually asks for |
+| Retry rate | Retry counter per hop | A silent multiplier on both latency and cost |
+| Fallback rate | Fallback-path counter | How often the primary path is actually failing, hidden by a working fallback |
+| Retrieval failure rate | RAG pipeline (Gate 3) | Empty or low-confidence retrievals, if you have retrieval in the loop |
+| Tool failure rate | Tool call outcome | Distinguishes "the agent chose badly" from "the tool was down" |
+| Average agent steps | Trajectory step count | Rising steps with flat success rate is a loop or drift developing quietly |
+| Eval pass rate | CI golden-set gate (Module 04/here) | Whether quality is regressing before a human notices |
+
+A dashboard missing any row here can look "green" while one of these is quietly getting worse — `budget_violations` above is one instance of that pattern (spend rising while `success_rate` still looks fine), not the only one.
 
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>

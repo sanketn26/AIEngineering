@@ -55,6 +55,31 @@ flowchart TB
 
 **Invariant:** every production run emits a step log you can scan. Detectors are **pure functions** over that log. Breakers wrap **side-effecting** dependencies (tools, MCP servers, model providers).
 
+### What a loop looks like in a trajectory
+
+Before the taxonomy below names the six failure modes, look at what one of them — `runaway_loop` — actually looks like as a step sequence. This is the shape a `FailureDetector` scans for:
+
+```text
+step 1   model → search_docs(query="refund policy")
+step 2   model → search_docs(query="refund policy")
+step 3   model → search_docs(query="refund policy")
+step 4   model → search_docs(query="refund policy")
+                 ↑
+              LOOP — same tool, same arguments, no new
+              information between steps, no exit condition hit
+```
+
+Compare against the controls that turn this from an incident into a bounded, logged event:
+
+| Control | What it checks | What it does on trip |
+|---|---|---|
+| `max_steps` | Step count against a hard ceiling | Aborts the run, returns partial result or "I don't know" |
+| Duplicate-tool detection | Same tool + same (normalized) arguments N steps in a row | Aborts or forces a different action before continuing |
+| Budget limit | Cumulative tokens/cost against a per-run cap | Aborts before the *next* call, not after |
+| State checkpointing | Whether the last N steps changed any state at all | Flags "no progress" even when arguments technically differ |
+
+A detector that only checks `max_steps` still lets a loop burn its entire budget before tripping — duplicate-tool detection is what catches it early, which is why §1 below stores the full step log, not just a counter.
+
 ---
 
 ## The six modes (taxonomy)

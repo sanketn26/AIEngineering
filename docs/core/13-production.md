@@ -70,6 +70,42 @@ flowchart LR
 
 ---
 
+## Execution flow, with cost and latency overlaid
+
+The Mental model diagram above is the system view. Zoom into **one request** and every box is somewhere your `request_id` can stall, retry, or spend money — this is the shape [22 — Evaluating agentic systems](22-agent-evaluation.md#agent-flight-recorder) formalizes into a trace schema once tool calls enter the picture:
+
+```mermaid
+flowchart TD
+  Req[Request] --> Router[Router]
+  Router --> PV[Prompt version]
+  PV --> Model[Model call]
+  Model --> SV{Structured validator}
+  SV -->|invalid, retry budget left| Model
+  SV -->|invalid, budget exhausted| Fail[Fail closed]
+  SV -->|valid| Tool{Tool call requested?}
+  Tool -->|no| Resp[Response]
+  Tool -->|yes| Authz{Authorization}
+  Authz -->|denied| Fail
+  Authz -->|approved| ToolCall[Tool]
+  ToolCall --> ToolResult[Tool result]
+  ToolResult --> Model
+  Resp --> FV[Final validator]
+  FV --> Out[Response to caller]
+```
+
+Every hop on this path carries four numbers you should be logging per `request_id`, not just per service:
+
+| Hop | Latency | Tokens / cost | Retries | Failure mode if unmeasured |
+|---|---|---|---|---|
+| Model call | Time to first token + total | Input + output tokens | Count against budget | Silent timeout, hung worker |
+| Structured validator | Parse time (usually negligible) | — | Counts toward the same retry budget as the model call | Invalid JSON passed downstream |
+| Authorization | Should be near-zero | — | None — deny is terminal, not retried | A denied action silently retried until approved by accident |
+| Tool call | Its own p95, independent of the model's | Often billed separately (API calls, compute) | Its own budget, capped below the agent's total step cap | Tool timeout mistaken for model timeout in logs |
+
+**Invariant:** a retry at *any* hop still has to respect the end-to-end deadline for the whole request — retrying the model call after the tool call already burned most of the budget is how "one retry" becomes a timeout anyway.
+
+---
+
 ## 1. Serving skeleton (FastAPI)
 
 Start with a **thin, stateless** API. Business logic and provider SDKs live behind clear boundaries so you can swap models without rewriting HTTP glue.
