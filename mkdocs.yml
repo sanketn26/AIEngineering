@@ -109,32 +109,37 @@ nav:
       - Progress & XP: getting-started/progress.md
   - Core modules:
       - Overview: core/index.md
-      - 01 Prompt engineering: core/01-prompt-engineering.md
-      - 02 Security & privacy: core/02-security-privacy.md
-      - 03 Advanced prompting: core/03-advanced-prompting.md
-      - 04 Testing & evals: core/04-testing-evals.md
-      - 05 Context engineering: core/05-context-engineering.md
-      - 06 Fine-tuning: core/06-fine-tuning.md
-      - 07 Tools & basic RAG: core/07-tools-and-rag.md
-      - 08 Model Context Protocol: core/08-model-context-protocol.md
-      - 09 Advanced RAG: core/09-advanced-rag.md
-      - 10 Cost optimization: core/10-cost-optimization.md
-      - 11 Single agents: core/11-single-agents.md
-      - 12 Multi-agent systems: core/12-multi-agents.md
-      - 13 Production: core/13-production.md
-      - 14 Compliance: core/14-compliance.md
-      - 15 Domain apps: core/15-domain-apps.md
-      - 16 Integration patterns: core/16-integration-patterns.md
-      - 17 Small & local models: core/17-small-models.md
-      - 18 Agent design patterns: core/18-agent-design-patterns.md
-      - 19 Orchestration patterns: core/19-orchestration-patterns.md
-      - 20 Agent reliability: core/20-agent-reliability.md
-      - 21 Secure tool use: core/21-secure-tool-use.md
-      - 22 Evaluating agents: core/22-agent-evaluation.md
-      - 23 Prompt & config drift: core/23-prompt-drift.md
-      - 24 Local-first agents: core/24-local-first-agents.md
-      - 25 Durable orchestration: core/25-durable-orchestration.md
-      - 26 Orchestrators in production: core/26-orchestrator-comparison.md
+      - "Gate 1 — Dependable model service":
+          - 01 Prompt engineering: core/01-prompt-engineering.md
+          - 02 Security & privacy: core/02-security-privacy.md
+          - 03 Advanced prompting: core/03-advanced-prompting.md
+      - "Gate 2 — Measurable quality":
+          - 04 Testing & evals: core/04-testing-evals.md
+      - "Gate 3 — External knowledge":
+          - 05 Context engineering: core/05-context-engineering.md
+          - 06 Fine-tuning: core/06-fine-tuning.md
+          - 07 Tools & basic RAG: core/07-tools-and-rag.md
+          - 09 Advanced RAG: core/09-advanced-rag.md
+      - "Gate 4 — Actions and agents":
+          - 08 Model Context Protocol: core/08-model-context-protocol.md
+          - 10 Cost optimization: core/10-cost-optimization.md
+          - 11 Single agents: core/11-single-agents.md
+          - 12 Multi-agent systems: core/12-multi-agents.md
+          - 16 Integration patterns: core/16-integration-patterns.md
+          - 18 Agent design patterns: core/18-agent-design-patterns.md
+          - 19 Orchestration patterns: core/19-orchestration-patterns.md
+          - 20 Agent reliability: core/20-agent-reliability.md
+          - 21 Secure tool use: core/21-secure-tool-use.md
+      - "Gate 5 — Operate it":
+          - 13 Production: core/13-production.md
+          - 14 Compliance: core/14-compliance.md
+          - 15 Domain apps: core/15-domain-apps.md
+          - 17 Small & local models: core/17-small-models.md
+          - 22 Evaluating agents: core/22-agent-evaluation.md
+          - 23 Prompt & config drift: core/23-prompt-drift.md
+          - 24 Local-first agents: core/24-local-first-agents.md
+          - 25 Durable orchestration: core/25-durable-orchestration.md
+          - 26 Orchestrators in production: core/26-orchestrator-comparison.md
   - Tracks:
       - Overview: tracks/index.md
       - Stock recommender: tracks/stock-recommender.md
