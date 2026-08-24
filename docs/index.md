@@ -63,24 +63,30 @@ Whether you have a weekend or want a complete engineering foundation, begin with
   </a>
 </div>
 
-## A curriculum built around shipping
+## A curriculum built around five engineering gates
 
-The modules move from dependable model interactions to complete production systems. Each stage builds on the one before it.
+The modules move from dependable model interactions to complete production systems. Each gate is a working-system exit criterion — the *previous* gate's failure mode is what forces the next one.
 
 <div class="curriculum-grid">
   <div class="curriculum-stage">
-    <div class="curriculum-stage__head"><span>Stage 1</span><strong>Foundations</strong></div>
-    <p>Make model behavior explicit, testable, and safe.</p>
+    <div class="curriculum-stage__head"><span>Gate 1</span><strong>Dependable model service</strong></div>
+    <p>Make model behavior explicit, schema-valid, and safe against hostile input.</p>
     <ul>
       <li><a href="core/01-prompt-engineering/">Prompt engineering</a></li>
       <li><a href="core/02-security-privacy/">Security & privacy</a></li>
       <li><a href="core/03-advanced-prompting/">Advanced prompting</a></li>
+    </ul>
+  </div>
+  <div class="curriculum-stage">
+    <div class="curriculum-stage__head"><span>Gate 2</span><strong>Measurable quality</strong></div>
+    <p>Trustworthy output is unmeasured output until it has an eval suite.</p>
+    <ul>
       <li><a href="core/04-testing-evals/">Testing & evals</a></li>
     </ul>
   </div>
   <div class="curriculum-stage">
-    <div class="curriculum-stage__head"><span>Stage 2</span><strong>Knowledge</strong></div>
-    <p>Give models the right context, tools, and data.</p>
+    <div class="curriculum-stage__head"><span>Gate 3</span><strong>External knowledge</strong></div>
+    <p>Give models the right context, and prove retrieval is even needed.</p>
     <ul>
       <li><a href="core/05-context-engineering/">Context engineering</a></li>
       <li><a href="core/06-fine-tuning/">Fine-tuning</a></li>
@@ -89,34 +95,28 @@ The modules move from dependable model interactions to complete production syste
     </ul>
   </div>
   <div class="curriculum-stage">
-    <div class="curriculum-stage__head"><span>Stage 3</span><strong>Agents</strong></div>
-    <p>Design workflows that can act without losing control.</p>
+    <div class="curriculum-stage__head"><span>Gate 4</span><strong>Actions and agents</strong></div>
+    <p>Design workflows that can act without losing control or budget.</p>
     <ul>
       <li><a href="core/08-model-context-protocol/">Model Context Protocol</a></li>
+      <li><a href="core/10-cost-optimization/">Cost optimization</a></li>
       <li><a href="core/11-single-agents/">Single-agent systems</a></li>
       <li><a href="core/12-multi-agents/">Multi-agent systems</a></li>
       <li><a href="core/16-integration-patterns/">Integration patterns</a></li>
       <li><a href="core/18-agent-design-patterns/">Agent design patterns</a></li>
       <li><a href="core/19-orchestration-patterns/">Orchestration patterns</a></li>
+      <li><a href="core/20-agent-reliability/">Agent reliability</a></li>
+      <li><a href="core/21-secure-tool-use/">Secure tool use</a></li>
     </ul>
   </div>
   <div class="curriculum-stage">
-    <div class="curriculum-stage__head"><span>Stage 4</span><strong>Production</strong></div>
-    <p>Operate AI systems within real-world constraints.</p>
+    <div class="curriculum-stage__head"><span>Gate 5</span><strong>Operate it</strong></div>
+    <p>Survive real traffic, audits, drift, and a bill someone has to explain.</p>
     <ul>
-      <li><a href="core/10-cost-optimization/">Cost optimization</a></li>
       <li><a href="core/13-production/">Production engineering</a></li>
       <li><a href="core/14-compliance/">Compliance</a></li>
       <li><a href="core/15-domain-apps/">Domain-specific applications</a></li>
       <li><a href="core/17-small-models/">Small & local models</a></li>
-    </ul>
-  </div>
-  <div class="curriculum-stage">
-    <div class="curriculum-stage__head"><span>Stage 5</span><strong>Production agents</strong></div>
-    <p>Harden agent loops: failures, sandboxes, evals, drift, and durable graphs.</p>
-    <ul>
-      <li><a href="core/20-agent-reliability/">Agent reliability</a></li>
-      <li><a href="core/21-secure-tool-use/">Secure tool use</a></li>
       <li><a href="core/22-agent-evaluation/">Evaluating agents</a></li>
       <li><a href="core/23-prompt-drift/">Prompt &amp; config drift</a></li>
       <li><a href="core/24-local-first-agents/">Local-first agents</a></li>
@@ -126,6 +126,7 @@ The modules move from dependable model interactions to complete production syste
   </div>
 </div>
 
+<p class="course-inline-link"><a href="core/#gate-1-dependable-model-service">See exit criteria for each gate →</a></p>
 <p class="course-inline-link"><a href="reference/progression/">View the complete capability map →</a></p>
 
 ## Learn by building, not by collecting vocabulary

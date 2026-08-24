@@ -8,6 +8,6 @@ Three short stops before Module 01: get your environment working, pick a pace, a
 | [Learning paths](paths.md) | Weekend Warrior (2–3 days) through the full Professional Developer track (8–12 weeks) |
 | [Progress & XP](progress.md) | How the in-browser tracker works — local only, no account required |
 
-Already set up? Jump straight into the [core modules](../index.md#a-curriculum-built-around-shipping).
+Already set up? Jump straight into the [core modules](../index.md#a-curriculum-built-around-five-engineering-gates).
 
 [Start with Setup →](setup.md){ .course-button .course-button--primary }

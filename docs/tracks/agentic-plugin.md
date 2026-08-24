@@ -873,7 +873,7 @@ Clean-machine install: explain + approved apply demo; offline local path documen
 
 ---
 
-## Production hardening (map Stage 5 onto the plugin)
+## Production hardening (map Gate 4/5's agent-hardening modules onto the plugin)
 
 These are **in the phases above**, not a day-90 shopping list:
 
