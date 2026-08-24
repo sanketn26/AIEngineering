@@ -41,5 +41,6 @@ What you should be able to build after each module. Times are rough calendar est
 | 12–14 | Coordinated, observable, governable systems |
 | 15–19 | Vertical + platform + local/edge + composable-pattern + orchestration options |
 | 20–26 | Production agents: named failures, sandboxes, trajectory evals, drift, durable graphs |
+| All 26 | [Capstone](../core/capstone.md)-ready: an evaluated, authorized, tool-using production AI service |
 
 Use this table in `PROGRESS.md` to mark completion honestly (demo > notes).
