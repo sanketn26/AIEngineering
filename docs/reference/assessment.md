@@ -61,6 +61,60 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 
 ---
 
+## Gate assessment ladder
+
+Five levels, one per depth of understanding — use these to check whether a student actually owns a gate's material or can only recite its vocabulary. Each level up requires the one below it; a student who can Design but not Predict is pattern-matching, not reasoning from the mechanism.
+
+| Level | Tests | 4 looks like |
+|---|---|---|
+| **Explain** | Why the mechanism exists at all | A causal explanation in the student's own words, not a definition copied from the module |
+| **Predict** | Forward simulation — given a change, what breaks | Names the *specific* failure and the mechanism that produces it, not "it gets worse" |
+| **Diagnose** | Reading a trace/log/symptom and naming the failure | Names the failure mode **and** the evidence in the trace that points to it — a correct guess without evidence doesn't count |
+| **Design** | Proposing a concrete fix | A specific, testable mechanism (code, config, or policy) — restating the principle is not a design |
+| **Defend** | Justifying a decision against a real objection | Names the tradeoff that was accepted and why, not a restatement of the original choice |
+
+### Gate 1 — Dependable Model Service
+
+1. **Explain:** Why is an LLM API call a different kind of dependency than a deterministic library call?
+2. **Predict:** A provider's median latency doubles overnight. If no request has a deadline, what happens to worker utilization under sustained load?
+3. **Diagnose:** A response passes JSON parsing but fails your Pydantic schema on a field type. What's the actual failure — and is "just retry" the right fix?
+4. **Design:** Add a fail-closed path for schema-invalid output that doesn't silently drop the user's request.
+5. **Defend:** Why does temperature 0 not remove the need for an eval suite (Gate 2)?
+
+### Gate 2 — Measurable Quality
+
+1. **Explain:** Why do deterministic code paths get unit tests while model behavior gets an eval suite instead?
+2. **Predict:** A one-line prompt "polish" ships without touching the golden set. What's the earliest point this course's CI setup could have caught a regression — and would it have?
+3. **Diagnose:** Golden-set accuracy holds steady but user complaints rise. What's not being measured?
+4. **Design:** Add a CI gate that blocks a merge when eval score regresses past a threshold, without blocking on noise from run-to-run variance.
+5. **Defend:** Why is LLM-as-judge only trustworthy after it's checked against human-labeled agreement — what fails if you skip that check?
+
+### Gate 3 — External Knowledge
+
+1. **Explain:** Why should raw-query retrieval be the baseline you measure against, not the thing you replace on day one?
+2. **Predict:** You add HyDE-based query rewriting without an eval gate. A query with an exact order-ID identifier stops retrieving correctly. Why?
+3. **Diagnose:** Retrieval recall is fine but generated answers still cite the wrong policy. Is this a retrieval problem or a packing/context problem?
+4. **Design:** Add a retrieval-confidence threshold that gates escalation to agentic RAG — and the evaluation step that has to happen before you trust it.
+5. **Defend:** Why is "the model needs more context" often the wrong diagnosis for a grounding failure?
+
+### Gate 4 — Actions and Agents
+
+1. **Explain:** Why must tool authorization live outside the model instead of in a system-prompt instruction?
+2. **Predict:** An agent's `max_steps` cap is set, but duplicate-tool-call detection is not. Where does the budget actually get spent when the agent loops?
+3. **Diagnose:** A trace shows the same tool called four times in a row with near-identical arguments. What failure mode is this, and what's the earliest step it could have been caught?
+4. **Design:** Add loop-control and tool-safety mechanisms to a single-agent loop that currently only checks a step counter.
+5. **Defend:** Why is a prompt-injection classifier a *mitigation*, not a *security boundary* — what does it not protect against that an allowlist does?
+
+### Gate 5 — Operate It
+
+1. **Explain:** Why does "it works in the notebook" not imply "it's a production service"?
+2. **Predict:** A provider starts rate-limiting during a traffic spike, and no request has a timeout. Trace the failure through workers, health checks, and the autoscaler.
+3. **Diagnose:** Given an Agent Flight Recorder trace with rising `retry_count` and flat `success_rate`, what's developing, and is it visible on a dashboard that only tracks success rate?
+4. **Design:** Add a dashboard alert that would have caught the Gate 5 incident story before the bill did.
+5. **Defend:** Why must a rollback path exist for prompt/model/config versions specifically, separate from a code rollback?
+
+---
+
 ## Track demo rubrics (day 90)
 
 ### Stock recommender
