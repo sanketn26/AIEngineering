@@ -156,9 +156,12 @@ assert router.pick("chat", "x" * 9000) == "gpt-4o"  # long context heuristic
 Design patterns:
 
 1. **Task-type route** — classify / extract → mini; plan / multi-hop → strong  
-2. **Confidence escalate** — mini first; if validator fails or self-reported confidence low → strong  
+2. **Confidence escalate** — mini first; if validator fails → strong  
 3. **Cascade** — rules → SLM → large model → human  
 4. **Length / complexity features** — input size, tool need, user tier  
+
+!!! warning "Don't route on the model's self-reported confidence"
+    A model saying "confidence = 0.93" is not a calibrated signal — LLMs are frequently overconfident and that number isn't grounded in anything measurable. Route on things you can actually verify: deterministic/schema validation, a task classifier, disagreement between two samples or models, or a calibrated router trained and checked against labeled outcomes. If you want an uncertainty signal from the model itself, use token-level logprobs, not a number the model typed into its own answer.
 
 ```python
 def answer(task: str, prompt: str, run_model, validate) -> str:

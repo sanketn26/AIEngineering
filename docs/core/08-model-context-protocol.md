@@ -30,35 +30,52 @@ Without a shared protocol, every IDE, desktop agent, and chat host reinvents con
 
     It is **not** a multi-model load balancer. Routing and load balancing belong in [Production](13-production.md) and [Integration patterns](16-integration-patterns.md). Earlier course drafts mislabeled those topics as MCP; that error is corrected here.
 
+!!! warning "Protocol snapshot — verify before production use"
+    This module teaches the **2025-era MCP architecture**: one host, N MCP clients, each client holding a **1:1 session with exactly one server**. MCP is evolving quickly — lifecycle, transport, authentication, and session semantics may change between protocol revisions.
+
+    Always check the current specification at [modelcontextprotocol.io](https://modelcontextprotocol.io/) before implementing a production integration.
+
+    **Last verified against the spec:** 2025-06-18.
+
 Primary reference: [modelcontextprotocol.io](https://modelcontextprotocol.io/)
 
 ## Mental model
+
+A host does not share one client session across every server. Each server gets its **own** client instance — a dedicated 1:1 session — so one misbehaving or slow server can't stall or leak into another's session state:
 
 ```mermaid
 flowchart LR
   subgraph Host["Host application"]
     UX[UX / auth / policy]
     Orch[Orchestration / sampling]
+    ClientA["MCP Client A<br/>(session w/ Server A)"]
+    ClientB["MCP Client B<br/>(session w/ Server B)"]
   end
-  subgraph Client["MCP Client"]
-    Sess[Session / capability negotiation]
+  subgraph ServerA["MCP Server A"]
+    TA[Tools]
+    RA[Resources]
+    PA[Prompts]
   end
-  subgraph Servers["MCP Server(s)"]
-    T[Tools]
-    R[Resources]
-    P[Prompts]
+  subgraph ServerB["MCP Server B"]
+    TB[Tools]
+    RB[Resources]
+    PB[Prompts]
   end
   UX --> Orch
-  Orch --> Sess
-  Sess -->|stdio / Streamable HTTP| T
-  Sess --> R
-  Sess --> P
+  Orch --> ClientA
+  Orch --> ClientB
+  ClientA -->|stdio / Streamable HTTP| TA
+  ClientA --> RA
+  ClientA --> PA
+  ClientB -->|stdio / Streamable HTTP| TB
+  ClientB --> RB
+  ClientB --> PB
 ```
 
 | Role | Responsibility | Examples |
 |------|----------------|----------|
-| **Host** | UX, user auth, orchestration, approval UI | Claude Desktop, VS Code / Cursor-style hosts, your agent product |
-| **Client** | Protocol session with one or more servers | Embedded MCP client library in the host |
+| **Host** | UX, user auth, orchestration, approval UI; owns one client per server | Claude Desktop, VS Code / Cursor-style hosts, your agent product |
+| **Client** | Protocol session with **exactly one** server (1:1 — not a fan-out router) | Embedded MCP client library instance in the host, one per server connection |
 | **Server** | Exposes tools, resources, prompts | Filesystem, git, DB, internal ticket API |
 
 Capability types:

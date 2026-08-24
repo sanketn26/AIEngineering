@@ -168,6 +168,8 @@ On each step the model outputs a probability distribution over the next token. *
 <p class="label">Explainer</p>
 
 **Temperature sits on that distribution.** At 0 the model (almost) always takes the highest-probability next token — good for labels and JSON. At 0.8 it samples farther into the tail — more variety, more chance of a weird key name. Temperature cannot invent a task you did not specify. Some “reasoning” models ignore temperature; treat the table below as a starting point for ordinary chat models, then read your provider’s decoding docs.
+
+Temperature 0 reduces sampling variability, but it does **not** guarantee exact, bit-for-bit reproducibility. Batching effects, mixture-of-experts routing, floating-point non-associativity across hardware, and silent provider-side model/serving updates can all still change the output for the same prompt. Treat temperature 0 as "much more consistent," not "deterministic" — pin the model/prompt version (Module 13) and use evals, not string equality, to catch drift.
 </div>
 
 Temperature (and related sampling knobs) trade **determinism for diversity**. Lower temperature concentrates probability mass; higher temperature samples more creative tails.

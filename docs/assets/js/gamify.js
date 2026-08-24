@@ -286,7 +286,7 @@
         '<div class="aieng-row"><span>Level</span><strong id="aieng-level">1</strong></div>' +
         '<div class="aieng-row"><span>XP</span><strong id="aieng-xp">0</strong></div>' +
         '<div class="aieng-bar"><span id="aieng-bar"></span></div>' +
-        '<div class="aieng-row"><span>Modules</span><strong id="aieng-mods">0/19</strong></div>' +
+        '<div class="aieng-row"><span>Modules</span><strong id="aieng-mods">0/26</strong></div>' +
         '<div class="aieng-badges" id="aieng-hud-badges"></div>' +
         '<div class="aieng-links">' +
         '<a id="aieng-dash-link" href="#">Dashboard</a>' +

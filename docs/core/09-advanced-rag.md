@@ -105,9 +105,9 @@ A **cross-encoder** (rerank stage) reads query and passage *together*. It is slo
 
 ### 2. Query understanding before you retrieve
 
-Do not embed the raw user string blindly. Transform the query into something the index can hit.
+**Start with the raw query as your retrieval baseline** and measure it with the eval harness from [§10](#10-evaluation-measure-the-path-not-the-vibes). Add rewriting, decomposition, expansion, or HyDE only when that measurement shows a retrieval problem the raw query can't solve — each of these techniques has a real cost: an exact identifier (order number, SKU, error code) can disappear during rewriting, expansion can hallucinate terms that pull in irrelevant documents, decomposition can drift from user intent, and every extra LLM call adds latency. Treat rewriting as a fix for a measured failure, not a default step.
 
-**Decompose** multi-part questions:
+**Decompose** multi-part questions — reach for this once a golden-set eval shows single-shot retrieval missing multi-hop questions:
 
 ```python
 import json
@@ -224,11 +224,13 @@ def rrf(rank_lists: list[list[str]], k: int = 60) -> list[str]:
 
 ### 5. Reranking (second stage)
 
-Cross-encoders score `(query, passage)` jointly. They are **too slow** for millions of docs, perfect for top 50 → top 5.
+Cross-encoders score `(query, passage)` jointly. They are **too slow** for millions of docs, so run them on a small first-stage shortlist rather than the full corpus.
 
 ```text
-hybrid shortlist (50) → cross-encoder scores → keep top 5–8 → LLM
+hybrid shortlist (N) → cross-encoder scores → keep top 5–8 → LLM
 ```
+
+There's no universal right size for `N`. Cross-encoders are normally applied to a relatively small first-stage candidate set — commonly tens to hundreds of passages — sized by your **p95 latency budget** and the cross-encoder's own speed (a small local model tolerates a larger shortlist than a hosted rerank API call). Measure rerank latency at your actual shortlist size before picking a default; don't copy a number from a blog post that ran on different hardware and a different model.
 
 ```python
 def rerank(query: str, passages: list[tuple[str, str]], top_k: int = 5):
@@ -327,6 +329,8 @@ Hard rules (same spirit as Module 11 agents):
 - Prefer “I don’t know” over another expensive hop when notes are empty  
 
 Agentic RAG **multiplies cost**. Gate it: only when a cheap single-shot retrieve scores low confidence or the query is classified multi-hop.
+
+Raw dense-retrieval similarity scores are **not calibrated confidence** — a 0.72 cosine score doesn't mean "72% likely relevant," and the threshold that separates good from bad retrieval shifts per embedding model, index, and domain. Before wiring a similarity score into the escalation gate above, validate the threshold against a representative labeled evaluation set (queries with known-good/known-bad retrievals); skip agentic escalation only once that threshold rule is measured, not assumed.
 
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>
