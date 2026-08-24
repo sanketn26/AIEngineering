@@ -24,6 +24,8 @@ Sprint review looked green: five happy-path chats, a thumbs-up, a “tiny wordin
 
 </div>
 
+*Same failure mode the [running app](index.md#the-running-app) hits at Gate 2: schema-valid output (Gate 1) is not the same as correct output, and nothing before this gate would have caught the drop.*
+
 You would not merge a pricing service without tests. LLM features still often ship on demos. Evals are how you give stochastic systems **engineering feedback loops**. Unit tests protect the code *around* the model (parsers, redactors, routers, authz). Eval suites protect the **behavior** of prompts, models, and retrieval under a fixed dataset. Confusing the two produces brittle tests (`assert reply == "Hello, Jane!"`) or, worse, no tests at all.
 
 You will use this module whenever you change a prompt, swap models, add few-shots, or tune RAG. CI should fail closed on deterministic layers always, and on golden-set thresholds when you opt into model-in-the-loop pipelines (with cost controls).

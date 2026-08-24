@@ -20,6 +20,8 @@ Day 19 of a “simple” support chat: the system policy still says never invent
 
 </div>
 
+*The [running app](index.md#the-running-app) enters Gate 3 here: it's tested and evaluated, but still ignorant of anything outside training data — this module and [07](07-tools-and-rag.md)/[09](09-advanced-rag.md) are what ground it.*
+
 You already budget CPU, memory, and bandwidth. The LLM context window is the same class of resource: finite, ordered, and expensive.
 
 In production, models rarely fail only because the *instruction* was poorly worded. They fail because safety policy is buried under a 40-turn log, tool dumps crowd out the user question, stale RAG chunks linger, or “memory” is an unbounded array with no summary path.

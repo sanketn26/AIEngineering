@@ -21,6 +21,8 @@ An engineer installs a trendy “productivity” MCP server from a public list s
 
 </div>
 
+*Gate 4 of the [running app](index.md#the-running-app): grounded answers aren't the same as safe actions — the moment the triager can call a tool, "who authorized this call" has to be answered outside the model.*
+
 Without a shared protocol, every IDE, desktop agent, and chat host reinvents connectors: one filesystem integration for App A, another for App B, N auth stories, N schema formats. That is classic **N×M integration** cost.
 
 **Model Context Protocol (MCP)** standardizes how hosts discover and call external capabilities so the same server can plug into multiple clients. For engineers, MCP is an **interface and process boundary** problem — closer to LSP (Language Server Protocol) for tools/context than to “another prompt trick.”

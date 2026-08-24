@@ -29,6 +29,8 @@ Friday 16:40. Support chat p95 jumps from 1.2s to “hung.” The provider is ra
 
 </div>
 
+*Gate 5 of the [running app](index.md#the-running-app): everything above worked on a laptop with one user. This is the failure that forces the rest — every other Gate-5 module exists to make this incident debuggable instead of mysterious.*
+
 In class, a notebook cell that calls an LLM “works.” In production, that same call is a **distributed dependency**: network timeouts, rate limits, model outages, prompt regressions, secret leaks in logs, and unbounded token spend. Your job is not “call the model” — it is to put a **contracted, observable, fail-soft service** around stochastic generation.
 
 Treat the LLM like any other unreliable remote system (payment gateway, search index), with three extra twists:

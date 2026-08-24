@@ -24,6 +24,8 @@ Friday 4:47pm: a support bot ships after a “quick prompt polish.” By Monday,
 
 </div>
 
+*This is the running app the [course index](index.md#the-running-app) tracks across all five gates — here it's a support-ticket triager with no contract on its own output. Gate 1 closes exactly this failure.*
+
 As a software engineer, you already ship APIs with schemas, retries, and contracts. An LLM call is another dependency with a **soft contract**: same input does not guarantee bit-identical output. Prompt engineering is how you tighten that contract enough that the rest of your system can stay boring.
 
 Production failures rarely look like “the model is dumb.” They look like: a classifier emits free text instead of a label; a nightly job burns 10× tokens because the prompt pasted entire ticket histories; two engineers rewrite the same system message in two services and drift apart. Those are systems problems: unclear interfaces, missing validation, no ownership of config.
