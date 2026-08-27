@@ -30,6 +30,7 @@ What you should be able to build after each module. Times are rough calendar est
 | 24 Local-first agents | Token budgets, hybrid local/cloud routing | Laptop-useful agents with hard meters | 4–6 days |
 | 25 Durable orchestration | Coordinators, hypothesis trees, merge gates, HITL | Restartable graphs with isolated writes | 7–10 days |
 | 26 Orchestrators in prod | Custom vs LangGraph vs CrewAI vs MCP; $ attribution | Defensible stack pick + per-step receipts | 5–7 days |
+| 27 Harness engineering | Prompt vs context vs harness; verify/persist/stop outside the model | Control layer that makes the same weights finish a long job | 4–6 days |
 
 ## Cumulative milestones
 
@@ -40,7 +41,7 @@ What you should be able to build after each module. Times are rough calendar est
 | 09–11 | Advanced retrieval + autonomous loops |
 | 12–14 | Coordinated, observable, governable systems |
 | 15–19 | Vertical + platform + local/edge + composable-pattern + orchestration options |
-| 20–26 | Production agents: named failures, sandboxes, trajectory evals, drift, durable graphs |
-| All 26 | [Capstone](../core/capstone.md)-ready: an evaluated, authorized, tool-using production AI service |
+| 20–27 | Production agents: named failures, sandboxes, harness, trajectory evals, drift, durable graphs |
+| All 27 | [Capstone](../core/capstone.md)-ready: an evaluated, authorized, tool-using production AI service |
 
 Use this table in `PROGRESS.md` to mark completion honestly (demo > notes).

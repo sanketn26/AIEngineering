@@ -30,7 +30,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Knowledge | 05, 07, 09 |
 | Connectors & cost | 08, 10 |
 | Ship | 11 (optional), 13 |
-| Production agents (optional) | 20, 21, 22 |
+| Production agents (optional) | 20, 21, 27, 22 |
 
 **Prerequisites:** API experience; basic cloud or container familiarity.
 
@@ -46,7 +46,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Integration | 15, 16 |
 | Local/hybrid | 17 |
 | Patterns (optional) | 18, 19 |
-| Production agents | 20–26 |
+| Production agents | 20–27 |
 
 **Emphasize:** Security, evals, multi-agent orchestration, audit trails, hybrid routing, agent failure modes, sandboxes, trajectory evals.
 
@@ -62,7 +62,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Retrieval frontier | 09 |
 | Agents | 11, 12 |
 | SLMs | 17 |
-| Production agents (optional) | 20, 22, 24, 26 |
+| Production agents (optional) | 20, 22, 24, 26, 27 |
 | Track | Hybrid models or stock research stack |
 
 ---
@@ -85,7 +85,7 @@ Tracks can run **in parallel** with later core modules if you already code comfo
 2. **Story → picture** (5 min) — read the opening incident and the **Intuition lock** first; say the sticky picture out loud
 3. **Concept** (20–30 min) — explainers and mental model; answer every **Think about it** *before* revealing
 4. **Hands-on** (20–30 min) — lab artifact (smallest thing that can fail in CI)
-5. **Check** (5–10 min) — quizzes + checkpoint; mark module complete only if you can teach the kill-this-idea line
+5. **Check** (5–10 min) — **predict → run → compare → explain**, then quizzes + checkpoint; mark module complete only if you can teach the kill-this-idea line ([Assessment](../reference/assessment.md))
 6. **Log** (5 min) — what failed, what you’d redesign, next question
 
 !!! tip "Anti-skim rule"

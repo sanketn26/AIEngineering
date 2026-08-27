@@ -35,7 +35,8 @@ Progress is saved under `localStorage` key `aieng-progress-v1`. Clearing site da
 | 🛡️ Security Mindset | Module 02 |
 | ⚡ Half Stack | 10 modules |
 | 🧯 Agent Hardening | Modules 20–22 |
-| 🏆 Full Core | All 26 modules |
+| 🧰 Harness | Modules 21 + 27 |
+| 🏆 Full Core | All 27 modules |
 | ⭐ Level 5 | Reach level 5 |
 
 ---
@@ -44,7 +45,7 @@ Progress is saved under `localStorage` key `aieng-progress-v1`. Clearing site da
 
 Gamification is optional. The real score is:
 
-1. Can you explain the failure mode without notes?
+1. Can you **predict** the failure, **run** the smallest lab, **compare** to the prediction, and **explain** the gap ([Assessment](../reference/assessment.md))?
 2. Do you have a runnable artifact and a golden eval?
 3. Would you ship this behind an API with timeouts and audit logs?
 

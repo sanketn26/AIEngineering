@@ -79,7 +79,7 @@ Constraints: no speculation beyond data
 
 ---
 
-## Agents (modules 11–12, 20–26)
+## Agents (modules 11–12, 20–27)
 
 **Symptom:** Same tool call forever
 

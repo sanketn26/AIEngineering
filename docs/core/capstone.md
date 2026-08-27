@@ -21,7 +21,7 @@ flowchart TB
 | **Core service** | Provider abstraction, structured/schema-valid output, deadlines on every model call, retries, fail-closed validation | 1 | 01, 02, 03, 13 |
 | **Evaluation** | A golden set, deterministic checks, quality metrics, and a CI gate that can fail a build on regression | 2 | 04, 22 |
 | **Knowledge** | Retrieval with citations, a measured decision on whether retrieval is even needed, freshness handling, retrieval metrics (recall/precision/groundedness) | 3 | 05, 07, 09 |
-| **Agent** | Tool use with an enforced permission boundary, loop/step/cost caps, persisted state, human approval on at least one write action | 4 | 08, 10, 11, 12, 20, 21 |
+| **Agent** | Tool use with an enforced permission boundary, loop/step/cost caps, persisted state, human approval on at least one write action, a verifier that is not the model | 4 | 08, 10, 11, 12, 20, 21, 27 |
 | **Operations** | Traces tied to a `request_id`, a cost dashboard, p50/p95/p99 latency, a documented fallback path, one rehearsed incident scenario | 5 | 13, 17, 22, 23 |
 | **Security** | Authorization enforced outside the model (not a prompt instruction), parameter validation on every tool call, resilience to a prompt-injection test case, least privilege on anything that writes | 1, 4 | 02, 08, 21 |
 

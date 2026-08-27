@@ -287,6 +287,17 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 
 ---
 
+## EX-27 — Harness (`src.harness`)
+
+1. `verifier_required=True` with no `verify` callable → `stopped == "no_verifier"`.
+2. Propose `tool="bash"` against a spec that only lists `write_note`; notes include `denied:`.
+3. First artifact `"draft"`, second `"REFUND …"`; report is `verified` in two steps, not at `step_cap`.
+4. Two context windows: persist `progress.json` after a failed draft; `load_progress` in session 2 and verify.
+
+**Check:** `pytest tests/test_harness.py -v`
+
+---
+
 ## Track stretch
 
 | Track | Stretch exercise |

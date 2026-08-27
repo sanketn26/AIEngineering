@@ -13,7 +13,7 @@ Prefer primary documentation and high-signal open-source curricula over random b
 | [rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) | Attention, GPT training loop | Hybrid track + mental model for **06 / 17** |
 | [huggingface/agents-course](https://github.com/huggingface/agents-course) | smolagents, LangGraph, agentic RAG | Modules **11–12**, **26**, agentic pieces of **09** |
 | [humanlayer/12-factor-agents](https://github.com/humanlayer/12-factor-agents) | Production agent design principles | Modules **05, 11–13, 20–25** |
-| [Anthropic / MCP](https://modelcontextprotocol.io/) | Tools, resources, prompts protocol | Module **08** (authoritative) + host policy in **21** |
+| [Anthropic / MCP 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28) | Tools, resources, prompts protocol | Module **08** (authoritative, current spec) + host policy in **21** |
 
 ---
 
@@ -44,14 +44,22 @@ Prefer primary documentation and high-signal open-source curricula over random b
 - [CrewAI](https://docs.crewai.com/)
 - [AutoGen / AG2](https://github.com/microsoft/autogen)
 - Provider agent / tool-calling guides (OpenAI, Anthropic)
-- Course **Module 18** (leaf patterns), **19** (workflow shape), **20–26** (reliability, sandbox, evals, drift, durable graphs, orchestrator comparison) — read 11–12 first
+- Course **Module 18** (leaf patterns), **19** (workflow shape), **20–27** (reliability, sandbox, harness, evals, drift, durable graphs, orchestrator comparison) — read 11–12 first
 - [ReAct (Yao et al., 2022)](https://arxiv.org/abs/2210.03629) · [ReWOO (Xu et al., 2023)](https://arxiv.org/abs/2305.18323) · [Self-consistency (Wang et al., 2022)](https://arxiv.org/abs/2203.11171)
+
+---
+
+## Harness engineering
+
+- [Anthropic — Effective harnesses for long-running agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) — progress files across context windows
+- [LangChain — Improving deep agents with harness engineering](https://www.langchain.com/blog/improving-deep-agents-with-harness-engineering) — same-model / harness-only quality delta
+- Course **Module 27** — prompt vs context vs harness; `src.harness` teaching loop
 
 ---
 
 ## MCP
 
-- [Model Context Protocol](https://modelcontextprotocol.io/) — **not** a load balancer; tools/resources/prompts over a standard host↔server protocol
+- [Model Context Protocol](https://modelcontextprotocol.io/specification/2026-07-28) — **not** a load balancer; tools/resources/prompts over a standard host↔server protocol. Course teaches **2026-07-28** (stateless `_meta` + `server/discover`). The 2025 `initialize` + `Mcp-Session-Id` model is historical and still deployed.
 
 ---
 

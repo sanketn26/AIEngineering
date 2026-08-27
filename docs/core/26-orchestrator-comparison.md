@@ -79,7 +79,7 @@ score = tradeoff_score(
 |--|-------------|-----------|--------|-----------|
 | **Control / testability** | Highest — you wrote the state machine | High if you keep graphs small | Lower — personas hide control flow | Medium — policy is host-side |
 | **HITL / checkpoints** | You build Module 25 | First-class interrupt + durable state | Weak unless you bolt it on | Host approval UI; not a job queue |
-| **Durability** | JSONL/WAL you own | Built-in checkpointers | Process memory unless you add store | Session with the server, not the graph |
+| **Durability** | JSONL/WAL you own | Built-in checkpointers | Process memory unless you add store | Not a job graph: 2026 MCP has no protocol session; app state is explicit handles |
 | **Ecosystem** | None | Large (LangChain world) | Fast demos, role packs | Many servers; supply-chain risk |
 | **Lock-in** | Lowest | Medium (graph + APIs) | Medium | Protocol is open; hosts differ |
 | **Typical failure** | Reimplement persistence badly | Graph soup; debug the library | Unbounded debate; weak isolation | Untrusted server as root |

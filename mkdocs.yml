@@ -130,6 +130,7 @@ nav:
           - 19 Orchestration patterns: core/19-orchestration-patterns.md
           - 20 Agent reliability: core/20-agent-reliability.md
           - 21 Secure tool use: core/21-secure-tool-use.md
+          - 27 Harness engineering: core/27-harness-engineering.md
       - "Gate 5 — Operate it":
           - 13 Production: core/13-production.md
           - 14 Compliance: core/14-compliance.md

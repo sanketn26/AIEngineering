@@ -62,7 +62,7 @@ You may run a track **in parallel** with later core modules if you already ship 
 
 ### Which new core patterns belong where
 
-Modules 20–26 (the agent-hardening tail of [Gate 4](../core/index.md#gate-4-actions-and-agents) and [Gate 5](../core/index.md#gate-5-operate-it)) and [17 §7 limited hardware](../core/17-small-models.md#7-working-effectively-on-limited-hardware) are not a tax on every track. Cargo-culting LangGraph, worktrees, or trajectory evals onto a tabular hybrid is how you get costume jewelry.
+Modules 20–27 (the agent-hardening tail of [Gate 4](../core/index.md#gate-4-actions-and-agents) and [Gate 5](../core/index.md#gate-5-operate-it)) and [17 §7 limited hardware](../core/17-small-models.md#7-working-effectively-on-limited-hardware) are not a tax on every track. Cargo-culting LangGraph, worktrees, or trajectory evals onto a tabular hybrid is how you get costume jewelry.
 
 | Pattern | Stock recommender | Hybrid models | Agentic plugin |
 |---------|-------------------|---------------|----------------|

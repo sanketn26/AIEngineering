@@ -16,6 +16,8 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 
 **Pass threshold:** average ≥ 3.0 on required criteria, with no required criterion at 0.
 
+**Study cycle (predict → run → compare → explain):** before each lab, write what you expect to happen (or fail). Run the smallest artifact. Compare the outcome to that prediction. Explain the gap in `PROGRESS.md`. Mark a module complete only after that cycle — a first-pass quiz is not a pass.
+
 ---
 
 ## Module exercise rubric (generic)
@@ -58,6 +60,7 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 | 24 | Token budget abort + local vs strong routing stub |
 | 25 | Durable pause/resume + merge gate refusing failed tests |
 | 26 | Written orchestrator pick with ranks + per-agent cost events |
+| 27 | Harness with allowlisted tools, external verifier, step/cost caps; “done” is not a model sentence |
 
 ---
 
