@@ -1,6 +1,7 @@
 from src.harness import (
     ExternalState,
     HarnessSpec,
+    load_progress,
     run_harness,
     verify_artifact,
 )
@@ -70,3 +71,53 @@ def test_cost_cap_stops_even_if_unverified():
     )
     assert report.stopped == "cost_cap"
     assert report.verified is False
+
+
+def test_second_window_resumes_from_progress_file(tmp_path):
+    progress = tmp_path / "progress.json"
+    spec = _spec(step_cap=1)
+    check = lambda a: verify_artifact(a, must_contain=("REFUND",))
+
+    def session_one(_state: ExternalState) -> dict:
+        return {"tool": "write_note", "artifact": "draft", "cost_usd": 0.01}
+
+    first = run_harness(
+        spec, propose=session_one, verify=check, progress_path=progress
+    )
+    assert first.verified is False
+    assert progress.exists()
+
+    saved = load_progress(progress)
+    assert saved.artifacts["last"] == "draft"
+
+    def session_two(state: ExternalState) -> dict:
+        assert state.artifacts["last"] == "draft"
+        return {
+            "tool": "write_note",
+            "artifact": "REFUND window is 30 days",
+            "cost_usd": 0.01,
+        }
+
+    second = run_harness(
+        spec,
+        propose=session_two,
+        verify=check,
+        state=saved,
+        progress_path=progress,
+    )
+    assert second.stopped == "verified"
+    assert load_progress(progress).artifacts["last"].startswith("REFUND")
+
+
+def test_denied_tool_does_not_write_artifact():
+    def propose(_state: ExternalState) -> dict:
+        return {"tool": "bash", "artifact": "rm -rf", "cost_usd": 0.01}
+
+    state = ExternalState()
+    run_harness(
+        _spec(step_cap=2),
+        propose=propose,
+        verify=lambda a: verify_artifact(a, must_contain=("REFUND",)),
+        state=state,
+    )
+    assert "last" not in state.artifacts

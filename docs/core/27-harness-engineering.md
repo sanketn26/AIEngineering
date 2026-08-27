@@ -173,25 +173,88 @@ Skipping (1) is how you get a loop that never calls `verify`. Skipping (3) is ho
 
 ---
 
-## Before you run this
+## Practical — two context windows, one ticket
+
+The support bot must leave a refund note that contains `REFUND`. Context windows die. The harness keeps a **progress file** so session 2 does not start from a blank RAM.
+
+### Before you run this
 
 Predict:
 
-1. If `propose` always writes `"draft"` and the verifier requires `"REFUND"`, does `run_harness` return `verified` or `step_cap`?
-2. If `propose` uses `tool="bash"` against a spec that only lists `write_note`, do you get a write or a deny note?
-3. Why would removing the verifier (and setting `verifier_required=False`) make a worse product even if the loop “finishes”?
+1. After session 1 writes only `"draft"`, is `progress.json` empty or does it still have the draft?
+2. If session 2 starts with `ExternalState()` instead of `load_progress`, can the verifier still pass in one step?
+3. Does “I’m done” from the model ever get consulted?
 
-## Run it
+### Run it
+
+```python
+from pathlib import Path
+from src.harness import (
+    HarnessSpec,
+    load_progress,
+    run_harness,
+    verify_artifact,
+)
+
+progress = Path("tmp-harness-progress.json")
+spec = HarnessSpec(
+    name="refund_note",
+    instructions="Cite REFUND. Stop when the verifier passes.",
+    tools=("write_note",),
+    step_cap=1,  # one window is short — like a small context
+    cost_cap_usd=0.5,
+)
+check = lambda a: verify_artifact(a, must_contain=("REFUND",))
+
+# Session 1 — window dies on an incomplete draft
+run_harness(
+    spec,
+    propose=lambda s: {"tool": "write_note", "artifact": "draft", "cost_usd": 0.01},
+    verify=check,
+    progress_path=progress,
+)
+
+# Session 2 — new window, same disk
+saved = load_progress(progress)
+report = run_harness(
+    spec,
+    propose=lambda s: {
+        "tool": "write_note",
+        "artifact": "REFUND window is 30 days",
+        "cost_usd": 0.01,
+    },
+    verify=check,
+    state=saved,
+    progress_path=progress,
+)
+assert report.stopped == "verified"
+assert "REFUND" in load_progress(progress).artifacts["last"]
+progress.unlink()  # cleanup
+```
 
 ```bash
 poetry run pytest tests/test_harness.py -v
 ```
 
-Compare with the prediction.
+### Explain the difference
 
-## Explain the difference
+If session 2 “forgot” the draft, you loaded RAM instead of disk. If you expected the model to declare done, the verifier never asked it. Compare that to packing the whole ticket history into the prompt (Module 05) — the progress file is the cheaper, checkable memory.
 
-If you were wrong, which assumption was wrong — that the model decides “done,” that a denied tool still writes, or that finishing the loop is the same as verifying the artifact?
+**Simplification:** one JSON file. **Production reality:** Module 25 checkpoints + `request_id`. **Where this stops being true:** if the artifact is a git tree, persist the worktree path (Module 21), not a string blob.
+
+---
+
+## Lab
+
+1. `verifier_required=True` with no `verify` callable → `stopped == "no_verifier"`.
+2. Propose `tool="bash"` against a spec that only lists `write_note`; notes include `denied:`.
+3. First artifact `"draft"`, second `"REFUND …"` in **one** window; report is `verified` in two steps, not at `step_cap`.
+4. **Two windows:** `step_cap=1`, session 1 writes `"draft"` to `progress_path`; session 2 `load_progress` and finishes with `REFUND`. Assert the file still exists after session 1 fails verify.
+5. Optional: deny-all session must not create an artifact named `last` from a `bash` proposal.
+
+```bash
+poetry run pytest tests/test_harness.py -v
+```
 
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>
@@ -251,7 +314,7 @@ Change the harness first: cap repeated identical tool calls (Module 20), add a v
 
 - [ ] You can explain prompt vs context vs harness without using them as synonyms  
 - [ ] “Done” is a verifier on an artifact, not a sentence from the model  
-- [ ] Progress survives a new context window (file, ticket, or checkpoint)  
+- [ ] Progress survives a new context window (file, ticket, or checkpoint) — you ran the two-session practical  
 - [ ] Unknown tools are denied; step/cost caps are integers in code  
 - [ ] A harness change re-runs evals the same way a prompt change does  
 
