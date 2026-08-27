@@ -13,7 +13,7 @@ Prefer primary documentation and high-signal open-source curricula over random b
 | [rasbt/LLMs-from-scratch](https://github.com/rasbt/LLMs-from-scratch) | Attention, GPT training loop | Hybrid track + mental model for **06 / 17** |
 | [huggingface/agents-course](https://github.com/huggingface/agents-course) | smolagents, LangGraph, agentic RAG | Modules **11–12**, **26**, agentic pieces of **09** |
 | [humanlayer/12-factor-agents](https://github.com/humanlayer/12-factor-agents) | Production agent design principles | Modules **05, 11–13, 20–25** |
-| [Anthropic / MCP](https://modelcontextprotocol.io/) | Tools, resources, prompts protocol | Module **08** (authoritative) + host policy in **21** |
+| [Anthropic / MCP 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28) | Tools, resources, prompts protocol | Module **08** (authoritative, current spec) + host policy in **21** |
 
 ---
 

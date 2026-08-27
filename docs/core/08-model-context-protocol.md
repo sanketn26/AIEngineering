@@ -145,8 +145,11 @@ MCP aims to make the **tool boundary model-agnostic**: swap models or hosts with
      io.modelcontextprotocol/serverInfo
    Version mismatch → UnsupportedProtocolVersionError; client retries with a
    mutually supported version. There is no initialize / notifications/initialized.
-4. Client lists tools / resources / prompts (tools/list, …). List results may
-   carry ttlMs / cacheScope cache hints.
+4. Client lists tools / resources / prompts (tools/list, …). On
+   resultType: "complete", servers MUST include ttlMs (freshness hint, ms)
+   and cacheScope ("public" or "private") on server/discover, tools/list,
+   prompts/list, resources/list, resources/templates/list, and
+   resources/read. MRTR input_required results are not cacheable.
 5. Model (via host) selects a tool + arguments.
 6. Host applies policy (allow / deny / ask user) — still outside the protocol.
 7. Client invokes the tool. On Streamable HTTP, POST includes routing headers
