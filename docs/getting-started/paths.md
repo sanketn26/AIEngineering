@@ -30,7 +30,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Knowledge | 05, 07, 09 |
 | Connectors & cost | 08, 10 |
 | Ship | 11 (optional), 13 |
-| Production agents (optional) | 20, 21, 22 |
+| Production agents (optional) | 20, 21, 27, 22 |
 
 **Prerequisites:** API experience; basic cloud or container familiarity.
 
@@ -46,7 +46,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Integration | 15, 16 |
 | Local/hybrid | 17 |
 | Patterns (optional) | 18, 19 |
-| Production agents | 20–26 |
+| Production agents | 20–27 |
 
 **Emphasize:** Security, evals, multi-agent orchestration, audit trails, hybrid routing, agent failure modes, sandboxes, trajectory evals.
 
@@ -62,7 +62,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Retrieval frontier | 09 |
 | Agents | 11, 12 |
 | SLMs | 17 |
-| Production agents (optional) | 20, 22, 24, 26 |
+| Production agents (optional) | 20, 22, 24, 26, 27 |
 | Track | Hybrid models or stock research stack |
 
 ---

@@ -1,6 +1,6 @@
 # Core Modules
 
-Twenty-six modules, five **gates**. Each gate is a working-system exit criterion: you don't advance because you finished reading, you advance because the previous gate's residual failure mode forced the next capability. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module's **Depends on** line is the real prerequisite — gates group modules by *which production failure they close*, not by topic family, so a module you'd expect to sit elsewhere (cost optimization, MCP) may be grouped by the failure it actually prevents rather than the technology it uses.
+Twenty-seven modules, five **gates**. Each gate is a working-system exit criterion: you don't advance because you finished reading, you advance because the previous gate's residual failure mode forced the next capability. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module's **Depends on** line is the real prerequisite — gates group modules by *which production failure they close*, not by topic family, so a module you'd expect to sit elsewhere (cost optimization, MCP) may be grouped by the failure it actually prevents rather than the technology it uses.
 
 ```mermaid
 flowchart LR
@@ -93,6 +93,7 @@ Grounded answers are not the same as safe actions. Once the system can call tool
 - [ ] Agents have a step cap and a cost cap enforced in code, not requested in the system prompt
 - [ ] Named failure modes (loop, hallucinated tool, partial execution, silent quality drop) each have a detector and a test
 - [ ] Any tool that writes or executes runs under least privilege / sandboxing
+- [ ] Stop, verify, and persist live outside the model (a harness, not a longer prompt)
 
 | Module | Time |
 |---|---|
@@ -105,6 +106,7 @@ Grounded answers are not the same as safe actions. Once the system can call tool
 | [19 — Orchestration patterns](19-orchestration-patterns.md) | 6–9 days |
 | [20 — Agent reliability & failure modes](20-agent-reliability.md) | 4–6 days |
 | [21 — Secure tool use & sandboxing](21-secure-tool-use.md) | 5–7 days |
+| [27 — Harness engineering](27-harness-engineering.md) | 4–6 days |
 
 ---
 

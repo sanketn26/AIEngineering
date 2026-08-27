@@ -1,6 +1,6 @@
 # Module 21 — Secure Tool Use & Sandboxing
 
-**Time:** 5–7 days · **Depends on:** [02 Security](02-security-privacy.md), [11 Single agents](11-single-agents.md), [20 Reliability](20-agent-reliability.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md) · **Next:** [Evaluating agents](22-agent-evaluation.md)
+**Time:** 5–7 days · **Depends on:** [02 Security](02-security-privacy.md), [11 Single agents](11-single-agents.md), [20 Reliability](20-agent-reliability.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md) · **Next:** [Harness engineering](27-harness-engineering.md)
 
 <span data-module-id="21" hidden></span>
 
@@ -311,4 +311,4 @@ poetry run pytest tests/test_sandbox.py -v
 <button type="button">Complete module · +120 XP</button>
 </div>
 
-**Next:** [Module 22 — Evaluating agentic systems](22-agent-evaluation.md)
+**Next:** [Module 27 — Harness engineering](27-harness-engineering.md)

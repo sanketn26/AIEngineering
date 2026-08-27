@@ -9,6 +9,7 @@ from src.context_memory import SessionMemory, estimate_tokens, fit_budget
 from src.cost import MemoryCache, ModelRouter, UsageLedger
 from src.drift import PromptConfig, detect_drift
 from src.evals import exact_fields, load_jsonl, run_suite
+from src.harness import HarnessSpec, run_harness
 from src.prompts import list_templates, render
 from src.rag import Chunk, TinyRAG, rrf, simple_chunks
 from src.reliability import CircuitBreaker, FailureDetector
@@ -22,6 +23,7 @@ __all__ = [
     "Chunk",
     "CircuitBreaker",
     "FailureDetector",
+    "HarnessSpec",
     "MemoryCache",
     "ModelRouter",
     "PromptConfig",
@@ -44,6 +46,7 @@ __all__ = [
     "redact_pii",
     "render",
     "rrf",
+    "run_harness",
     "run_suite",
     "sanitize_user_text",
     "sha256_text",

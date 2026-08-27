@@ -145,12 +145,21 @@
       }
     },
     {
+      id: "harness",
+      icon: "🧰",
+      name: "Harness",
+      desc: "Complete Secure tool use (21) and Harness engineering (27)",
+      test: function (s) {
+        return s.modules && s.modules["21"] && s.modules["27"];
+      }
+    },
+    {
       id: "full-core",
       icon: "🏆",
       name: "Full Core",
-      desc: "Complete all 26 core modules",
+      desc: "Complete all 27 core modules",
       test: function (s) {
-        return Object.keys(s.modules || {}).length >= 26;
+        return Object.keys(s.modules || {}).length >= 27;
       }
     },
     {

@@ -13,7 +13,7 @@ hide:
       <a class="course-button course-button--secondary" href="getting-started/paths/">Explore learning paths</a>
       <a class="course-button course-button--coffee" href="https://buymeacoffee.com/sanketn">☕ Support this course</a>
     </div>
-    <p class="course-hero__note">26 core modules · Interactive labs and quizzes · Learn at your own pace</p>
+    <p class="course-hero__note">27 core modules · Interactive labs and quizzes · Learn at your own pace</p>
   </div>
   <div class="course-terminal" aria-label="Course outcomes">
     <div class="course-terminal__bar"><i></i><i></i><i></i><span>ai-engineering / roadmap</span></div>
@@ -28,7 +28,7 @@ hide:
 </div>
 
 <div class="course-proof" aria-label="Course overview">
-  <div><strong>26</strong><span>Core modules</span></div>
+  <div><strong>27</strong><span>Core modules</span></div>
   <div><strong>3</strong><span>Specialization tracks</span></div>
   <div><strong>100%</strong><span>Open source</span></div>
   <div><strong>Local</strong><span>Private progress tracking</span></div>
@@ -107,6 +107,7 @@ The modules move from dependable model interactions to complete production syste
       <li><a href="core/19-orchestration-patterns/">Orchestration patterns</a></li>
       <li><a href="core/20-agent-reliability/">Agent reliability</a></li>
       <li><a href="core/21-secure-tool-use/">Secure tool use</a></li>
+      <li><a href="core/27-harness-engineering/">Harness engineering</a></li>
     </ul>
   </div>
   <div class="curriculum-stage">

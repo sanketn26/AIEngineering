@@ -60,6 +60,7 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 | 24 | Token budget abort + local vs strong routing stub |
 | 25 | Durable pause/resume + merge gate refusing failed tests |
 | 26 | Written orchestrator pick with ranks + per-agent cost events |
+| 27 | Harness with allowlisted tools, external verifier, step/cost caps; “done” is not a model sentence |
 
 ---
 
