@@ -44,7 +44,7 @@ Progress is saved under `localStorage` key `aieng-progress-v1`. Clearing site da
 
 Gamification is optional. The real score is:
 
-1. Can you explain the failure mode without notes?
+1. Can you **predict** the failure, **run** the smallest lab, **compare** to the prediction, and **explain** the gap ([Assessment](../reference/assessment.md))?
 2. Do you have a runnable artifact and a golden eval?
 3. Would you ship this behind an API with timeouts and audit logs?
 

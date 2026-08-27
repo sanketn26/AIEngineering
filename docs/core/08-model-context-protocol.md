@@ -4,6 +4,16 @@
 
 <span data-module-id="08" hidden></span>
 
+!!! important "Protocol version taught: MCP 2026-07-28"
+    | | |
+    |---|---|
+    | **Protocol version taught** | MCP **2026-07-28** (current) |
+    | **Last verified** | 2026-08-27 |
+    | **Current version** | 2026-07-28 |
+    | **Historical (still deployed)** | 2025-11-25 / 2025-06-18 stateful `initialize` + `Mcp-Session-Id` model |
+
+    This lesson is **not** historical: it teaches the current spec. The 2025 handshake/session model remains in production, so it is labeled below as a compatibility era, not as current MCP.
+
 ## Learning objectives
 
 - Define **MCP** correctly: Anthropic-originated open standard for connecting AI apps to **tools**, **resources**, and **prompts**
@@ -33,25 +43,25 @@ Without a shared protocol, every IDE, desktop agent, and chat host reinvents con
     It is **not** a multi-model load balancer. Routing and load balancing belong in [Production](13-production.md) and [Integration patterns](16-integration-patterns.md). Earlier course drafts mislabeled those topics as MCP; that error is corrected here.
 
 !!! warning "Protocol snapshot — verify before production use"
-    This module teaches the **2025-era MCP architecture**: one host, N MCP clients, each client holding a **1:1 session with exactly one server**. MCP is evolving quickly — lifecycle, transport, authentication, and session semantics may change between protocol revisions.
+    This module teaches **MCP 2026-07-28**: a **stateless** protocol core. Every request is self-contained. There is **no** protocol-level `initialize` handshake and **no** protocol-level session (`Mcp-Session-Id` is gone). The host still creates and manages **multiple clients**, and each client still has a **1:1 relationship with exactly one server**.
 
-    Always check the current specification at [modelcontextprotocol.io](https://modelcontextprotocol.io/) before implementing a production integration.
+    Always check the current specification at [modelcontextprotocol.io/specification/2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28) before implementing a production integration.
 
-    **Last verified against the spec:** 2025-06-18.
+    **Last verified against the spec:** 2026-08-27. **Current version:** 2026-07-28.
 
-Primary reference: [modelcontextprotocol.io](https://modelcontextprotocol.io/)
+Primary reference: [MCP specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28)
 
 ## Mental model
 
-A host does not share one client session across every server. Each server gets its **own** client instance — a dedicated 1:1 session — so one misbehaving or slow server can't stall or leak into another's session state:
+A host does not share one client across every server. The host creates **one client instance per server** — a dedicated 1:1 relationship — so one misbehaving or slow server cannot stall or leak into another's traffic. That 1:1 pairing is an **architecture** fact, not a protocol-level session: requests do not share an `Mcp-Session-Id`.
 
 ```mermaid
 flowchart LR
   subgraph Host["Host application"]
     UX[UX / auth / policy]
     Orch[Orchestration / sampling]
-    ClientA["MCP Client A<br/>(session w/ Server A)"]
-    ClientB["MCP Client B<br/>(session w/ Server B)"]
+    ClientA["MCP Client A<br/>(1:1 with Server A)"]
+    ClientB["MCP Client B<br/>(1:1 with Server B)"]
   end
   subgraph ServerA["MCP Server A"]
     TA[Tools]
@@ -76,9 +86,9 @@ flowchart LR
 
 | Role | Responsibility | Examples |
 |------|----------------|----------|
-| **Host** | UX, user auth, orchestration, approval UI; owns one client per server | Claude Desktop, VS Code / Cursor-style hosts, your agent product |
-| **Client** | Protocol session with **exactly one** server (1:1 — not a fan-out router) | Embedded MCP client library instance in the host, one per server connection |
-| **Server** | Exposes tools, resources, prompts | Filesystem, git, DB, internal ticket API |
+| **Host** | UX, user auth, orchestration, approval UI; creates and manages one client per server | Claude Desktop, VS Code / Cursor-style hosts, your agent product |
+| **Client** | Talks to **exactly one** server (1:1 — not a fan-out router); attaches version and capabilities on every request | Embedded MCP client library instance in the host, one per server |
+| **Server** | Exposes tools, resources, prompts; must implement `server/discover` | Filesystem, git, DB, internal ticket API |
 
 Capability types:
 
@@ -116,22 +126,67 @@ MCP aims to make the **tool boundary model-agnostic**: swap models or hosts with
 **Protocol vs product.** MCP specifies how hosts and servers talk about capabilities. It does not replace your product’s authn/z, multi-tenant isolation, or eval suite. A secure host can still make unsafe product choices (auto-approve `rm -rf`). Treat MCP as plumbing; **policy stays in the host**.
 </div>
 
-### 2. End-to-end call flow
+### 2. End-to-end call flow (MCP 2026-07-28)
 
-Conceptual sequence (details evolve — read the live spec):
+**Simplification:** think USB-C + HTTP request/response. **Production reality:** JSON-RPC 2.0 over stdio or Streamable HTTP, with per-request `_meta` and optional long-lived `subscriptions/listen` for change notifications.
 
 ```text
-1. Host starts / connects MCP client to server (stdio subprocess or Streamable HTTP; older docs mention HTTP+SSE — prefer the current spec)
-2. Client and server negotiate protocol version & capabilities
-3. Client lists tools / resources / prompts
-4. Model (via host) selects a tool + arguments
-5. Host applies policy (allow / deny / ask user)
-6. Client invokes tool on server
-7. Server returns result
-8. Host inserts result into model context (Module 05 packing still applies!)
+1. Host creates one MCP client per server (stdio subprocess or Streamable HTTP).
+   HTTP+SSE (2024-11-05) is deprecated — do not adopt it.
+2. Optional: client calls server/discover (servers MUST implement it) to learn
+   supportedVersions, capabilities, and identity. Discovery is not a handshake
+   and is not required before other RPCs.
+3. Every request is self-describing. Protocol version, client capabilities, and
+   (SHOULD) client identity travel in params._meta:
+     io.modelcontextprotocol/protocolVersion
+     io.modelcontextprotocol/clientCapabilities
+     io.modelcontextprotocol/clientInfo
+   Servers SHOULD echo identity in the result's _meta:
+     io.modelcontextprotocol/serverInfo
+   Version mismatch → UnsupportedProtocolVersionError; client retries with a
+   mutually supported version. There is no initialize / notifications/initialized.
+4. Client lists tools / resources / prompts (tools/list, …). List results may
+   carry ttlMs / cacheScope cache hints.
+5. Model (via host) selects a tool + arguments.
+6. Host applies policy (allow / deny / ask user) — still outside the protocol.
+7. Client invokes the tool. On Streamable HTTP, POST includes routing headers
+   MCP-Protocol-Version, Mcp-Method, and (for tools/call, resources/read,
+   prompts/get) Mcp-Name so gateways can route without parsing the JSON body.
+8. If the server needs more information mid-call (typically elicitation), it
+   does not send a server-initiated JSON-RPC request. It returns resultType:
+   "input_required" (Multi Round-Trip Requests / MRTR) with inputRequests;
+   the client retries the original method with inputResponses. Ordinary
+   results use resultType: "complete". Sampling and Roots still use MRTR if
+   present, but both are deprecated in 2026-07-28 — new servers should not
+   adopt them.
+9. Host inserts the result into model context (Module 05 packing still applies).
 ```
 
+**Application state is explicit.** Dropping protocol-level sessions does not make your product stateless. If a server needs state across calls, it mints a **handle** (ordinary tool argument) and the model passes that handle back. Do not hide that state in a transport session.
+
 MCP does **not** remove the need for context engineering: tool results still consume tokens and can drown instructions.
+
+!!! note "Historical — 2025-11-25 / 2025-06-18 (still deployed)"
+    **This box is intentionally historical.** Many hosts and servers still speak the stateful era:
+
+    - `initialize` / `notifications/initialized` handshake
+    - Capability negotiation once per session
+    - Streamable HTTP `Mcp-Session-Id` (and HTTP DELETE to end the session)
+    - Server-initiated requests on a held-open stream (sampling, elicitation, roots)
+    - Optional HTTP GET SSE stream and `Last-Event-ID` resumability
+
+    The 2026 spec calls those versions **legacy**. Dual-era servers may still answer `initialize`. A 2026-only server has no protocol-level session; if it sees `Mcp-Session-Id` it ignores it. Interop rules live in the [versioning page](https://modelcontextprotocol.io/specification/2026-07-28/basic/versioning) — do not mix eras in your head and call it “current MCP.”
+
+#### Authorization (HTTP transports, optional)
+
+Authorization is **optional** in the protocol. When used on HTTP, 2026-07-28 hardens the OAuth path rather than replacing host policy:
+
+- Authorization servers **SHOULD** include `iss` on authorization responses ([RFC 9207](https://datatracker.ietf.org/doc/html/rfc9207)); clients **MUST** validate a present `iss` before redeeming the code (closes authorization-server mix-up).
+- Preferred client registration is **Client ID Metadata Documents (CIMD)**. OAuth 2.0 Dynamic Client Registration remains available but is **deprecated**.
+- Client credentials are bound to the issuer that minted them — do not reuse them against a different authorization server.
+- Clients specify an appropriate `application_type` if they still use Dynamic Client Registration (localhost redirect URIs for desktop/CLI).
+
+Host-side allowlists, approvals, and least privilege (this module §5 / §8, Module 21) are still the security boundary. The protocol does not make a malicious server safe.
 
 ### 3. Relation to Module 07 in-process tools
 
@@ -194,7 +249,7 @@ MCP servers can be as powerful as **local code execution**. Installing a random 
 | Risk | Control |
 |------|---------|
 | Malicious server | Install only reviewed sources; pin versions; prefer internal registry in prod |
-| Over-broad filesystem | Scope roots; read-only where possible |
+| Over-broad filesystem | Scope paths in tool args, resource URIs, or server config; read-only where possible. **Roots** is deprecated in 2026-07-28 — do not adopt it in new servers. |
 | Secret exfiltration | Host approval for tool calls; redact logs; least-privilege credentials |
 | Confused deputy | Per-tenant credentials; never share end-user tokens blindly with servers |
 | Supply chain | Lockfiles; SBOM; signed artifacts where available |
@@ -358,7 +413,7 @@ poetry run pytest tests/test_mcp_prod.py -v
 
 **Goal:** Use MCP safely as a consumer, then write policy.
 
-1. Read the current overview/spec at [modelcontextprotocol.io](https://modelcontextprotocol.io/).
+1. Read the current spec at [MCP 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28). Note the historical 2025 initialize+session model only as compatibility.
 2. In a **dev-only** host (not production credentials), install a **reputable** filesystem or git MCP server from a reviewed source.
 3. List tools and resources the server exposes. Perform **one read-only** operation (e.g. list files under a sandbox directory).
 4. Write a short policy doc (`mcp-policy.md` in your notes — not required in this repo):
@@ -394,6 +449,18 @@ poetry run pytest tests/test_mcp_prod.py -v
 <p class="quiz-feedback"></p>
 </div>
 
+<div class="aieng-quiz" data-quiz-id="08-q4" data-xp="25" data-success="Correct — 2026-07-28 is stateless; initialize and Mcp-Session-Id are the 2025 legacy era, still deployed but not current." data-fail="Current MCP (2026-07-28) has no protocol-level initialize handshake or Mcp-Session-Id." markdown>
+<p class="label">Quiz · +25 XP</p>
+<p class="quiz-prompt">In MCP 2026-07-28, how do client and server agree on protocol version and capabilities?</p>
+<div class="quiz-options">
+<button type="button" class="quiz-opt" data-correct="false">They run initialize / notifications/initialized once, then reuse Mcp-Session-Id on every call</button>
+<button type="button" class="quiz-opt" data-correct="true">Each request carries version and client capabilities in _meta; servers advertise via server/discover (optional for the client)</button>
+<button type="button" class="quiz-opt" data-correct="false">The host is a multi-model load balancer that picks the protocol version</button>
+<button type="button" class="quiz-opt" data-correct="false">Version is implied by the stdio process lifetime; HTTP servers mint a session cookie</button>
+</div>
+<p class="quiz-feedback"></p>
+</div>
+
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>
 
@@ -407,19 +474,21 @@ The host must still enforce budgets: refuse oversized reads, truncate, or summar
 
 ## Open source materials
 
-1. [Model Context Protocol — official site & spec](https://modelcontextprotocol.io/) — **primary**
-2. [MCP GitHub organization / servers & SDKs](https://github.com/modelcontextprotocol) — reference servers and SDKs (verify before install)
-3. Anthropic / ecosystem docs on MCP hosts — how desktop and API products attach servers
-4. Module 07 course patterns: in-process tools for comparison ([Tools & RAG](07-tools-and-rag.md))
-5. Module 02 threat model: injection and tool abuse ([Security](02-security-privacy.md))
-6. Supply-chain hygiene: pin versions, private registries, SBOM practices for any executable connector
-7. Course `src/mcp_prod.py` + `tests/test_mcp_prod.py` — host authz, pins, untrusted wrap, failover
-8. [Module 21](21-secure-tool-use.md) sandboxes and approval gates reused for MCP writes
+1. [MCP specification 2026-07-28](https://modelcontextprotocol.io/specification/2026-07-28) — **primary**
+2. [2026-07-28 changelog](https://modelcontextprotocol.io/specification/2026-07-28/changelog) · [architecture](https://modelcontextprotocol.io/specification/2026-07-28/architecture) · [release post](https://blog.modelcontextprotocol.io/posts/2026-07-28/)
+3. Historical architecture (still deployed): [2025-11-25](https://modelcontextprotocol.io/specification/2025-11-25/architecture) · [2025-06-18](https://modelcontextprotocol.io/specification/2025-06-18/architecture)
+4. [MCP GitHub organization / servers & SDKs](https://github.com/modelcontextprotocol) — reference servers and SDKs (verify before install)
+5. Module 07 course patterns: in-process tools for comparison ([Tools & RAG](07-tools-and-rag.md))
+6. Module 02 threat model: injection and tool abuse ([Security](02-security-privacy.md))
+7. Supply-chain hygiene: pin versions, private registries, SBOM practices for any executable connector
+8. Course `src/mcp_prod.py` + `tests/test_mcp_prod.py` — host authz, pins, untrusted wrap, failover
+9. [Module 21](21-secure-tool-use.md) sandboxes and approval gates reused for MCP writes
 
 ## Checkpoint
 
 - [ ] You can define MCP **without** saying “load balancer”
-- [ ] You can name host, client, and server responsibilities
+- [ ] You can name host, client, and server responsibilities — host creates N clients; each client is 1:1 with one server
+- [ ] You can contrast **2026-07-28 stateless `_meta` + `server/discover`** with the **historical initialize + `Mcp-Session-Id` session**
 - [ ] You know tools vs resources vs prompts
 - [ ] You have a security bar for third-party servers (dev vs prod)
 - [ ] You know when to stay with in-process tools instead

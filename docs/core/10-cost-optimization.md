@@ -118,9 +118,20 @@ Unit economics force you to define *success* in code: JSON schema valid, retriev
 | **Model tier** | Defaulting everything to flagship | Router + escalate on failure |
 | **Calls / retries** | Agents, self-consistency, flaky tools | max_steps, idempotent tools, backoff caps |
 | **Embeddings** | Re-embed whole corpus every deploy | Content-hash; batch; change-only |
-| **Rerank / tools** | External APIs per request | Cache; skip when dense score is high |
+| **Rerank / tools** | External APIs per request | Cache; skip reranking **only** when a retrieval-confidence rule has been calibrated and validated on a representative labeled evaluation set |
 
 Rule of thumb for chat+RAG: **input** often dominates. For agents that write code or long plans: **output** and **step count** dominate.
+
+!!! warning "Don't skip rerank on raw dense score"
+    Vector similarity is **not** a calibrated measure of retrieval sufficiency across queries, embedding models, corpora, domains, or query lengths. A high cosine/dot score on one index is not “we already have the right docs” on another.
+
+    **Skip reranking only when a retrieval-confidence rule has been calibrated and validated on a representative labeled evaluation set.**
+
+    **Production path:**
+
+    `baseline retrieval → labeled eval set → measure first-stage sufficiency → calibrate confidence rule → conditionally skip reranker`
+
+    Until that rule is measured, pay for the rerank (or accept the quality risk explicitly). The same calibration requirement applies to gating agentic RAG (Module 09).
 
 ```python
 # Approximate with tiktoken (or your provider’s usage field — prefer the latter in prod)
@@ -161,7 +172,9 @@ Design patterns:
 4. **Length / complexity features** — input size, tool need, user tier  
 
 !!! warning "Don't route on the model's self-reported confidence"
-    A model saying "confidence = 0.93" is not a calibrated signal — LLMs are frequently overconfident and that number isn't grounded in anything measurable. Route on things you can actually verify: deterministic/schema validation, a task classifier, disagreement between two samples or models, or a calibrated router trained and checked against labeled outcomes. If you want an uncertainty signal from the model itself, use token-level logprobs, not a number the model typed into its own answer.
+    A model saying "confidence = 0.93" is not a calibrated signal — LLMs are frequently overconfident and that number isn't grounded in anything measurable. Route on things you can actually verify: deterministic/schema validation, a task classifier, disagreement between two samples or models, or a calibrated router trained and checked against labeled outcomes.
+
+    Token-level log probabilities can provide a more grounded model-internal signal than verbal self-confidence, but they should still be calibrated against task outcomes before being used as a production routing threshold. Logprobs are **not** automatically calibrated probabilities of task correctness.
 
 ```python
 def answer(task: str, prompt: str, run_model, validate) -> str:

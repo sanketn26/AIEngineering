@@ -16,6 +16,8 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 
 **Pass threshold:** average ≥ 3.0 on required criteria, with no required criterion at 0.
 
+**Study cycle (predict → run → compare → explain):** before each lab, write what you expect to happen (or fail). Run the smallest artifact. Compare the outcome to that prediction. Explain the gap in `PROGRESS.md`. Mark a module complete only after that cycle — a first-pass quiz is not a pass.
+
 ---
 
 ## Module exercise rubric (generic)

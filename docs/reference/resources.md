@@ -51,7 +51,7 @@ Prefer primary documentation and high-signal open-source curricula over random b
 
 ## MCP
 
-- [Model Context Protocol](https://modelcontextprotocol.io/) — **not** a load balancer; tools/resources/prompts over a standard host↔server protocol
+- [Model Context Protocol](https://modelcontextprotocol.io/specification/2026-07-28) — **not** a load balancer; tools/resources/prompts over a standard host↔server protocol. Course teaches **2026-07-28** (stateless `_meta` + `server/discover`). The 2025 `initialize` + `Mcp-Session-Id` model is historical and still deployed.
 
 ---
 
