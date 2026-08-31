@@ -11,8 +11,10 @@ The published course is available at **[sanketn26.github.io/AIEngineering](https
 | **Docs (local)** | `mkdocs serve` → http://127.0.0.1:8000 |
 | **Curriculum source** | [`docs/`](docs/) |
 | **Progress / XP** | [docs/getting-started/progress.md](docs/getting-started/progress.md) (localStorage gamification) |
-| **Originals (archived)** | [`archive/source/`](archive/source/) |
+| **Originals (archived)** | [`archive/`](archive/) — provenance only, not the curriculum |
 | **Python sandbox** | [`src/`](src/) + Poetry (`pyproject.toml`) |
+| **Capstone starter** | [`capstone-starter/`](capstone-starter/) — triage service; mock model; five gates |
+| **Track starters** | [`tracks/starters/`](tracks/starters/) — one vertical slice per track, not the 90-day solution |
 
 ---
 
@@ -64,15 +66,30 @@ Exercises: [docs/reference/exercises.md](docs/reference/exercises.md) · Rubrics
 
 ---
 
+## Quick start — capstone starter
+
+Independently of Poetry/`src/`. No API keys.
+
+```bash
+cd capstone-starter
+pip install -r requirements.txt
+uvicorn app:app --reload
+pytest tests/ -v
+```
+
+Gates: [docs/core/capstone-gates.md](docs/core/capstone-gates.md) · spec: [docs/core/capstone.md](docs/core/capstone.md)
+
+---
+
 ## Curriculum map
 
 **Core modules:** prompting → security → advanced prompts → evals → context engineering → fine-tuning → tools/RAG → MCP → advanced RAG → cost → agents → multi-agent → production → compliance → domains → integration → small/local models → agent design patterns → orchestration patterns → **reliability → secure tool use → harness engineering → agent evals → prompt drift → local-first agents → durable orchestration → orchestrator comparison**.
 
-**Tracks (90 days):**
+**Tracks (90 days):** start from the slice, not a blank repo.
 
-1. [Stock recommender (SLM + RAG + MLOps)](docs/tracks/stock-recommender.md)  
-2. [Hybrid Transformer+MLP from scratch](docs/tracks/hybrid-models.md)  
-3. [Agentic VS Code plugin](docs/tracks/agentic-plugin.md)  
+1. [Stock recommender](docs/tracks/stock-recommender.md) — [`tracks/starters/stock-recommender/`](tracks/starters/stock-recommender/)
+2. [Hybrid Transformer+MLP](docs/tracks/hybrid-models.md) — [`tracks/starters/hybrid-models/`](tracks/starters/hybrid-models/)
+3. [Agentic VS Code plugin](docs/tracks/agentic-plugin.md) — [`tracks/starters/agentic-plugin/`](tracks/starters/agentic-plugin/)  
 
 ---
 

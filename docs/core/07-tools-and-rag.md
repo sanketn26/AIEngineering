@@ -386,4 +386,10 @@ If the need is **calling** the API (actions, live reads), use **tools**, not doc
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-07 — Tiny RAG](../reference/exercises.md#ex-07)
+- **Prove:** Answerable queries cite retrieved ids; unanswerable queries do not invent ids.
+- **Test:** `pytest tests/test_rag.py -v`
+
 **Next:** [Module 08 — Model Context Protocol](08-model-context-protocol.md) · later depth: [Advanced RAG](09-advanced-rag.md)

@@ -556,4 +556,10 @@ Pick **three** of the six patterns and apply them to one workflow (do not build 
 <button type="button">Complete module · +130 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-19 — Orchestration shape](../reference/exercises.md#ex-19)
+- **Prove:** Three orchestration shapes on *one* workflow, with the combo rule from the lab.
+- **Test:** `pytest tests/test_orchestrators.py -v`
+
 **Next:** [Module 20 — Agent reliability & failure modes](20-agent-reliability.md)

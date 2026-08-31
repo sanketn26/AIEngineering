@@ -501,4 +501,10 @@ poetry run pytest tests/test_local_agents.py -v
 <button type="button">Complete module · +100 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-17 — Local SLM vs mini](../reference/exercises.md#ex-17)
+- **Prove:** Local vs mini is scored; the local model fits `recommend_local_setup` for your RAM (no swap).
+- **Test:** `pytest tests/test_local_agents.py -v`
+
 **Next:** [Module 18 — Agent design patterns](18-agent-design-patterns.md) · or jump to a [specialization track](../tracks/index.md)

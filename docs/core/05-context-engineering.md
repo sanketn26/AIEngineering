@@ -393,4 +393,10 @@ Curated reading (concepts — verify current URLs and versions):
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-05 — Memory budget](../reference/exercises.md#ex-05)
+- **Prove:** Session memory stays bounded; `fit_budget` drops low-priority history instead of silent truncation.
+- **Test:** `pytest tests/test_context_memory.py -v`
+
 **Next:** [Module 06 — Fine-tuning](06-fine-tuning.md) · or jump to [Tools & basic RAG](07-tools-and-rag.md) on a faster path (you will still need context packing).

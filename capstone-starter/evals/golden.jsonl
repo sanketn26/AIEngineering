@@ -1,0 +1,5 @@
+{"id": "billing-invoice", "input": "Please refund last month's invoice, the charge is wrong.", "expect": {"category": "billing", "priority": "medium"}}
+{"id": "shipping-late", "input": "Where is my delivery? It's been two weeks.", "expect": {"category": "shipping", "priority": "high"}}
+{"id": "account-password", "input": "I forgot my password and cannot reset it from the email link.", "expect": {"category": "account", "priority": "medium"}}
+{"id": "product-crash", "input": "The app crashes when I open settings.", "expect": {"category": "product", "priority": "low"}}
+{"id": "planted-mixed-ticket", "input": "My package arrived on time but I was billed twice for it. Please refund the duplicate charge.", "expect": {"category": "billing", "priority": "high"}, "note": "Planted Gate 2 miss: heuristic sees 'package/arrived' first and labels shipping. Make this pass without breaking the other rows."}

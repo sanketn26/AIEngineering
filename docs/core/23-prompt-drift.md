@@ -228,4 +228,10 @@ poetry run pytest tests/test_drift.py -v
 <button type="button">Complete module · +100 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-23 — Prompt drift](../reference/exercises.md#ex-23)
+- **Prove:** A tool-list change is `changed`, a missing pin is `missing`, a parse-rate drop fails the gate.
+- **Test:** `pytest tests/test_drift.py -v`
+
 **Next:** [Module 24 — Local-first, cost-aware agents](24-local-first-agents.md)

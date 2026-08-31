@@ -369,4 +369,10 @@ Do **not** claim your prototype is deployable in production regulated settings.
 <button type="button">Complete module · +80 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-15 — Vertical refuse path](../reference/exercises.md#ex-15)
+- **Prove:** Must-refuse cases fail closed with an audit event — fluency is not authority.
+- **Test:** `pytest tests/test_security.py -v`
+
 **Next:** [Module 16 — Integration patterns](16-integration-patterns.md)

@@ -492,4 +492,10 @@ poetry run pytest tests/test_cost.py -v
 <button type="button">Complete module · +80 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-10 — Cost controls](../reference/exercises.md#ex-10)
+- **Prove:** Router, cache, and ledger actually deny over-budget work.
+- **Test:** `pytest tests/test_cost.py -v`
+
 **Next:** [Module 11 — Single-agent workflows](11-single-agents.md)

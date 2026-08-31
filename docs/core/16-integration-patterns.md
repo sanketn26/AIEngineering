@@ -397,4 +397,10 @@ Load-test **p95 latency** and **error rate** separately for API tier vs worker t
 <button type="button">Complete module · +100 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-16 — Jobs or hybrid route](../reference/exercises.md#ex-16)
+- **Prove:** `request_id` survives the hop (gateway → worker, or two stub backends).
+- **Test:** `pytest tests/test_orchestrators.py -v`
+
 **Next:** [Module 17 — Small & local models](17-small-models.md)

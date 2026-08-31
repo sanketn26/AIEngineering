@@ -406,4 +406,10 @@ poetry run python -c "from src.prompts import render; print(render('classify', l
 <button type="button">Complete module · +100 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-03 — Structured extract](../reference/exercises.md#ex-03)
+- **Prove:** Messy inputs parse into a schema; `parse_success_rate` is a measured number, not a vibe.
+- **Test:** `pytest tests/test_prompts.py -v`
+
 **Next:** [Module 04 — Testing & evals](04-testing-evals.md)

@@ -502,4 +502,10 @@ The host must still enforce budgets: refuse oversized reads, truncate, or summar
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-08 — MCP policy](../reference/exercises.md#ex-08)
+- **Prove:** Host policy pins servers and write tools stay blocked in CI — policy is code, not a README wish.
+- **Test:** `pytest tests/test_mcp_prod.py -v`
+
 **Next:** [Module 09 — Advanced RAG](09-advanced-rag.md)

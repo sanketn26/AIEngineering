@@ -26,6 +26,8 @@ flowchart LR
   Log --> Demo[Day-90 demo + rubric]
 ```
 
+**Day 1:** start from the slice in [`tracks/starters/`](https://github.com/sanketn26/AIEngineering/tree/main/tracks/starters), not an empty repo and not a finished 90-day demo.
+
 1. **Skim the whole track once** — know the day-90 shape before day 1.  
 2. **Read the track’s Intuition lock** out loud; if you can’t restate it, you’re not ready to code.  
 3. **Map each phase → core modules**; finish those modules’ labs first.  

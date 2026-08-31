@@ -252,4 +252,10 @@ poetry run pytest tests/test_orchestrators.py -v
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-26 — Orchestrator pick](../reference/exercises.md#ex-26)
+- **Prove:** A written pick (custom vs hosted) plus per-agent cost and traces that include `agent`.
+- **Test:** `pytest tests/test_orchestrators.py -v`
+
 **Next:** [Specialization tracks](../tracks/index.md) — add hardening, security review, and eval harnesses to the 90-day projects.

@@ -322,4 +322,10 @@ poetry run pytest tests/test_reliability.py tests/test_agents.py -v
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-20 — Failure detectors](../reference/exercises.md#ex-20)
+- **Prove:** Loop, hallucinated tool, and tripped breaker each have a test that would have caught the incident.
+- **Test:** `pytest tests/test_reliability.py -v`
+
 **Next:** [Module 21 — Secure tool use & sandboxing](21-secure-tool-use.md)

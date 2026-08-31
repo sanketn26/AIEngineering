@@ -272,4 +272,10 @@ poetry run pytest tests/test_local_agents.py tests/test_cost.py -v
 <button type="button">Complete module · +110 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-24 — Local-first](../reference/exercises.md#ex-24)
+- **Prove:** `TokenBudget` refuses overflow; classify stays local; a tiny meter aborts with a budget reason.
+- **Test:** `pytest tests/test_local_agents.py -v`
+
 **Next:** [Module 25 — Durable orchestration](25-durable-orchestration.md)

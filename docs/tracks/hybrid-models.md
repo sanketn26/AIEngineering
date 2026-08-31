@@ -10,6 +10,10 @@
 
 **Cadence:** ~1–2 focused hours most days; heavier near training and ablations.
 
+## Day 1 — starter tree
+
+Do not stand up a GPU training stack on day 1. Open [`tracks/starters/hybrid-models/`](https://github.com/sanketn26/AIEngineering/tree/main/tracks/starters/hybrid-models): a **stdlib** MLP forward + scaled-dot attention, `fixtures/tiny_data.json`, `pytest tests/test_slice.py`. This is the shape demo. Dual-path training, leakage-safe splits, and ablations are later — listed in that folder's `PROGRESS.md`.
+
 ---
 
 ## The incident (why hybrids exist)

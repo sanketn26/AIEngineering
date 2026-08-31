@@ -323,4 +323,10 @@ Change the harness first: cap repeated identical tool calls (Module 20), add a v
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-27 — Harness](../reference/exercises.md#ex-27)
+- **Prove:** Stop, disk, and grader live outside the prompt: no verifier → stop; unknown tool denied; progress reloads.
+- **Test:** `pytest tests/test_harness.py -v`
+
 **Next:** [Module 22 — Evaluating agentic systems](22-agent-evaluation.md) — score the path the harness actually ran.

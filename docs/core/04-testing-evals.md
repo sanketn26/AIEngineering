@@ -426,4 +426,10 @@ poetry run pytest tests/test_evals.py tests/test_security.py -v
 <button type="button">Complete module · +100 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-04 — Golden evals](../reference/exercises.md#ex-04)
+- **Prove:** A golden suite runs and accuracy is a number you would fail a build on.
+- **Test:** `pytest tests/test_evals.py -v`
+
 **Next:** [Module 05 — Context engineering](05-context-engineering.md)

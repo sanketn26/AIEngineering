@@ -505,4 +505,10 @@ def adaptive_retrieve(query: str, max_reformulations: int = 2) -> list[Candidate
 <button type="button">Complete module · +125 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-18 — Leaf patterns](../reference/exercises.md#ex-18)
+- **Prove:** Three leaf patterns, each named to the failure it closes — not three slogans.
+- **Test:** `pytest tests/test_agents.py -v`
+
 **Next:** [Module 19 — Orchestration patterns](19-orchestration-patterns.md)

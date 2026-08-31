@@ -464,4 +464,10 @@ Capture: p95 latency under a small load script, and a greppable `request_id` fro
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-13 — Production endpoint](../reference/exercises.md#ex-13)
+- **Prove:** `/healthz` plus a generate/triage path with a deadline and a mapped fallback. Prefer growing [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter) over a greenfield app.
+- **Test:** `cd capstone-starter && pytest tests/test_api.py -v`
+
 **Next:** [Module 14 — Compliance & governance](14-compliance.md)

@@ -1,0 +1,24 @@
+{
+  "as_of": "2024-12-31",
+  "disclaimer": "Fixture prices for tests. Not a market data feed. Not financial advice.",
+  "quotes": {
+    "AAPL": {
+      "symbol": "AAPL",
+      "close": 250.13,
+      "currency": "USD",
+      "source": "fixture"
+    },
+    "MSFT": {
+      "symbol": "MSFT",
+      "close": 421.50,
+      "currency": "USD",
+      "source": "fixture"
+    },
+    "GOOGL": {
+      "symbol": "GOOGL",
+      "close": 189.22,
+      "currency": "USD",
+      "source": "fixture"
+    }
+  }
+}

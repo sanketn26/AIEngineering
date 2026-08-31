@@ -521,4 +521,10 @@ Use `src.agents.Agent` as the baseline; extend only if you need new abort reason
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-11 — Agent loop](../reference/exercises.md#ex-11)
+- **Prove:** The stub calls `add` then `final`; repeated identical tool calls abort in code.
+- **Test:** `pytest tests/test_agents.py -v`
+
 **Next:** [Module 12 — Multi-agent systems](12-multi-agents.md)
