@@ -435,4 +435,10 @@ Keep 3–4 sources open while you do the lab; do not try to memorize every techn
 <button type="button">Complete module · +100 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-01 — Templates](../reference/exercises.md#ex-01)
+- **Prove:** A named template renders; untrusted user text stays out of the system role.
+- **Test:** `pytest tests/test_prompts.py -v`
+
 **Next:** [Module 02 — Security & privacy](02-security-privacy.md)

@@ -311,4 +311,10 @@ poetry run pytest tests/test_sandbox.py -v
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-21 — Sandbox](../reference/exercises.md#ex-21)
+- **Prove:** Writes deny without grant+human; a worktree edit leaves the source file untouched.
+- **Test:** `pytest tests/test_sandbox.py -v`
+
 **Next:** [Module 27 — Harness engineering](27-harness-engineering.md)

@@ -18,6 +18,10 @@
 
 In-repo teaching mirrors: `src.agents`, `src.sandbox`, `src.durable`, `src.agent_evals`, `src.local_agents`.
 
+## Day 1 — starter tree
+
+Do not scaffold a full VS Code extension on day 1. Open [`tracks/starters/agentic-plugin/`](https://github.com/sanketn26/AIEngineering/tree/main/tracks/starters/agentic-plugin): one editor command (`explain_selection`), a **mock model**, one allowlisted tool (`read_file`). `pytest tests/test_slice.py`. Writes stay off. Milestone TODOs are in its `PROGRESS.md`.
+
 ---
 
 ## Incident: the agent that “fixed” the repo without you

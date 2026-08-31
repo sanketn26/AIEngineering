@@ -306,4 +306,10 @@ poetry run pytest tests/test_agent_evals.py tests/test_reliability.py -v
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-22 — Trajectory evals](../reference/exercises.md#ex-22)
+- **Prove:** Looping-success scores worse than clean success; `regression_delta` can fail CI.
+- **Test:** `pytest tests/test_agent_evals.py -v`
+
 **Next:** [Module 23 — Prompt & config drift](23-prompt-drift.md)

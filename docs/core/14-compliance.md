@@ -396,4 +396,10 @@ Wire routing in code (Module 16) so the table is enforced, not a wiki wish.
 <button type="button">Complete module · +80 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-14 — Audit log](../reference/exercises.md#ex-14)
+- **Prove:** Tool events are hashed to JSONL; raw secrets never appear on disk.
+- **Test:** `pytest tests/test_audit.py -v`
+
 **Next:** [Module 15 — Domain applications](15-domain-apps.md)

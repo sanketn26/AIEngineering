@@ -533,4 +533,10 @@ Also: [Curated resources](../reference/resources.md) → RAG & embeddings.
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-09 — Hybrid retrieval](../reference/exercises.md#ex-09)
+- **Prove:** Hybrid Hit@5 / MRR is reported against dense-only on a labeled slice.
+- **Test:** `pytest tests/test_rag.py -v`
+
 **Next:** [Module 10 — Cost optimization](10-cost-optimization.md)

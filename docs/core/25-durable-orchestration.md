@@ -279,4 +279,10 @@ poetry run pytest tests/test_durable.py tests/test_sandbox.py -v
 <button type="button">Complete module · +130 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-25 — Durable graph](../reference/exercises.md#ex-25)
+- **Prove:** Pause/resume from JSONL; a denied HITL does not run the next phase; merge gate blocks failed tests.
+- **Test:** `pytest tests/test_durable.py -v`
+
 **Next:** [Module 26 — Orchestrators in production](26-orchestrator-comparison.md)

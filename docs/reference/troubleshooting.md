@@ -137,3 +137,89 @@ mkdocs build --strict
 ```
 
 If `--strict` fails: fix broken internal links listed in the error output.
+
+---
+
+## Progressive debugging (production AI)
+
+Work the layer that is actually failing. Each section: what it looks like, where it usually is, what to open, and **what not to change yet** (so you do not "fix" a schema bug by adding another agent).
+
+### Structured output
+
+**Symptom:** HTTP 200 with a blob you cannot parse, or 422/5xx after a schema validator you added.
+
+**Likely cause:** The model (or heuristic) is emitting prose, extra keys, or a type the contract forbids. Temperature too high. Schema not shown to the model. A "helpful" regex rescue that almost works.
+
+**What to inspect:** The raw provider payload *before* Pydantic. The schema (`capstone-starter/schemas.py` or your model). A 20-row parse-success sample, not one demo. Logs keyed by `request_id`.
+
+**What not to change yet:** Prompts for tone, RAG chunk size, adding a second model, or loosening the schema to `dict[str, Any]` so the test goes green.
+
+### Tool calling
+
+**Symptom:** The model asks for `run_sql` / a tool you never registered, or calls the right tool with the wrong types, or never stops calling.
+
+**Likely cause:** No allowlist in the *runtime*. Args not schema-validated. Repeated `(name, args)` not detected. The system prompt "lists" tools but the dispatcher `eval`s free text.
+
+**What to inspect:** The decision object the model returned. The allowlist vs the call. `FailureDetector` / `max_steps` (Module 20). One golden trajectory that must abort.
+
+**What not to change yet:** The tool implementation internals, the KB, or swapping agent frameworks. If dispose() is not in your process, a better prompt will not save you.
+
+### RAG
+
+**Symptom:** Fluent answer, wrong or invented citations; or "I don't know" on questions the corpus answers.
+
+**Likely cause:** Chunk boundaries split tables/ids. Dense-only miss on tokens/IDs. Cite ids not intersected with the retrieved set. Empty index still answering from weights.
+
+**What to inspect:** Hit@k on a labeled slice *before* you look at the prose. The retrieved ids vs `citations`. The unanswerable query. `validate_citations` (Module 07).
+
+**What not to change yet:** The generator prompt, the agent loop, or fine-tuning. If Hit@k is bad, the generator is decorating a miss.
+
+### Orchestration
+
+**Symptom:** Steps run in the wrong order, state is lost between nodes, or two agents overwrite the same field.
+
+**Likely cause:** Hidden shared mutable state. No typed payload between nodes. A graph library used as a substitute for a schema. Planner emitted a step the runtime cannot run.
+
+**What to inspect:** The message/event between hop N and N+1. The persisted run record (`request_id`, phase). One failing fixture that is *not* the happy path.
+
+**What not to change yet:** Model choice, temperature, or adding a fourth agent to "coordinate the coordinators."
+
+### Retries
+
+**Symptom:** Latency cliffs, duplicate side effects, or a worker that never returns.
+
+**Likely cause:** No deadline on the provider call. Retrying non-transient 4xx / schema failures. Retrying a write tool. Unbounded backoff.
+
+**What to inspect:** `capstone-starter/model.py` `_call_provider` (Gate 1 hole). Status codes you retry vs fail closed. Whether the tool is idempotent. Trace timestamps vs the timeout you *think* you set.
+
+**What not to change yet:** Batch size, a larger model, or "just raise max_retries." A hang is a deadline bug.
+
+### Agent loops
+
+**Symptom:** Same search forever; cost alert; "success" after 40 steps of junk.
+
+**Likely cause:** Empty hits re-issued with the same query. No `max_steps`. Success defined as "the model said final" rather than a verifier. Repeated-args not canonicalized (key order).
+
+**What to inspect:** The trajectory log. Canonical `tool+args` signatures. The stop condition in code (Module 11/20/27), not in the prompt. Composite eval on a looping-success fixture (Module 22).
+
+**What not to change yet:** The system prompt's "please stop when done." If stop lives only there, it does not live.
+
+### Sandboxing
+
+**Symptom:** The agent edited the user's tree, or a path like `../.env` was read, or a write landed without a click.
+
+**Likely cause:** Tools using the process CWD. Approval as a prompt instruction. Worktree skipped. `requires_approval` not checked in the executor.
+
+**What to inspect:** Absolute paths vs sandbox root. Whether `apply_diff` ran on the source tree. Grant + human flags (Module 21). `tracks/starters/agentic-plugin` `read_file` prefix check as the minimum.
+
+**What not to change yet:** Model vendor, MCP server list, or "we'll add git undo later."
+
+### Evaluation drift
+
+**Symptom:** CI still green, users say quality dropped. Or every change looks like a win because you edited the golden labels.
+
+**Likely cause:** Prompt/tool-list/model id changed without a pin (Module 23). Golden set too small or contaminated by tuning. LLM-as-judge without agreement. Threshold not actually failing the build.
+
+**What to inspect:** Prompt digest vs live config. `evals/golden.jsonl` vs the last merge. `eval_regression` / `regression_delta`. The planted miss in the capstone starter — if you deleted it to go green, that is the bug.
+
+**What not to change yet:** The production prompt "just a little," the judge model, or the threshold. Freeze the pin, re-run the suite, then change one thing.

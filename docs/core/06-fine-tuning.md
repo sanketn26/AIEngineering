@@ -348,4 +348,10 @@ When **inference cost/latency/privacy** dominate and the teacher’s behavior is
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-06 — Fine-tune or not](../reference/exercises.md#ex-06)
+- **Prove:** You can defend FT vs RAG/tools on paper, with a held-out eval — not a LoRA screenshot.
+- **Test:** `pytest tests/test_evals.py -v` (eval floor before any FT)
+
 **Next:** [Module 07 — Tools & basic RAG](07-tools-and-rag.md)

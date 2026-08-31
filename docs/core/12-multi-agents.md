@@ -502,4 +502,10 @@ Learn the concepts in this module; use frameworks as **implementations**, not as
 <button type="button">Complete module · +120 XP</button>
 </div>
 
+## Exercise
+
+- **Catalog:** [EX-12 — Multi-agent vs single](../reference/exercises.md#ex-12)
+- **Prove:** A capped multi-role pipeline has numbers (success, cost) against a single `Agent`.
+- **Test:** `pytest tests/test_agents.py -v`
+
 **Next:** [Module 13 — Production systems](13-production.md)

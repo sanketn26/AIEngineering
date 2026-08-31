@@ -12,7 +12,7 @@ Choose intensity and depth. All paths share [Setup](setup.md). Core modules are 
 |-----|-------|---------|
 | 1 | Prompts + safety basics | 01, 02 (skim) |
 | 2 | Tools or basic RAG | 07 |
-| 3 | Minimal eval + ship | 04 (unit smoke), 13 (FastAPI sketch) |
+| 3 | Minimal eval + ship | 04 (unit smoke), 13 (`capstone-starter/` `/healthz` + `/v1/triage`) |
 
 **Skip for now:** Fine-tuning, multi-agent, compliance deep-dives.
 

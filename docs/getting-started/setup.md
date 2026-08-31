@@ -153,6 +153,19 @@ poetry run pytest tests/ -v
 
 Guided exercises: [Exercises](../reference/exercises.md) · grading: [Assessment](../reference/assessment.md).
 
+### Capstone starter (no Poetry, no API keys)
+
+The production-AI skeleton lives next to `docs/`, not inside `src/`:
+
+```bash
+cd capstone-starter
+pip install -r requirements.txt
+uvicorn app:app --reload
+pytest tests/test_api.py tests/test_eval.py -v
+```
+
+Walk the [five gates](../core/capstone-gates.md). Track day-1 slices: `tracks/starters/`.
+
 ### Recommended layout for *your* track work
 
 ```text

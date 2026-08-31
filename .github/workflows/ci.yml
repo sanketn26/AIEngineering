@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install Poetry
+        run: pip install poetry
+
+      - name: Install core + dev
+        run: poetry install --with dev
+
+      - name: Pytest (core teaching package)
+        run: poetry run pytest tests/ -v
+
+      - name: Pytest (capstone-starter)
+        working-directory: capstone-starter
+        run: |
+          pip install -r requirements.txt
+          pytest tests/ -v
+
+      - name: Pytest (track starters)
+        run: |
+          # Separate invocations: each starter names its test test_slice.py
+          poetry run pytest tracks/starters/stock-recommender/tests -v
+          poetry run pytest tracks/starters/agentic-plugin/tests -v
+          poetry run pytest tracks/starters/hybrid-models/tests -v

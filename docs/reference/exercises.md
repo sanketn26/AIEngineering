@@ -1,6 +1,6 @@
 # Hands-on exercises (repo package)
 
-Complete these alongside the matching core module. Numbered `src.*` exercises hit the teaching package; the others are the module labs (no extra library required).
+Complete these alongside the matching core module. Numbered `src.*` exercises hit the teaching package; the others are the module labs (no extra library required). Grow the production path in `capstone-starter/` (own `requirements.txt`, mock model, no Poetry) — especially EX-13 and the [five gates](../core/capstone-gates.md).
 
 ```bash
 poetry install
@@ -9,7 +9,7 @@ poetry run pytest tests/ -v
 
 ---
 
-## EX-01 — Templates (`src.prompts`)
+## EX-01 — Templates (`src.prompts`) {#ex-01}
 
 1. Render `email_reply` with a real email snippet.  
 
@@ -21,7 +21,7 @@ poetry run pytest tests/ -v
 
 ---
 
-## EX-02 — Security (`src.security`)
+## EX-02 — Security (`src.security`) {#ex-02}
 
 1. Run `sanitize_user_text` on three injection strings; all should flag.  
 
@@ -33,7 +33,7 @@ poetry run pytest tests/ -v
 
 ---
 
-## EX-03 — Structured extract (Module 03 lab)
+## EX-03 — Structured extract (Module 03 lab) {#ex-03}
 
 No extra package code — use the Module 03 lab:
 
@@ -49,7 +49,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-04 — Golden evals (`src.evals`)
+## EX-04 — Golden evals (`src.evals`) {#ex-04}
 
 1. Open `tests/fixtures/invoice_golden.jsonl`.  
 
@@ -61,7 +61,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-05 — Memory budget (`src.context_memory`)
+## EX-05 — Memory budget (`src.context_memory`) {#ex-05}
 
 1. Fill `SessionMemory` with 15 turns; set `max_recent=5`.  
 
@@ -73,7 +73,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-06 — Fine-tune or not (Module 06 lab)
+## EX-06 — Fine-tune or not (Module 06 lab) {#ex-06}
 
 1. One-page decision memo: why FT vs RAG/tools.  
 
@@ -83,7 +83,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-07 — Tiny RAG (`src.rag`)
+## EX-07 — Tiny RAG (`src.rag`) {#ex-07}
 
 1. Chunk two short notes (company handbook style).  
 
@@ -95,7 +95,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-08 — MCP policy (Module 08 lab)
+## EX-08 — MCP policy (Module 08 lab) {#ex-08}
 
 1. Read [modelcontextprotocol.io](https://modelcontextprotocol.io/).  
 
@@ -106,7 +106,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-09 — Hybrid retrieval (Module 09 lab)
+## EX-09 — Hybrid retrieval (Module 09 lab) {#ex-09}
 
 1. 20 questions with `must_have` ids (include keyword/ID and multi-hop).  
 
@@ -118,7 +118,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-10 — Cost controls (`src.cost`)
+## EX-10 — Cost controls (`src.cost`) {#ex-10}
 
 1. Route `classify` vs `complex_reason` with `ModelRouter`.  
 
@@ -130,7 +130,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-11 — Agent loop (`src.agents`)
+## EX-11 — Agent loop (`src.agents`) {#ex-11}
 
 1. Implement tools `add(a,b)` and `echo(text)`.  
 
@@ -142,7 +142,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-12 — Multi-agent vs single (Module 12 lab)
+## EX-12 — Multi-agent vs single (Module 12 lab) {#ex-12}
 
 1. Researcher → writer → critic with max 2 critique rounds.  
 
@@ -152,7 +152,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-13 — Production endpoint (Module 13 lab)
+## EX-13 — Production endpoint (Module 13 lab) {#ex-13}
 
 1. FastAPI `/healthz` + `/v1/generate` with `request_id`.  
 
@@ -162,7 +162,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-14 — Audit log (`src.audit`)
+## EX-14 — Audit log (`src.audit`) {#ex-14}
 
 1. Record three tool events with hashed inputs.  
 
@@ -174,7 +174,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-15 — Vertical refuse path (Module 15 lab)
+## EX-15 — Vertical refuse path (Module 15 lab) {#ex-15}
 
 1. One-page policy: allowed / refused / escalate.  
 
@@ -184,7 +184,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-16 — Jobs or hybrid route (Module 16 lab)
+## EX-16 — Jobs or hybrid route (Module 16 lab) {#ex-16}
 
 1. `POST /jobs` → worker (in-memory queue is fine).  
 
@@ -194,7 +194,7 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-17 — Local SLM vs mini (Module 17 lab)
+## EX-17 — Local SLM vs mini (Module 17 lab) {#ex-17}
 
 1. Run a 3B–8B-class local model on 20 golden tasks.
 2. Score vs a cloud mini model.
@@ -205,19 +205,19 @@ No extra package code — use the Module 03 lab:
 
 ---
 
-## EX-18 — Leaf patterns (Module 18 lab)
+## EX-18 — Leaf patterns (Module 18 lab) {#ex-18}
 
 Apply **three** of: Subroutine (validated output), Tool Gate (split messages), Rejection Sampler (`max_trials`), Consensus (n=5 + entropy), Adaptive Retriever. Name the failure each one fixes.
 
 ---
 
-## EX-19 — Orchestration shape (Module 19 lab)
+## EX-19 — Orchestration shape (Module 19 lab) {#ex-19}
 
 Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** workflow. See the Module 19 lab for the combo rule.
 
 ---
 
-## EX-20 — Failure detectors (`src.reliability`)
+## EX-20 — Failure detectors (`src.reliability`) {#ex-20}
 
 1. Build a two-step trajectory with identical `search` args; assert `runaway_loop`.
 2. Propose a tool not in `known_tools`; assert `tool_hallucination`.
@@ -227,7 +227,7 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 
 ---
 
-## EX-21 — Sandbox (`src.sandbox`)
+## EX-21 — Sandbox (`src.sandbox`) {#ex-21}
 
 1. Register a read tool and a write tool with `requires_approval=True`.
 2. Deny without grant; deny without human; allow after approval.
@@ -237,7 +237,7 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 
 ---
 
-## EX-22 — Trajectory evals (`src.agent_evals`)
+## EX-22 — Trajectory evals (`src.agent_evals`) {#ex-22}
 
 1. Score a clean success vs a looping success; composite must drop on the loop.
 2. `dashboard` on both; note `budget_violations`.
@@ -247,7 +247,7 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 
 ---
 
-## EX-23 — Prompt drift (`src.drift`)
+## EX-23 — Prompt drift (`src.drift`) {#ex-23}
 
 1. Pin a `PromptConfig`; change only `tools`; assert `kind == "changed"`.
 2. Drop the id from live; assert `missing`.
@@ -257,7 +257,7 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 
 ---
 
-## EX-24 — Local-first (`src.local_agents`)
+## EX-24 — Local-first (`src.local_agents`) {#ex-24}
 
 1. `TokenBudget(10)` refuses `allow(11)`.
 2. Router: `classify` → local; `plan` + schema fail → strong.
@@ -267,7 +267,7 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 
 ---
 
-## EX-25 — Durable graph (`src.durable`)
+## EX-25 — Durable graph (`src.durable`) {#ex-25}
 
 1. Child evidence raises parent score on `HypothesisTree`.
 2. `DurableStore` round-trips `phase_done` from JSONL.
@@ -277,7 +277,7 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 
 ---
 
-## EX-26 — Orchestrator pick (`src.orchestrators`)
+## EX-26 — Orchestrator pick (`src.orchestrators`) {#ex-26}
 
 1. Compare custom / LangGraph / CrewAI / MCP hosts; write when you’d pick each.
 2. Two `CostEvent`s; writer USD > researcher.
@@ -287,7 +287,7 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 
 ---
 
-## EX-27 — Harness (`src.harness`)
+## EX-27 — Harness (`src.harness`) {#ex-27}
 
 1. `verifier_required=True` with no `verify` callable → `stopped == "no_verifier"`.
 2. Propose `tool="bash"` against a spec that only lists `write_note`; notes include `denied:`.

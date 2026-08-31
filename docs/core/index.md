@@ -135,7 +135,7 @@ Everything above works on a laptop with one user. Production means real traffic,
 
 ---
 
-Ready to prove all five gates work together? See the [Capstone](capstone.md).
+Ready to prove all five gates work together? Start from [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter) and walk the [Capstone](capstone.md) spec plus the [gate checkpoints](capstone-gates.md).
 
 Full skill-by-skill breakdown: [Capability progression](../reference/progression.md). Prefer a guided route instead of the full list? See [Learning paths](../getting-started/paths.md).
 

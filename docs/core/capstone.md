@@ -1,5 +1,15 @@
 # Capstone — An Evaluated, Authorized, Tool-Using Production AI Service
 
+**Start from [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter)** at the repo root — a runnable support-ticket triage service with a mock model (no API keys) and four planted holes. Do not scaffold a new framework. Close the holes using the [five-gate checkpoints](capstone-gates.md). Learner ticks: [`capstone-starter/PROGRESS.md`](https://github.com/sanketn26/AIEngineering/blob/main/capstone-starter/PROGRESS.md).
+
+```bash
+cd capstone-starter
+pip install -r requirements.txt
+uvicorn app:app --reload          # GET /healthz  POST /v1/triage
+pytest tests/test_api.py -v       # must pass
+pytest tests/test_eval.py -v      # suite runs; planted miss is reported on purpose
+```
+
 The five gates are learned in sequence; the capstone proves you can hold all five at once, in a single service, under the same request path. It is **domain-agnostic** — unlike the [specialization tracks](../tracks/index.md), which go deep on one vertical (stock research, hybrid architectures, an editor plugin) over 90 days, the capstone is the generic "does the whole chain actually work together" checkpoint. Run it instead of a track, or alongside one — a track's day-90 demo can double as your capstone if it satisfies every row below.
 
 For the oral defense format (architecture sketch, live happy path, failure demo, Q&A), see [Assessment rubrics → Capstone oral](../reference/assessment.md#capstone-oral-optional-15-min). This page is the **build spec**; that section is the **defense format**.
@@ -33,6 +43,8 @@ flowchart TB
 - [ ] Known failure modes are written down, with which ones are handled and which ones aren't
 - [ ] A live failure demo works: kill a dependency, feed it a prompt-injection payload, or force an empty retrieval, and show the system degrade the way it's supposed to
 - [ ] Every claim in the "Operations" and "Security" rows above is demonstrated live, not asserted in a slide
+
+Operational checkpoints (entry, build, eval, failure injection, exit, artifact) for each gate: [Capstone gates](capstone-gates.md). Tick them in `capstone-starter/PROGRESS.md`.
 
 ## What "done" is not
 

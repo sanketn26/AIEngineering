@@ -13,6 +13,10 @@
 
 **Core modules:** [01](../core/01-prompt-engineering.md)–[07](../core/07-tools-and-rag.md), [09](../core/09-advanced-rag.md), [10](../core/10-cost-optimization.md), [13](../core/13-production.md), [14](../core/14-compliance.md), [17](../core/17-small-models.md) (including [§7 hardware](../core/17-small-models.md#7-working-effectively-on-limited-hardware)), [23](../core/23-prompt-drift.md). **Only if you add a tool-using research loop:** [22](../core/22-agent-evaluation.md), [24](../core/24-local-first-agents.md). This track is a **pipeline**, not a multi-agent crew — skip worktrees and LangGraph.
 
+## Day 1 — starter tree
+
+Do not prebuild the 90-day pipeline. Clone/open [`tracks/starters/stock-recommender/`](https://github.com/sanketn26/AIEngineering/tree/main/tracks/starters/stock-recommender): one `research()` card over **fixture quotes**, a non-advice disclaimer, and `pytest tests/test_slice.py`. Grow that tree. Milestone TODOs (time-safe split, RAG citations, evals) are in its `PROGRESS.md`.
+
 ---
 
 ## Why this track exists

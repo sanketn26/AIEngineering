@@ -142,6 +142,7 @@ nav:
           - 25 Durable orchestration: core/25-durable-orchestration.md
           - 26 Orchestrators in production: core/26-orchestrator-comparison.md
       - Capstone: core/capstone.md
+      - Capstone gates: core/capstone-gates.md
   - Tracks:
       - Overview: tracks/index.md
       - Stock recommender: tracks/stock-recommender.md
