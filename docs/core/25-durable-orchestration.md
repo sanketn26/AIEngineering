@@ -1,3 +1,7 @@
+---
+description: Design durable workflow orchestration with a persistent coordinator, hypothesis trees, isolated worktrees, and human-in-the-loop merge gates.
+---
+
 # Module 25 — Durable Orchestration & Real Agent Patterns
 
 **Time:** 7–10 days · **Depends on:** [12](12-multi-agents.md), [19](19-orchestration-patterns.md), [21](21-secure-tool-use.md), [22](22-agent-evaluation.md) · **Next:** [Orchestrator comparison](26-orchestrator-comparison.md)

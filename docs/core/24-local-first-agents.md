@@ -1,3 +1,7 @@
+---
+description: Build cost-aware agents that run local small models first and escalate to cloud only under a hard token budget, not on vibes-based routing.
+---
+
 # Module 24 — Local-First, Cost-Aware Agents
 
 **Time:** 4–6 days · **Depends on:** [10 Cost](10-cost-optimization.md), [11 Single agents](11-single-agents.md), [17 Small models](17-small-models.md), [20 Reliability](20-agent-reliability.md) · **Next:** [Durable orchestration](25-durable-orchestration.md)

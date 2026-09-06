@@ -1,3 +1,7 @@
+---
+description: Curated primary documentation and high-signal open-source curricula for prompting, RAG, agents, and production LLM engineering, mapped to modules.
+---
+
 # Curated Resources
 
 Prefer primary documentation and high-signal open-source curricula over random blogs. Links are entry points — always check for updates.

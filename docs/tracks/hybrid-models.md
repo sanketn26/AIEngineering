@@ -1,3 +1,7 @@
+---
+description: A 90-day track building a custom hybrid MLP plus Transformer model from scratch in PyTorch, validated against honest single-path baselines.
+---
+
 # Track: Hybrid Models from Scratch (90 days)
 
 **Goal:** Design, train, evaluate, and ship a **custom hybrid**: **MLP path** (tabular/static) + **Transformer path** (sequence) + **fusion** + **task head**. Prove it against honest **MLP-only** and **Transformer-only** baselines—not vibes.

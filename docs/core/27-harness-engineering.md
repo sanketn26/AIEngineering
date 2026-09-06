@@ -1,3 +1,7 @@
+---
+description: Learn LLM harness engineering, the control layer of tools, verification, and stop conditions that lets an agent finish a long task reliably.
+---
+
 # Module 27 — Harness Engineering
 
 **Time:** 4–6 days · **Depends on:** [05 Context](05-context-engineering.md), [11 Single agents](11-single-agents.md), [20 Reliability](20-agent-reliability.md), [21 Secure tool use](21-secure-tool-use.md) · **Pairs with:** [04 Evals](04-testing-evals.md), [22 Agent evals](22-agent-evaluation.md) · **Next:** [Evaluating agents](22-agent-evaluation.md)

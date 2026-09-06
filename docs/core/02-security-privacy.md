@@ -1,3 +1,7 @@
+---
+description: Threat-model LLM features against prompt injection, jailbreaks, and indirect injection via RAG, with least-privilege tool access and PII redaction.
+---
+
 # Module 02 — Security & Privacy Essentials
 
 **Time:** 1–2 days · **Depends on:** [01 Prompt engineering](01-prompt-engineering.md) · **Next:** [Advanced prompting](03-advanced-prompting.md)

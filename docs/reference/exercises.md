@@ -1,3 +1,7 @@
+---
+description: Hands-on exercises in the repo's src package that pair with each core module, from prompt templates through production capstone gates.
+---
+
 # Hands-on exercises (repo package)
 
 Complete these alongside the matching core module. Numbered `src.*` exercises hit the teaching package; the others are the module labs (no extra library required). Grow the production path in `capstone-starter/` (own `requirements.txt`, mock model, no Poetry) — especially EX-13 and the [five gates](../core/capstone-gates.md).

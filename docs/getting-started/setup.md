@@ -1,3 +1,7 @@
+---
+description: Prerequisites and environment setup for the course, Python version, hardware needs by model size, provider accounts, and first clone steps.
+---
+
 # Prerequisites & Setup
 
 ## What you need

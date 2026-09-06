@@ -1,3 +1,7 @@
+---
+description: A module-by-module map of the skills and shippable systems you gain after each of the 27 core modules, with rough time estimates for each.
+---
+
 # Capability Progression Summary
 
 What you should be able to build after each module. Times are rough calendar estimates at ~1 focused hour/day unless noted.

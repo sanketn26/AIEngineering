@@ -1,3 +1,7 @@
+---
+description: Symptom-to-cause troubleshooting guide for prompting, RAG, and agent failures, what to inspect first and what not to change yet.
+---
+
 # Troubleshooting Guide
 
 ## Prompting

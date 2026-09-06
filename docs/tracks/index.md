@@ -1,3 +1,7 @@
+---
+description: Ninety-day specialization tracks that reuse the core modules to build a stock research assistant, a hybrid model, or an agentic editor plugin.
+---
+
 # Specialization Tracks
 
 Ninety-day, **project-shaped tutorials** that reuse the [core modules](../index.md). These are not phase checklists alone — each track page has mental models, explainers, code sketches, traps, and exit gates.

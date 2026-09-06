@@ -1,3 +1,7 @@
+---
+description: Scoring rubrics for grading module exercises and day-90 track demos honestly, with a predict-run-compare-explain study cycle for each lab.
+---
+
 # Assessment Rubrics
 
 Use these rubrics to judge **module exercises** and **day-90 track demos**. Score honestly; demos beat slideware.

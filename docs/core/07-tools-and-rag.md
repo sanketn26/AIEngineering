@@ -1,3 +1,7 @@
+---
+description: Build a safe function-calling loop with allowlists and a minimal retrieve-then-generate RAG pipeline, and choose between tools, RAG, and fine-tuned weights.
+---
+
 # Module 07 — Tool Integration & Basic RAG
 
 **Time:** 5–7 days · **Depends on:** [01](01-prompt-engineering.md)–[05](05-context-engineering.md) · **Next:** [MCP](08-model-context-protocol.md)

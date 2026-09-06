@@ -1,3 +1,7 @@
+---
+description: Three quick stops before Module 01, set up your environment, choose a learning pace, and see how the in-browser progress tracker works.
+---
+
 # Getting Started
 
 Three short stops before Module 01: get your environment working, pick a pace, and know how progress is tracked.

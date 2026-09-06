@@ -1,3 +1,7 @@
+---
+description: Overview of the 27-module core curriculum, organized into five production gates from dependable model serving through operating agents live.
+---
+
 # Core Modules
 
 Twenty-seven modules, five **gates**. Each gate is a working-system exit criterion: you don't advance because you finished reading, you advance because the previous gate's residual failure mode forced the next capability. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module's **Depends on** line is the real prerequisite — gates group modules by *which production failure they close*, not by topic family, so a module you'd expect to sit elsewhere (cost optimization, MCP) may be grouped by the failure it actually prevents rather than the technology it uses.

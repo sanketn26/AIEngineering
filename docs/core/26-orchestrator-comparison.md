@@ -1,3 +1,7 @@
+---
+description: Compare custom loops, LangGraph, CrewAI, and MCP hosts on control, durability, and lock-in, then attribute agent cost and latency per step.
+---
+
 # Module 26 — Orchestrators in Production
 
 **Time:** 5–7 days · **Depends on:** [12](12-multi-agents.md), [19](19-orchestration-patterns.md), [25](25-durable-orchestration.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md), [13](13-production.md) · **Next:** [Specialization tracks](../tracks/index.md)

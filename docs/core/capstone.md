@@ -1,3 +1,7 @@
+---
+description: Build the AI engineering capstone project, an evaluated, authorized, tool-using production service that proves all five gates work together.
+---
+
 # Capstone — An Evaluated, Authorized, Tool-Using Production AI Service
 
 **Start from [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter)** at the repo root — a runnable support-ticket triage service with a mock model (no API keys) and four planted holes. Do not scaffold a new framework. Close the holes using the [five-gate checkpoints](capstone-gates.md). Learner ticks: [`capstone-starter/PROGRESS.md`](https://github.com/sanketn26/AIEngineering/blob/main/capstone-starter/PROGRESS.md).

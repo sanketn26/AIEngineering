@@ -1,3 +1,7 @@
+---
+description: Map LLM product data flows for privacy and security review, build append-only audit trails for model actions, and set change management for prompts and model pins.
+---
+
 # Module 14 — Legal, Compliance & Governance
 
 <span data-module-id="14" hidden></span>
