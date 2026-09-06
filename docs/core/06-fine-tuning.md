@@ -1,3 +1,7 @@
+---
+description: Decide when fine-tuning beats prompting and RAG, build a mental model of LoRA and QLoRA adapters, and prepare instruction datasets with a held-out eval set.
+---
+
 # Module 06 — Fine-Tuning & Model Customization
 
 **Time:** 7–10 days · **Depends on:** [01](01-prompt-engineering.md)–[05](05-context-engineering.md) · **Next:** [Tools & RAG](07-tools-and-rag.md)

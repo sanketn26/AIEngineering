@@ -1,3 +1,7 @@
+---
+description: Learn MCP's host, client, and server roles, apply a security bar for third-party servers, and run production host policy with authz per tool and pinned versions.
+---
+
 # Module 08 — Model Context Protocol (MCP)
 
 **Time:** 4–6 days · **Depends on:** [Tools & RAG](07-tools-and-rag.md) · **Pairs with:** [21 Secure tool use](21-secure-tool-use.md), [23 Drift](23-prompt-drift.md) · **Next:** [Advanced RAG](09-advanced-rag.md)

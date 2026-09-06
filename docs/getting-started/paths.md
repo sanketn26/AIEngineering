@@ -1,3 +1,7 @@
+---
+description: Pick a learning path, from a 2-3 day Weekend Warrior sprint to a 12-16 week Enterprise Architect track, all sharing the same setup and modules.
+---
+
 # Learning Paths
 
 Choose intensity and depth. All paths share [Setup](setup.md). Core modules are listed in the [home map](../index.md).

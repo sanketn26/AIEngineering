@@ -1,3 +1,7 @@
+---
+description: Decompose agent workflows into testable subroutines, add gates and rejection sampling for format contracts, and use consensus runs to raise reliability.
+---
+
 # Module 18 — Agent Design Patterns
 
 <span data-module-id="18" hidden></span>

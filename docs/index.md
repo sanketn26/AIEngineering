@@ -1,4 +1,5 @@
 ---
+description: A practical, open-source AI engineering curriculum covering prompt engineering, RAG, fine-tuning, multi-agent orchestration, evaluation, and production LLM systems.
 hide:
   - toc
 ---

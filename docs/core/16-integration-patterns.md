@@ -1,3 +1,7 @@
+---
+description: Embed LLMs into event-driven architectures with queues and streaming instead of blocking request threads, and route generation by data class in hybrid cloud designs.
+---
+
 # Module 16 — Advanced Integration Patterns
 
 <span data-module-id="16" hidden></span>

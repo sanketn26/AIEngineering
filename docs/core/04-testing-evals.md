@@ -1,3 +1,7 @@
+---
+description: Separate deterministic unit tests from stochastic eval suites, build a golden set with regression gates, and use LLM-as-judge without fooling yourself.
+---
+
 # Module 04 — Testing & Evaluation
 
 **Time:** 2–3 days · **Depends on:** [01](01-prompt-engineering.md)–[03](03-advanced-prompting.md) · **Next:** [Context engineering](05-context-engineering.md)

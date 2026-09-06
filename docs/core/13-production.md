@@ -1,3 +1,7 @@
+---
+description: Serve LLMs behind stable APIs with timeouts, retries, and fallbacks, instrument the request path with traces, and version prompts for reproducible rollbacks.
+---
+
 # Module 13 — Production-Grade Systems
 
 <span data-module-id="13" hidden></span>

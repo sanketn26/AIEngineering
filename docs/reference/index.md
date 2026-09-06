@@ -1,3 +1,7 @@
+---
+description: Lookup reference for the course, capability progression, hands-on exercises, assessment rubrics, troubleshooting guide, and curated resources.
+---
+
 # Reference
 
 Lookup material for while you're working through the curriculum — not meant to be read front to back.

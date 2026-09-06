@@ -1,3 +1,7 @@
+---
+description: Track cost-per-success instead of raw token thrift, and apply LLM routing, caching, and prompt compression without a silent quality collapse.
+---
+
 # Module 10 — Cost Optimization & Economics
 
 **Time:** 2–3 days · **Depends on:** [01](01-prompt-engineering.md), [05](05-context-engineering.md), [07](07-tools-and-rag.md) · **Next:** [Single agents](11-single-agents.md)

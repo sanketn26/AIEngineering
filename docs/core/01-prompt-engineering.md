@@ -1,3 +1,7 @@
+---
+description: Structure prompts with role, task, and output format, treat them as versioned config, and catch beginner failure modes before production incidents.
+---
+
 # Module 01 — Prompt Engineering Fundamentals
 
 **Time:** 2–3 days · **Depends on:** [Setup](../getting-started/setup.md) · **Next:** [Security & privacy](02-security-privacy.md)

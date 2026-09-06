@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  {% if page and page.is_homepage %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": {{ config.site_name | tojson }},
+    "description": {{ config.site_description | tojson }},
+    "provider": {
+      "@type": "Organization",
+      "name": {{ config.site_author | tojson }},
+      "sameAs": {{ config.repo_url | tojson }}
+    },
+    "url": {{ config.site_url | tojson }}
+    "isAccessibleForFree": true,
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "online",
+      "courseWorkload": "PT60H"
+    },
+    "about": [
+      "Prompt Engineering", "Retrieval-Augmented Generation", "Fine-Tuning",
+      "Multi-Agent Systems", "LLM Evaluation", "AI Agent Orchestration",
+      "Production AI Systems", "AI Security"
+    ]
+  }
+  </script>
+  {% endif %}
+{% endblock %}

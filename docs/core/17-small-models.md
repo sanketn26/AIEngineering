@@ -1,3 +1,7 @@
+---
+description: Match small language models to tasks they can own, run local inference with Ollama and llama.cpp, apply quantization deliberately, and build a routing layer.
+---
+
 # Module 17 — Small & Local LLM Models
 
 <span data-module-id="17" hidden></span>

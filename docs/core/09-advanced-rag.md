@@ -1,3 +1,7 @@
+---
+description: Diagnose why naive dense retrieval fails, build hybrid BM25-plus-dense search with reciprocal rank fusion and reranking, and evaluate retrieval separately.
+---
+
 # Module 09 — Advanced RAG & Knowledge Systems
 
 **Time:** 7–10 days · **Depends on:** [07 Tools & RAG](07-tools-and-rag.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md) if retrieval is exposed as a server · **Next:** [Cost optimization](10-cost-optimization.md)

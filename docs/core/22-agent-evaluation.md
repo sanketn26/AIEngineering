@@ -1,3 +1,7 @@
+---
+description: Score agent trajectories instead of only final answers, separate process metrics like loop count and spend from outcome metrics, and detect multi-step regressions.
+---
+
 # Module 22 — Evaluating Agentic Systems
 
 **Time:** 5–7 days · **Depends on:** [04 Testing & evals](04-testing-evals.md), [11](11-single-agents.md)–[12](12-multi-agents.md), [20 Reliability](20-agent-reliability.md), [27 Harness](27-harness-engineering.md) · **Next:** [Prompt & config drift](23-prompt-drift.md)

@@ -1,3 +1,7 @@
+---
+description: Implement a plan-act-observe agent loop with hard stops, an allowlisted tool surface, and replayable step logs before reaching for a framework like LangGraph.
+---
+
 # Module 11 — Single-Agent Workflows
 
 **Time:** 7–10 days · **Depends on:** [03](03-advanced-prompting.md)–[05](05-context-engineering.md), [07](07-tools-and-rag.md) · **Next:** [Multi-agent](12-multi-agents.md)

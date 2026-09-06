@@ -1,3 +1,7 @@
+---
+description: Build an agentic VS Code plugin over 90 days, a Python agent backend with approval-gated writes, tool permissions, and optional local SLM routing.
+---
+
 # Track: Agentic VS Code Plugin (90 days)
 
 **Who this is for:** CS engineers who ship TypeScript and Python and want a real agentic coding assistant—not a chat wrapper glued to `fetch`.

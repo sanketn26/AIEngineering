@@ -1,3 +1,7 @@
+---
+description: Run the five capstone gates against the starter service, from dependable serving through authorized tool actions to production operations.
+---
+
 # Capstone gates — operational checkpoints
 
 The [core overview](index.md) explains *why* the five gates exist. This page is how you **run them against the starter service** in [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter).

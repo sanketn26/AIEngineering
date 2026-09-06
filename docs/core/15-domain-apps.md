@@ -1,3 +1,7 @@
+---
+description: Prototype vertical LLM assistants for regulated domains with policy, evidence, and a human-in-the-loop, and design must-refuse cases before feature polish.
+---
+
 # Module 15 — Domain-Specific Applications
 
 <span data-module-id="15" hidden></span>

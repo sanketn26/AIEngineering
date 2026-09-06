@@ -1,3 +1,7 @@
+---
+description: Decide when multi-agent orchestration is actually justified, choose sequential, hierarchical, or peer topologies, and measure cost against a single-agent baseline.
+---
+
 # Module 12 — Multi-Agent Coordination
 
 **Time:** 10–14 days · **Depends on:** [11 Single agents](11-single-agents.md) · **Next:** [Production](13-production.md)

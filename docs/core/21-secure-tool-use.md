@@ -1,3 +1,7 @@
+---
+description: Ship agent tools as least-privilege manifests with approval gates on writes, validate outputs before they re-enter context, and sandbox execution in containers.
+---
+
 # Module 21 — Secure Tool Use & Sandboxing
 
 **Time:** 5–7 days · **Depends on:** [02 Security](02-security-privacy.md), [11 Single agents](11-single-agents.md), [20 Reliability](20-agent-reliability.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md) · **Next:** [Harness engineering](27-harness-engineering.md)

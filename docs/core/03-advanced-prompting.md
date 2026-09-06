@@ -1,3 +1,7 @@
+---
+description: Apply chain-of-thought, few-shot, and self-consistency deliberately, ship structured outputs with Pydantic, and pick techniques by failure mode not hype.
+---
+
 # Module 03 — Advanced Prompting Techniques
 
 **Time:** 3–5 days · **Depends on:** [01](01-prompt-engineering.md)–[02](02-security-privacy.md) · **Next:** [Testing & evals](04-testing-evals.md)

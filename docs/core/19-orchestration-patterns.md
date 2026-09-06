@@ -1,3 +1,7 @@
+---
+description: Apply Map-Reduce, Router, Planner, and ReAct orchestration patterns to decide what runs when across a multi-agent workflow, beyond single leaf-level calls.
+---
+
 # Module 19 — Orchestration Patterns
 
 <span data-module-id="19" hidden></span>

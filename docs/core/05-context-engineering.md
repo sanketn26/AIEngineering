@@ -1,3 +1,7 @@
+---
+description: Treat the context window as a scarce token budget, design a packing hierarchy, and build working, session, and long-term memory tiers that don't drown the model.
+---
+
 # Module 05 — Context Engineering & Memory
 
 **Time:** 5–7 days · **Depends on:** [01](01-prompt-engineering.md)–[04](04-testing-evals.md) · **Next:** [Fine-tuning](06-fine-tuning.md)

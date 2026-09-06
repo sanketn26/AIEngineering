@@ -1,3 +1,7 @@
+---
+description: Name the agent failure taxonomy — runaway loops, tool hallucination, silent degradation — and detect them from trajectory logs with runtime circuit breakers.
+---
+
 # Module 20 — Agent Reliability & Failure Modes
 
 **Time:** 4–6 days · **Depends on:** [11 Single agents](11-single-agents.md), [12 Multi-agent](12-multi-agents.md), [10 Cost](10-cost-optimization.md) · **Next:** [Secure tool use](21-secure-tool-use.md)

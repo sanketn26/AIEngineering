@@ -1,3 +1,7 @@
+---
+description: How the local, account-free XP and badge system tracks your progress through the core curriculum, stored entirely in your browser's localStorage.
+---
+
 # Progress & gamification
 
 Track your journey through the core curriculum. **Everything here is local to your browser** — no accounts, no server, fully compatible with static **GitHub Pages**.

@@ -1,3 +1,7 @@
+---
+description: Detect silent prompt and config drift by pinning versioned bundles with content hashes and gating deploys on eval regression, not vibes.
+---
+
 # Module 23 — Prompt & Config Drift Detection
 
 **Time:** 3–5 days · **Depends on:** [04](04-testing-evals.md), [13 Production](13-production.md), [22 Agent evals](22-agent-evaluation.md) · **Next:** [Local-first agents](24-local-first-agents.md)
