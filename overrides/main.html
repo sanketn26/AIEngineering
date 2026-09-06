@@ -7,14 +7,14 @@
   {
     "@context": "https://schema.org",
     "@type": "Course",
-    "name": "{{ config.site_name }}",
-    "description": "{{ config.site_description }}",
+    "name": {{ config.site_name | tojson }},
+    "description": {{ config.site_description | tojson }},
     "provider": {
       "@type": "Organization",
-      "name": "{{ config.site_author }}",
-      "sameAs": "{{ config.repo_url }}"
+      "name": {{ config.site_author | tojson }},
+      "sameAs": {{ config.repo_url | tojson }}
     },
-    "url": "{{ config.site_url }}",
+    "url": {{ config.site_url | tojson }}
     "isAccessibleForFree": true,
     "hasCourseInstance": {
       "@type": "CourseInstance",
