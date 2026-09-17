@@ -1,511 +1,356 @@
 # Plan: Make the tutorials hold attention through storytelling
 
-**Status:** audit complete, implementation not started
+**Status:** Module 01 pilot implemented; content checks passed; visual and reader validation pending. See [pilot evidence record](tutorial-storytelling-pilot.md).
 **Branch:** `plan/tutorial-storytelling`
-**Scope:** rewrite *how* the curriculum is told, not *what* it teaches
-**Non-goal:** turning modules into fiction, lengthening every page 2×, or changing labs / quizzes / Python APIs
+**Scope:** improve how the curriculum connects problems, decisions, practice, and results while preserving what it teaches
+**Non-goals:** a compulsory fictional serial, rewriting Python APIs or eval fixtures, replacing existing labs/quizzes, or substantially lengthening pages
+**Validation:** source findings rechecked and corrections incorporated on 2026-09-17; baseline `e4d0f8c`. Evidence, limitations, and counts are recorded below.
 
 ---
 
-## 1. Verdict
+## 1. Verdict and evidence boundary
 
-Reader feedback is **validated**. The content is appreciated because it is specific, production-minded, and technically dense. Attention drops because the pages are **reference manuals with a one-paragraph anecdote taped to the front**, not stories that a reader is pulled through.
+Readers report that the content is valuable but difficult to stay engaged with. The source scan supports a plausible explanation: short incidents often introduce technically organized lessons without carrying the opening problem through to a demonstrated outcome. It does not establish that objectives, anonymous characters, or short openers cause disengagement, or that a named cast will solve it.
 
-This is not “there are no stories.” There already are. They are the wrong *kind*, in the wrong *place*, and they **stop** after the intro.
-
-| Claim | Evidence from this scan |
-|---|---|
-| People like the content | 27 ordered modules, diagrams, labs, quizzes, kill-this-idea boxes, a five-gate running app |
-| Content does not hold attention | Homogeneous 50–90 word italic asides, then 300–500 lines of tables and numbered sections |
-| “They lack storytelling” | Accurate as a *reader experience* claim; inaccurate as a “zero narrative” claim |
-
-Treat the work as **upgrading incident notes into a serial case**, not adding more callout boxes.
-
----
-
-## 2. What was scanned
-
-| Surface | Files | Role |
+| Evidence level | Finding | Implication |
 |---|---|---|
-| Core modules | `docs/core/01`–`27` | Primary reader path |
-| Core framing | `docs/core/index.md`, `capstone.md`, `capstone-gates.md` | Serial spine and exit criteria |
-| Home / getting started | `docs/index.md`, `docs/getting-started/*` | First 10 minutes |
-| Tracks | `docs/tracks/*.md` | 90-day deep dives (~750–940 lines each) |
-| Reference | `docs/reference/*` | Rubrics, exercises — keep as reference |
-| Presentation | `docs/assets/css/gamify.css` (`.aieng-story`) | How story *looks* |
+| Reported experience | Readers appreciate the content but report weak attention | Preserve technical value and investigate where attention drops |
+| Observed structure | 27/27 core modules put incidents after objectives; story median is 75 words; six explicitly reference the running app | Test opening order and stronger continuity |
+| Observed exceptions | Module 19 continues its contract case in code; tracks have milestones and reflective activities | Improve existing case progression instead of assuming it is absent |
+| Hypothesis | Weak problem-to-result continuity contributes to disengagement | Compare a revised module with the original using readers |
+| Unresolved alternatives | Difficulty, repetition, navigation, delayed practice, and visual density | Include these in the pilot rather than attributing all friction to storytelling |
 
-Method: every core module opening, every `aieng-story` block, counts of story words / “running app” links / think boxes / quizzes, plus mid-page samples of “Core tutorial” sections.
+The target is a **case-driven tutorial: problem → decision → action → demonstrated result**. A recurring company is an optional means of supporting that structure.
 
----
+## 2. What was scanned and what remains to validate
 
-## 3. What already exists (do not throw away)
-
-The course already invested in narrative *ingredients*:
-
-1. **Incident openers** — 27/27 core modules have exactly one `<div class="aieng-story">`. Stock track has one. Hybrid and agentic tracks have “The incident” prose without the class.
-2. **A serial idea** — `docs/core/index.md` § “The running app”: a support-ticket triage service whose *previous gate’s failure* forces the next gate.
-3. **Pedagogy blocks** — intuition locks, kill-this-idea, think-about-it, labs, quizzes.
-4. **Gate plot** — dependable model → measured quality → grounded knowledge → safe action → operate it. That *is* a story structure.
-
-Those ingredients are why the content is appreciated. They are not enough to hold a reader for a 400–550 line module.
-
----
-
-## 4. Why attention still drops
-
-### 4.1 The hook is buried
-
-Every core module opens:
-
-1. Title + time + depends-on
-2. **Learning objectives** (syllabus list)
-3. Heading **“Why this matters (CS engineer view)”**
-4. Then the story, in italics
-
-A reader who is already tired meets a bullet list of competencies before any human is on the page. That is a textbook, not a chapter.
-
-### 4.2 The “stories” are postmortems, not scenes
-
-Median story length is **~50–90 words** (modules 18 and 19 are the outliers at ~135–154). Pattern:
-
-> Friday 4:47pm. Anonymous team. Bot does a bad thing. Bolded root cause. End.
-
-Missing from almost every opener:
-
-- A **named person** the reader can track
-- A **want** (ship the demo, close the ticket, survive the questionnaire)
-- A **clock** that continues *inside* the lesson
-- **Dialogue or a concrete artifact** (Slack, pager, PR, dashboard)
-- A **resolution** later on the same page
-
-They read as engineering slogans in narrative clothing. After three modules the Friday-timestamp formula itself becomes wallpaper.
-
-### 4.3 The story dies at the intro
-
-After the italic paragraph, pages switch to:
-
-- CS-engineer lecture (“an LLM call is a distributed dependency…”)
-- Mermaid mental model
-- `## Core tutorial` with numbered subsections, tables, and code
-
-There is almost never a return to the incident. Teaching does not *use* the scene; it *cites* it and moves on.
-
-### 4.4 The serial is a table, not a plot
-
-“The running app” is the right idea. It is implemented as a **five-row failure table** on the core index, then mentioned in **only six modules**: 01, 04, 05, 08, 13, 27. The other 21 modules invent a *new* anonymous incident (research crew, wellness assistant, CrewAI vs LangGraph, MCP server, weekend repo agent…). The reader cannot accumulate attachment.
-
-### 4.5 Visual design demotes the story
-
-```css
-.aieng-story {
-  font-style: italic;
-  opacity: 0.95;
-  margin: 0.35rem 0 0.75rem;
-  padding-left: 0.75rem;
-  border-left: 3px solid rgba(245, 158, 11, 0.7);
-}
-```
-
-Story is styled as a *sidebar quote*. Quizzes, labs, and intuition locks get full colored panels. The thing that should hook the eye looks like a caption.
-
-### 4.6 Density without beats
-
-Typical core module: **240–570 lines**. Tracks: **750–940 lines** of day-by-day syllabus after one incident. Attention needs **beats** (scene → concept → decision → proof → next scene). Right now the beat is: scene (80 words) → concept dump (the rest).
-
-### 4.7 Uneven secondary narrative
-
-| Device | Coverage |
-|---|---|
-| `aieng-story` | 27/27 core, 1/3 tracks |
-| Think boxes | 0 in modules 18 and 19; 1–4 elsewhere |
-| Running-app callback | 6/27 modules |
-| Capstone as story | 0 — it is a build spec |
-| Getting started as story | 0 — it is a checklist |
-
-Modules 18–19 have the *longest* openers and then the *least* mid-page human texture.
-
----
-
-## 5. What “storytelling” should mean here
-
-Not a novel. Not “once upon a time.” The target is the density of a good incident write-up plus a recurring company:
-
-**Case-driven tutorial.** Each module is one chapter in the life of a support-triage product. The reader is inside the on-call rotation. Concepts are the tools the team uses to get out of the hole they just fell into.
-
-Closest existing models: SRE postmortems, *The Phoenix Project* (without the padding), Stripe-style API guides that open on a failing request.
-
-### Hard constraints
-
-- Keep every learning objective, diagram, lab, quiz, and code sample unless a rewrite makes it clearer.
-- Do not invent capabilities the code does not teach.
-- Do not add more than ~400 narrative words per module (cold open + one mid-return + close). The page stays a tutorial.
-- Do not start every chapter at “Friday 4:47pm.”
-- Fictional company and people are **teaching devices**, labeled once as composite, not case studies of real outages.
-
----
-
-## 6. The serial: Helix at Northstar Support
-
-Promote the existing “running app” from a table into a **named product and a small crew**. One canon, reused everywhere.
-
-### Company and product
-
-| Item | Canon |
-|---|---|
-| Company | **Northstar** — mid-size commerce / billing company (fictional) |
-| Product | **Helix** — the support-ticket triage service the course already describes |
-| Stakes | Wrong category/priority, invented refunds, silent quality drops, runaway tool spend, hung workers, failed enterprise renewal |
-| Disclaimer | One line on the core index: composite incidents for teaching; not a real vendor postmortem |
-
-This matches the capstone starter (`capstone-starter/` is already a triage service). Story and code finally share a protagonist.
-
-### Recurring people (keep the cast small)
-
-| Name | Role | Why they exist |
+| Surface | Scope | What the source review can establish |
 |---|---|---|
-| **Maya Chen** | Backend / on-call for Helix | The reader’s stand-in. Ships, pages, writes the fix. |
-| **Priya Shah** | Product | Deadline, “make it friendlier,” demo pressure. Turns vague requests into contracts. |
-| **Jules Okonkwo** | Security | Injection, MCP, sandbox, confused deputy. |
-| **Noah Berg** | Finance / ops | Bills, `cost_per_success`, questionnaires, SLOs. |
-| **Helix** | The system | Not a person. Treat it like a flaky dependency with a name. |
+| Core | All 27 openings and story blocks; counts; representative middle/code/lab/closing sections | Structure, inventory, and examples of continuity |
+| Core framing | Index, capstone, gate checkpoints, starter | Gate transitions and story-to-code compatibility |
+| Home / getting started | Landing, setup, paths, progress | Entry routes and setup expectations |
+| Tracks | Stock, hybrid, plugin structure and representative sections | Existing incidents, milestones, reflection, and reference density |
+| Reference | Assessment, exercises, progression and related lookup surfaces | Material whose retrieval usability must be preserved |
+| Presentation | `.aieng-story` and related CSS | Styling rules, not their perceived effect |
 
-Tracks that are *not* Helix (stock, hybrid, plugin) get their **own** short cast, not a forced Helix cameo. See §9.
+This was not an exhaustive technical audit, rendered usability test, or observation of learners. Appendix counts describe source, not reading time. Before broad rewriting, inspect rendered pages and ask readers where they stopped, what they came to do, their prior knowledge, their device, and whether they were studying or looking up an answer.
 
-### Serial spine (gates as seasons)
+## 3. Existing strengths to preserve
 
-This is the plot the core index already has, named so modules can continue it instead of resetting:
+- All 27 core modules have one incident block; the stock track has one, and hybrid/plugin tracks have untagged incident prose.
+- The core index already connects five gates through a support-ticket triage service and residual failures.
+- Intuition locks, explainers, think prompts, labs, quizzes, and checkpoints already provide varied learning activities.
+- Module 19 carries contract auditing into `Finding`, `chunk_by_section`, `map_find_predatory_clauses`, and `audit_contract`. Preserve that continuity.
+- Hybrid has Markdown “Think-about-it” sections and ablation milestones; plugin has “Without vs. with” sections and staged working artifacts.
+- The capstone's planted holes and failure injections already give the learner a problem → action → proof arc.
 
-| Gate | Season title | Helix state at the start | Failure that ends the season |
+These are observed strengths. Reader feedback, rather than the number of components, is the evidence that the content is appreciated.
+
+## 4. Problems to test
+
+### Opening and continuity
+
+All core incidents follow objectives; 18–19 also insert “What you can build.” Try a concise problem before objectives, but do not assume the current order causes abandonment. Stories range from 49–154 words (median 75). Length alone is not the defect: several openers reveal a root cause immediately, then the walkthrough changes to topic-by-topic exposition.
+
+Concrete artifacts already exist: Module 09 has an exact error identifier and Hit@5; 14 has a questionnaire and ticket; 27 has tool calls. The question is whether the artifact drives subsequent decisions and proof. Explicit running-app references appear in 01, 04, 05, 08, 13, 27; this is not a count of all thematic continuity.
+
+### Density and first action
+
+Core pages span 241–569 source lines. The formal lab starts at line 354 of 448 in Module 01 and 478 of 569 in Module 19. Earlier code and questions may already engage learners, so measure the first meaningful action rather than treating lab position as proof of inactivity.
+
+For pilot pages, inventory repeated definitions, new concepts, runnable versus illustrative code, first prediction/change/run, and visible milestones. Test a small early action using the existing material. Tracks already contain instructional progression; improve milestone visibility and chunking before adding prose.
+
+### Presentation
+
+The current `.aieng-story` uses italics, a left border, and no shared card background. That is a styling difference, not proof that readers perceive it as a caption. Compare readability and first-screen content in the browser before prescribing full-width colored panels. More panel weight can also compete with existing labs and quizzes.
+
+### Semantic audit
+
+Record whether each revised module has an unresolved problem, a learner choice, application to that problem, visible consequences, and a resolved outcome. Count plain Markdown activities as well as HTML blocks. Modules 18–19 have zero `aieng-think` blocks but three quizzes each; do not add boxes merely to meet a quota.
+
+## 5. Editorial constraints
+
+- Preserve learning objectives, diagrams, labs, quizzes, and code meaning. If a case cannot be resolved by existing material, narrow the promised outcome or explicitly describe transfer to another artifact.
+- Keep objectives about what **the learner** can do. Retain `Learning objectives`, `Mental model`, `Core tutorial`, and lab headings by default for navigation and existing anchors.
+- Use no minimum opener length. Budget at most **400 total narrative words per revised module**, including opening, all section transitions, callbacks, and close—not 400 net additions. Aim lower whenever the case is clear.
+- Keep total source-word growth within approximately 15%, comparing before/after with the same whitespace-count method. This is a size guardrail, not a reading-time metric. Cut repetition or narrative before removing instructional substance.
+- Vary openings: a failing request, test result, trace, conflicting requirement, or short scene. Names, dialogue, clocks, and cliffhangers are optional.
+- Label invented incidents as fictional teaching scenarios where a standalone reader can see it. Distinguish illustrative artifacts/results from observed lab output.
+- Do not invent repository files, runtime capabilities, or measured outcomes. Prompt constraints alone do not establish authorization or guarantee correctness.
+
+## 6. Running case and reading routes
+
+### Optional names, deferred commitment
+
+The current docs and starter do **not** name Helix. Candidate names are **Helix** (service) at **Northstar** (company), with Maya (engineering), Priya (product), Jules (security), and Noah (finance/ops). Use only people needed by a case. Commit to a recurring cast only if pilot feedback supports it; a named company and four-person cast are not acceptance requirements.
+
+The starter is a schema-valid triage endpoint with a deterministic keyword mock. A fictional pre-contract service is not its current implementation. Preserve this distinction whenever the story connects to starter work.
+
+### Gate progression
+
+| Gate | Problem motivating this gate | Capability at exit | Residual limitation / next question |
 |---|---|---|---|
-| 1 | Soft contracts | Helix is a prompt in a PR | Invented refunds; hostile input; unparseable JSON |
-| 2 | Unmeasured quality | Output is schema-valid | A “tiny wording tweak” drops accuracy 12 points with no CI red |
-| 3 | Confident ignorance | Evals are green | Helix invents `POLICY-404` / drowns policy under tool JSON |
-| 4 | Unsafe action | Retrieval works | Refund JSON treated as authority; 400 tool calls overnight |
-| 5 | Laptop ≠ production | The loop works locally | Hung workers, no `request_id`, prompt edited in a dashboard, renewal questionnaire |
+| 1 — Dependable model service | Soft output contracts and hostile input | Structured output checked; invalid output handled; policy/input boundaries established | Schema-valid output can still be wrong: measure quality |
+| 2 — Measurable quality | Changes regress behavior unnoticed | Golden-set checks can block regressions | Passing known tests does not supply missing business knowledge |
+| 3 — External knowledge | Missing or poorly retrieved policy | Budgeted retrieval with measured grounding and citation checks | Grounded answers do not authorize actions |
+| 4 — Actions and agents | Unbounded or unauthorized tool execution | Runtime authorization, budgets, verification, and persistence | A local workflow still needs production hardening |
+| 5 — Operate it | Traffic, drift, outages, and unclear costs | Observable, versioned, tested operations and rollback | Continued monitoring and incident rehearsal; no promise of permanent reliability |
 
-Each module is **one episode** of that season, not a new TV show.
+These summarize the core gates; retain the existing detailed exit criteria and capstone checkpoint mapping, including serving discipline borrowed from Module 13. Do not relabel a gate's resolved entry failure as its exit failure.
 
----
+### Navigation contract
 
-## 7. Module template (the actual change)
+- Numbering is catalog order, not a mandatory reading chain; `Depends on` remains authoritative.
+- Every case states the current system capabilities briefly and stands alone for search arrivals and returning readers. Callbacks must not require remembering earlier fiction.
+- Preserve Weekend Warrior, Professional Developer, AI Researcher, and other supported routes. A route that reaches 07 before 04 cannot assume the reader completed 04's story or lab.
+- Use prerequisite-aware next-step links, with a reason to continue. No compulsory next-episode cliffhanger.
+- Before writing cross-module closes, map catalog order, gate groups, `Depends on`/`Next`, and learning paths. Resolve discrepancies explicitly; for example, 27 currently links to 22 while Gate 5's table begins with 13. Do not silently change prerequisites to fit a plot.
+- If a recommended serial route is useful, document it separately from catalog numbering and retain alternate entry paths.
 
-Replace the current skeleton with this. Same technical body; different *arc*.
+## 7. Flexible module structure
 
 ```text
 # Module NN — Title
-Time / depends / next          (keep)
+Time / depends / next
 
-## Cold open                    (NEW, before objectives)
-Named people. Concrete artifact. Clock.
-150–250 words. Not italic-only.
-Ends on a question the module will answer.
+Concise concrete problem (test before objectives in the pilot)
+State current capabilities and the outcome the reader will demonstrate.
+A scene, trace, failing request, or test can do this job.
 
-## What this chapter is for     (RENAME learning objectives)
-Same bullets. Framed as “by the end Maya can …”
-not “the learner will be able to …”
+## Learning objectives
+Keep the learner-facing objectives and anchor.
 
-## Mental model                 (keep)
-Diagram first. One sticky picture.
+## Mental model
+Keep the diagram and useful CS framing; remove redundant motivation.
 
-## Walkthrough                  (RENAME Core tutorial)
-Numbered sections stay.
-Each H3 opens with 1–3 sentences that advance the incident
-(“Maya pins the template; Priya’s ‘friendlier’ now has a rubric”).
-Then the current tables/code/explainers.
+## Core tutorial
+Use existing numbered sections, tables, and code.
+Invite an early prediction or small action using existing material.
+Apply the concepts to the opening problem where they actually fit.
+Show a decision and its consequence; a code result can be the callback.
 
-## Return to the scene          (NEW, once, mid-page)
-80–120 words. Apply the last two techniques to Helix.
-Not a recap of the opener.
+## Lab / quizzes
+Keep existing tasks and acceptance criteria.
+Explain whether the lab resolves the case or practices a transferable part.
 
-## Lab / quizzes                (keep)
-
-## Close and next failure       (NEW)
-Resolve *this* episode.
-Name the residual failure that is the next module’s cold open.
-Link it.
+Close
+State what the artifact demonstrates and what it cannot yet guarantee.
+Link a useful next step compatible with prerequisites and supported routes.
 ```
 
-### Opening-order change (do this even if nothing else ships)
+Do not prepend a fictional sentence to every H3. A mid-page scene is optional when code or a worked decision already continues the case. Preserve the CS framing that helps understanding. If removing or renaming a heading, check incoming links and preserve its anchor where needed.
 
-**Before:** objectives → “Why this matters (CS engineer)” → 60-word italic story → lecture.
+For each pilot, fill in: **failure → taught decision → actual artifact → observable result → remaining limitation**. This mapping is required before drafting the opener.
 
-**After:** cold open → one-line “this is the Helix failure for this gate” → objectives → mental model → walkthrough.
+## 8. Module 01 pilot: align the problem with the lab
 
-Drop the heading **“Why this matters (CS engineer view)”**. The scene *is* why it matters. The CS framing moves into the mental-model paragraph, where it already lives.
+The current 52-word incident concerns invented refunds. The actual lab asks learners to generate a Markdown reply for a real email or GitHub issue, compare five runs each at temperatures 0.2 and 0.8, and add a constraint based on a failure they observed. `src.prompts` integration is optional.
 
-### Voice rules
+Use a case about inconsistent reply structure or invented details, which this lab can investigate. Illustrative opening, not final copy or measured output:
 
-- Specific artifacts: ticket `#88421`, prompt digest, `cost_per_success`, p95, golden-set 71% vs 92%.
-- People speak in Slack-length lines, not speeches.
-- Root cause is earned in the walkthrough, not bolded in sentence three of the opener.
-- Humor is dry and rare. No sitcom, no “dear reader.”
-- Kill-this-idea boxes stay. They are the moral of the episode.
+> You ask for a reply to the same customer email twice. One draft invents a meeting time; the other omits the risks section your reviewer needs. Before adding more examples, inspect the request: did it specify the facts the model may use and the sections it must return? In this module, you will turn one real message into a clearer contract, compare repeated outputs, and document what improved—and what still varies.
 
-### CSS
+| Mapping | Pilot implementation |
+|---|---|
+| Failure | Inconsistent sections or unsupported details in a reply |
+| Decision | Specify task, boundaries, format, and sampling choice |
+| Artifact | Existing lab's prompt and ten output observations; optional `src.prompts` template |
+| Early action | Predict what an underspecified request leaves open before reading the anatomy table |
+| Proof | Compare section presence, length, and invented details using the learner's actual results |
+| Limitation | A small sample and a constraint do not prove correctness or authorize side effects |
+| Next step | Link Module 02 for untrusted-input boundaries without assuming a RAG system already exists |
 
-Promote `.aieng-story` from caption to **chapter cold-open**:
+Do not claim this lab patches a `triage.py` implementation or fixes refund authorization. Explain how the same contract discipline transfers to triage. Preserve the original version for comparison through a recorded commit or review artifact.
 
-- Roman (not italic) body text
-- Full-width panel, same visual weight as `.aieng-lab`
-- Optional eyebrow: `Northstar · Helix · Gate N`
-- Mid-page returns use a sibling class (e.g. `.aieng-scene`) so they are not confused with the opener
+## 9. File-by-file implementation inventory
 
-Do not make story blocks look like ads. Keep them readable in light and slate.
+**P0:** pilot and evidence. **P1:** expansion after pilot gates. **P2:** later surfaces where evidence warrants changes. Items below describe candidate treatments, not a mandatory cast or guaranteed rewrite of every page.
 
----
-
-## 8. Gold-standard snippet (Module 01)
-
-Current opener (~52 words, italic, after objectives):
-
-> Friday 4:47pm: a support bot ships after a “quick prompt polish.” By Monday, finance is chasing three refunds the bot invented…
-
-Target cold open (illustrative, not final copy):
-
-> Thursday, 4:47 p.m. Priya slacks Maya a screenshot: Helix told a customer they were “approved for a courtesy refund.” There is no such policy. Maya greps the repo. The system prompt is an f-string in `triage.py` that says *be helpful*. No role. No “do not invent money rules.” No output schema. Finance will see the tickets Monday.
->
-> Maya has until standup to put a contract on the model — something two engineers could grade the same way — without rewriting Helix in three services.
-
-Then the existing anatomy table, temperature section, and `src.prompts` lab **are the fix**, narrated as Maya’s PR, not as “§1 Anatomy of a good prompt” in a vacuum.
-
-Close of 01 hands the residual to 02: the prompt is versioned, but a PDF in the knowledge base is about to become a work order (Jules’s incident).
-
----
-
-## 9. File-by-file change list
-
-Priority: **P0** = attention-critical path; **P1** = complete the serial; **P2** = polish / tracks / chrome.
-
-### 9.1 Canon and chrome — P0
+### 9.1 Pilot and supporting material — P0
 
 | File | Change |
 |---|---|
-| `docs/core/index.md` | Rewrite “The running app” as Helix at Northstar: named crew, season table, “read this as a serial.” Keep gate exit criteria. |
-| `docs/index.md` | One narrative beat in the hero or method section: you follow Helix from a soft prompt to a production service. Do not turn the landing page into a short story. |
-| `docs/assets/css/gamify.css` | Restyle `.aieng-story`; add `.aieng-scene` for mid-page returns. |
-| `plans/helix-story-bible.md` *(new, with implementation)* | One-pager: names, product facts, what Helix can/cannot do at each gate, forbidden contradictions. Writers use this so Module 12 does not invent a different company. |
+| `docs/core/01-prompt-engineering.md` | Implement §8; compare opening order, early action, case-to-lab continuity, and close |
+| `plans/tutorial-storytelling-pilot.md` (new during implementation) | Record baseline, artifact mapping, participant tasks, findings, route map, and go/revise decision |
+| `docs/assets/css/gamify.css` | Only if rendered pilot review identifies a styling need; test scoped treatment before a global change |
+| `docs/core/02-security-privacy.md`, `03-advanced-prompting.md` | Extend after Module 01 review; test continuity without requiring earlier plot recall |
+| `docs/core/19-orchestration-patterns.md` or `27-harness-engineering.md` | Test standalone entry before broad rollout; record which was selected and why |
 
-### 9.2 Gate 1 (prove the template) — P0
+### 9.2 Gates 1–3 — P0 pilot / P1 expansion
 
-Do these first. They set voice for everything else. If 01–03 do not hold attention in a read-aloud, stop and revise the template before touching Gate 4.
-
-| Module | Current story (words) | Change |
-|---|---|---|
-| **01 Prompt engineering** | 52. Anonymous Friday polish. Running-app note exists. | Gold-standard Helix cold open (Priya screenshot / no contract). Mid-return: “friendlier” VP request becomes versioned policy (the existing think box, lifted into the scene). Close → 02. |
-| **02 Security** | 61. Tuesday standup, RAG PDF as work order. No running-app link. | Same incident, Jules + Maya. Helix forwarded a runbook because a KB PDF issued orders. Walkthrough = trust boundaries on *that* path. Close → 03 (parse failures from stacked techniques). |
-| **03 Advanced prompting** | 52. 2:14am invoice `json.loads`. | Helix on-call: CoT + eight few-shots shipped “to be safe,” parse still broken, bill spiked. Decision map is how Maya chooses *one* lever. Close → 04 (still no evals). |
-
-### 9.3 Gate 2–3 — P0 / P1
-
-| Module | Current | Change |
-|---|---|---|
-| **04 Testing & evals** | 51. Green sprint review, 92%→71%. Has running-app link. | Noah notices wrong amounts; CI never went red. Golden set is the chapter’s object. Close → 05 (correct but ignorant). |
-| **05 Context engineering** | 57. Day 19, policy drowned. Has running-app link. | Helix invents account IDs because the packer drowned policy. Maya owns the window. Close → 06/07 fork: weights vs retrieve. |
-| **06 Fine-tuning** | 49. Catalog baked into weights. | Product wants Helix to “know the catalog.” Train loss great; retired SKUs persist. Decision tree is the episode. Stay on Helix *or* a Northstar catalog sidecar — do not switch industries. |
-| **07 Tools & RAG** | 75. Refund JSON `eval`’d + POLICY-404. Strongest Gate-3 opener. | Split into two beats of the *same* week (action vs knowledge), both Helix. Intern `eval` becomes a named PR. Close → 08/09. |
-| **09 Advanced RAG** | 61. `ERR_INV_88421` missed by dense search. | Helix ops bot; ticket `#88421` already used in 14 — **reuse it**. Crime scene is retrieval. Do not “fix quality” with a bigger generator. |
-
-### 9.4 Gate 4 — P1
-
-These modules currently each invent a new anonymous agent. Re-home them on Helix’s tool loop unless the topic *cannot* live there (MCP host / editor sandbox can be Jules’s laptop still at Northstar).
-
-| Module | Current | Change |
-|---|---|---|
-| **08 MCP** | 93. Trendy MCP server + PM “load balancer” confusion. Has running-app link. | Jules enables auto-approve so Helix’s IDE “sees the monorepo.” Peripheral vs host policy. Keep the naming confusion as Priya’s deck. |
-| **10 Cost** | 64. Two incidents mashed (mini routing + Alice/Bob cache). | One episode: Noah’s 40% token screenshot vs reopen rate. Cache cross-tenant is a *second beat* mid-page, not a second opener. Metric: `cost_per_success`. |
-| **11 Single agents** | 60. Overnight 400 tool calls. | Helix “research” path. Maya adds `max_steps` / signature abort. Personality vs state machine. |
-| **12 Multi-agent** | 79. Hackathon persona theater. | Priya asks for CEO/engineer/designer agents. Cost 10×, README worse. Topology vs theater, on Helix’s doc-draft path. |
-| **16 Integration** | 85. `POST /chat` 120s timeout, refresh storms. | Helix chat behind a gateway. Jobs/queues. Maya’s `request_id` dies at hop 1. |
-| **18 Patterns** | 135. Missing-person hard drive (off-canon). 0 think boxes. | **Do not keep the hard-drive plot** if we are serializing Helix. Recast as Helix scanning a large ticket attachment / order-history dump. Add 1–2 think boxes. |
-| **19 Orchestration** | 154. Contract audit vs 40 clauses. 0 think boxes. | Northstar vendor-contract audit *or* Helix policy-clause audit — pick one and stick. Long opener is good; still needs mid-page scene and think boxes. |
-| **20 Reliability** | 94. Friday 17:10 research crew, $186, green 200. | Helix research crew. Named failure families. Close → 21. |
-| **21 Secure tools** | 71. `bash` god-tool, novel in sibling folder. | Jules’s incident: Helix’s editor agent. Policy in English vs sandbox. Can stay “laptop” as long as the user is Jules at Northstar. |
-| **27 Harness** | 91. Helix already named (lookup_order / write_note). Has running-app link. | Best existing serial beat. Expand to Maya discovering the prompt was fine. Close Gate 4. |
-
-### 9.5 Gate 5 — P1
-
-| Module | Current | Change |
-|---|---|---|
-| **13 Production** | 84. Hung p95, no timeout, dashboard prompt edit. Has running-app link. | Season 5 premiere. Keep; name Maya/Noah; `request_id` hunt. |
-| **14 Compliance** | 92. Renewal questionnaire, ticket `#88421`. | Noah + legal. Same ticket id as 09. Controls/provenance. |
-| **15 Domain apps** | 81. Wellness assistant (off-canon). | Either a **Northstar-adjacent** vertical Helix should not pretend to be (medical/legal adjacent feature request from Priya) or a clearly marked side-quest. Do not introduce a new company without saying so. |
-| **17 Small models** | 94. Swap everything to 3B Q4. | Noah’s bill-cut + Maya’s schema collapse. Router as the fix. |
-| **22 Agent evals** | 73. Extract 94%, path 6× cost. | Helix agentic bot. Trajectory vs extract. |
-| **23 Drift** | 69. Playground “warmer” prompt, pin lied. | Priya’s warmth tweak; digest vs `v3` name. |
-| **24 Local-first** | 81. Weekend personal repo agent (off-canon). | Recast as Maya’s laptop loop on Helix, or mark as Jules’s weekend side project *at Northstar*. Keep token budget lesson. |
-| **25 Durable** | 82. Codebase investigator, laptop sleep, Slack merge. | Helix billing double-charge investigation. Coordinator + worktree + HITL state. |
-| **26 Orchestrators** | 70. Team A/B/C framework tourism. | Three Northstar squads, one Helix workflow, three engines. Question remains: “who spent money on step 7?” |
-
-### 9.6 Capstone and getting started — P1 / P2
-
-| File | Change |
+| Module | Candidate treatment and alignment check |
 |---|---|
-| `docs/core/capstone.md` | Open on Helix with four planted holes (the starter already has them). The spec table stays. Reader should feel they are finishing Maya’s service, not starting a new assignment. |
-| `docs/core/capstone-gates.md` | One-line episode framing per gate checkpoint. Do not novelize checklists. |
-| `docs/getting-started/setup.md` | Keep commands. Add a 80-word “you are joining Northstar; this is your laptop” beat so setup is onboarding, not a package list. |
-| `docs/getting-started/paths.md` | Each path is a different *pace through Helix’s seasons*, not a different product. |
-| `docs/getting-started/index.md` / `progress.md` | Light touch. Progress UX can stay mechanical. |
+| 01 Prompt engineering | Reply-contract case and existing lab; see §8 |
+| 02 Security | Keep the malicious-document incident; state the system boundary and connect to existing security exercises; do not imply learners have built retrieval already |
+| 03 Advanced prompting | Keep parse failure and cost tension; use the decision map to choose a lever and state what the existing lab proves |
+| 04 Testing & evals | Carry the quality regression into the golden-set decision and test result; distinguish illustrative scores from measured output |
+| 05 Context engineering | Use drowned policy to motivate packing choices and an observable context-budget result |
+| 06 Fine-tuning | Keep the stale-catalog decision case; show why the FT-versus-RAG decision follows from the evidence; no forced industry change |
+| 07 Tools & RAG | Distinguish knowledge failure from unsafe action; preserve the authorization boundary and show what each example actually fixes |
+| 09 Advanced RAG | Carry `ERR_INV_88421` into retrieval diagnosis and metrics; it is an error/runbook id, not Module 14's ticket |
 
-### 9.7 Tracks — P2 (separate casts)
+### 9.3 Gate 4 — P1
 
-Tracks are 90-day syllabi. Story will not save a 900-line day list by itself. Changes:
+| Module | Candidate treatment and alignment check |
+|---|---|
+| 08 MCP | Preserve host-versus-server policy distinction; show the runtime decision that resolves auto-approval risk |
+| 10 Cost | Tie routing savings to success/reopen measures; treat cache isolation as a separate failure when necessary |
+| 11 Single agents | Carry repeated tool calls into step caps and repeated-argument abort evidence |
+| 12 Multi-agent | Connect topology decisions to an existing task and its cost/quality evidence; do not invent a Helix doc-draft path as implemented code |
+| 16 Integration | Follow a timed-out request through jobs/queues and request-id propagation |
+| 18 Patterns | Keep the file-decomposition case if it teaches the primitives clearly; recast only if existing code and lab still fit. Add reflective activity only where the semantic audit finds a gap |
+| 19 Orchestration | Preserve contract-audit continuity already present in code; strengthen choice and outcome rather than adding a redundant scene |
+| 20 Reliability | Connect named failure families to detectors, tests, and residual risk |
+| 21 Secure tools | Keep the editor/sandbox case as a self-contained example; an unrelated service cameo is unnecessary |
+| 27 Harness | Preserve the existing triage/tool-loop continuity. Helix is not currently named. Show external verification and stop conditions; check 22/13 route ambiguity before changing the close |
 
-| Track | Current | Change |
+### 9.4 Gate 5 — P1
+
+| Module | Candidate treatment and alignment check |
+|---|---|
+| 13 Production | Follow hung requests and prompt drift into deadlines, traces, and versioning |
+| 14 Compliance | Carry ticket `#88421` into provenance and controls; do not equate it with 09's error code. Any relationship would be explicitly fictional and newly introduced |
+| 15 Domain apps | Preserve the domain-specific case where it explains the decision best; introduce its context locally |
+| 17 Small models | Connect the model swap's failures to measured routing tradeoffs |
+| 22 Agent evals | Compare trajectory evidence and outcome quality on the same task |
+| 23 Drift | Carry the warmth tweak into digest-versus-version-name checks and actual limits |
+| 24 Local-first | Keep the laptop/repo example and budget lesson; no mandatory company recast |
+| 25 Durable | Match the interruption/resume incident to actual coordinator, worktree, and approval-state material |
+| 26 Orchestrators | Compare engines on one workflow and observable cost/step ownership, with a self-contained entry |
+
+### 9.5 Framing, capstone, setup, and tracks — P1 / P2
+
+| Surface | Change after pilot evidence |
+|---|---|
+| `docs/core/index.md` | Clarify running-case capabilities, entry/exit/residual failures, and routes; retain gate criteria |
+| `docs/index.md` | Optional brief problem-to-result promise consistent with the tested teaching approach |
+| `plans/helix-story-bible.md` (optional new file) | Only if recurring names help: record fictional names, capabilities, identifiers, code mappings, and contradictions to avoid |
+| `docs/core/capstone.md`, `capstone-gates.md` | Strengthen the learner's existing planted-hole → fix → proof arc; preserve schema-valid mock starting state and operational checklists |
+| `docs/getting-started/setup.md` | Keep the first successful command easy to reach; add context only if it aids onboarding |
+| `docs/getting-started/paths.md` | Preserve distinct goals, skipped modules, and cadence; explain optional case continuity |
+| `docs/getting-started/index.md`, `progress.md` | Light touch based on entry/lookup testing |
+| Stock track | Carry time-safe split, citations, and eval decisions through existing milestones; preserve the non-advice warning |
+| Hybrid track | Preserve incident, Markdown reflection, ablations, and exits; strengthen visible before/after evidence |
+| Plugin track | Preserve “Without vs. with” progression, approval gate, MCP trust, and local-model milestones |
+| `docs/tracks/index.md` | Explain distinct projects and prerequisites; no required separate companies or casts |
+
+Keep reference documents as lookup material. Do not story-wrap `src/`, tests, or eval fixtures.
+
+## 10. Per-module acceptance criteria
+
+1. The opening defines a concrete problem and a learner-relevant outcome using only necessary context.
+2. The walkthrough applies a consequential decision to that problem; code, a worked example, or a scene can provide continuity.
+3. The lab/result connection is truthful: identify what the existing artifact proves, transfers, or leaves unresolved.
+4. The reader gets an early opportunity to predict, inspect, or act where appropriate; do not duplicate exercises solely to add a beat.
+5. Technical meaning and existing learning objectives, labs, quizzes, diagrams, and code paths are preserved.
+6. A standalone reader can follow the case, and next steps respect prerequisites and supported paths.
+7. The narrative and total-growth budgets in §5 are met; names, opener word minima, think-box counts, and cliffhangers are not completion gates.
+8. Headings, anchors, links, code readability, and rendered desktop/mobile light/dark layouts remain usable.
+9. Pilot evidence meets §15 before the treatment becomes a course-wide default. Read-aloud is an editorial check, not sufficient acceptance evidence.
+
+## 11. Boundaries
+
+No character illustrations, comic panels, real-person likenesses, or claims of real outages. Keep this plan internal to the repository, outside MkDocs navigation. Do not change production code or evaluation fixtures in this workstream. If a proposed narrative needs new functionality to be true, revise the narrative or raise a separate scoped implementation proposal.
+
+## 12. Implementation sequence and review gates
+
+| PR | Scope | Entry / exit condition |
 |---|---|---|
-| Stock | One 75-word `aieng-story`, then pipeline. | Named researcher + PM; **do not** reuse Helix. Cold open + “week N return” at each major milestone (time-safe split, citations, evals). Keep non-advice warning. |
-| Hybrid | “The incident” at 2:14 a.m., no `aieng-story` class. | Same incident, wrap in story class, named ML engineer. Ablation days get a return-to-scene (“the Transformer-only path still loses on SKU X”). |
-| Agentic plugin | Strong incident (11:40 p.m. auto-apply). No story class. | Wrap in story class. Named extension author. Recurring rule: model proposes, runtime disposes. Milestone returns at approval gate, MCP trust, local SLM. |
-| `docs/tracks/index.md` | Catalog. | One paragraph: tracks are *other companies*; core is Helix. |
+| PR1 | Module 01 pilot and pilot record; minimal scoped styling only if needed | Record baseline and comparison tasks, draft artifact mapping, render/check links, then reader comparison |
+| PR2 | Modules 02–03 continuity pilot | Proceed after 01 gives directional evidence of improvement without learning/lookup regressions; test skipped-entry comprehension |
+| PR3 | Standalone-entry pilot on 19 or 27; finalize route rules and reusable guidance | Proceed after PR2 review; preserve existing case strengths and test an advanced/search arrival |
+| PR4 | Core framing and optional names/canon/global CSS | Only after pilot evidence supports these choices; no full cast or global panel rollout as a prerequisite to learning from PR1 |
+| PR5 | Gates 2–3: 04–07, 09 | Apply tested functional guidance; each module gets an artifact mapping and route check |
+| PR6 | Remaining Gate 4 modules | Exclude whichever advanced pilot is already done; use small independently reviewable batches |
+| PR7 | Gate 5 modules | Apply the same checks; keep domain/repo cases where clearer |
+| PR8 | Capstone and getting started | Preserve starter entry conditions and first-command/lookup usability |
+| PR9 | Tracks | Build on milestones and existing reflective activities; no automatic scene-wrapper pass |
 
-### 9.8 Leave as reference (no storytelling pass)
+Pause expansion after each pilot for actual reader evidence. If readers are unavailable, complete a reviewable pilot and its technical/rendered checks, record reader validation as pending, and do not treat elapsed time or self-review as a passed gate. No outreach is part of this plan unless separately authorized.
 
-`docs/reference/assessment.md`, `exercises.md`, `progression.md`, `resources.md`, `troubleshooting.md`. These should stay lookup documents. Optional: exercises can *mention* Helix ticket ids so they feel like the same world.
+## 13. Decisions and hypotheses
 
-Do not story-wrap `src/` or tests.
+| Item | Position |
+|---|---|
+| Diagnosis | Structural continuity is a supported hypothesis; reader behavior is still to be observed |
+| Teaching form | Self-contained cases with optional recurring context |
+| Opening order | Test concise problem before objectives in Module 01 |
+| Protagonist | Learner's engineering decision and artifact; Helix/cast optional |
+| Existing varied domains | Preserve where they teach the concept clearly |
+| Visual treatment | Decide from rendered pilot evidence, not CSS alone |
+| Rollout | 01 → 02–03 → advanced standalone entry → broader adoption |
+| Track treatment | Strengthen existing milestone progression before adding fiction |
 
----
+## 14. Questions to resolve during the pilot
 
-## 10. Per-module quality bar (acceptance)
+1. Where did original readers disengage, and were they studying, skimming, or solving a specific problem?
+2. Which intended readers can compare versions, including newcomers, experienced engineers, and search/short-path arrivals?
+3. Does early action or reduced repetition help more than adding narrative? Record which changes were bundled so their effects are not falsely separated.
+4. Does a recurring name help comprehension or just story recall? Keep the unnamed case as a valid outcome.
+5. Which advanced module best tests standalone use, and how should route links handle existing catalog/gate differences?
 
-A module is done only if all of the following are true:
+Names and company branding do not block the first pilot. Reader evidence does block broad standardization.
 
-1. **Cold open before objectives**, 150–250 words, named Northstar people (or the track’s own cast).
-2. **Same incident** is visible in at least one mid-page beat and the close.
-3. Close names the **next module’s failure** with a link.
-4. Technical claims, diagrams, labs, quizzes, and code paths are unchanged in meaning.
-5. No second fictional company unless labeled a side-quest (15, 21 laptop, tracks).
-6. Read-aloud test: first 400 words hold a listener who is not looking at the headings.
-7. Skim test: a returning reader can still jump to `## Mental model` and labs without reading the fiction.
+## 15. Success measures and reader protocol
 
-If (6) and (7) conflict, cut narrative, not the mental model.
+Before sessions, record the original version, participant context, tasks, intended outcomes, and go/revise criteria in the pilot record. Use a small mix of intended readers. Preserve the original for comparison; where someone sees both versions, vary order and account for familiarity. Small samples provide directional evidence, not statistical proof.
 
----
+Ask readers to study normally before asking about the fiction. Record confusing/skippable passages and where they stop. Then ask them to explain the technical choice, attempt the existing lab, apply the idea to a fresh related scenario, and find a particular answer as a returning reader. Include a standalone entry and a shortened reading route during the later pilots. Read-aloud may supplement these tasks but must not replace silent reading and code use.
 
-## 11. What we will not do
+| Measure | Desired evidence |
+|---|---|
+| Willingness to continue | Clearer reported interest, fewer identified passages readers want to skip, with reasons |
+| Technical understanding | Correct explanation of the decision and its limitations |
+| Transfer | Appropriate application to a fresh related problem |
+| Lab progress | Independent progress on the existing task, without extra confusion about what the code implements |
+| Lookup usability | Can find the relevant concept, code, and lab without reading fictional setup |
+| Standalone comprehension | Can understand the case without earlier episodes |
+| Narrative recall (secondary) | Remembers the problem and consequence; character names are not required |
 
-- Add illustrations of characters or comic panels (out of scope; diagrams stay mermaid).
-- Generate a real-person likeness or “based on a true outage.”
-- Rewrite Python teaching modules to print story text.
-- Publish this plan in the MkDocs nav (internal).
-- Homogenize every opener into the same timestamp joke.
-- Double page length. If a module grows more than ~15%, cut lecture repetition, not labs.
+**Go/revise rule:** expand when reader feedback indicates better willingness to continue without observed worsening of technical understanding, lab progress, transfer, or lookup usability. Record contrary findings; resolve material regressions and repeat only the affected checks before expansion. Do not pass a pilot solely on story recall or format compliance.
 
----
-
-## 12. Implementation sequence (PRs)
-
-Each PR independently reviewable. Do not stack all 27 modules in one diff.
-
-| PR | Title | Files | Depends on |
-|---|---|---|---|
-| **PR1** | Helix canon, core index serial, story CSS | `docs/core/index.md`, `docs/index.md` (light), `docs/assets/css/gamify.css`, `plans/helix-story-bible.md` | — |
-| **PR2** | Gate 1 template + modules 01–03 | `docs/core/01`–`03` | PR1 |
-| **PR3** | Gates 2–3: modules 04–07, 09 | `docs/core/04`–`07`, `09` | PR2 (voice freeze) |
-| **PR4** | Gate 4: 08, 10–12, 16, 18–21, 27 | those core files | PR2 |
-| **PR5** | Gate 5: 13–15, 17, 22–26 | those core files | PR2 |
-| **PR6** | Capstone + getting started | `docs/core/capstone*.md`, `docs/getting-started/*` | PR1 |
-| **PR7** | Tracks | `docs/tracks/*` | PR1 |
-
-**Stop after PR2** for a read-aloud with the people who gave the original feedback. If 01–03 still “don’t hold attention,” the template is wrong; do not roll it across 24 more files.
-
-Suggested review protocol for PR2: one reviewer reads 01 on a phone, out loud, without scrolling to the TOC. Mark the first sentence they disengage. That line is the bug.
-
----
-
-## 13. Key decisions
-
-| Decision | Choice | Why |
-|---|---|---|
-| Diagnosis | Attention failure is structural (order, length, no continuation), not missing callouts | 27 story boxes already exist and still fail |
-| Form | Case-driven serial, not a novel | Preserves labs, evals, and CS audience |
-| Protagonist system | Helix at Northstar + 4 people | Already implied by the running app and capstone starter |
-| Off-canon plots | Recast 18, 24, 15, 21 onto Northstar or label side-quest | Serial attachment cannot survive a new industry every chapter |
-| Opening order | Scene before objectives | Objectives are why attention dies in the first screen |
-| Visual | Story panels equal to labs, not italic captions | Current CSS tells the eye the hook is optional |
-| Rollout | Template on Gate 1, then fan out | Prevents 27 mediocre rewrites of the same 80-word blurb |
-| Tracks | Separate casts, milestone returns | 90-day lists are a different genre; forcing Helix would confuse |
-
----
-
-## 14. Open questions (resolve before PR2 copy is final)
-
-1. **Names:** Keep Maya / Priya / Jules / Noah, or pick different ones? (Avoid names of real teammates.)
-2. **Company name:** Northstar vs keep unnamed “the running app”? Named is stronger for memory; unnamed is safer if the course is rebranded.
-3. **Module 15 (domain apps):** Helix-adjacent refusal (don’t ship a medical bot) vs a marked side-quest in another vertical.
-4. **Module 18:** Recast the 400GB drive example onto ticket/order dumps, or keep it as a labeled side-quest because the parallel-subroutine lesson is clearer on files.
-5. **Feedback loop:** Who from the original readers reviews PR2? Schedule that before PR3.
-
----
-
-## 15. Success metrics
-
-Qualitative (primary, matches the original complaint):
-
-- Unprompted comments shift from “dry / hard to finish” to “I wanted the next module.”
-- PR2 read-aloud: listeners can retell *what happened to Helix* in 01–03 without looking at headings.
-
-Structural (objective, from this audit):
-
-| Check | Today | After |
-|---|---|---|
-| Story before learning objectives | 0/27 | 27/27 |
-| Named recurring cast in core | 0 | Helix + crew on ≥24/27 |
-| Running-app / Helix callback | 6/27 | 27/27 |
-| Mid-page scene return | ~0 | 27/27 |
-| Next-module cliffhanger | ~0 | 27/27 |
-| Opener length | ~50–90 words | 150–250 words |
-| Think boxes in 18–19 | 0 | ≥1 each |
-
-Do not A/B “time on page” in analytics; this site tracks progress in `localStorage` only and should stay that way.
-
----
+Track semantic continuity and size budgets for editorial QA. Do not target 27 named casts, 27 cliffhangers, or longer openers as success measures. Reading time can reflect interest or confusion; do not optimize for it. Keep site progress in `localStorage`; use consented reader sessions without adding analytics.
 
 ## 16. Audit appendix (counts)
 
-Story word counts are words inside `.aieng-story` only.
+
+Baseline: source reviewed at `e4d0f8c`. Lines use Python `splitlines()`; story words use whitespace splitting inside `.aieng-story` after removing HTML tags. Think and Quiz count CSS classes only. Running-app mentions are explicit wording, not a semantic continuity score. Zero tagged story/think blocks does not mean zero narrative/reflection; hybrid and plugin tracks use Markdown equivalents. These are inventory measures, not engagement outcomes.
 
 | Module | Lines | Story words | Running-app mention | Think | Quiz |
 |---|---|---|---|---|---|
-| 01 | 449 | 52 | yes | 2 | 2 |
-| 02 | 403 | 61 | no | 2 | 2 |
-| 03 | 420 | 52 | no | 2 | 2 |
-| 04 | 440 | 51 | yes | 2 | 2 |
-| 05 | 407 | 57 | yes | 2 | 3 |
-| 06 | 362 | 49 | no | 2 | 3 |
-| 07 | 400 | 75 | no | 3 | 3 |
-| 08 | 516 | 93 | yes | 4 | 4 |
-| 09 | 547 | 61 | no | 3 | 3 |
-| 10 | 506 | 64 | no | 3 | 2 |
-| 11 | 535 | 60 | no | 3 | 3 |
-| 12 | 516 | 79 | no | 3 | 3 |
-| 13 | 478 | 84 | yes | 2 | 2 |
-| 14 | 410 | 92 | no | 2 | 2 |
-| 15 | 383 | 81 | no | 1 | 2 |
-| 16 | 411 | 85 | no | 1 | 2 |
-| 17 | 515 | 94 | no | 3 | 3 |
-| 18 | 519 | 135 | no | **0** | 3 |
-| 19 | 570 | 154 | no | **0** | 3 |
-| 20 | 336 | 94 | no | 1 | 3 |
-| 21 | 325 | 71 | no | 1 | 2 |
-| 22 | 320 | 73 | no | 1 | 2 |
-| 23 | 242 | 69 | no | 1 | 2 |
-| 24 | 286 | 81 | no | 1 | 2 |
-| 25 | 293 | 82 | no | 1 | 2 |
-| 26 | 266 | 70 | no | 1 | 2 |
-| 27 | 337 | 91 | yes | 1 | 2 |
-| Capstone | 56 | 0 | no | 0 | 0 |
-| Tracks (stock / hybrid / plugin) | 943 / 747 / 935 | 75 / 0 / 0 | no | 4 / 0 / 0 | 0 |
+| 01 | 448 | 52 | yes | 2 | 2 |
+| 02 | 402 | 61 | no | 2 | 2 |
+| 03 | 419 | 52 | no | 2 | 2 |
+| 04 | 439 | 51 | yes | 2 | 2 |
+| 05 | 406 | 57 | yes | 2 | 3 |
+| 06 | 361 | 49 | no | 2 | 3 |
+| 07 | 399 | 75 | no | 3 | 3 |
+| 08 | 515 | 93 | yes | 4 | 4 |
+| 09 | 546 | 61 | no | 3 | 3 |
+| 10 | 505 | 64 | no | 3 | 2 |
+| 11 | 534 | 60 | no | 3 | 3 |
+| 12 | 515 | 79 | no | 3 | 3 |
+| 13 | 477 | 84 | yes | 2 | 2 |
+| 14 | 409 | 92 | no | 2 | 2 |
+| 15 | 382 | 81 | no | 1 | 2 |
+| 16 | 410 | 85 | no | 1 | 2 |
+| 17 | 514 | 94 | no | 3 | 3 |
+| 18 | 518 | 135 | no | **0** | 3 |
+| 19 | 569 | 154 | no | **0** | 3 |
+| 20 | 335 | 94 | no | 1 | 3 |
+| 21 | 324 | 71 | no | 1 | 2 |
+| 22 | 319 | 73 | no | 1 | 2 |
+| 23 | 241 | 69 | no | 1 | 2 |
+| 24 | 285 | 81 | no | 1 | 2 |
+| 25 | 292 | 82 | no | 1 | 2 |
+| 26 | 265 | 70 | no | 1 | 2 |
+| 27 | 336 | 91 | yes | 1 | 2 |
+| Capstone | 55 | 0 | no | 0 | 0 |
+| Tracks (stock / hybrid / plugin) | 942 / 746 / 934 | 75 / 0 / 0 | no | 4 / 0 / 0 | 0 |
+
 
 ---
 
-## 17. PR plan (summary)
+## 17. Next action
 
-1. **Canon + CSS + core index** — name Helix, restyle story, write the story bible.
-2. **Modules 01–03** — implement the template; **external read-aloud gate**.
-3. **Modules 04–07, 09** — Gate 2–3 serial.
-4. **Gate 4 modules** — re-home anonymous agents onto Helix.
-5. **Gate 5 modules** — production season; recast off-canon plots.
-6. **Capstone + getting started** — finish Maya’s service; setup as onboarding.
-7. **Tracks** — own casts, milestone scene-returns, wrap existing incidents in story chrome.
-
-No production code or eval fixtures change in this workstream.
+Complete the pending visual and reader checks in the [pilot evidence record](tutorial-storytelling-pilot.md), then compare with the original before extending the approach to Modules 02–03. The content build and generated-link checks have passed; they do not substitute for reader evidence.
