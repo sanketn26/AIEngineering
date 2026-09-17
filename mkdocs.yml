@@ -38,7 +38,7 @@ theme:
     - navigation.tabs
     - navigation.tabs.sticky
     - navigation.sections
-    - navigation.expand
+    - navigation.path
     - navigation.top
     - navigation.footer
     - search.suggest
@@ -57,6 +57,7 @@ plugins:
   - search:
       lang: en
   - social:
+      concurrency: 1
       cards_layout_options:
         background_color: "#1a1b26"
         color: "#ffffff"
@@ -106,13 +107,13 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Getting started:
-      - Overview: getting-started/index.md
-      - Setup: getting-started/setup.md
+  - Getting Started:
+      - Start here: getting-started/index.md
+      - Install & setup: getting-started/setup.md
       - Learning paths: getting-started/paths.md
       - Progress & XP: getting-started/progress.md
-  - Core modules:
-      - Overview: core/index.md
+  - Core Curriculum:
+      - Core overview: core/index.md
       - "Gate 1 — Dependable model service":
           - 01 Prompt engineering: core/01-prompt-engineering.md
           - 02 Security & privacy: core/02-security-privacy.md
@@ -129,7 +130,6 @@ nav:
           - 10 Cost optimization: core/10-cost-optimization.md
           - 11 Single agents: core/11-single-agents.md
           - 12 Multi-agent systems: core/12-multi-agents.md
-          - 16 Integration patterns: core/16-integration-patterns.md
           - 18 Agent design patterns: core/18-agent-design-patterns.md
           - 19 Orchestration patterns: core/19-orchestration-patterns.md
           - 20 Agent reliability: core/20-agent-reliability.md
@@ -137,6 +137,7 @@ nav:
           - 27 Harness engineering: core/27-harness-engineering.md
       - "Gate 5 — Operate it":
           - 13 Production: core/13-production.md
+          - 16 Integration patterns: core/16-integration-patterns.md
           - 14 Compliance: core/14-compliance.md
           - 15 Domain apps: core/15-domain-apps.md
           - 17 Small & local models: core/17-small-models.md
@@ -145,17 +146,18 @@ nav:
           - 24 Local-first agents: core/24-local-first-agents.md
           - 25 Durable orchestration: core/25-durable-orchestration.md
           - 26 Orchestrators in production: core/26-orchestrator-comparison.md
-      - Capstone: core/capstone.md
-      - Capstone gates: core/capstone-gates.md
-  - Tracks:
-      - Overview: tracks/index.md
-      - Stock recommender: tracks/stock-recommender.md
-      - Hybrid models: tracks/hybrid-models.md
-      - Agentic editor plugin: tracks/agentic-plugin.md
+      - Capstone:
+          - Build specification: core/capstone.md
+          - Gate checkpoints: core/capstone-gates.md
+  - Specialization Tracks:
+      - Track overview: tracks/index.md
+      - Stock research assistant: tracks/stock-recommender.md
+      - Hybrid models from scratch: tracks/hybrid-models.md
+      - Agentic VS Code plugin: tracks/agentic-plugin.md
   - Reference:
-      - Overview: reference/index.md
-      - Progression: reference/progression.md
-      - Exercises: reference/exercises.md
+      - Reference overview: reference/index.md
+      - Capability progression: reference/progression.md
+      - Exercise catalog: reference/exercises.md
       - Assessment rubrics: reference/assessment.md
       - Troubleshooting: reference/troubleshooting.md
-      - Resources: reference/resources.md
+      - Further resources: reference/resources.md

@@ -4,11 +4,23 @@ description: Serve LLMs behind stable APIs with timeouts, retries, and fallbacks
 
 # Module 13 — Production-Grade Systems
 
+**Time:** 2–3 weeks (alongside a real project) · **Depends on:** [04 Testing & evals](04-testing-evals.md), [07 Tools & RAG](07-tools-and-rag.md), [10 Cost](10-cost-optimization.md) · **Next:** [Integration patterns](16-integration-patterns.md)
+
 <span data-module-id="13" hidden></span>
 
-**Time:** 2–3 weeks (alongside a real project) · **Depends on:** 04, 07, 10 · **Next:** [Compliance](14-compliance.md)
-
 ---
+
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Friday 16:40. Support chat p95 jumps from 1.2s to “hung.” The provider is rate-limiting; your SDK default has **no timeout**. Workers pile up, health checks still pass (process is “up”), autoscaler adds pods that also hang, and the bill spikes from retries without jitter. Nobody can answer “what did user X see?” because logs have no shared `request_id` — only “the bot was weird.” Someone had also hot-edited the system prompt in the dashboard that morning; there is no version pin to roll back.
+
+</div>
+
+**Case question:** Which deadline, request identifier, version record, and service metric would let on-call reconstruct and contain this incident?
 
 ## Learning objectives
 
@@ -17,21 +29,14 @@ description: Serve LLMs behind stable APIs with timeouts, retries, and fallbacks
 - Version prompts and model IDs so deploys are reproducible and roll-backable
 - Ship a containerized inference service with a realistic CI gate
 
+---
+
 ## What you can build
 
 - FastAPI (or similar) inference service with `/healthz` and `/v1/generate`
 - Latency / error / token dashboards wired to request IDs
 - Blue/green or canary prompt versions with eval gates in CI
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Friday 16:40. Support chat p95 jumps from 1.2s to “hung.” The provider is rate-limiting; your SDK default has **no timeout**. Workers pile up, health checks still pass (process is “up”), autoscaler adds pods that also hang, and the bill spikes from retries without jitter. Nobody can answer “what did user X see?” because logs have no shared `request_id` — only “the bot was weird.” Someone had also hot-edited the system prompt in the dashboard that morning; there is no version pin to roll back.
-
-</div>
 
 *Gate 5 of the [running app](index.md#the-running-app): everything above worked on a laptop with one user. This is the failure that forces the rest — every other Gate-5 module exists to make this incident debuggable instead of mysterious.*
 
@@ -104,7 +109,9 @@ Every hop on this path carries four numbers you should be logging per `request_i
 
 ---
 
-## 1. Serving skeleton (FastAPI)
+## Core tutorial
+
+### 1. Serving skeleton (FastAPI)
 
 Start with a **thin, stateless** API. Business logic and provider SDKs live behind clear boundaries so you can swap models without rewriting HTTP glue.
 
@@ -176,7 +183,7 @@ def generate(req: GenerateRequest, request: Request):
     )
 ```
 
-### Production checklist (app tier)
+#### Production checklist (app tier)
 
 - [ ] Timeouts on **all** egress (provider, tools, vector DB)
 - [ ] Retries with jitter — **idempotent** paths only
@@ -196,7 +203,7 @@ def generate(req: GenerateRequest, request: Request):
 
 ---
 
-## 2. Timeouts, retries, fallbacks
+### 2. Timeouts, retries, fallbacks
 
 Provider SDKs default to “wait a long time.” That is wrong for interactive UX. Cap wait time; map exceptions to **your** HTTP status model.
 
@@ -263,7 +270,7 @@ Retries are safe when the call is **read-only** or **idempotent** from the produ
 
 ---
 
-## 3. Observability: metrics, traces, logs
+### 3. Observability: metrics, traces, logs
 
 You cannot debug “the bot was weird yesterday” without three signals sharing a `request_id`.
 
@@ -275,7 +282,7 @@ You cannot debug “the bot was weird yesterday” without three signals sharing
 
 **Tools to know:** OpenTelemetry (vendor-neutral instrumentation), Prometheus/Grafana, Langfuse / Phoenix / Helicone (LLM-specific), provider dashboards.
 
-### Minimal structured log shape
+#### Minimal structured log shape
 
 ```python
 import json
@@ -327,7 +334,7 @@ If your dashboard only has “number of requests,” you will guess. Instrument 
 
 ---
 
-## 4. CI/CD for prompts and models
+### 4. CI/CD for prompts and models
 
 ```text
 PR → lint / typecheck / unit tests
@@ -363,7 +370,7 @@ Rollback is not “paste the old string into the dashboard.” You need the **te
 
 ---
 
-## 5. Docker sketch
+### 5. Docker sketch
 
 ```dockerfile
 FROM python:3.11-slim
@@ -392,6 +399,19 @@ CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000"]
 | Logs contain prompts + secrets | Compliance incident | Redact; separate secure transcript store |
 | Single model provider | Total outage | Fallback model / degrade mode |
 | Eval only on laptop | Silent quality drop | Golden suite in CI (subset) + nightly full |
+
+---
+
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Hung calls and missing request context made a production incident impossible to reconstruct.
+
+**What this lab demonstrates:** The endpoint, deadline/fallback path, structured request ID, container, golden subset, and p95 measurement create the evidence the incident lacked.
+
+**What it does not prove:** A local load run does not establish production capacity or eliminate provider and downstream failures.
+
+</div>
 
 ---
 
@@ -474,4 +494,6 @@ Capture: p95 latency under a small load script, and a greppable `request_id` fro
 - **Prove:** `/healthz` plus a generate/triage path with a deadline and a mapped fallback. Prefer growing [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter) over a greenfield app.
 - **Test:** `cd capstone-starter && pytest tests/test_api.py -v`
 
-**Next:** [Module 14 — Compliance & governance](14-compliance.md)
+**Return to the case:** Deadlines, request IDs, version pins, and service-level telemetry make the hung request diagnosable and recoverable. Observability reveals failure; it does not eliminate provider outages.
+
+**Next:** [Integration patterns](16-integration-patterns.md)

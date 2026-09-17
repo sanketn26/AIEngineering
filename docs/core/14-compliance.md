@@ -4,14 +4,28 @@ description: Map LLM product data flows for privacy and security review, build a
 
 # Module 14 — Legal, Compliance & Governance
 
+**Time:** 3–5 days · **Depends on:** [02 Security & privacy](02-security-privacy.md), [13 Production](13-production.md) · **Next:** [Domain apps](15-domain-apps.md)
+
 <span data-module-id="14" hidden></span>
 
-**Time:** 3–5 days · **Depends on:** 02, 13 · **Next:** [Domain apps](15-domain-apps.md)
+---
 
 !!! warning "Not legal advice"
     This module is an **engineering orientation** for CS practitioners. It is **not** legal advice, a compliance certification, or a substitute for qualified counsel, privacy officers, or security review. Laws and contracts are jurisdiction- and product-specific. When in doubt, escalate to specialists before shipping regulated data flows.
 
 ---
+
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Enterprise security questionnaire, week before renewal. They ask: *Where does customer text go? How long do you keep it? Which model version answered ticket #88421 last Tuesday?* Your team discovers prompts in the default log stream, no data inventory for the vector index, and a system prompt last changed by “someone on-call” with no PR. Legal cannot answer “are we allowed to send this field to Vendor X?” because engineering never drew the map. The deal stalls — not because the model is weak, but because **controls and provenance** were an afterthought.
+
+</div>
+
+**Case question:** What deployed evidence answers where ticket data went, which version acted on it, and whether the organization was allowed to send it?
 
 ## Learning objectives
 
@@ -20,21 +34,14 @@ description: Map LLM product data flows for privacy and security review, build a
 - Establish lightweight change management for prompts, tools, and model pins
 - Classify data and route it according to policy (without inventing legal conclusions)
 
+---
+
 ## What you can build
 
 - Audit log schema for prompts/actions (hashes + redaction), using `src.audit`
 - Data inventory table: training, RAG, logs, evals, vendors
 - Model/prompt change approval checklist tied to eval evidence
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Enterprise security questionnaire, week before renewal. They ask: *Where does customer text go? How long do you keep it? Which model version answered ticket #88421 last Tuesday?* Your team discovers prompts in the default log stream, no data inventory for the vector index, and a system prompt last changed by “someone on-call” with no PR. Legal cannot answer “are we allowed to send this field to Vendor X?” because engineering never drew the map. The deal stalls — not because the model is weak, but because **controls and provenance** were an afterthought.
-
-</div>
 
 You already version APIs and database migrations. LLM systems introduce **new artifact types** that change behavior without a classic “code deploy”:
 
@@ -79,7 +86,9 @@ flowchart TB
 
 ---
 
-## 1. Frameworks you will hear about
+## Core tutorial
+
+### 1. Frameworks you will hear about
 
 | Area | Examples (jurisdiction-dependent) | Engineering takeaway |
 |------|-----------------------------------|----------------------|
@@ -108,11 +117,11 @@ If someone asks you “Are we GDPR compliant?” the correct engineering answer 
 
 ---
 
-## 2. Audit trail pattern
+### 2. Audit trail pattern
 
 Prefer **append-only events** with **content hashes** over logging full sensitive prompts in the default stream. Full transcripts, when required, go to a restricted store with retention and access review.
 
-### Course package: `src.audit`
+#### Course package: `src.audit`
 
 Runnable and tested (`pytest tests/test_audit.py`):
 
@@ -218,7 +227,7 @@ Hashes prove “this exact input was processed” if you still hold the original
 
 ---
 
-## 3. Data inventory (start here)
+### 3. Data inventory (start here)
 
 Before fancy classifiers, make a table. Here is a **worked sketch** for a support chatbot — copy the columns, replace the rows with your stores.
 
@@ -243,7 +252,7 @@ If you cannot fill that table for *your* app, you are not ready for a vendor sec
 | Eval golden set | labeled cases | … | long-lived | eng / QA | careful |
 | Fine-tune set | examples | … | … | … | training risk |
 
-### Classification labels (working set)
+#### Classification labels (working set)
 
 ```text
 public → internal → confidential → restricted
@@ -251,7 +260,7 @@ public → internal → confidential → restricted
 
 Map each class to **allowed model destinations** (public cloud mini vs private VPC endpoint vs “never leave premises”). That table is product policy; counsel reviews it for regulated sectors.
 
-### Data governance checklist
+#### Data governance checklist
 
 - [ ] Inventory: training, RAG corpora, logs, eval sets, backups  
 - [ ] Classification labels on stores and API fields  
@@ -275,7 +284,7 @@ Teams list “app DB” and “vendor API” and stop. Common misses: **embeddin
 
 ---
 
-## 4. Change management for prompts & models
+### 4. Change management for prompts & models
 
 Treat prompts, tools, and models like production code:
 
@@ -303,7 +312,7 @@ Agent max-steps, tool allowlists, and temperature defaults belong in the same ch
 
 ---
 
-## 5. Minimal “allowed data by destination” table
+### 5. Minimal “allowed data by destination” table
 
 Write this for *your* app (example only):
 
@@ -328,6 +337,19 @@ Wire routing in code (Module 16) so the table is enforced, not a wiki wish.
 | Eval set contains real PII | Secondary breach surface | Synthetic / redacted goldens |
 | “We’ll be compliant later” | Retrofitting audit is expensive | Ship audit events with the feature |
 | Engineering signs legal attestations | Wrong accountability | Escalate; do not self-certify |
+
+---
+
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** The team could not answer where customer data went or which configuration handled a ticket.
+
+**What this lab demonstrates:** The data-flow diagram, classified stores, audit events, destination policy, and change checklist assemble the evidence needed for that questionnaire.
+
+**What it does not prove:** These artifacts are not legal advice or certification, and they are useful only if they match the deployed data path.
+
+</div>
 
 ---
 
@@ -406,4 +428,6 @@ Wire routing in code (Module 16) so the table is enforced, not a wiki wish.
 - **Prove:** Tool events are hashed to JSONL; raw secrets never appear on disk.
 - **Test:** `pytest tests/test_audit.py -v`
 
-**Next:** [Module 15 — Domain applications](15-domain-apps.md)
+**Return to the case:** A data inventory, provenance record, retention policy, and auditable control owner let the team answer the questionnaire with evidence. Documentation is not certification and must match the deployed path.
+
+**Next:** [Domain apps](15-domain-apps.md)

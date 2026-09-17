@@ -10,6 +10,22 @@ description: Structure prompts with role, task, and output format, treat them as
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+**The reply you cannot send**
+
+The customer asks, “Any demo slots Tuesday?” You ask an email assistant to draft a reply. It offers 10 a.m. You never gave it a calendar. A second draft avoids the time but leaves out the risks section your reviewer needs. Both sound ready to send; neither is ready to trust.
+
+</div>
+
+**Case question:** How do you make the request reviewable — which facts may the reply use, which sections must it contain, and what should it do when a fact is missing? In the lab, you will test that contract on a real message and record where it still fails.
+
+**Try before reading:** Write one instruction that would prevent an invented appointment and one that would make a missing section easy to spot. Keep them beside your notes; compare them with the constraints and format below. No model call needed yet.
+
 ## Learning objectives
 
 - Structure prompts with role, task, context, constraints, and output format so a colleague can maintain them
@@ -18,29 +34,12 @@ description: Structure prompts with role, task, and output format, treat them as
 - Treat prompts as **versioned config**, not one-off chat experiments
 - Spot beginner failure modes before they become production incidents
 
----
-
-## Why this matters (CS engineer view)
-
-<div class="aieng-story" markdown>
-
-Friday 4:47pm: a support bot ships after a “quick prompt polish.” By Monday, finance is chasing three refunds the bot invented—no policy snippet in context, no “don’t invent money rules” constraint, no output check. The model wasn’t “evil”; the interface was soft and nobody validated the response before it hit the customer.
-
-</div>
-
-*This is the running app the [course index](index.md#the-running-app) tracks across all five gates — here it's a support-ticket triager with no contract on its own output. Gate 1 closes exactly this failure.*
-
-As a software engineer, you already ship APIs with schemas, retries, and contracts. An LLM call is another dependency with a **soft contract**: same input does not guarantee bit-identical output. Prompt engineering is how you tighten that contract enough that the rest of your system can stay boring.
-
-Production failures rarely look like “the model is dumb.” They look like: a classifier emits free text instead of a label; a nightly job burns 10× tokens because the prompt pasted entire ticket histories; two engineers rewrite the same system message in two services and drift apart. Those are systems problems: unclear interfaces, missing validation, no ownership of config.
-
-You will use this module whenever you build a single-turn or lightly multi-turn feature—email drafts, ticket triage, extraction, routing, summarization. Later modules add security boundaries, structured decoding, and evals. Start here: make one prompt **specific, role-separated, and testable**.
 
 ---
 
 ## Mental model
 
-Think of a chat completion as a **request lifecycle**, not a magic box. Your code assembles messages, the provider samples tokens under a decoding policy, and your code must validate what comes back before it becomes a side effect.
+As a software engineer, you already work with API contracts. An LLM call has a **soft contract**: the same input does not guarantee the same output. Think of a chat completion as a **request lifecycle**, not a magic box. Your code assembles messages, the provider samples tokens under a decoding policy, and your code must validate what comes back before it becomes a side effect.
 
 ```mermaid
 flowchart LR
@@ -93,6 +92,8 @@ flowchart LR
 | **Examples** (optional) | Few-shot anchors | 1–3 input→output pairs (Module 03) |
 
 If you cannot name the **artifact** (JSON object, email body, label enum), the prompt is not ready for production.
+
+For the Tuesday reply, “be helpful” leaves both failures open. Your **constraint** can say “Do not invent availability; ask when it is unknown.” Your **format** can require `## Summary`, `## Response`, and `## Risks`. One limits unsupported claims; the other makes omissions inspectable. Neither verifies the output for you.
 
 ### Minimal pattern
 
@@ -161,6 +162,8 @@ Downstream systems need contracts:
 - **Machines:** JSON with named fields, or provider structured-output modes (Module 03)
 
 Do not parse “whatever the model felt like saying” with fragile regex in production without a fallback path.
+
+Return to the draft: all three headings are present, but `## Response` still offers 10 a.m. Has it passed? Only the shape check. Compare its claims with the supplied facts before sending. The lab records **section presence and invented facts separately** for this reason.
 
 ### 5. Temperature matches the task
 
@@ -259,6 +262,8 @@ if __name__ == "__main__":
 
 Use Anthropic / Gemini / Ollama with the same **message roles** idea; only the SDK and model id differ.
 
+This sketch separates messages, but its requirements do not yet ask for the lab’s three headings or forbid invented appointment times. Carry your opening instructions into your lab version; copying the sketch alone does not complete the contract.
+
 ### 7. Prompts as config (production mindset)
 
 Ad-hoc f-strings in business logic do not scale. Prefer named templates, versioned files, and a single render path.
@@ -351,9 +356,24 @@ Each stage can have its own temperature, model size, and tests. Fail closed on s
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** The reply looked polished while inventing an appointment and omitting a required section.
+
+**What this lab demonstrates:** Your ten-run comparison tests section presence and unsupported claims, then ties one new constraint to a failure you actually observed.
+
+**What it does not prove:** A small sample does not guarantee factual correctness on future messages or authorize the reply to be sent automatically.
+
+</div>
+
+---
+
 ## Lab
 
 **Artifact:** a small script (or notebook cell) that produces a **stable** Markdown reply for a real email or GitHub issue *you* wrote.
+
+The opening drafts were illustrative. Your evidence comes from the outputs you collect here: check the required sections and compare claims with your input. If the failures differ from the opening, record those instead.
 
 **Steps**
 
@@ -445,4 +465,6 @@ Keep 3–4 sources open while you do the lab; do not try to memorize every techn
 - **Prove:** A named template renders; untrusted user text stays out of the system role.
 - **Test:** `pytest tests/test_prompts.py -v`
 
-**Next:** [Module 02 — Security & privacy](02-security-privacy.md)
+Your result is a reviewable reply contract and a record of observed variation—not a guarantee that every future reply is safe. The same discipline transfers to the [running app’s triage output](index.md#the-running-app); this lab does not modify that service or authorize refunds.
+
+**Next:** [Security & privacy](02-security-privacy.md) — the request has clearer rules; now examine what happens when the message itself tries to override them.

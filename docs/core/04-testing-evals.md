@@ -10,6 +10,18 @@ description: Separate deterministic unit tests from stochastic eval suites, buil
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Sprint review looked green: five happy-path chats, a thumbs-up, a “tiny wording tweak” merged Friday. Two weeks later billing extraction accuracy sits at 71% instead of 92%. No CI red. No pager. Customers just filed tickets about wrong amounts. Nothing measured the model path—so the regression was silent until finance noticed.
+
+</div>
+
+**Case question:** What dataset, metric, and threshold would have turned the 92% → 71% drop into a failed build before customers saw it?
+
 ## Learning objectives
 
 - Separate **unit tests** (deterministic code) from **eval suites** (stochastic model behavior)
@@ -20,13 +32,6 @@ description: Separate deterministic unit tests from stochastic eval suites, buil
 
 ---
 
-## Why this matters (CS engineer view)
-
-<div class="aieng-story" markdown>
-
-Sprint review looked green: five happy-path chats, a thumbs-up, a “tiny wording tweak” merged Friday. Two weeks later billing extraction accuracy sits at 71% instead of 92%. No CI red. No pager. Customers just filed tickets about wrong amounts. Nothing measured the model path—so the regression was silent until finance noticed.
-
-</div>
 
 *Same failure mode the [running app](index.md#the-running-app) hits at Gate 2: schema-valid output (Gate 1) is not the same as correct output, and nothing before this gate would have caught the drop.*
 
@@ -344,6 +349,19 @@ rows = load_jsonl("tests/fixtures/invoice_golden.jsonl")
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A prompt change dropped extraction accuracy without producing a failing build.
+
+**What this lab demonstrates:** The golden set, deliberate regression, failure IDs, and CI threshold recreate the missing feedback loop and prove it can go red.
+
+**What it does not prove:** Fifteen rows cover known behavior only; production failures must continue to expand the set.
+
+</div>
+
+---
+
 ## Lab
 
 **Artifact:** a golden set (≥15 rows) + automated scorer that fails when you break a prompt on purpose.
@@ -436,4 +454,6 @@ poetry run pytest tests/test_evals.py tests/test_security.py -v
 - **Prove:** A golden suite runs and accuracy is a number you would fail a build on.
 - **Test:** `pytest tests/test_evals.py -v`
 
-**Next:** [Module 05 — Context engineering](05-context-engineering.md)
+**Return to the case:** The golden set turns the silent quality drop into a failing regression gate with an explicit threshold. It covers the cases you collected, not every future input; maintain and expand it as failures arrive.
+
+**Next:** [Context engineering](05-context-engineering.md)

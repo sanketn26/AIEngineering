@@ -4,11 +4,23 @@ description: Decompose agent workflows into testable subroutines, add gates and 
 
 # Module 18 — Agent Design Patterns
 
-<span data-module-id="18" hidden></span>
-
 **Time:** 5–8 days · **Depends on:** [11 Single agents](11-single-agents.md), [12 Multi-agent systems](12-multi-agents.md) · **Pairs with:** [09 Advanced RAG](09-advanced-rag.md) · **Next:** [Orchestration patterns](19-orchestration-patterns.md)
 
+<span data-module-id="18" hidden></span>
+
 ---
+
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+A team builds an agent to scan a missing person's hard drive: one big "reason and act" loop reading file after file, deciding what's relevant, summarizing as it goes. It works on the demo laptop with 200 files. On a real 400GB drive it blows the context window by lunch, drifts off-task after a few hundred files, and takes eleven hours because every step waits on the last one. The fix isn't a bigger context window — it's decomposition: a **subroutine** that extracts facts from one file at a time (parallelizable, stateless, disposable reasoning), a **guardrail** that keeps PII out of the running case file, a **rejection sampler** that guarantees each extraction parses as JSON, and a **retriever** that means the agent never has to "read everything" to answer "did we see a passport photo."
+
+</div>
+
+**Case question:** Which leaf patterns make one file independently testable and disposable without losing the evidence needed by the larger investigation?
 
 ## Learning objectives
 
@@ -18,6 +30,8 @@ description: Decompose agent workflows into testable subroutines, add gates and 
 - Use **consensus** (parallel independent runs + deterministic reconciliation) to raise reliability and estimate confidence
 - Use a two-stage **retriever** (cheap recall → expensive precision) to keep massive corpora out of the context window
 
+---
+
 ## What you can build
 
 - A field-extraction subroutine with a validated schema boundary
@@ -26,15 +40,6 @@ description: Decompose agent workflows into testable subroutines, add gates and 
 - A consensus ensemble that reports both an answer and a confidence score
 - A hybrid retriever with reciprocal rank fusion and an adaptive re-query loop
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-A team builds an agent to scan a missing person's hard drive: one big "reason and act" loop reading file after file, deciding what's relevant, summarizing as it goes. It works on the demo laptop with 200 files. On a real 400GB drive it blows the context window by lunch, drifts off-task after a few hundred files, and takes eleven hours because every step waits on the last one. The fix isn't a bigger context window — it's decomposition: a **subroutine** that extracts facts from one file at a time (parallelizable, stateless, disposable reasoning), a **guardrail** that keeps PII out of the running case file, a **rejection sampler** that guarantees each extraction parses as JSON, and a **retriever** that means the agent never has to "read everything" to answer "did we see a passport photo."
-
-</div>
 
 Single-agent loops (Module 11) and multi-agent topologies (Module 12) tell you *when* to split work into roles. This module is about the smaller-grained patterns you reach for **inside** a role, or at the seams between roles, once you already know a split is justified — the load-bearing engineering primitives, not the org chart.
 
@@ -427,6 +432,19 @@ def adaptive_retrieve(query: str, max_reformulations: int = 2) -> list[Candidate
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** One sequential agent tried to read an entire drive and carried every intermediate thought forward.
+
+**What this lab demonstrates:** The lab extracts a validated subroutine, gates the riskiest tool, bounds format retries, and measures consensus confidence on repeated cases.
+
+**What it does not prove:** These primitives do not choose the correct global workflow or remove correlated errors shared by every worker.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>
@@ -515,4 +533,6 @@ def adaptive_retrieve(query: str, max_reformulations: int = 2) -> list[Candidate
 - **Prove:** Three leaf patterns, each named to the failure it closes — not three slogans.
 - **Test:** `pytest tests/test_agents.py -v`
 
-**Next:** [Module 19 — Orchestration patterns](19-orchestration-patterns.md)
+**Return to the case:** The large scan becomes small, validated, disposable subroutines behind gates, retrieval, and deterministic reconciliation. Decomposition controls scope; it cannot repair a badly chosen split or shared model blind spot.
+
+**Next:** [Orchestration patterns](19-orchestration-patterns.md)

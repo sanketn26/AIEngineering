@@ -10,6 +10,18 @@ description: Name the agent failure taxonomy — runaway loops, tool hallucinati
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Friday 17:10. The “research crew” has been “almost done” for ninety minutes. Logs show the same `search` signature 140 times, then a hallucinated `run_sql` that your allowlist never declared — except one intern had wired `**kwargs` through to a helper. Meanwhile a second worker wrote three of five planned tickets and crashed; the UI showed a green check because `done=True` was set on the first success. Cost: $186. Customer-visible quality: a 12-point drop vs last week’s golden set, no pager, because the HTTP layer still returned 200. Personality did not fail. **Controls** were missing.
+
+</div>
+
+**Case question:** Which named detector catches this failure before the budget is gone, and what state lets the system abort or recover safely?
+
 ## Learning objectives
 
 - Name a **failure taxonomy** for agents: runaway loops, tool hallucination, state corruption, partial execution, cost explosions, silent degradation
@@ -19,13 +31,6 @@ description: Name the agent failure taxonomy — runaway loops, tool hallucinati
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Friday 17:10. The “research crew” has been “almost done” for ninety minutes. Logs show the same `search` signature 140 times, then a hallucinated `run_sql` that your allowlist never declared — except one intern had wired `**kwargs` through to a helper. Meanwhile a second worker wrote three of five planned tickets and crashed; the UI showed a green check because `done=True` was set on the first success. Cost: $186. Customer-visible quality: a 12-point drop vs last week’s golden set, no pager, because the HTTP layer still returned 200. Personality did not fail. **Controls** were missing.
-
-</div>
 
 Module 11 taught `max_steps` and repeated-signature abort. That is the minimum viable circuit breaker. Production agents fail in **families**. If you cannot name the family, you will patch the last incident forever.
 
@@ -248,6 +253,19 @@ That is **silent degradation**. Detectors need a `quality_score` from a golden t
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** The agent consumed budget while loops, invented tools, and partial state still returned a green response.
+
+**What this lab demonstrates:** The detector, breaker, spend guard, and optional checksum tests turn each named failure into an asserted runtime state.
+
+**What it does not prove:** Detection and abort limit damage; they do not repair partial external side effects or explain the original model error.
+
+</div>
+
+---
+
 ## Lab
 
 1. Script an `Agent` (Module 11) whose stub LLM repeats `search` twice; assert `FailureDetector` reports `runaway_loop`.
@@ -332,4 +350,6 @@ poetry run pytest tests/test_reliability.py tests/test_agents.py -v
 - **Prove:** Loop, hallucinated tool, and tripped breaker each have a test that would have caught the incident.
 - **Test:** `pytest tests/test_reliability.py -v`
 
-**Next:** [Module 21 — Secure tool use & sandboxing](21-secure-tool-use.md)
+**Return to the case:** Named detectors and circuit breakers turn loops, hallucinated tools, partial work, and cost spikes into observable failure states. A breaker limits damage; recovery and root-cause work remain necessary.
+
+**Next:** [Secure tool use](21-secure-tool-use.md)

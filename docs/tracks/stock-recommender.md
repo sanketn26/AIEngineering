@@ -31,6 +31,8 @@ Tuesday 9:41 a.m. A demo bot tells PMs ACME will “likely outperform” after a
 
 </div>
 
+**Case question:** Which boundary makes every claim inspectable—time-safe data, live quote tools, resolvable citations, or non-advice UX—and what evidence proves each boundary held?
+
 Build this pipeline on purpose:
 
 **Data → features → classical baseline (time-safe) → SLM PEFT → RAG → compression → prompts/evals → FastAPI + Docker + CI**

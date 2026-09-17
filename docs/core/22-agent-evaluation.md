@@ -10,6 +10,18 @@ description: Score agent trajectories instead of only final answers, separate pr
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Golden-set extract accuracy is 94%. Leadership ships the new “agentic” support bot. A week later, tickets close slower and the bill is 6×. Extract evals are still green — the bot still parses invoices. What died was the **path**: 18 tool calls instead of 3, two hallucinated tools per session, $0.40 vs $0.04, and a 40-second p95. Single-turn evals never saw a trajectory. The regression was **silent on the only dashboard you had**.
+
+</div>
+
+**Case question:** Which trajectory metrics expose the slower, costlier path even when the final extraction score remains green?
+
 ## Learning objectives
 
 - Score **trajectories**, not only final strings
@@ -19,13 +31,6 @@ description: Score agent trajectories instead of only final answers, separate pr
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Golden-set extract accuracy is 94%. Leadership ships the new “agentic” support bot. A week later, tickets close slower and the bill is 6×. Extract evals are still green — the bot still parses invoices. What died was the **path**: 18 tool calls instead of 3, two hallucinated tools per session, $0.40 vs $0.04, and a 40-second p95. Single-turn evals never saw a trajectory. The regression was **silent on the only dashboard you had**.
-
-</div>
 
 Module 04 is necessary and insufficient. Agents fail **in the middle**. If you only assert the final JSON, you will promote a loop that lucks into the right answer.
 
@@ -246,6 +251,19 @@ Scheduled job (optional): replay the same fixtures against a live model, write J
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Final-answer accuracy stayed green while the agent used six times the cost and far more tool calls.
+
+**What this lab demonstrates:** The three trajectories, dashboard, and regression assertion make looping success and hallucinated-tool failure score differently from exact success.
+
+**What it does not prove:** A composite score can hide trade-offs, so its process and outcome components must remain visible and calibrated to real tasks.
+
+</div>
+
+---
+
 ## Lab
 
 1. Build three stub trajectories: exact success, looping success, hallucinated-tool failure.
@@ -316,4 +334,6 @@ poetry run pytest tests/test_agent_evals.py tests/test_reliability.py -v
 - **Prove:** Looping-success scores worse than clean success; `regression_delta` can fail CI.
 - **Test:** `pytest tests/test_agent_evals.py -v`
 
-**Next:** [Module 23 — Prompt & config drift](23-prompt-drift.md)
+**Return to the case:** Trajectory scoring exposes the extra calls, hallucinated tools, latency, and spend that final-answer accuracy hid. Composite scores aid promotion decisions but must keep their component metrics visible.
+
+**Next:** [Prompt & config drift](23-prompt-drift.md)

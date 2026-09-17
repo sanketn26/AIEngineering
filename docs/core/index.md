@@ -14,17 +14,21 @@ flowchart LR
   G4 -->|"works on a laptop ≠ survives production"| G5["Gate 5<br/>Operate it"]
 ```
 
-## The running app
+<span id="the-running-app"></span>
 
-One thread ties the five gates together: a support-ticket triage service. Each gate is what the *previous* gate's failure forced the team to add.
+## The running case
 
-| Gate | The app gains | The failure that forced it |
-|---|---|---|
-| 1 — Dependable model service | A triage endpoint that returns schema-valid `{category, priority}` for any input, including hostile ones | Free-text output that "mostly" parsed broke the queue integration on the first malformed reply |
-| 2 — Measurable quality | A 100+ item golden set gating every prompt change in CI | A "small" prompt tweak silently dropped priority accuracy 12 points and nobody noticed for a week |
-| 3 — External knowledge | Retrieval over the policy KB so triage cites the actual refund window, not a guess | The model confidently invented a refund policy that never existed |
-| 4 — Actions and agents | A bounded tool loop that looks up the customer's order and re-routes the ticket | An ungated agent looped on the same tool call until the cost alert fired |
-| 5 — Operate it | A served, observable, versioned, drift-checked production system | A provider rate-limit spike caused hung workers, an autoscaler pileup, and a bill nobody could explain |
+One thread ties the five gates together: a fictional support-ticket triage service. Each gate begins with a failure the current system cannot handle, adds an engineering capability, and leaves a narrower limitation that motivates later work. The incidents are teaching scenarios, not vendor postmortems.
+
+Modules remain self-contained because this curriculum supports several reading paths. Each case states the system state it needs; callbacks add continuity but never require you to remember characters or read every earlier module. Follow **Depends on** for prerequisites—the module number is catalog order, not a compulsory episode order.
+
+| Gate | Problem entering the gate | Capability at exit | Residual limitation |
+|---|---|---|---|
+| 1 — Dependable model service | Soft output contracts and hostile input | Structured output checks, policy/input boundaries, fail-closed handling | Schema-valid output can still be wrong |
+| 2 — Measurable quality | Behavior regresses without a failing test | Golden-set thresholds gate changes | Passing known tests does not supply missing business knowledge |
+| 3 — External knowledge | Policy is missing, stale, or poorly retrieved | Budgeted retrieval with grounding and citation checks | Grounded answers do not authorize actions |
+| 4 — Actions and agents | Tools can loop or act without authority | Runtime authorization, budgets, verification, and persistence | A safe local workflow still has to survive production |
+| 5 — Operate it | Traffic, drift, outages, and cost are opaque | Observable, versioned operation with rehearsed rollback | Monitoring and incident response remain ongoing work |
 
 Each gate section below names this same failure again, then shows the modules that close it.
 
@@ -105,7 +109,6 @@ Grounded answers are not the same as safe actions. Once the system can call tool
 | [10 — Cost optimization](10-cost-optimization.md) | 2–3 days |
 | [11 — Single-agent workflows](11-single-agents.md) | 7–10 days |
 | [12 — Multi-agent coordination](12-multi-agents.md) | 10–14 days |
-| [16 — Integration patterns](16-integration-patterns.md) | 1–2 weeks |
 | [18 — Agent design patterns](18-agent-design-patterns.md) | 5–8 days |
 | [19 — Orchestration patterns](19-orchestration-patterns.md) | 6–9 days |
 | [20 — Agent reliability & failure modes](20-agent-reliability.md) | 4–6 days |
@@ -128,6 +131,7 @@ Everything above works on a laptop with one user. Production means real traffic,
 | Module | Time |
 |---|---|
 | [13 — Production-grade systems](13-production.md) | 2–3 weeks (alongside a real project) |
+| [16 — Integration patterns](16-integration-patterns.md) | 1–2 weeks |
 | [14 — Compliance](14-compliance.md) | 3–5 days |
 | [15 — Domain-specific applications](15-domain-apps.md) | 1–2 weeks |
 | [17 — Small & local models](17-small-models.md) | 5–7 days |

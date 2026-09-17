@@ -4,14 +4,28 @@ description: Prototype vertical LLM assistants for regulated domains with policy
 
 # Module 15 — Domain-Specific Applications
 
+**Time:** 1–2 weeks (patterning, not full vertical certification) · **Depends on:** [02 Security & privacy](02-security-privacy.md), [07 Tools & RAG](07-tools-and-rag.md), [14 Compliance](14-compliance.md) · **Next:** [Small models](17-small-models.md)
+
 <span data-module-id="15" hidden></span>
 
-**Time:** 1–2 weeks (patterning, not full vertical certification) · **Depends on:** 02, 07, 14 · **Next:** [Integration patterns](16-integration-patterns.md)
+---
 
 !!! warning "Not medical, legal, or financial advice"
     Domain examples in this module are **illustrative engineering patterns only**. They are **not** clinical guidance, legal advice, investment advice, or a license to operate in a regulated market. Do **not** deploy systems that diagnose, prescribe, file legal documents, or execute trades without licensed professionals, institutional validation, compliance review, and appropriate approvals. Educational prototypes must fail closed and refuse personal decisioning.
 
 ---
+
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+A pilot “wellness assistant” ships with a warm tone and a footer: *not medical advice*. Demo day goes well. Two weeks later a user asks for a dose “for tonight”; the model answers fluently from training cut-off noise. There was no **must-refuse** case in the eval set, no clinician loop, and the only “control” was a disclaimer. Leadership freezes the feature. The failure was not model size — it was **missing layers**: policy, approved knowledge, action bounds, evidence, and human authority.
+
+</div>
+
+**Case question:** Where must this domain application answer, cite, defer, or escalate—and which evaluation demonstrates that boundary on hard cases?
 
 ## Learning objectives
 
@@ -20,21 +34,14 @@ description: Prototype vertical LLM assistants for regulated domains with policy
 - Separate product UX (helpful language) from regulated decisioning (human authority)
 - Design must-refuse cases and escalation paths before feature polish
 
+---
+
 ## What you can build
 
 - A domain-shaped **prototype** with refuse-and-escalate behavior
 - A 10-case eval set including must-refuse scenarios
 - Citation + audit wiring for knowledge answers
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-A pilot “wellness assistant” ships with a warm tone and a footer: *not medical advice*. Demo day goes well. Two weeks later a user asks for a dose “for tonight”; the model answers fluently from training cut-off noise. There was no **must-refuse** case in the eval set, no clinician loop, and the only “control” was a disclaimer. Leadership freezes the feature. The failure was not model size — it was **missing layers**: policy, approved knowledge, action bounds, evidence, and human authority.
-
-</div>
 
 Generic chatbots fail in verticals for non-ML reasons: **wrong authority**, **wrong sources**, **missing audit**, and **no human ownership**. A CS engineer who only optimizes BLEU or thumbs-up will ship something that looks fluent and is operationally unsafe.
 
@@ -302,6 +309,19 @@ A system prompt that says “you are not a doctor” helps, but adversaries and 
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A domain assistant crossed a boundary where a fluent answer required refusal or expert escalation.
+
+**What this lab demonstrates:** The written policy, must-refuse cases, policy check, citations, and audit events exercise both allowed and denied paths for one chosen vertical.
+
+**What it does not prove:** Ten cases cannot establish clinical, financial, or legal safety, and the prototype remains unsuitable for regulated deployment claims.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>
@@ -379,4 +399,6 @@ Do **not** claim your prototype is deployable in production regulated settings.
 - **Prove:** Must-refuse cases fail closed with an audit event — fluency is not authority.
 - **Test:** `pytest tests/test_security.py -v`
 
-**Next:** [Module 16 — Integration patterns](16-integration-patterns.md)
+**Return to the case:** The domain boundary determines when the application may answer, defer, cite, or escalate. Guardrails and evaluation reduce risk; they do not turn a general model into a licensed expert.
+
+**Next:** [Small models](17-small-models.md)

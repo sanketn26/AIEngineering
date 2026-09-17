@@ -4,11 +4,23 @@ description: Design durable workflow orchestration with a persistent coordinator
 
 # Module 25 — Durable Orchestration & Real Agent Patterns
 
-**Time:** 7–10 days · **Depends on:** [12](12-multi-agents.md), [19](19-orchestration-patterns.md), [21](21-secure-tool-use.md), [22](22-agent-evaluation.md) · **Next:** [Orchestrator comparison](26-orchestrator-comparison.md)
+**Time:** 7–10 days · **Depends on:** [12](12-multi-agents.md), [19](19-orchestration-patterns.md), [21](21-secure-tool-use.md), [22](22-agent-evaluation.md) · **Next:** [Orchestrators in production](26-orchestrator-comparison.md)
 
 <span data-module-id="25" hidden></span>
 
 ---
+
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+A “codebase investigator” is supposed to find why billing double-charges. It chats for forty minutes, holds the hypothesis in free-form CoT, writes the user’s tree directly, dies on a laptop sleep, and comes back with no memory. A junior re-runs it; it files a PR that fails tests; merge is a Slack thumbs-up. Durable orchestration is the opposite design: **coordinator with a log**, **tree of claims with scores**, **photocopy worktree**, **tests + approval before merge**, **HITL as a state**, not a hope.
+
+</div>
+
+**Case question:** What must be persisted, isolated, tested, and approved so the investigation can resume after interruption without corrupting the user tree?
 
 ## Learning objectives
 
@@ -20,13 +32,6 @@ description: Design durable workflow orchestration with a persistent coordinator
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-A “codebase investigator” is supposed to find why billing double-charges. It chats for forty minutes, holds the hypothesis in free-form CoT, writes the user’s tree directly, dies on a laptop sleep, and comes back with no memory. A junior re-runs it; it files a PR that fails tests; merge is a Slack thumbs-up. Durable orchestration is the opposite design: **coordinator with a log**, **tree of claims with scores**, **photocopy worktree**, **tests + approval before merge**, **HITL as a state**, not a hope.
-
-</div>
 
 Modules 18–19 gave leaf patterns and workflow *shape*. This module is the **end-to-end machine**: something that can survive a restart and refuse to merge junk.
 
@@ -217,6 +222,19 @@ You persisted **the wrong artifact**. Durable events should carry **compressed r
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A long investigation lost its hypothesis on restart and wrote an untested patch directly into the user's tree.
+
+**What this lab demonstrates:** The durable log, hypothesis frontier, pause/resume path, denial assertion, and merge gate prove state and side effects survive interruption safely.
+
+**What it does not prove:** Persistence can faithfully preserve a wrong hypothesis, so evidence scoring and human review still matter.
+
+</div>
+
+---
+
 ## Lab
 
 1. `HypothesisTree`: child evidence raises parent score; `frontier()` returns leaves.
@@ -289,4 +307,6 @@ poetry run pytest tests/test_durable.py tests/test_sandbox.py -v
 - **Prove:** Pause/resume from JSONL; a denied HITL does not run the next phase; merge gate blocks failed tests.
 - **Test:** `pytest tests/test_durable.py -v`
 
-**Next:** [Module 26 — Orchestrators in production](26-orchestrator-comparison.md)
+**Return to the case:** An append-only log, isolated worktree, tests, and a human merge state let the investigation survive interruption without writing directly to the user tree. Durability preserves state; it does not validate the hypothesis by itself.
+
+**Next:** [Orchestrators in production](26-orchestrator-comparison.md)

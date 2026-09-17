@@ -4,6 +4,8 @@ description: Three quick stops before Module 01, set up your environment, choose
 
 # Getting Started
 
+You will learn through concrete failures and the artifacts that close them: a prompt contract, a regression gate, grounded evidence, an authorized action, and an observable service. Each module's case stands alone, so choose the pace that matches your goal and follow its **Depends on** line.
+
 Three short stops before Module 01: get your environment working, pick a pace, and know how progress is tracked.
 
 | Page | What it covers |

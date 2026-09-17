@@ -10,9 +10,19 @@ description: Implement a plan-act-observe agent loop with hard stops, an allowli
 
 ---
 
-## Learning objectives
+<span id="why-this-matters-cs-engineer-view"></span>
 
-By the end of this module you will be able to:
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Overnight, a “helpful research agent” leaves 400+ tool calls in the logs: same `search` query, same empty hits, same optimistic retry. No `max_steps`. No repeated-signature abort. Morning bill: four figures for zero tickets closed. The demo had a charming persona and a ReAct prompt. It did not have a **state machine with circuit breakers**. Personality does not terminate; code does.
+
+</div>
+
+**Case question:** Which state, budget, and repeated-call rule must live outside the model so this loop stops predictably?
+
+## Learning objectives
 
 - Implement a **plan–act–observe** loop with **hard stops**
 - Constrain the model to an **allowlisted** tool surface and structured decisions
@@ -22,13 +32,6 @@ By the end of this module you will be able to:
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Overnight, a “helpful research agent” leaves 400+ tool calls in the logs: same `search` query, same empty hits, same optimistic retry. No `max_steps`. No repeated-signature abort. Morning bill: four figures for zero tickets closed. The demo had a charming persona and a ReAct prompt. It did not have a **state machine with circuit breakers**. Personality does not terminate; code does.
-
-</div>
 
 An “agent” is not a personality. It is a **state machine** that repeatedly:
 
@@ -442,6 +445,19 @@ Default to **one agent + tools** until a second role needs a crisp interface (Mo
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** An agent repeated tool calls overnight because neither the prompt nor runtime enforced termination.
+
+**What this lab demonstrates:** The forced failure and looping-policy tests prove the agent aborts cleanly at a hard step cap while preserving a replayable decision log.
+
+**What it does not prove:** Termination bounds damage; it does not prove the selected tools or final answer were correct.
+
+</div>
+
+---
+
 ## Lab
 
 1. Build an agent with tools: `search_notes`, `calculator`, and final answer (type `final`).  
@@ -531,4 +547,6 @@ Use `src.agents.Agent` as the baseline; extend only if you need new abort reason
 - **Prove:** The stub calls `add` then `final`; repeated identical tool calls abort in code.
 - **Test:** `pytest tests/test_agents.py -v`
 
-**Next:** [Module 12 — Multi-agent systems](12-multi-agents.md)
+**Return to the case:** A state machine with typed actions, repeated-call detection, and a hard step cap stops the overnight loop. It bounds execution; it does not make every selected action correct.
+
+**Next:** [Multi-agent](12-multi-agents.md)

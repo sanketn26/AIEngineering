@@ -4,15 +4,25 @@ description: Decide when multi-agent orchestration is actually justified, choose
 
 # Module 12 — Multi-Agent Coordination
 
-**Time:** 10–14 days · **Depends on:** [11 Single agents](11-single-agents.md) · **Next:** [Production](13-production.md)
+**Time:** 10–14 days · **Depends on:** [11 Single agents](11-single-agents.md) · **Next:** [Agent design patterns](18-agent-design-patterns.md)
 
 <span data-module-id="12" hidden></span>
 
 ---
 
-## Learning objectives
+<span id="why-this-matters-cs-engineer-view"></span>
 
-By the end of this module you will be able to:
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Hackathon energy: “CEO, engineer, designer, critic” agents write a README. Each persona re-reads the whole repo context. Critic and writer debate for six uncapped rounds. Final doc is worse than a single agent with `read_file` + one pass. Cost: ~10×. Latency: painful. The team shipped a **microservice mesh for a 200-line CRUD app** — theater, not topology. The fix was not more personas; it was **one agent + tools**, then maybe a capped writer→critic contract if metrics demand it.
+
+</div>
+
+**Case question:** Does the task require separate workers, and what topology and message contract make their added cost and failure surface worthwhile?
+
+## Learning objectives
 
 - Decide **when multi-agent is wrong** (default remains one agent + tools)
 - Choose among **sequential**, **hierarchical (manager–worker)**, and **peer** topologies
@@ -22,13 +32,6 @@ By the end of this module you will be able to:
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Hackathon energy: “CEO, engineer, designer, critic” agents write a README. Each persona re-reads the whole repo context. Critic and writer debate for six uncapped rounds. Final doc is worse than a single agent with `read_file` + one pass. Cost: ~10×. Latency: painful. The team shipped a **microservice mesh for a 200-line CRUD app** — theater, not topology. The fix was not more personas; it was **one agent + tools**, then maybe a capped writer→critic contract if metrics demand it.
-
-</div>
 
 Multi-agent systems are distributed systems with **nondeterministic workers**. Every extra agent adds:
 
@@ -426,6 +429,19 @@ Learn the concepts in this module; use frameworks as **implementations**, not as
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A persona-heavy multi-agent demo multiplied cost without demonstrating better work.
+
+**What this lab demonstrates:** The bounded handoff log, schemas, single-agent baseline, and ten-task comparison require the topology to earn its added coordination cost.
+
+**What it does not prove:** Ten tasks provide directional evidence only, and shared model blind spots can remain correlated across every role.
+
+</div>
+
+---
+
 ## Lab
 
 1. Implement **researcher + writer + critic** with **max 2** critique rounds.  
@@ -512,4 +528,6 @@ Learn the concepts in this module; use frameworks as **implementations**, not as
 - **Prove:** A capped multi-role pipeline has numbers (success, cost) against a single `Agent`.
 - **Test:** `pytest tests/test_agents.py -v`
 
-**Next:** [Module 13 — Production systems](13-production.md)
+**Return to the case:** A topology chosen from task dependencies replaces persona theater, and message contracts make handoffs testable. More workers still add cost and correlated failure unless evaluation justifies them.
+
+**Next:** [Agent design patterns](18-agent-design-patterns.md)

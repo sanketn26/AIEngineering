@@ -10,6 +10,18 @@ description: Ship agent tools as least-privilege manifests with approval gates o
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+An editor agent is told “clean up this module.” It has a god-tool `bash`. The model proposes `git checkout --orphan tmp && git add -A && git commit`. No path sandbox. No approval. The user’s uncommitted novel in a sibling folder is gone from the index. Postmortem: the prompt said “be careful.” The process had the user’s full UID, env, and credentials. **Policy lived in English.** English is not a sandbox.
+
+</div>
+
+**Case question:** Which privilege, approval, isolation, and output check prevents the model proposal from reaching files outside its authority?
+
 ## Learning objectives
 
 - Ship tools as **least-privilege manifests**, not `run(cmd: str)`
@@ -20,13 +32,6 @@ description: Ship agent tools as least-privilege manifests with approval gates o
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-An editor agent is told “clean up this module.” It has a god-tool `bash`. The model proposes `git checkout --orphan tmp && git add -A && git commit`. No path sandbox. No approval. The user’s uncommitted novel in a sibling folder is gone from the index. Postmortem: the prompt said “be careful.” The process had the user’s full UID, env, and credentials. **Policy lived in English.** English is not a sandbox.
-
-</div>
 
 Module 02 taught injection and allowlists. Module 11 executed tools in-process. This module is the **security course handshake**: capability tokens, human gates, and an execution environment that cannot reach the rest of the laptop.
 
@@ -249,6 +254,19 @@ A container with a network and a mounted Docker socket is a **root-equivalent** 
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A model proposal reached a broad shell running with the user's full filesystem authority.
+
+**What this lab demonstrates:** Privilege and approval tests, secret/size output validation, a temp-directory process, and copy-only mutation prove the runtime disposes of proposals within limits.
+
+**What it does not prove:** A sandbox reduces reach; it does not make an approved patch correct or eliminate platform-specific escape risks.
+
+</div>
+
+---
+
 ## Lab
 
 1. Register `echo` (read) and `apply_patch` (write, approval). Unit-test deny without grant and deny without human.
@@ -321,4 +339,6 @@ poetry run pytest tests/test_sandbox.py -v
 - **Prove:** Writes deny without grant+human; a worktree edit leaves the source file untouched.
 - **Test:** `pytest tests/test_sandbox.py -v`
 
-**Next:** [Module 27 — Harness engineering](27-harness-engineering.md)
+**Return to the case:** Least-privilege manifests, approval gates, isolated execution, and output validation keep English policy from being the only defense. Sandboxing limits reach; it does not make proposed changes desirable.
+
+**Next:** [Harness engineering](27-harness-engineering.md)

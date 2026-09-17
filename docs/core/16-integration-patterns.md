@@ -4,11 +4,23 @@ description: Embed LLMs into event-driven architectures with queues and streamin
 
 # Module 16 — Advanced Integration Patterns
 
+**Time:** 1–2 weeks · **Depends on:** [13 Production](13-production.md) · **Next:** [Compliance](14-compliance.md)
+
 <span data-module-id="16" hidden></span>
 
-**Time:** 1–2 weeks · **Depends on:** 13 · **Next:** [Small models](17-small-models.md)
-
 ---
+
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Product wants “chat that researches the whole corpus.” Engineering puts a multi-tool agent behind `POST /chat` with a 120s gateway timeout. Users refresh when the spinner stalls; each refresh starts a **new** agent run. Load balancers kill connections mid-flight; workers keep spending tokens; support cannot find which run belongs to which ticket because `request_id` dies at the first hop. Fixing it is not “a faster model” — it is **jobs, queues, and progressive delivery**, the same patterns you use for video encoding or report generation.
+
+</div>
+
+**Case question:** Which interaction belongs on the request path, which belongs in a durable job, and how does one request ID survive both?
 
 ## Learning objectives
 
@@ -17,6 +29,8 @@ description: Embed LLMs into event-driven architectures with queues and streamin
 - Route by **data class** in hybrid cloud / on-prem designs
 - Stream tokens safely and version contracts between services
 
+---
+
 ## What you can build
 
 - Queue-backed generation workers with job status APIs
@@ -24,15 +38,6 @@ description: Embed LLMs into event-driven architectures with queues and streamin
 - LLM microservice boundaries with gateway policies
 - SSE/WebSocket streaming path with `request_id` propagation
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Product wants “chat that researches the whole corpus.” Engineering puts a multi-tool agent behind `POST /chat` with a 120s gateway timeout. Users refresh when the spinner stalls; each refresh starts a **new** agent run. Load balancers kill connections mid-flight; workers keep spending tokens; support cannot find which run belongs to which ticket because `request_id` dies at the first hop. Fixing it is not “a faster model” — it is **jobs, queues, and progressive delivery**, the same patterns you use for video encoding or report generation.
-
-</div>
 
 A single FastAPI handler that calls the model synchronously is fine for demos and low-QPS chat. Real platforms have **spikes**, **multi-minute agents**, **tenant isolation**, and **data residency**. If you bolt an LLM into a monolith request thread, you will hit: worker exhaustion, double-billing on retries, cross-tenant data leaks in shared caches, and “the API felt down” when only the model was slow.
 
@@ -73,7 +78,9 @@ flowchart LR
 
 ---
 
-## 1. Event-driven pipeline
+## Core tutorial
+
+### 1. Event-driven pipeline
 
 ```text
 Producer → Kafka / SQS / PubSub topic → worker pool → results topic → consumers
@@ -113,7 +120,7 @@ Most queues deliver **at least once**. Your worker must be **idempotent** (same 
 
 ---
 
-## 2. Sync vs async vs batch
+### 2. Sync vs async vs batch
 
 | Mode | Latency UX | Use | API shape |
 |------|------------|-----|-----------|
@@ -180,7 +187,7 @@ If product wants “chat” but work is agentic and long, use **streaming partia
 
 ---
 
-## 3. Hybrid cloud / on-prem routing by data class
+### 3. Hybrid cloud / on-prem routing by data class
 
 Pair with Module 14’s classification table. Routing is a **policy enforcement point**, not a performance micro-optimization alone.
 
@@ -218,7 +225,7 @@ Hybrid routing fails when teams treat it as “pick the cheapest GPU.” The fir
 
 ---
 
-## 4. Microservice boundaries
+### 4. Microservice boundaries
 
 ```text
 API gateway → orchestration service → {retriever, tool service, generator}
@@ -262,7 +269,7 @@ class Orchestrator:
 
 ---
 
-## 5. Streaming
+### 5. Streaming
 
 For chat UX, stream tokens (SSE or WebSocket).
 
@@ -295,7 +302,7 @@ Streaming improves perceived latency but does not remove the need for **output v
 
 ---
 
-## 6. Putting it together: hybrid async worker
+### 6. Putting it together: hybrid async worker
 
 ```python
 def process_job(job: dict, llm_clients: dict) -> dict:
@@ -328,6 +335,19 @@ Load-test **p95 latency** and **error rate** separately for API tier vs worker t
 | Client-trusted `data_class` | Restricted data → public model | Derive class server-side |
 | Stream without cancel | Token burn after tab close | Abort upstream on disconnect |
 | God orchestration service | Un-deployable ball of mud | Split retriever/tools/generator |
+
+---
+
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A long synchronous request timed out and retries created more work without end-to-end identity.
+
+**What this lab demonstrates:** The queue conversion, data-class route, progress channel, load result, and cross-hop request ID practice the complete integration path.
+
+**What it does not prove:** A stubbed route and small load test do not prove broker durability, idempotency under crash, or production scaling limits.
+
+</div>
 
 ---
 
@@ -407,4 +427,6 @@ Load-test **p95 latency** and **error rate** separately for API tier vs worker t
 - **Prove:** `request_id` survives the hop (gateway → worker, or two stub backends).
 - **Test:** `pytest tests/test_orchestrators.py -v`
 
-**Next:** [Module 17 — Small & local models](17-small-models.md)
+**Return to the case:** The long request becomes a bounded job with idempotency, queue state, and a request ID that survives every hop. Asynchrony prevents refresh storms but introduces state, retry, and cancellation responsibilities.
+
+**Next:** [Compliance](14-compliance.md)

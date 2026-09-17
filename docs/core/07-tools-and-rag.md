@@ -4,9 +4,23 @@ description: Build a safe function-calling loop with allowlists and a minimal re
 
 # Module 07 — Tool Integration & Basic RAG
 
-**Time:** 5–7 days · **Depends on:** [01](01-prompt-engineering.md)–[05](05-context-engineering.md) · **Next:** [MCP](08-model-context-protocol.md)
+**Time:** 5–7 days · **Depends on:** [01](01-prompt-engineering.md)–[05](05-context-engineering.md) · **Next:** [Advanced RAG](09-advanced-rag.md)
 
 <span data-module-id="07" hidden></span>
+
+---
+
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Friday 4:52 p.m. Support bot “refunds” three enterprise accounts. The model wrote `{"action":"refund","amount":"full"}` in chat. An intern’s demo script `eval`’d the JSON. No ticket system call, no allowlist, no human gate — just prose treated as authority. Concurrently the “docs bot” cites `POLICY-404` that never existed: RAG was never built; the model improvised from training vibes. Same week, two different failures of the same root cause: **the model was trusted to act and to know**.
+
+</div>
+
+**Case question:** Which need is knowledge, which is action, and which runtime boundary stops model text from pretending to be either evidence or authority?
 
 ## Learning objectives
 
@@ -16,13 +30,8 @@ description: Build a safe function-calling loop with allowlists and a minimal re
 - Use course `src.rag` (`TinyRAG`, chunking, citation checks) as a learning scaffold
 - Apply chunking heuristics and know where FAISS / Chroma / sentence-transformers fit
 
-## Why this matters (CS engineer view)
+---
 
-<div class="aieng-story" markdown>
-
-Friday 4:52 p.m. Support bot “refunds” three enterprise accounts. The model wrote `{"action":"refund","amount":"full"}` in chat. An intern’s demo script `eval`’d the JSON. No ticket system call, no allowlist, no human gate — just prose treated as authority. Concurrently the “docs bot” cites `POLICY-404` that never existed: RAG was never built; the model improvised from training vibes. Same week, two different failures of the same root cause: **the model was trusted to act and to know**.
-
-</div>
 
 LLMs are strong at language and weak at **authority over your systems**. They do not magically have:
 
@@ -312,6 +321,19 @@ Retrieved text is **data**, not instructions (Module 02). Indirect injection via
 | Context blow-ups | Unbounded tool dumps | Cap + summarize tool results |
 | “I don’t know” never appears | Prompt rewards guessing | Explicit refuse; grade unanswerables |
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Free-form model text was treated as both an authorized refund action and a policy citation.
+
+**What this lab demonstrates:** TinyRAG verifies answerable and unanswerable behavior with real citation IDs, while the allowlisted tool test rejects an unknown action.
+
+**What it does not prove:** A valid citation does not authorize a side effect, and a tool allowlist still needs argument validation and identity-aware permission checks.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>
@@ -396,4 +418,6 @@ If the need is **calling** the API (actions, live reads), use **tools**, not doc
 - **Prove:** Answerable queries cite retrieved ids; unanswerable queries do not invent ids.
 - **Test:** `pytest tests/test_rag.py -v`
 
-**Next:** [Module 08 — Model Context Protocol](08-model-context-protocol.md) · later depth: [Advanced RAG](09-advanced-rag.md)
+**Return to the case:** Retrieval supplies evidence and typed tools expose live state or actions; neither grants the model authority. Citation checks, allowlists, validation, and approval remain runtime responsibilities.
+
+**Next:** [Advanced RAG](09-advanced-rag.md) — retrieval you can measure, not just wire up.

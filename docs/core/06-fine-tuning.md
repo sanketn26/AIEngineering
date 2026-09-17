@@ -8,6 +8,20 @@ description: Decide when fine-tuning beats prompting and RAG, build a mental mod
 
 <span data-module-id="06" hidden></span>
 
+---
+
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Leadership wanted the bot to “know the catalog.” The team fine-tuned on last quarter’s PDF dump. Train loss looked great. Three product launches later the model still confidently recommends retired SKUs—because weekly facts were baked into weights instead of fetched. Rollback meant another training cycle, not a config flip.
+
+</div>
+
+**Case question:** Is the missing capability stable behavior or changing knowledge, and what held-out comparison earns the cost of changing weights?
+
 ## Learning objectives
 
 - Decide **when not to fine-tune** — and when PEFT is the right lever
@@ -16,13 +30,8 @@ description: Decide when fine-tuning beats prompting and RAG, build a mental mod
 - Sketch a **PEFT** training path (conceptual, provider-agnostic for 2026)
 - Compare **base vs adapter** with task metrics, not only train loss
 
-## Why this matters (CS engineer view)
+---
 
-<div class="aieng-story" markdown>
-
-Leadership wanted the bot to “know the catalog.” The team fine-tuned on last quarter’s PDF dump. Train loss looked great. Three product launches later the model still confidently recommends retired SKUs—because weekly facts were baked into weights instead of fetched. Rollback meant another training cycle, not a config flip.
-
-</div>
 
 Fine-tuning is a product decision with ops cost: data pipelines, GPU time, eval gates, versioning, and regression risk. Many teams fine-tune because it feels “more ML,” then discover that **prompting + RAG + tools** would have shipped faster with fresher facts.
 
@@ -275,6 +284,19 @@ Promotion rule example: ship only if task metric ≥ baseline + δ **and** no cr
 | Single GPU OOM | Full FT attempt | QLoRA / smaller base / lower `r` |
 | Cannot roll back | Merged opaque weights only | Keep base + adapter artifacts |
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Changing catalog facts were baked into weights and became expensive to update.
+
+**What this lab demonstrates:** The decision memo forces an economic comparison with prompting, retrieval, and tools; the held-out set measures the base gap before training.
+
+**What it does not prove:** A better adapter score does not make mutable knowledge fresh or remove deployment, rollback, and regression costs.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>
@@ -358,4 +380,6 @@ When **inference cost/latency/privacy** dominate and the teacher’s behavior is
 - **Prove:** You can defend FT vs RAG/tools on paper, with a held-out eval — not a LoRA screenshot.
 - **Test:** `pytest tests/test_evals.py -v` (eval floor before any FT)
 
-**Next:** [Module 07 — Tools & basic RAG](07-tools-and-rag.md)
+**Return to the case:** The decision record keeps changing catalog facts out of weights and reserves fine-tuning for stable behavioral gaps. The chosen approach still needs held-out evaluation and an operational update path.
+
+**Next:** [Tools & RAG](07-tools-and-rag.md)

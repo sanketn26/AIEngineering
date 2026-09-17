@@ -10,9 +10,19 @@ description: Track cost-per-success instead of raw token thrift, and apply LLM r
 
 ---
 
-## Learning objectives
+<span id="why-this-matters-cs-engineer-view"></span>
 
-By the end of this module you will be able to:
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Finance screenshots a 40% token drop after “routing everything to mini.” Leadership celebrates thrift. Support reopen rate doubles. The mini model fails validators, retries three times, then escalates to humans who eat the savings. `cost_per_success` barely moved — sometimes rose. Separately, a cache keyed only on user text serves Alice Bob’s invoice answer. Tokens were never the product. **Successful outcomes under a budget** were.
+
+</div>
+
+**Case question:** Can you lower cost per successful outcome without raising reopen rate, leaking cached data, or hiding failure behind a cheaper average?
+
+## Learning objectives
 
 - Define and track **unit economics**: `cost_per_success`, not raw token thrift
 - Identify the real **token and call drivers** in a request path
@@ -22,13 +32,6 @@ By the end of this module you will be able to:
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Finance screenshots a 40% token drop after “routing everything to mini.” Leadership celebrates thrift. Support reopen rate doubles. The mini model fails validators, retries three times, then escalates to humans who eat the savings. `cost_per_success` barely moved — sometimes rose. Separately, a cache keyed only on user text serves Alice Bob’s invoice answer. Tokens were never the product. **Successful outcomes under a budget** were.
-
-</div>
 
 LLM spend is not a fixed SaaS seat license. It is closer to **pay-per-request compute** with a heavy tail: one agent loop or RAG dump can cost 100× a classifier call.
 
@@ -426,6 +429,19 @@ Savings that fail the gate are regressions, not wins.
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A cheaper-looking system hid reopen costs and risked sharing cached content across tenants.
+
+**What this lab demonstrates:** Cost per successful request, a quality-gated router, cache hit rate, and an enforced usage limit test savings against outcomes and hard budgets.
+
+**What it does not prove:** Fifty requests do not capture traffic seasonality, and cache correctness still depends on complete tenant- and version-aware keys.
+
+</div>
+
+---
+
 ## Lab
 
 1. Log tokens and estimated $ for **50** real or fixture requests on one feature.  
@@ -502,4 +518,6 @@ poetry run pytest tests/test_cost.py -v
 - **Prove:** Router, cache, and ledger actually deny over-budget work.
 - **Test:** `pytest tests/test_cost.py -v`
 
-**Next:** [Module 11 — Single-agent workflows](11-single-agents.md)
+**Return to the case:** Routing and cache isolation lower cost only when success and reopen rates remain acceptable. A smaller bill is not an optimization if quality or tenant boundaries regress.
+
+**Next:** [Single agents](11-single-agents.md)

@@ -18,6 +18,7 @@ class HarnessSpec:
     step_cap: int = 8
     cost_cap_usd: float = 1.0
     verifier_required: bool = True
+    no_progress_cap: int = 0  # 0 disables; N stops after N identical proposals
 
 
 @dataclass
@@ -37,6 +38,7 @@ class VerifyResult:
 @dataclass(frozen=True)
 class HarnessReport:
     stopped: str  # verified | step_cap | cost_cap | denied_all | no_verifier
+    #              | no_progress
     steps: int
     cost_usd: float
     verified: bool
@@ -85,6 +87,8 @@ def run_harness(
     state = state or ExternalState()
     cost = 0.0
     taken = 0
+    last_call: tuple[str, str] | None = None
+    repeats = 0
 
     def _persist() -> None:
         if progress_path is not None:
@@ -93,6 +97,19 @@ def run_harness(
     for _ in range(spec.step_cap):
         proposal = propose(state)
         tool = str(proposal.get("tool") or "")
+
+        # No-progress brake: the same call with the same args is spinning,
+        # not working. Without this a loop burns its whole step budget.
+        call = (tool, str(proposal.get("artifact") or ""))
+        repeats = repeats + 1 if call == last_call else 0
+        last_call = call
+        if spec.no_progress_cap and repeats >= spec.no_progress_cap:
+            state.notes.append(f"no_progress:{tool or 'missing'}")
+            _persist()
+            return HarnessReport(
+                "no_progress", taken, cost, False, tuple(state.notes)
+            )
+
         if tool not in spec.tools:
             state.notes.append(f"denied:{tool or 'missing'}")
             taken += 1

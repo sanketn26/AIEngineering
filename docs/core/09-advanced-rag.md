@@ -4,15 +4,25 @@ description: Diagnose why naive dense retrieval fails, build hybrid BM25-plus-de
 
 # Module 09 — Advanced RAG & Knowledge Systems
 
-**Time:** 7–10 days · **Depends on:** [07 Tools & RAG](07-tools-and-rag.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md) if retrieval is exposed as a server · **Next:** [Cost optimization](10-cost-optimization.md)
+**Time:** 7–10 days · **Depends on:** [07 Tools & RAG](07-tools-and-rag.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md) if retrieval is exposed as a server · **Next:** [MCP](08-model-context-protocol.md)
 
 <span data-module-id="09" hidden></span>
 
 ---
 
-## Learning objectives
+<span id="why-this-matters-cs-engineer-view"></span>
 
-By the end of this module you will be able to:
+<div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
+
+Ops bot answers “what does `ERR_INV_88421` mean?” with a confident essay about inventory philosophy. The gold runbook title *is* `ERR_INV_88421` — never retrieved. Dense-only search mapped the question to “inventory errors” prose and missed the rare token. Support escalates. Team “fixes quality” by switching to a larger generator. Bill goes up. Hit@5 stays flat. The crime scene was **retrieval**, not eloquence.
+
+</div>
+
+**Case question:** Which retrieval metric will reveal that the rare identifier never reached the generator, before anyone pays for a larger model?
+
+## Learning objectives
 
 - Diagnose **why** naive top-k dense retrieval fails on real corpora
 - Build **hybrid** retrieval (BM25 + dense) fused with **Reciprocal Rank Fusion (RRF)**
@@ -22,13 +32,6 @@ By the end of this module you will be able to:
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Ops bot answers “what does `ERR_INV_88421` mean?” with a confident essay about inventory philosophy. The gold runbook title *is* `ERR_INV_88421` — never retrieved. Dense-only search mapped the question to “inventory errors” prose and missed the rare token. Support escalates. Team “fixes quality” by switching to a larger generator. Bill goes up. Hit@5 stays flat. The crime scene was **retrieval**, not eloquence.
-
-</div>
 
 Basic RAG is a vector nearest-neighbor lookup plus a prompt. Production RAG is closer to a **search system**: inverted indices, multi-stage ranking, query understanding, freshness, and offline metrics.
 
@@ -444,6 +447,19 @@ Retrieval now finds the right docs, but generation may still fail: wrong span in
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Dense-only retrieval missed a rare error identifier, so changing the generator could not improve the answer.
+
+**What this lab demonstrates:** The labeled queries compare dense-only with hybrid Hit@5 and MRR, making candidate-retrieval improvement visible before generation.
+
+**What it does not prove:** A small corpus and lexical reranker do not prove production relevance, freshness, or grounded generation.
+
+</div>
+
+---
+
 ## Lab
 
 **Goal:** Prove hybrid + fusion beats dense-only on a small labeled set.
@@ -543,4 +559,6 @@ Also: [Curated resources](../reference/resources.md) → RAG & embeddings.
 - **Prove:** Hybrid Hit@5 / MRR is reported against dense-only on a labeled slice.
 - **Test:** `pytest tests/test_rag.py -v`
 
-**Next:** [Module 10 — Cost optimization](10-cost-optimization.md)
+**Return to the case:** Hybrid retrieval and reranking recover the rare identifier, and Hit@k shows whether the retrieval path improved before changing the generator. Success on this query does not guarantee coverage of the whole corpus.
+
+**Next:** [MCP](08-model-context-protocol.md)
