@@ -107,7 +107,9 @@ Every hop on this path carries four numbers you should be logging per `request_i
 
 ---
 
-## 1. Serving skeleton (FastAPI)
+## Core tutorial
+
+### 1. Serving skeleton (FastAPI)
 
 Start with a **thin, stateless** API. Business logic and provider SDKs live behind clear boundaries so you can swap models without rewriting HTTP glue.
 
@@ -179,7 +181,7 @@ def generate(req: GenerateRequest, request: Request):
     )
 ```
 
-### Production checklist (app tier)
+#### Production checklist (app tier)
 
 - [ ] Timeouts on **all** egress (provider, tools, vector DB)
 - [ ] Retries with jitter — **idempotent** paths only
@@ -199,7 +201,7 @@ def generate(req: GenerateRequest, request: Request):
 
 ---
 
-## 2. Timeouts, retries, fallbacks
+### 2. Timeouts, retries, fallbacks
 
 Provider SDKs default to “wait a long time.” That is wrong for interactive UX. Cap wait time; map exceptions to **your** HTTP status model.
 
@@ -266,7 +268,7 @@ Retries are safe when the call is **read-only** or **idempotent** from the produ
 
 ---
 
-## 3. Observability: metrics, traces, logs
+### 3. Observability: metrics, traces, logs
 
 You cannot debug “the bot was weird yesterday” without three signals sharing a `request_id`.
 
@@ -278,7 +280,7 @@ You cannot debug “the bot was weird yesterday” without three signals sharing
 
 **Tools to know:** OpenTelemetry (vendor-neutral instrumentation), Prometheus/Grafana, Langfuse / Phoenix / Helicone (LLM-specific), provider dashboards.
 
-### Minimal structured log shape
+#### Minimal structured log shape
 
 ```python
 import json
@@ -330,7 +332,7 @@ If your dashboard only has “number of requests,” you will guess. Instrument 
 
 ---
 
-## 4. CI/CD for prompts and models
+### 4. CI/CD for prompts and models
 
 ```text
 PR → lint / typecheck / unit tests
@@ -366,7 +368,7 @@ Rollback is not “paste the old string into the dashboard.” You need the **te
 
 ---
 
-## 5. Docker sketch
+### 5. Docker sketch
 
 ```dockerfile
 FROM python:3.11-slim

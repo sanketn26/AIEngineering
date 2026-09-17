@@ -82,7 +82,9 @@ flowchart TB
 
 ---
 
-## 1. Frameworks you will hear about
+## Core tutorial
+
+### 1. Frameworks you will hear about
 
 | Area | Examples (jurisdiction-dependent) | Engineering takeaway |
 |------|-----------------------------------|----------------------|
@@ -111,11 +113,11 @@ If someone asks you “Are we GDPR compliant?” the correct engineering answer 
 
 ---
 
-## 2. Audit trail pattern
+### 2. Audit trail pattern
 
 Prefer **append-only events** with **content hashes** over logging full sensitive prompts in the default stream. Full transcripts, when required, go to a restricted store with retention and access review.
 
-### Course package: `src.audit`
+#### Course package: `src.audit`
 
 Runnable and tested (`pytest tests/test_audit.py`):
 
@@ -221,7 +223,7 @@ Hashes prove “this exact input was processed” if you still hold the original
 
 ---
 
-## 3. Data inventory (start here)
+### 3. Data inventory (start here)
 
 Before fancy classifiers, make a table. Here is a **worked sketch** for a support chatbot — copy the columns, replace the rows with your stores.
 
@@ -246,7 +248,7 @@ If you cannot fill that table for *your* app, you are not ready for a vendor sec
 | Eval golden set | labeled cases | … | long-lived | eng / QA | careful |
 | Fine-tune set | examples | … | … | … | training risk |
 
-### Classification labels (working set)
+#### Classification labels (working set)
 
 ```text
 public → internal → confidential → restricted
@@ -254,7 +256,7 @@ public → internal → confidential → restricted
 
 Map each class to **allowed model destinations** (public cloud mini vs private VPC endpoint vs “never leave premises”). That table is product policy; counsel reviews it for regulated sectors.
 
-### Data governance checklist
+#### Data governance checklist
 
 - [ ] Inventory: training, RAG corpora, logs, eval sets, backups  
 - [ ] Classification labels on stores and API fields  
@@ -278,7 +280,7 @@ Teams list “app DB” and “vendor API” and stop. Common misses: **embeddin
 
 ---
 
-## 4. Change management for prompts & models
+### 4. Change management for prompts & models
 
 Treat prompts, tools, and models like production code:
 
@@ -306,7 +308,7 @@ Agent max-steps, tool allowlists, and temperature defaults belong in the same ch
 
 ---
 
-## 5. Minimal “allowed data by destination” table
+### 5. Minimal “allowed data by destination” table
 
 Write this for *your* app (example only):
 

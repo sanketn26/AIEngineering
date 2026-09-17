@@ -73,7 +73,9 @@ flowchart TB
 
 ---
 
-## 1. Strengths and limits
+## Core tutorial
+
+### 1. Strengths and limits
 
 | Advantages | Limits |
 |------------|--------|
@@ -95,7 +97,7 @@ A 3B model that **only** outputs one of five labels with a strict schema can bea
 
 ---
 
-## 2. Local runtimes
+### 2. Local runtimes
 
 | Runtime | Fit | Notes |
 |---------|-----|-------|
@@ -133,7 +135,7 @@ def local_chat(prompt: str, model: str = "llama3.2") -> str:
 
 ---
 
-## 3. Prompting SLMs well
+### 3. Prompting SLMs well
 
 - **Shorter instructions**; explicit output formats  
 - **More few-shot** when structure is fragile  
@@ -176,7 +178,7 @@ If a deterministic extractor works, do not pay for tokens — small or large.
 
 ---
 
-## 4. Quantization
+### 4. Quantization
 
 Quantization reduces weight precision so models fit in RAM/VRAM and run faster — **at a quality cost you must measure**.
 
@@ -213,7 +215,7 @@ Quantization error is uneven: some tasks (sentiment, short classify) stay flat u
 
 ---
 
-## 5. Router pattern (highest ROI)
+### 5. Router pattern (highest ROI)
 
 ```text
 User → cheap SLM router / rules
@@ -277,7 +279,7 @@ If 80% of traffic is cheap classify/extract that the SLM nails, and 20% escalate
 
 ---
 
-## 6. SLMs + RAG + privacy
+### 6. SLMs + RAG + privacy
 
 Local models shine when documents must not leave the device or VPC:
 
@@ -289,7 +291,7 @@ Still apply **injection hygiene** (Module 02): retrieved text is data, not instr
 
 ---
 
-## 7. Working effectively on limited hardware
+### 7. Working effectively on limited hardware
 
 This course assumes a **laptop, often no discrete GPU**. That is a product constraint, not an apology. A 3B model that stays in RAM and answers in 200 ms will beat an 8B that thrashes swap and fans for 40 seconds — on quality *and* on whether you actually use it.
 
@@ -303,7 +305,7 @@ This course assumes a **laptop, often no discrete GPU**. That is a product const
 </div>
 </div>
 
-### RAM is the limiter
+#### RAM is the limiter
 
 ```text
 working set ≈ weights + KV cache + runtime + OS
@@ -337,7 +339,7 @@ Apple Silicon: **Metal** is the reason 7–8B Q4 is pleasant. x86 laptop CPU: ex
 Weights are mostly **fixed**. The KV cache is **per token of context** (keys and values for every layer). Doubling `num_ctx` can add more RAM than dropping one quant level saves. A “32k context” 7B on 16 GB often loses to a 4k context 7B that actually stays resident. Module 05 packing is a **hardware** feature here: retrieve 3 chunks, not 30.
 </div>
 
-### Knobs that matter on a laptop
+#### Knobs that matter on a laptop
 
 | Knob | What to do | Why |
 |------|------------|-----|
@@ -365,7 +367,7 @@ ollama run llama3.2  # 3B-class; good 8–16 GB default
 
 **Thermals:** laptop CPU/GPU will **throttle**. Do not publish tok/s from the first 10 seconds on a cold chassis. Steady state after a minute is the number that matters.
 
-### Prompt and system design that small hardware can survive
+#### Prompt and system design that small hardware can survive
 
 Hardware limits and prompt limits are the same list:
 
@@ -388,7 +390,7 @@ Ship the **smallest model that clears the golden set** at the context you actual
 </details>
 </div>
 
-### What not to do on this hardware
+#### What not to do on this hardware
 
 | Temptation | What happens |
 |------------|----------------|

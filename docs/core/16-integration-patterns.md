@@ -76,7 +76,9 @@ flowchart LR
 
 ---
 
-## 1. Event-driven pipeline
+## Core tutorial
+
+### 1. Event-driven pipeline
 
 ```text
 Producer → Kafka / SQS / PubSub topic → worker pool → results topic → consumers
@@ -116,7 +118,7 @@ Most queues deliver **at least once**. Your worker must be **idempotent** (same 
 
 ---
 
-## 2. Sync vs async vs batch
+### 2. Sync vs async vs batch
 
 | Mode | Latency UX | Use | API shape |
 |------|------------|-----|-----------|
@@ -183,7 +185,7 @@ If product wants “chat” but work is agentic and long, use **streaming partia
 
 ---
 
-## 3. Hybrid cloud / on-prem routing by data class
+### 3. Hybrid cloud / on-prem routing by data class
 
 Pair with Module 14’s classification table. Routing is a **policy enforcement point**, not a performance micro-optimization alone.
 
@@ -221,7 +223,7 @@ Hybrid routing fails when teams treat it as “pick the cheapest GPU.” The fir
 
 ---
 
-## 4. Microservice boundaries
+### 4. Microservice boundaries
 
 ```text
 API gateway → orchestration service → {retriever, tool service, generator}
@@ -265,7 +267,7 @@ class Orchestrator:
 
 ---
 
-## 5. Streaming
+### 5. Streaming
 
 For chat UX, stream tokens (SSE or WebSocket).
 
@@ -298,7 +300,7 @@ Streaming improves perceived latency but does not remove the need for **output v
 
 ---
 
-## 6. Putting it together: hybrid async worker
+### 6. Putting it together: hybrid async worker
 
 ```python
 def process_job(job: dict, llm_clients: dict) -> dict:
