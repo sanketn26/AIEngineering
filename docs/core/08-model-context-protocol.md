@@ -418,6 +418,19 @@ poetry run pytest tests/test_mcp_prod.py -v
 | Stable version, hostile payload | Pin was marketing-only | Wrap untrusted; pin digest; validate output |
 | Writes in CI | Same allowlist as laptop | Env matrix; `write_tools` blocked in CI |
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** An MCP server gained broad filesystem access because the host had no meaningful permission policy.
+
+**What this lab demonstrates:** The dev-only read operation and written environment/tool policy make discovery, approval, and version pinning concrete without exposing production credentials.
+
+**What it does not prove:** Reviewing one server and one read path does not certify its supply chain or justify write, network, or secret access.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

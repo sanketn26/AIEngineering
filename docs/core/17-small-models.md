@@ -423,6 +423,19 @@ poetry run pytest tests/test_local_agents.py -v
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A blanket small-model swap reduced cost while silently breaking quality and schemas.
+
+**What this lab demonstrates:** The same twenty tasks compare local and cloud models, route validation failures upward, and remeasure any quantization choice on your actual hardware.
+
+**What it does not prove:** Twenty tasks and one machine do not establish fleet-wide latency, thermal behavior, or long-tail quality.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

@@ -317,6 +317,19 @@ Retrieved text is **data**, not instructions (Module 02). Indirect injection via
 | Context blow-ups | Unbounded tool dumps | Cap + summarize tool results |
 | “I don’t know” never appears | Prompt rewards guessing | Explicit refuse; grade unanswerables |
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Free-form model text was treated as both an authorized refund action and a policy citation.
+
+**What this lab demonstrates:** TinyRAG verifies answerable and unanswerable behavior with real citation IDs, while the allowlisted tool test rejects an unknown action.
+
+**What it does not prove:** A valid citation does not authorize a side effect, and a tool allowlist still needs argument validation and identity-aware permission checks.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

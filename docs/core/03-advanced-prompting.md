@@ -321,6 +321,19 @@ If you cannot define `score_fn`, you are not ready for ToT—you need a better s
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A stack of prompting techniques increased cost while invoice output still failed to parse.
+
+**What this lab demonstrates:** The validated extractor and measured parse-success rate show whether structured output and chosen examples fix the named contract failure.
+
+**What it does not prove:** Parse success does not establish field accuracy, and optional CoT is justified only by a measured improvement on the same cases.
+
+</div>
+
+---
+
 ## Lab
 
 **Artifact:** an invoice (or similar) extractor that returns **Pydantic-validated** data, with few-shot edge cases and a measured parse-success rate.

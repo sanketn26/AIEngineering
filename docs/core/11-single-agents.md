@@ -445,6 +445,19 @@ Default to **one agent + tools** until a second role needs a crisp interface (Mo
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** An agent repeated tool calls overnight because neither the prompt nor runtime enforced termination.
+
+**What this lab demonstrates:** The forced failure and looping-policy tests prove the agent aborts cleanly at a hard step cap while preserving a replayable decision log.
+
+**What it does not prove:** Termination bounds damage; it does not prove the selected tools or final answer were correct.
+
+</div>
+
+---
+
 ## Lab
 
 1. Build an agent with tools: `search_notes`, `calculator`, and final answer (type `final`).  

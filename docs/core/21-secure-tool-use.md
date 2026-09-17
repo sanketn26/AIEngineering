@@ -252,6 +252,19 @@ A container with a network and a mounted Docker socket is a **root-equivalent** 
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A model proposal reached a broad shell running with the user's full filesystem authority.
+
+**What this lab demonstrates:** Privilege and approval tests, secret/size output validation, a temp-directory process, and copy-only mutation prove the runtime disposes of proposals within limits.
+
+**What it does not prove:** A sandbox reduces reach; it does not make an approved patch correct or eliminate platform-specific escape risks.
+
+</div>
+
+---
+
 ## Lab
 
 1. Register `echo` (read) and `apply_patch` (write, approval). Unit-test deny without grant and deny without human.

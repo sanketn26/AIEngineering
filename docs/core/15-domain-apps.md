@@ -305,6 +305,19 @@ A system prompt that says “you are not a doctor” helps, but adversaries and 
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A domain assistant crossed a boundary where a fluent answer required refusal or expert escalation.
+
+**What this lab demonstrates:** The written policy, must-refuse cases, policy check, citations, and audit events exercise both allowed and denied paths for one chosen vertical.
+
+**What it does not prove:** Ten cases cannot establish clinical, financial, or legal safety, and the prototype remains unsuitable for regulated deployment claims.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

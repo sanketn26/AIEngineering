@@ -192,6 +192,19 @@ Do not let a vendor slide collapse these layers. Write them as **four boxes** on
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Teams chose orchestrators by popularity but could not attribute cost or control to a workflow step.
+
+**What this lab demonstrates:** The comparison, per-agent cost events, structured trace export, and one-workflow design note make the engine decision reviewable against retained controls.
+
+**What it does not prove:** A framework scorecard is not a benchmark and does not guarantee the implementation actually enforces the controls you listed.
+
+</div>
+
+---
+
 ## Lab
 
 1. `compare_orchestrators` for all four; write three sentences: when you’d pick each.

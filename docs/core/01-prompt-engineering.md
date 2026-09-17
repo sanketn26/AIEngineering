@@ -352,6 +352,19 @@ Each stage can have its own temperature, model size, and tests. Fail closed on s
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** The reply looked polished while inventing an appointment and omitting a required section.
+
+**What this lab demonstrates:** Your ten-run comparison tests section presence and unsupported claims, then ties one new constraint to a failure you actually observed.
+
+**What it does not prove:** A small sample does not guarantee factual correctness on future messages or authorize the reply to be sent automatically.
+
+</div>
+
+---
+
 ## Lab
 
 **Artifact:** a small script (or notebook cell) that produces a **stable** Markdown reply for a real email or GitHub issue *you* wrote.

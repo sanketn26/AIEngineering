@@ -429,6 +429,19 @@ Savings that fail the gate are regressions, not wins.
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A cheaper-looking system hid reopen costs and risked sharing cached content across tenants.
+
+**What this lab demonstrates:** Cost per successful request, a quality-gated router, cache hit rate, and an enforced usage limit test savings against outcomes and hard budgets.
+
+**What it does not prove:** Fifty requests do not capture traffic seasonality, and cache correctness still depends on complete tenant- and version-aware keys.
+
+</div>
+
+---
+
 ## Lab
 
 1. Log tokens and estimated $ for **50** real or fixture requests on one feature.  

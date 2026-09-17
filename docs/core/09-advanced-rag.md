@@ -447,6 +447,19 @@ Retrieval now finds the right docs, but generation may still fail: wrong span in
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Dense-only retrieval missed a rare error identifier, so changing the generator could not improve the answer.
+
+**What this lab demonstrates:** The labeled queries compare dense-only with hybrid Hit@5 and MRR, making candidate-retrieval improvement visible before generation.
+
+**What it does not prove:** A small corpus and lexical reranker do not prove production relevance, freshness, or grounded generation.
+
+</div>
+
+---
+
 ## Lab
 
 **Goal:** Prove hybrid + fusion beats dense-only on a small labeled set.

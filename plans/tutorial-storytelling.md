@@ -1,6 +1,6 @@
 # Plan: Make the tutorials hold attention through storytelling
 
-**Status:** rollout implemented across the core curriculum after approval of the Module 01 treatment; verification recorded in this plan
+**Status:** editorial rollout implemented across the core curriculum; every lab now has a case-to-evidence checkpoint; full strict social-card build passes. Rendered visual review and participant-based reader testing remain pending for the reasons recorded below.
 **Branch:** `plan/tutorial-storytelling`
 **Scope:** improve how the curriculum connects problems, decisions, practice, and results while preserving what it teaches
 **Non-goals:** a compulsory fictional serial, rewriting Python APIs or eval fixtures, replacing existing labs/quizzes, or substantially lengthening pages
@@ -258,12 +258,25 @@ No character illustrations, comic panels, real-person likenesses, or claims of r
 |---|---|---|
 | Module 01 | Implemented and approved as the rollout reference | Retain its case-to-lab alignment and early prediction |
 | Modules 02–27 | Implemented: incident before objectives, module-specific case question, closing resolution and limitation | Review any weak case-to-artifact links with readers; refine individually rather than expanding prose uniformly |
-| Core framing and CSS | Implemented: self-contained running-case rules, gate transitions, full story panel | Inspect desktop/mobile and light/dark rendering when browser access is available |
+| Mid-page integration and labs | Implemented in 01–27: a module-specific checkpoint states the opening failure, what the lab demonstrates, and what it does not prove | Validate the mapping with readers doing the actual lab; revise claims if the artifact does not support them |
+| Core framing and CSS | Implemented: self-contained running-case rules, gate transitions, full story and checkpoint panels, mobile spacing rules | Browser connection is unavailable in this environment; desktop/mobile and light/dark visual inspection remains pending |
 | Capstone and getting started | Implemented with light case framing; operational checklists preserved | Validate first-command and lookup usability |
 | Tracks | Implemented with track-specific case questions and phase-return guidance | Preserve existing milestones and measure the appropriate evidence for each domain |
 | Reference, source, and tests | Deliberately unchanged | Keep them optimized for lookup and execution |
+| Full docs build | Passed with the social plugin and card generation enabled after adding the Material `imaging` extra; social generation uses one worker for reliable local builds | Keep the lockfile and CI install path aligned with the docs dependency group |
 
 Reader sessions now evaluate the rollout rather than gate its existence. Record and fix material regressions before treating the template as stable guidance for future modules. No outreach is part of this work unless separately authorized.
+
+### Verification record — 2026-09-17
+
+- `mkdocs build --strict` passes with the configured social-card plugin enabled.
+- `mkdocs-material[imaging]` is declared in the docs dependency group and resolved in `poetry.lock`.
+- Social-card generation is pinned to `concurrency: 1`; the previous default parallel build stalled in this environment.
+- All 27 core modules contain exactly one case checkpoint immediately before the lab.
+- Source checks preserve the existing learning objectives, fenced code, labs, quizzes, and local anchors.
+- Generated local links and fragment identifiers resolve.
+- The in-app browser fails during connection setup before a page can load because required sandbox metadata is absent. No desktop/mobile or light/dark visual pass is claimed.
+- No participant sessions have been run. Reader outcomes remain unmeasured; use §15 rather than substituting automated checks or invented feedback.
 
 ## 13. Decisions and hypotheses
 
@@ -272,7 +285,7 @@ Reader sessions now evaluate the rollout rather than gate its existence. Record 
 | Diagnosis | Structural continuity is a supported hypothesis; reader behavior is still to be observed |
 | Teaching form | Self-contained cases with optional recurring context |
 | Opening order | Concrete problem before objectives across all core modules |
-| Protagonist | Learner's engineering decision and artifact; Helix/cast optional |
+| Protagonist | The learner's engineering decision and artifact. A named recurring cast is deliberately not adopted: modules must remain self-contained across alternate routes and search entry. |
 | Existing varied domains | Preserve where they teach the concept clearly |
 | Visual treatment | Story panel promoted from italic aside; rendered review remains required |
 | Rollout | Complete across core, framing, capstone/getting started, and tracks |

@@ -251,6 +251,19 @@ If session 2 “forgot” the draft, you loaded RAM instead of disk. If you expe
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** The model had adequate instructions and context but repeated tools, skipped verification, and lost progress between windows.
+
+**What this lab demonstrates:** The verifier, denied-tool, two-step completion, and two-window persistence tests directly exercise stop, verify, permit, and persist outside the model.
+
+**What it does not prove:** A correct harness controls execution; it cannot guarantee the generated artifact is semantically correct beyond the verifier you provide.
+
+</div>
+
+---
+
 ## Lab
 
 1. `verifier_required=True` with no `verify` callable → `stopped == "no_verifier"`.

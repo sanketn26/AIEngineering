@@ -215,6 +215,19 @@ Local is not free in **wall-clock, battery, context quality, or fan noise**. Unb
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A local agent used an expensive cloud model for trivial steps and had no admission-control budget.
+
+**What this lab demonstrates:** The budget assertions, task-class router, schema-failure escalation, and stubbed local-first run make tier selection and refusal deterministic.
+
+**What it does not prove:** Stub routes do not establish local-model quality or real token accounting until evaluated on representative tasks.
+
+</div>
+
+---
+
 ## Lab
 
 1. `TokenBudget(10)`: assert `allow(11)` is false.

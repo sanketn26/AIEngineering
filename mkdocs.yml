@@ -57,6 +57,7 @@ plugins:
   - search:
       lang: en
   - social:
+      concurrency: 1
       cards_layout_options:
         background_color: "#1a1b26"
         color: "#ffffff"

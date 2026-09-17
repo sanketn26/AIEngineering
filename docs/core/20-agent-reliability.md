@@ -251,6 +251,19 @@ That is **silent degradation**. Detectors need a `quality_score` from a golden t
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** The agent consumed budget while loops, invented tools, and partial state still returned a green response.
+
+**What this lab demonstrates:** The detector, breaker, spend guard, and optional checksum tests turn each named failure into an asserted runtime state.
+
+**What it does not prove:** Detection and abort limit damage; they do not repair partial external side effects or explain the original model error.
+
+</div>
+
+---
+
 ## Lab
 
 1. Script an `Agent` (Module 11) whose stub LLM repeats `search` twice; assert `FailureDetector` reports `runaway_loop`.

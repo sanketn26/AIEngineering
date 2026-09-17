@@ -280,6 +280,19 @@ Promotion rule example: ship only if task metric ≥ baseline + δ **and** no cr
 | Single GPU OOM | Full FT attempt | QLoRA / smaller base / lower `r` |
 | Cannot roll back | Merged opaque weights only | Keep base + adapter artifacts |
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Changing catalog facts were baked into weights and became expensive to update.
+
+**What this lab demonstrates:** The decision memo forces an economic comparison with prompting, retrieval, and tools; the held-out set measures the base gap before training.
+
+**What it does not prove:** A better adapter score does not make mutable knowledge fresh or remove deployment, rollback, and regression costs.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

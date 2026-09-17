@@ -478,6 +478,19 @@ Do not invert `user`/`assistant` roles on a shared OpenAI-style transcript to si
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** An unstructured contract audit reread sections, lost earlier findings, and produced no repeatable trail.
+
+**What this lab demonstrates:** Applying three patterns to one workflow forces an explicit shape, bounded loop or memory rule, and a traceable artifact instead of six disconnected demos.
+
+**What it does not prove:** A well-shaped workflow still needs reliability detectors, security controls, and outcome evaluation.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

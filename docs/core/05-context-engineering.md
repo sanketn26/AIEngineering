@@ -318,6 +318,19 @@ In production you will measure exact tokens and may truncate *within* a part (e.
 | Answers cut off | No completion headroom | Reserve 10–20% of window |
 | “Forgot” after refresh | Memory only in client RAM | Persist session + user tiers server-side |
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Old history and tool dumps crowded a durable policy out of the model window.
+
+**What this lab demonstrates:** The memory lab proves a named constraint survives summarization and that the packer drops low-priority history before system policy.
+
+**What it does not prove:** A surviving string does not prove the model will obey it, and summarization may still distort facts that need separate evaluation.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

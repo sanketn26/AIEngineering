@@ -249,6 +249,19 @@ Scheduled job (optional): replay the same fixtures against a live model, write J
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Final-answer accuracy stayed green while the agent used six times the cost and far more tool calls.
+
+**What this lab demonstrates:** The three trajectories, dashboard, and regression assertion make looping success and hallucinated-tool failure score differently from exact success.
+
+**What it does not prove:** A composite score can hide trade-offs, so its process and outcome components must remain visible and calibrated to real tasks.
+
+</div>
+
+---
+
 ## Lab
 
 1. Build three stub trajectories: exact success, looping success, hallucinated-tool failure.

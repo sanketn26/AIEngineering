@@ -170,6 +170,19 @@ Canary: 5% of traffic on `v4` digest; compare Module 22 dashboard; promote the p
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A live prompt and tool list changed while the environment continued reporting the old version name.
+
+**What this lab demonstrates:** Digest equality, tool-only drift, missing-config detection, eval regression, and optional readiness output prove both byte-level and behavior-level gates.
+
+**What it does not prove:** A matching digest proves identity, not quality; a changed digest requires evaluation rather than automatic rejection forever.
+
+</div>
+
+---
+
 ## Lab
 
 1. Pin `PromptConfig`; copy it; assert `detect_drift` is empty.

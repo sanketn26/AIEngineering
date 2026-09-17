@@ -347,6 +347,19 @@ rows = load_jsonl("tests/fixtures/invoice_golden.jsonl")
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A prompt change dropped extraction accuracy without producing a failing build.
+
+**What this lab demonstrates:** The golden set, deliberate regression, failure IDs, and CI threshold recreate the missing feedback loop and prove it can go red.
+
+**What it does not prove:** Fifteen rows cover known behavior only; production failures must continue to expand the set.
+
+</div>
+
+---
+
 ## Lab
 
 **Artifact:** a golden set (≥15 rows) + automated scorer that fails when you break a prompt on purpose.

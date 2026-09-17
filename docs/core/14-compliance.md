@@ -336,6 +336,19 @@ Wire routing in code (Module 16) so the table is enforced, not a wiki wish.
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** The team could not answer where customer data went or which configuration handled a ticket.
+
+**What this lab demonstrates:** The data-flow diagram, classified stores, audit events, destination policy, and change checklist assemble the evidence needed for that questionnaire.
+
+**What it does not prove:** These artifacts are not legal advice or certification, and they are useful only if they match the deployed data path.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

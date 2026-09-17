@@ -310,6 +310,19 @@ Decide product policy for `flagged=True`: refuse, allow with no tools, or queue 
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A retrieved document supplied hostile instructions to a model that still had privileged tools.
+
+**What this lab demonstrates:** The pre-processor, hostile-input cases, PII assertions, and five-line threat model practice the input boundary before any model call.
+
+**What it does not prove:** Regex detection will miss attacks; the lab does not replace tool authorization, isolation, or an organizational security review.
+
+</div>
+
+---
+
 ## Lab
 
 **Artifact:** a chat pre-processor that uses `src.security` before any model call.

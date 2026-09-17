@@ -429,6 +429,19 @@ Learn the concepts in this module; use frameworks as **implementations**, not as
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A persona-heavy multi-agent demo multiplied cost without demonstrating better work.
+
+**What this lab demonstrates:** The bounded handoff log, schemas, single-agent baseline, and ten-task comparison require the topology to earn its added coordination cost.
+
+**What it does not prove:** Ten tasks provide directional evidence only, and shared model blind spots can remain correlated across every role.
+
+</div>
+
+---
+
 ## Lab
 
 1. Implement **researcher + writer + critic** with **max 2** critique rounds.  

@@ -220,6 +220,19 @@ You persisted **the wrong artifact**. Durable events should carry **compressed r
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A long investigation lost its hypothesis on restart and wrote an untested patch directly into the user's tree.
+
+**What this lab demonstrates:** The durable log, hypothesis frontier, pause/resume path, denial assertion, and merge gate prove state and side effects survive interruption safely.
+
+**What it does not prove:** Persistence can faithfully preserve a wrong hypothesis, so evidence scoring and human review still matter.
+
+</div>
+
+---
+
 ## Lab
 
 1. `HypothesisTree`: child evidence raises parent score; `frontier()` returns leaves.

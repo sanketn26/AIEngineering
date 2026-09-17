@@ -430,6 +430,19 @@ def adaptive_retrieve(query: str, max_reformulations: int = 2) -> list[Candidate
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** One sequential agent tried to read an entire drive and carried every intermediate thought forward.
+
+**What this lab demonstrates:** The lab extracts a validated subroutine, gates the riskiest tool, bounds format retries, and measures consensus confidence on repeated cases.
+
+**What it does not prove:** These primitives do not choose the correct global workflow or remove correlated errors shared by every worker.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

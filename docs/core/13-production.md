@@ -400,6 +400,19 @@ CMD ["uvicorn", "src.api:app", "--host", "0.0.0.0", "--port", "8000"]
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** Hung calls and missing request context made a production incident impossible to reconstruct.
+
+**What this lab demonstrates:** The endpoint, deadline/fallback path, structured request ID, container, golden subset, and p95 measurement create the evidence the incident lacked.
+
+**What it does not prove:** A local load run does not establish production capacity or eliminate provider and downstream failures.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>

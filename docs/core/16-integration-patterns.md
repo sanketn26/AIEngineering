@@ -336,6 +336,19 @@ Load-test **p95 latency** and **error rate** separately for API tier vs worker t
 
 ---
 
+<div class="aieng-case-checkpoint" markdown>
+<p class="label">Case checkpoint</p>
+
+**Opening failure:** A long synchronous request timed out and retries created more work without end-to-end identity.
+
+**What this lab demonstrates:** The queue conversion, data-class route, progress channel, load result, and cross-hop request ID practice the complete integration path.
+
+**What it does not prove:** A stubbed route and small load test do not prove broker durability, idempotency under crash, or production scaling limits.
+
+</div>
+
+---
+
 ## Lab
 
 <div class="aieng-lab" markdown>
