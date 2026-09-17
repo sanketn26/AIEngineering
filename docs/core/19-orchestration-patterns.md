@@ -4,14 +4,17 @@ description: Apply Map-Reduce, Router, Planner, and ReAct orchestration patterns
 
 # Module 19 — Orchestration Patterns
 
-<span data-module-id="19" hidden></span>
-
 **Time:** 6–9 days · **Depends on:** [18 Agent design patterns](18-agent-design-patterns.md) · **Pairs with:** [12 Multi-agent systems](12-multi-agents.md) · **Next:** [Agent reliability](20-agent-reliability.md)
 
+<span data-module-id="19" hidden></span>
+
+---
 
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 A compliance team asks for an agent that audits vendor contracts against 40 regulatory clauses. First attempt: one prompt, whole contract, all 40 clauses at once. It misses clauses buried mid-document ("lost in the middle"), and by clause 30 it's forgotten what it flagged for clause 3. Second attempt: an unstructured "just read and reason" loop — better, but it wanders, re-reads the same section twice, and never produces the same audit trail twice. What actually ships is three patterns stacked: **Map-Reduce** splits the contract into sections so each gets full attention; a **Planner** turns "audit for compliance" into an explicit 40-item checklist executed in order; and a lean **Router** sends flagged financial clauses to a finance-tuned model and flagged privacy clauses to a privacy-tuned one. None of these are exotic — they're the same divide-and-conquer, dispatch, and staged-execution ideas from classic systems design, applied to a stochastic worker instead of a deterministic one.
 
@@ -584,4 +587,4 @@ Pick **three** of the six patterns and apply them to one workflow (do not build 
 
 **Return to the case:** Map-Reduce, planning, routing, and bounded loops give the contract audit an explicit execution shape and reproducible trail. The workflow still needs failure detectors, budgets, and evaluation.
 
-**Next:** [Module 20 — Agent reliability & failure modes](20-agent-reliability.md)
+**Next:** [Agent reliability](20-agent-reliability.md)

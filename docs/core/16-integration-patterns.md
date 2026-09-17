@@ -4,15 +4,17 @@ description: Embed LLMs into event-driven architectures with queues and streamin
 
 # Module 16 — Advanced Integration Patterns
 
-<span data-module-id="16" hidden></span>
+**Time:** 1–2 weeks · **Depends on:** [13 Production](13-production.md) · **Next:** [Compliance](14-compliance.md)
 
-**Time:** 1–2 weeks · **Depends on:** 13 · **Next:** [Small models](17-small-models.md)
+<span data-module-id="16" hidden></span>
 
 ---
 
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 Product wants “chat that researches the whole corpus.” Engineering puts a multi-tool agent behind `POST /chat` with a 120s gateway timeout. Users refresh when the spinner stalls; each refresh starts a **new** agent run. Load balancers kill connections mid-flight; workers keep spending tokens; support cannot find which run belongs to which ticket because `request_id` dies at the first hop. Fixing it is not “a faster model” — it is **jobs, queues, and progressive delivery**, the same patterns you use for video encoding or report generation.
 
@@ -427,4 +429,4 @@ Load-test **p95 latency** and **error rate** separately for API tier vs worker t
 
 **Return to the case:** The long request becomes a bounded job with idempotency, queue state, and a request ID that survives every hop. Asynchrony prevents refresh storms but introduces state, retry, and cancellation responsibilities.
 
-**Next:** [Module 17 — Small & local models](17-small-models.md)
+**Next:** [Compliance](14-compliance.md)

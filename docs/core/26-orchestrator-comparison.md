@@ -14,6 +14,8 @@ description: Compare custom loops, LangGraph, CrewAI, and MCP hosts on control, 
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 Two teams ship “multi-agent.” Team A copies a CrewAI demo: five personas, unbounded debate, $9/ticket, no step ids. Team B copies LangGraph: a 40-node graph nobody can draw, checkpoints on, still no spend guard, still auto-merge. Team C writes a 200-line custom loop, then rediscovers durable HITL the hard way. None of them can answer **“which worker spent the money on step 7?”** Frameworks are not villains. **Unmeasured topology** is.
 
 </div>

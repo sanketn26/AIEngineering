@@ -14,6 +14,8 @@ description: Implement a plan-act-observe agent loop with hard stops, an allowli
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 Overnight, a “helpful research agent” leaves 400+ tool calls in the logs: same `search` query, same empty hits, same optimistic retry. No `max_steps`. No repeated-signature abort. Morning bill: four figures for zero tickets closed. The demo had a charming persona and a ReAct prompt. It did not have a **state machine with circuit breakers**. Personality does not terminate; code does.
 
 </div>
@@ -21,8 +23,6 @@ Overnight, a “helpful research agent” leaves 400+ tool calls in the logs: sa
 **Case question:** Which state, budget, and repeated-call rule must live outside the model so this loop stops predictably?
 
 ## Learning objectives
-
-By the end of this module you will be able to:
 
 - Implement a **plan–act–observe** loop with **hard stops**
 - Constrain the model to an **allowlisted** tool surface and structured decisions
@@ -549,4 +549,4 @@ Use `src.agents.Agent` as the baseline; extend only if you need new abort reason
 
 **Return to the case:** A state machine with typed actions, repeated-call detection, and a hard step cap stops the overnight loop. It bounds execution; it does not make every selected action correct.
 
-**Next:** [Module 12 — Multi-agent systems](12-multi-agents.md)
+**Next:** [Multi-agent](12-multi-agents.md)

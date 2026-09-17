@@ -8,9 +8,13 @@ description: Decide when fine-tuning beats prompting and RAG, build a mental mod
 
 <span data-module-id="06" hidden></span>
 
+---
+
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 Leadership wanted the bot to “know the catalog.” The team fine-tuned on last quarter’s PDF dump. Train loss looked great. Three product launches later the model still confidently recommends retired SKUs—because weekly facts were baked into weights instead of fetched. Rollback meant another training cycle, not a config flip.
 
@@ -378,4 +382,4 @@ When **inference cost/latency/privacy** dominate and the teacher’s behavior is
 
 **Return to the case:** The decision record keeps changing catalog facts out of weights and reserves fine-tuning for stable behavioral gaps. The chosen approach still needs held-out evaluation and an operational update path.
 
-**Next:** [Module 07 — Tools & basic RAG](07-tools-and-rag.md)
+**Next:** [Tools & RAG](07-tools-and-rag.md)

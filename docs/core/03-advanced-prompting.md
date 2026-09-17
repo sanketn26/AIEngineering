@@ -14,6 +14,8 @@ description: Apply chain-of-thought, few-shot, and self-consistency deliberately
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 2:14am: on-call gets paged because the invoice pipeline can’t `json.loads` again. Yesterday’s “quality” PR stacked CoT + eight few-shots + self-consistency on every ticket “to be safe.” Latency 3×, bill spike, parse rate still broken—because nobody measured which lever fixed the real failure. Techniques without a decision map are load-bearing cargo cult.
 
 </div>
@@ -434,4 +436,4 @@ poetry run python -c "from src.prompts import render; print(render('classify', l
 
 **Return to the case:** Schema validation fixes the parser contract, and measured technique choices avoid paying for every prompting trick at once. A parseable answer can still be wrong, so Module 04 adds behavioral evaluation.
 
-**Next:** [Module 04 — Testing & evals](04-testing-evals.md)
+**Next:** [Testing & evals](04-testing-evals.md)

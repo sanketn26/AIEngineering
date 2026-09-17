@@ -14,6 +14,8 @@ description: Track cost-per-success instead of raw token thrift, and apply LLM r
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 Finance screenshots a 40% token drop after “routing everything to mini.” Leadership celebrates thrift. Support reopen rate doubles. The mini model fails validators, retries three times, then escalates to humans who eat the savings. `cost_per_success` barely moved — sometimes rose. Separately, a cache keyed only on user text serves Alice Bob’s invoice answer. Tokens were never the product. **Successful outcomes under a budget** were.
 
 </div>
@@ -21,8 +23,6 @@ Finance screenshots a 40% token drop after “routing everything to mini.” Lea
 **Case question:** Can you lower cost per successful outcome without raising reopen rate, leaking cached data, or hiding failure behind a cheaper average?
 
 ## Learning objectives
-
-By the end of this module you will be able to:
 
 - Define and track **unit economics**: `cost_per_success`, not raw token thrift
 - Identify the real **token and call drivers** in a request path
@@ -520,4 +520,4 @@ poetry run pytest tests/test_cost.py -v
 
 **Return to the case:** Routing and cache isolation lower cost only when success and reopen rates remain acceptable. A smaller bill is not an optimization if quality or tenant boundaries regress.
 
-**Next:** [Module 11 — Single-agent workflows](11-single-agents.md)
+**Next:** [Single agents](11-single-agents.md)

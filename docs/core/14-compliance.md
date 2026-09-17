@@ -4,9 +4,11 @@ description: Map LLM product data flows for privacy and security review, build a
 
 # Module 14 — Legal, Compliance & Governance
 
+**Time:** 3–5 days · **Depends on:** [02 Security & privacy](02-security-privacy.md), [13 Production](13-production.md) · **Next:** [Domain apps](15-domain-apps.md)
+
 <span data-module-id="14" hidden></span>
 
-**Time:** 3–5 days · **Depends on:** 02, 13 · **Next:** [Domain apps](15-domain-apps.md)
+---
 
 !!! warning "Not legal advice"
     This module is an **engineering orientation** for CS practitioners. It is **not** legal advice, a compliance certification, or a substitute for qualified counsel, privacy officers, or security review. Laws and contracts are jurisdiction- and product-specific. When in doubt, escalate to specialists before shipping regulated data flows.
@@ -16,6 +18,8 @@ description: Map LLM product data flows for privacy and security review, build a
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 Enterprise security questionnaire, week before renewal. They ask: *Where does customer text go? How long do you keep it? Which model version answered ticket #88421 last Tuesday?* Your team discovers prompts in the default log stream, no data inventory for the vector index, and a system prompt last changed by “someone on-call” with no PR. Legal cannot answer “are we allowed to send this field to Vendor X?” because engineering never drew the map. The deal stalls — not because the model is weak, but because **controls and provenance** were an afterthought.
 
@@ -426,4 +430,4 @@ Wire routing in code (Module 16) so the table is enforced, not a wiki wish.
 
 **Return to the case:** A data inventory, provenance record, retention policy, and auditable control owner let the team answer the questionnaire with evidence. Documentation is not certification and must match the deployed path.
 
-**Next:** [Module 15 — Domain applications](15-domain-apps.md)
+**Next:** [Domain apps](15-domain-apps.md)

@@ -14,6 +14,8 @@ description: Detect silent prompt and config drift by pinning versioned bundles 
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 Tuesday: someone “just tweaks” the support system prompt in a vendor playground to be “warmer.” No PR. Hash changes. Tool list accidentally includes `export_transcript`. Wednesday: parse_rate on the golden set is 71% (was 92%); a user gets an internal runbook in the reply. Logs still say `prompt_version=v3` because the env var was never bumped — only the blob behind it moved. **The pin lied.** Drift is a config-integrity bug.
 
 </div>
@@ -256,4 +258,4 @@ poetry run pytest tests/test_drift.py -v
 
 **Return to the case:** A digest over the full prompt, model, decoding, policy, and tool bundle makes the silent edit detectable and rollbackable. Matching bytes still requires evals to establish acceptable behavior.
 
-**Next:** [Module 24 — Local-first, cost-aware agents](24-local-first-agents.md)
+**Next:** [Local-first agents](24-local-first-agents.md)

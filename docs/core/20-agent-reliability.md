@@ -14,6 +14,8 @@ description: Name the agent failure taxonomy — runaway loops, tool hallucinati
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 Friday 17:10. The “research crew” has been “almost done” for ninety minutes. Logs show the same `search` signature 140 times, then a hallucinated `run_sql` that your allowlist never declared — except one intern had wired `**kwargs` through to a helper. Meanwhile a second worker wrote three of five planned tickets and crashed; the UI showed a green check because `done=True` was set on the first success. Cost: $186. Customer-visible quality: a 12-point drop vs last week’s golden set, no pager, because the HTTP layer still returned 200. Personality did not fail. **Controls** were missing.
 
 </div>
@@ -350,4 +352,4 @@ poetry run pytest tests/test_reliability.py tests/test_agents.py -v
 
 **Return to the case:** Named detectors and circuit breakers turn loops, hallucinated tools, partial work, and cost spikes into observable failure states. A breaker limits damage; recovery and root-cause work remain necessary.
 
-**Next:** [Module 21 — Secure tool use & sandboxing](21-secure-tool-use.md)
+**Next:** [Secure tool use](21-secure-tool-use.md)

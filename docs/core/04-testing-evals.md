@@ -14,6 +14,8 @@ description: Separate deterministic unit tests from stochastic eval suites, buil
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 Sprint review looked green: five happy-path chats, a thumbs-up, a “tiny wording tweak” merged Friday. Two weeks later billing extraction accuracy sits at 71% instead of 92%. No CI red. No pager. Customers just filed tickets about wrong amounts. Nothing measured the model path—so the regression was silent until finance noticed.
 
 </div>
@@ -454,4 +456,4 @@ poetry run pytest tests/test_evals.py tests/test_security.py -v
 
 **Return to the case:** The golden set turns the silent quality drop into a failing regression gate with an explicit threshold. It covers the cases you collected, not every future input; maintain and expand it as failures arrive.
 
-**Next:** [Module 05 — Context engineering](05-context-engineering.md)
+**Next:** [Context engineering](05-context-engineering.md)

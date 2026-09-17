@@ -4,7 +4,7 @@ description: Decide when multi-agent orchestration is actually justified, choose
 
 # Module 12 — Multi-Agent Coordination
 
-**Time:** 10–14 days · **Depends on:** [11 Single agents](11-single-agents.md) · **Next:** [Production](13-production.md)
+**Time:** 10–14 days · **Depends on:** [11 Single agents](11-single-agents.md) · **Next:** [Agent design patterns](18-agent-design-patterns.md)
 
 <span data-module-id="12" hidden></span>
 
@@ -14,6 +14,8 @@ description: Decide when multi-agent orchestration is actually justified, choose
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 Hackathon energy: “CEO, engineer, designer, critic” agents write a README. Each persona re-reads the whole repo context. Critic and writer debate for six uncapped rounds. Final doc is worse than a single agent with `read_file` + one pass. Cost: ~10×. Latency: painful. The team shipped a **microservice mesh for a 200-line CRUD app** — theater, not topology. The fix was not more personas; it was **one agent + tools**, then maybe a capped writer→critic contract if metrics demand it.
 
 </div>
@@ -21,8 +23,6 @@ Hackathon energy: “CEO, engineer, designer, critic” agents write a README. E
 **Case question:** Does the task require separate workers, and what topology and message contract make their added cost and failure surface worthwhile?
 
 ## Learning objectives
-
-By the end of this module you will be able to:
 
 - Decide **when multi-agent is wrong** (default remains one agent + tools)
 - Choose among **sequential**, **hierarchical (manager–worker)**, and **peer** topologies
@@ -530,4 +530,4 @@ Learn the concepts in this module; use frameworks as **implementations**, not as
 
 **Return to the case:** A topology chosen from task dependencies replaces persona theater, and message contracts make handoffs testable. More workers still add cost and correlated failure unless evaluation justifies them.
 
-**Next:** [Module 13 — Production systems](13-production.md)
+**Next:** [Agent design patterns](18-agent-design-patterns.md)

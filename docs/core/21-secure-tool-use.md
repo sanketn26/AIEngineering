@@ -14,6 +14,8 @@ description: Ship agent tools as least-privilege manifests with approval gates o
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 An editor agent is told “clean up this module.” It has a god-tool `bash`. The model proposes `git checkout --orphan tmp && git add -A && git commit`. No path sandbox. No approval. The user’s uncommitted novel in a sibling folder is gone from the index. Postmortem: the prompt said “be careful.” The process had the user’s full UID, env, and credentials. **Policy lived in English.** English is not a sandbox.
 
 </div>
@@ -339,4 +341,4 @@ poetry run pytest tests/test_sandbox.py -v
 
 **Return to the case:** Least-privilege manifests, approval gates, isolated execution, and output validation keep English policy from being the only defense. Sandboxing limits reach; it does not make proposed changes desirable.
 
-**Next:** [Module 27 — Harness engineering](27-harness-engineering.md)
+**Next:** [Harness engineering](27-harness-engineering.md)

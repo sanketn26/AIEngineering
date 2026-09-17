@@ -105,7 +105,6 @@ The modules move from dependable model interactions to complete production syste
       <li><a href="core/10-cost-optimization/">Cost optimization</a></li>
       <li><a href="core/11-single-agents/">Single-agent systems</a></li>
       <li><a href="core/12-multi-agents/">Multi-agent systems</a></li>
-      <li><a href="core/16-integration-patterns/">Integration patterns</a></li>
       <li><a href="core/18-agent-design-patterns/">Agent design patterns</a></li>
       <li><a href="core/19-orchestration-patterns/">Orchestration patterns</a></li>
       <li><a href="core/20-agent-reliability/">Agent reliability</a></li>
@@ -118,6 +117,7 @@ The modules move from dependable model interactions to complete production syste
     <p>Survive real traffic, audits, drift, and a bill someone has to explain.</p>
     <ul>
       <li><a href="core/13-production/">Production engineering</a></li>
+      <li><a href="core/16-integration-patterns/">Integration patterns</a></li>
       <li><a href="core/14-compliance/">Compliance</a></li>
       <li><a href="core/15-domain-apps/">Domain-specific applications</a></li>
       <li><a href="core/17-small-models/">Small & local models</a></li>

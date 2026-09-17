@@ -4,9 +4,11 @@ description: Prototype vertical LLM assistants for regulated domains with policy
 
 # Module 15 — Domain-Specific Applications
 
+**Time:** 1–2 weeks (patterning, not full vertical certification) · **Depends on:** [02 Security & privacy](02-security-privacy.md), [07 Tools & RAG](07-tools-and-rag.md), [14 Compliance](14-compliance.md) · **Next:** [Small models](17-small-models.md)
+
 <span data-module-id="15" hidden></span>
 
-**Time:** 1–2 weeks (patterning, not full vertical certification) · **Depends on:** 02, 07, 14 · **Next:** [Integration patterns](16-integration-patterns.md)
+---
 
 !!! warning "Not medical, legal, or financial advice"
     Domain examples in this module are **illustrative engineering patterns only**. They are **not** clinical guidance, legal advice, investment advice, or a license to operate in a regulated market. Do **not** deploy systems that diagnose, prescribe, file legal documents, or execute trades without licensed professionals, institutional validation, compliance review, and appropriate approvals. Educational prototypes must fail closed and refuse personal decisioning.
@@ -16,6 +18,8 @@ description: Prototype vertical LLM assistants for regulated domains with policy
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 A pilot “wellness assistant” ships with a warm tone and a footer: *not medical advice*. Demo day goes well. Two weeks later a user asks for a dose “for tonight”; the model answers fluently from training cut-off noise. There was no **must-refuse** case in the eval set, no clinician loop, and the only “control” was a disclaimer. Leadership freezes the feature. The failure was not model size — it was **missing layers**: policy, approved knowledge, action bounds, evidence, and human authority.
 
@@ -397,4 +401,4 @@ Do **not** claim your prototype is deployable in production regulated settings.
 
 **Return to the case:** The domain boundary determines when the application may answer, defer, cite, or escalate. Guardrails and evaluation reduce risk; they do not turn a general model into a licensed expert.
 
-**Next:** [Module 16 — Integration patterns](16-integration-patterns.md)
+**Next:** [Small models](17-small-models.md)

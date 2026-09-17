@@ -8,17 +8,21 @@ description: Structure prompts with role, task, and output format, treat them as
 
 <span data-module-id="01" hidden></span>
 
+---
+
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
 
-**The reply you cannot send** · Fictional teaching scenario
+*Fictional teaching scenario.*
+
+**The reply you cannot send**
 
 The customer asks, “Any demo slots Tuesday?” You ask an email assistant to draft a reply. It offers 10 a.m. You never gave it a calendar. A second draft avoids the time but leaves out the risks section your reviewer needs. Both sound ready to send; neither is ready to trust.
 
-Your job is to make the request reviewable: which facts may the reply use, which sections must it contain, and what should it do when a fact is missing? In the lab, you will test that contract on a real message and record where it still fails.
-
 </div>
+
+**Case question:** How do you make the request reviewable — which facts may the reply use, which sections must it contain, and what should it do when a fact is missing? In the lab, you will test that contract on a real message and record where it still fails.
 
 **Try before reading:** Write one instruction that would prevent an invented appointment and one that would make a missing section easy to spot. Keep them beside your notes; compare them with the constraints and format below. No model call needed yet.
 
@@ -463,4 +467,4 @@ Keep 3–4 sources open while you do the lab; do not try to memorize every techn
 
 Your result is a reviewable reply contract and a record of observed variation—not a guarantee that every future reply is safe. The same discipline transfers to the [running app’s triage output](index.md#the-running-app); this lab does not modify that service or authorize refunds.
 
-**Next:** [Module 02 — Security & privacy](02-security-privacy.md) — the request has clearer rules; now examine what happens when the message itself tries to override them.
+**Next:** [Security & privacy](02-security-privacy.md) — the request has clearer rules; now examine what happens when the message itself tries to override them.

@@ -4,15 +4,17 @@ description: Serve LLMs behind stable APIs with timeouts, retries, and fallbacks
 
 # Module 13 — Production-Grade Systems
 
-<span data-module-id="13" hidden></span>
+**Time:** 2–3 weeks (alongside a real project) · **Depends on:** [04 Testing & evals](04-testing-evals.md), [07 Tools & RAG](07-tools-and-rag.md), [10 Cost](10-cost-optimization.md) · **Next:** [Integration patterns](16-integration-patterns.md)
 
-**Time:** 2–3 weeks (alongside a real project) · **Depends on:** 04, 07, 10 · **Next:** [Compliance](14-compliance.md)
+<span data-module-id="13" hidden></span>
 
 ---
 
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 Friday 16:40. Support chat p95 jumps from 1.2s to “hung.” The provider is rate-limiting; your SDK default has **no timeout**. Workers pile up, health checks still pass (process is “up”), autoscaler adds pods that also hang, and the bill spikes from retries without jitter. Nobody can answer “what did user X see?” because logs have no shared `request_id` — only “the bot was weird.” Someone had also hot-edited the system prompt in the dashboard that morning; there is no version pin to roll back.
 
@@ -494,4 +496,4 @@ Capture: p95 latency under a small load script, and a greppable `request_id` fro
 
 **Return to the case:** Deadlines, request IDs, version pins, and service-level telemetry make the hung request diagnosable and recoverable. Observability reveals failure; it does not eliminate provider outages.
 
-**Next:** [Module 14 — Compliance & governance](14-compliance.md)
+**Next:** [Integration patterns](16-integration-patterns.md)

@@ -14,6 +14,8 @@ description: Score agent trajectories instead of only final answers, separate pr
 
 <div class="aieng-story" markdown>
 
+*Fictional teaching scenario.*
+
 Golden-set extract accuracy is 94%. Leadership ships the new “agentic” support bot. A week later, tickets close slower and the bill is 6×. Extract evals are still green — the bot still parses invoices. What died was the **path**: 18 tool calls instead of 3, two hallucinated tools per session, $0.40 vs $0.04, and a 40-second p95. Single-turn evals never saw a trajectory. The regression was **silent on the only dashboard you had**.
 
 </div>
@@ -334,4 +336,4 @@ poetry run pytest tests/test_agent_evals.py tests/test_reliability.py -v
 
 **Return to the case:** Trajectory scoring exposes the extra calls, hallucinated tools, latency, and spend that final-answer accuracy hid. Composite scores aid promotion decisions but must keep their component metrics visible.
 
-**Next:** [Module 23 — Prompt & config drift](23-prompt-drift.md)
+**Next:** [Prompt & config drift](23-prompt-drift.md)

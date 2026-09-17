@@ -8,9 +8,13 @@ description: Treat the context window as a scarce token budget, design a packing
 
 <span data-module-id="05" hidden></span>
 
+---
+
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 Day 19 of a “simple” support chat: the system policy still says never invent account IDs. The window is 90% old tool JSON and small talk. The model invents an account ID anyway—not because the policy vanished from the product, but because it drowned under clutter on the desk. Cost per turn climbed; nobody owned the packer.
 
@@ -423,4 +427,4 @@ Curated reading (concepts — verify current URLs and versions):
 
 **Return to the case:** A budgeted packer keeps policy and high-signal evidence ahead of stale history and tool dumps. Packing preserves attention; it cannot supply facts that were never retrieved.
 
-**Next:** [Module 06 — Fine-tuning](06-fine-tuning.md) · or jump to [Tools & basic RAG](07-tools-and-rag.md) on a faster path (you will still need context packing).
+**Next:** [Fine-tuning](06-fine-tuning.md) — when packing the window is not enough and the knowledge belongs in weights · or jump to [Tools & basic RAG](07-tools-and-rag.md) on a faster path (you will still need context packing).

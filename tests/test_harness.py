@@ -121,3 +121,34 @@ def test_denied_tool_does_not_write_artifact():
         state=state,
     )
     assert "last" not in state.artifacts
+
+
+def test_no_progress_cap_stops_a_spinning_loop():
+    """Same tool, same args, forever — the brake fires before the step cap."""
+
+    def propose(_state: ExternalState) -> dict:
+        return {"tool": "lookup_policy", "artifact": "same", "cost_usd": 0.01}
+
+    report = run_harness(
+        _spec(step_cap=8, no_progress_cap=2),
+        propose=propose,
+        verify=lambda a: verify_artifact(a, must_contain=("REFUND",)),
+    )
+    assert report.stopped == "no_progress"
+    assert report.steps < 8
+    assert any(n.startswith("no_progress:") for n in report.notes)
+
+
+def test_no_progress_cap_does_not_fire_on_real_progress():
+    """Differing proposals must not trip the brake."""
+
+    def propose(state: ExternalState) -> dict:
+        text = "draft" if not state.artifacts else "REFUND window is 30 days"
+        return {"tool": "write_note", "artifact": text, "cost_usd": 0.01}
+
+    report = run_harness(
+        _spec(no_progress_cap=2),
+        propose=propose,
+        verify=lambda a: verify_artifact(a, must_contain=("REFUND",)),
+    )
+    assert report.stopped == "verified"

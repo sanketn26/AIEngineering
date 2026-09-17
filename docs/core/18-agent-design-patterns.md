@@ -4,15 +4,17 @@ description: Decompose agent workflows into testable subroutines, add gates and 
 
 # Module 18 — Agent Design Patterns
 
-<span data-module-id="18" hidden></span>
-
 **Time:** 5–8 days · **Depends on:** [11 Single agents](11-single-agents.md), [12 Multi-agent systems](12-multi-agents.md) · **Pairs with:** [09 Advanced RAG](09-advanced-rag.md) · **Next:** [Orchestration patterns](19-orchestration-patterns.md)
+
+<span data-module-id="18" hidden></span>
 
 ---
 
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 A team builds an agent to scan a missing person's hard drive: one big "reason and act" loop reading file after file, deciding what's relevant, summarizing as it goes. It works on the demo laptop with 200 files. On a real 400GB drive it blows the context window by lunch, drifts off-task after a few hundred files, and takes eleven hours because every step waits on the last one. The fix isn't a bigger context window — it's decomposition: a **subroutine** that extracts facts from one file at a time (parallelizable, stateless, disposable reasoning), a **guardrail** that keeps PII out of the running case file, a **rejection sampler** that guarantees each extraction parses as JSON, and a **retriever** that means the agent never has to "read everything" to answer "did we see a passport photo."
 
@@ -533,4 +535,4 @@ def adaptive_retrieve(query: str, max_reformulations: int = 2) -> list[Candidate
 
 **Return to the case:** The large scan becomes small, validated, disposable subroutines behind gates, retrieval, and deterministic reconciliation. Decomposition controls scope; it cannot repair a badly chosen split or shared model blind spot.
 
-**Next:** [Module 19 — Orchestration patterns](19-orchestration-patterns.md)
+**Next:** [Orchestration patterns](19-orchestration-patterns.md)

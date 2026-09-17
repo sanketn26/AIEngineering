@@ -4,9 +4,11 @@ description: Learn MCP's host, client, and server roles, apply a security bar fo
 
 # Module 08 — Model Context Protocol (MCP)
 
-**Time:** 4–6 days · **Depends on:** [Tools & RAG](07-tools-and-rag.md) · **Pairs with:** [21 Secure tool use](21-secure-tool-use.md), [23 Drift](23-prompt-drift.md) · **Next:** [Advanced RAG](09-advanced-rag.md)
+**Time:** 4–6 days · **Depends on:** [Tools & RAG](07-tools-and-rag.md) · **Pairs with:** [21 Secure tool use](21-secure-tool-use.md), [23 Drift](23-prompt-drift.md) · **Next:** [Cost optimization](10-cost-optimization.md)
 
 <span data-module-id="08" hidden></span>
+
+---
 
 !!! important "Protocol version taught: MCP 2026-07-28"
     | | |
@@ -21,6 +23,8 @@ description: Learn MCP's host, client, and server roles, apply a security bar fo
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 An engineer installs a trendy “productivity” MCP server from a public list so the IDE can “see the monorepo.” Auto-approve is on. By lunch the server has listed `~/.ssh`, read `.env`, and shipped a “helpful summary” of secrets into the model context — which then lands in provider logs. Nobody wrote malware. They plugged a **peripheral** into the host without a permission model. Same day, a PM deck still labels MCP as “our multi-model load balancer.” Two confusions, one theme: **protocol without host policy is just a nicer way to run untrusted code**.
 
@@ -532,4 +536,4 @@ The host must still enforce budgets: refuse oversized reads, truncate, or summar
 
 **Return to the case:** The host treats each MCP server as an untrusted peripheral, pins what it connects to, and authorizes every capability. Protocol compatibility does not establish trustworthiness.
 
-**Next:** [Module 09 — Advanced RAG](09-advanced-rag.md)
+**Next:** [Cost optimization](10-cost-optimization.md)

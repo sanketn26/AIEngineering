@@ -4,15 +4,17 @@ description: Match small language models to tasks they can own, run local infere
 
 # Module 17 — Small & Local LLM Models
 
-<span data-module-id="17" hidden></span>
+**Time:** 5–7 days · **Depends on:** [01 Prompt engineering](01-prompt-engineering.md), [05 Context engineering](05-context-engineering.md), [10 Cost](10-cost-optimization.md) · **Pairs with:** tracks using Phi / Ollama · **Next:** [Evaluating agents](22-agent-evaluation.md) · **Agents on SLMs:** [24 Local-first](24-local-first-agents.md)
 
-**Time:** 5–7 days · **Depends on:** 01, 05, 10 · **Pairs with:** tracks using Phi / Ollama · **Next:** [Agent design patterns](18-agent-design-patterns.md) · **Agents on SLMs:** [24 Local-first](24-local-first-agents.md)
+<span data-module-id="17" hidden></span>
 
 ---
 
 <span id="why-this-matters-cs-engineer-view"></span>
 
 <div class="aieng-story" markdown>
+
+*Fictional teaching scenario.*
 
 Finance wants the bill cut in half. The team swaps every call to a 3B local model “because demos looked fine,” then quantizes to Q4 so it fits on a laptop GPU. Schema pass rate on extraction collapses; the agent loops on tools the small model cannot plan. There was no **router**, no **re-eval after quant**, and no list of tasks the SLM actually owns. Cost went down; product quality and on-call load went up. The fix was not “bigger GPU” — it was **specialist first-line + escalate**, with golden metrics as the gate.
 
@@ -531,4 +533,4 @@ poetry run pytest tests/test_local_agents.py -v
 
 **Return to the case:** Measured routing keeps narrow work on the small model and escalates cases whose schema or quality fails. Quantization and lower cost do not excuse reusing the large-model threshold blindly.
 
-**Next:** [Module 18 — Agent design patterns](18-agent-design-patterns.md) · or jump to a [specialization track](../tracks/index.md)
+**Next:** [Evaluating agents](22-agent-evaluation.md) — score the path an agent actually ran · or jump to a [specialization track](../tracks/index.md)

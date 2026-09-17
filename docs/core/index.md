@@ -109,7 +109,6 @@ Grounded answers are not the same as safe actions. Once the system can call tool
 | [10 — Cost optimization](10-cost-optimization.md) | 2–3 days |
 | [11 — Single-agent workflows](11-single-agents.md) | 7–10 days |
 | [12 — Multi-agent coordination](12-multi-agents.md) | 10–14 days |
-| [16 — Integration patterns](16-integration-patterns.md) | 1–2 weeks |
 | [18 — Agent design patterns](18-agent-design-patterns.md) | 5–8 days |
 | [19 — Orchestration patterns](19-orchestration-patterns.md) | 6–9 days |
 | [20 — Agent reliability & failure modes](20-agent-reliability.md) | 4–6 days |
@@ -132,6 +131,7 @@ Everything above works on a laptop with one user. Production means real traffic,
 | Module | Time |
 |---|---|
 | [13 — Production-grade systems](13-production.md) | 2–3 weeks (alongside a real project) |
+| [16 — Integration patterns](16-integration-patterns.md) | 1–2 weeks |
 | [14 — Compliance](14-compliance.md) | 3–5 days |
 | [15 — Domain-specific applications](15-domain-apps.md) | 1–2 weeks |
 | [17 — Small & local models](17-small-models.md) | 5–7 days |

@@ -1,6 +1,12 @@
 # Plan: Make the tutorials hold attention through storytelling
 
 **Status:** editorial rollout implemented across the core curriculum; every lab now has a case-to-evidence checkpoint; full strict social-card build passes. Rendered visual review and participant-based reader testing remain pending for the reasons recorded below.
+
+**2026-09-17 navigation resolution:** the `Next:` chain now follows **gate order**, not catalog order, so the sidebar, the index gate tables, the landing page, and every page's `Next:` link agree. This removes all three backward gate jumps (`08→09`, `15→16`, `17→18`) and cuts gate switches from 10 to 4 (the minimum for five gates). Module 16 moved from Gate 4 to Gate 5, immediately after 13: it `Depends on` 13, so leaving it in Gate 4 was the one prerequisite violation gate order would have introduced. §6's open question about 27 linking to 22 is resolved — 27 now closes Gate 4 and hands off to 13, which opens Gate 5. Catalog numbering is unchanged and remains the file/anchor identity.
+
+**2026-09-17 formatting pass:** normalized across all 27 core modules — linked `Depends on` in 13–17 (were bare numbers), `**Time:**` line at line 7 and `<span data-module-id>` at line 9 (13–19 were offset), a `---` rule at line 11 (7 modules lacked it), one `*Fictional teaching scenario.*` label style, `## Learning objectives` straight to bullets (4 modules had an extra lead-in sentence), and a `**Case question:**` in every module (01 was the only one without).
+
+**2026-09-17 follow-up:** fixed a stray brace in `gamify.css` that invalidated the dark-mode rule for `.aieng-think`, `.aieng-explainer`, `.aieng-lab`, `.aieng-quiz`, and `.aieng-complete`; added the missing dark-mode rules for `.aieng-story` and `.aieng-case-checkpoint`; propagated the "Fictional teaching scenario" label from the pilot to all 27 modules, as constraint §5 requires. The pilot's "Try before reading" prompt is still Module 01 only — decide whether to propagate it or drop it from the pilot pattern.
 **Branch:** `plan/tutorial-storytelling`
 **Scope:** improve how the curriculum connects problems, decisions, practice, and results while preserving what it teaches
 **Non-goals:** a compulsory fictional serial, rewriting Python APIs or eval fixtures, replacing existing labs/quizzes, or substantially lengthening pages
@@ -74,6 +80,8 @@ Record whether each revised module has an unresolved problem, a learner choice, 
 - Keep objectives about what **the learner** can do. Retain `Learning objectives`, `Mental model`, `Core tutorial`, and lab headings by default for navigation and existing anchors.
 - Use no minimum opener length. Budget at most **400 total narrative words per revised module**, including opening, all section transitions, callbacks, and close—not 400 net additions. Aim lower whenever the case is clear.
 - Keep total source-word growth within approximately 15%, comparing before/after with the same whitespace-count method. This is a size guardrail, not a reading-time metric. Cut repetition or narrative before removing instructional substance.
+  - **Scope:** this budget governs *editorial* reframing. A deliberate expansion of what a module teaches is a content decision, not a storytelling one, and is recorded as an explicit exception below.
+  - **Exception — Module 27 (2026-09-17):** 2,298 → 3,901 source words (+70%) when loop engineering, context rot, tool-set design, failure-to-infrastructure, and harness decay were folded in, with `no_progress_cap` added to `src/harness.py` and two tests. Narrative words stayed within the 400-word budget; the growth is instructional material and runnable code. Re-check page length in the rendered review.
 - Vary openings: a failing request, test result, trace, conflicting requirement, or short scene. Names, dialogue, clocks, and cliffhangers are optional.
 - Label invented incidents as fictional teaching scenarios where a standalone reader can see it. Distinguish illustrative artifacts/results from observed lab output.
 - Do not invent repository files, runtime capabilities, or measured outcomes. Prompt constraints alone do not establish authorization or guarantee correctness.

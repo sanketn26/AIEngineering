@@ -130,7 +130,6 @@ nav:
           - 10 Cost optimization: core/10-cost-optimization.md
           - 11 Single agents: core/11-single-agents.md
           - 12 Multi-agent systems: core/12-multi-agents.md
-          - 16 Integration patterns: core/16-integration-patterns.md
           - 18 Agent design patterns: core/18-agent-design-patterns.md
           - 19 Orchestration patterns: core/19-orchestration-patterns.md
           - 20 Agent reliability: core/20-agent-reliability.md
@@ -138,6 +137,7 @@ nav:
           - 27 Harness engineering: core/27-harness-engineering.md
       - "Gate 5 — Operate it":
           - 13 Production: core/13-production.md
+          - 16 Integration patterns: core/16-integration-patterns.md
           - 14 Compliance: core/14-compliance.md
           - 15 Domain apps: core/15-domain-apps.md
           - 17 Small & local models: core/17-small-models.md
