@@ -10,6 +10,16 @@ description: Decide when multi-agent orchestration is actually justified, choose
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Hackathon energy: “CEO, engineer, designer, critic” agents write a README. Each persona re-reads the whole repo context. Critic and writer debate for six uncapped rounds. Final doc is worse than a single agent with `read_file` + one pass. Cost: ~10×. Latency: painful. The team shipped a **microservice mesh for a 200-line CRUD app** — theater, not topology. The fix was not more personas; it was **one agent + tools**, then maybe a capped writer→critic contract if metrics demand it.
+
+</div>
+
+**Case question:** Does the task require separate workers, and what topology and message contract make their added cost and failure surface worthwhile?
+
 ## Learning objectives
 
 By the end of this module you will be able to:
@@ -22,13 +32,6 @@ By the end of this module you will be able to:
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Hackathon energy: “CEO, engineer, designer, critic” agents write a README. Each persona re-reads the whole repo context. Critic and writer debate for six uncapped rounds. Final doc is worse than a single agent with `read_file` + one pass. Cost: ~10×. Latency: painful. The team shipped a **microservice mesh for a 200-line CRUD app** — theater, not topology. The fix was not more personas; it was **one agent + tools**, then maybe a capped writer→critic contract if metrics demand it.
-
-</div>
 
 Multi-agent systems are distributed systems with **nondeterministic workers**. Every extra agent adds:
 
@@ -511,5 +514,7 @@ Learn the concepts in this module; use frameworks as **implementations**, not as
 - **Catalog:** [EX-12 — Multi-agent vs single](../reference/exercises.md#ex-12)
 - **Prove:** A capped multi-role pipeline has numbers (success, cost) against a single `Agent`.
 - **Test:** `pytest tests/test_agents.py -v`
+
+**Return to the case:** A topology chosen from task dependencies replaces persona theater, and message contracts make handoffs testable. More workers still add cost and correlated failure unless evaluation justifies them.
 
 **Next:** [Module 13 — Production systems](13-production.md)

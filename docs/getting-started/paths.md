@@ -6,6 +6,8 @@ description: Pick a learning path, from a 2-3 day Weekend Warrior sprint to a 12
 
 Choose intensity and depth. All paths share [Setup](setup.md). Core modules are listed in the [home map](../index.md).
 
+The opening cases are self-contained. A shorter path does not require story context from skipped modules; use each module's **Depends on** line for prerequisites and its closing limitation to choose a useful next step.
+
 ---
 
 ## Weekend Warrior (2–3 days)

@@ -10,6 +10,16 @@ description: Ship agent tools as least-privilege manifests with approval gates o
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+An editor agent is told “clean up this module.” It has a god-tool `bash`. The model proposes `git checkout --orphan tmp && git add -A && git commit`. No path sandbox. No approval. The user’s uncommitted novel in a sibling folder is gone from the index. Postmortem: the prompt said “be careful.” The process had the user’s full UID, env, and credentials. **Policy lived in English.** English is not a sandbox.
+
+</div>
+
+**Case question:** Which privilege, approval, isolation, and output check prevents the model proposal from reaching files outside its authority?
+
 ## Learning objectives
 
 - Ship tools as **least-privilege manifests**, not `run(cmd: str)`
@@ -20,13 +30,6 @@ description: Ship agent tools as least-privilege manifests with approval gates o
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-An editor agent is told “clean up this module.” It has a god-tool `bash`. The model proposes `git checkout --orphan tmp && git add -A && git commit`. No path sandbox. No approval. The user’s uncommitted novel in a sibling folder is gone from the index. Postmortem: the prompt said “be careful.” The process had the user’s full UID, env, and credentials. **Policy lived in English.** English is not a sandbox.
-
-</div>
 
 Module 02 taught injection and allowlists. Module 11 executed tools in-process. This module is the **security course handshake**: capability tokens, human gates, and an execution environment that cannot reach the rest of the laptop.
 
@@ -320,5 +323,7 @@ poetry run pytest tests/test_sandbox.py -v
 - **Catalog:** [EX-21 — Sandbox](../reference/exercises.md#ex-21)
 - **Prove:** Writes deny without grant+human; a worktree edit leaves the source file untouched.
 - **Test:** `pytest tests/test_sandbox.py -v`
+
+**Return to the case:** Least-privilege manifests, approval gates, isolated execution, and output validation keep English policy from being the only defense. Sandboxing limits reach; it does not make proposed changes desirable.
 
 **Next:** [Module 27 — Harness engineering](27-harness-engineering.md)

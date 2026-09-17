@@ -10,6 +10,8 @@ Complete [Setup](../getting-started/setup.md) first. Close core gaps listed on t
 
 Tracks are domain-specific; the [Capstone](../core/capstone.md) is domain-agnostic and can run instead of or alongside a track — it proves the six generic parts (service, evals, knowledge, agent, ops, security) hold together, without committing to a vertical.
 
+Each track keeps its own case because its evidence is different: time-safe claims and citations for stock research, ablations for hybrid models, and approval-gated writes for the editor plugin. Return to that case at each phase exit; the artifact and measurement are the resolution.
+
 | Track | Outcome | Core dependencies | Vibe |
 |-------|---------|-------------------|------|
 | [Stock recommender](stock-recommender.md) | Research assistant / recommender prototype: data → baseline ML → SLM → RAG → compression → ship | 01–07, 09–10, 13–14, 17, 23; 22/24 if you add a tool loop | Markets + retrieval + MLOps (**not** financial advice) |

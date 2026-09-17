@@ -10,6 +10,16 @@ description: Track cost-per-success instead of raw token thrift, and apply LLM r
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Finance screenshots a 40% token drop after “routing everything to mini.” Leadership celebrates thrift. Support reopen rate doubles. The mini model fails validators, retries three times, then escalates to humans who eat the savings. `cost_per_success` barely moved — sometimes rose. Separately, a cache keyed only on user text serves Alice Bob’s invoice answer. Tokens were never the product. **Successful outcomes under a budget** were.
+
+</div>
+
+**Case question:** Can you lower cost per successful outcome without raising reopen rate, leaking cached data, or hiding failure behind a cheaper average?
+
 ## Learning objectives
 
 By the end of this module you will be able to:
@@ -22,13 +32,6 @@ By the end of this module you will be able to:
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Finance screenshots a 40% token drop after “routing everything to mini.” Leadership celebrates thrift. Support reopen rate doubles. The mini model fails validators, retries three times, then escalates to humans who eat the savings. `cost_per_success` barely moved — sometimes rose. Separately, a cache keyed only on user text serves Alice Bob’s invoice answer. Tokens were never the product. **Successful outcomes under a budget** were.
-
-</div>
 
 LLM spend is not a fixed SaaS seat license. It is closer to **pay-per-request compute** with a heavy tail: one agent loop or RAG dump can cost 100× a classifier call.
 
@@ -501,5 +504,7 @@ poetry run pytest tests/test_cost.py -v
 - **Catalog:** [EX-10 — Cost controls](../reference/exercises.md#ex-10)
 - **Prove:** Router, cache, and ledger actually deny over-budget work.
 - **Test:** `pytest tests/test_cost.py -v`
+
+**Return to the case:** Routing and cache isolation lower cost only when success and reopen rates remain acceptable. A smaller bill is not an optimization if quality or tenant boundaries regress.
 
 **Next:** [Module 11 — Single-agent workflows](11-single-agents.md)

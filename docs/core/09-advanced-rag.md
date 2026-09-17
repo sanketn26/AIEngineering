@@ -10,6 +10,16 @@ description: Diagnose why naive dense retrieval fails, build hybrid BM25-plus-de
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Ops bot answers “what does `ERR_INV_88421` mean?” with a confident essay about inventory philosophy. The gold runbook title *is* `ERR_INV_88421` — never retrieved. Dense-only search mapped the question to “inventory errors” prose and missed the rare token. Support escalates. Team “fixes quality” by switching to a larger generator. Bill goes up. Hit@5 stays flat. The crime scene was **retrieval**, not eloquence.
+
+</div>
+
+**Case question:** Which retrieval metric will reveal that the rare identifier never reached the generator, before anyone pays for a larger model?
+
 ## Learning objectives
 
 By the end of this module you will be able to:
@@ -22,13 +32,6 @@ By the end of this module you will be able to:
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Ops bot answers “what does `ERR_INV_88421` mean?” with a confident essay about inventory philosophy. The gold runbook title *is* `ERR_INV_88421` — never retrieved. Dense-only search mapped the question to “inventory errors” prose and missed the rare token. Support escalates. Team “fixes quality” by switching to a larger generator. Bill goes up. Hit@5 stays flat. The crime scene was **retrieval**, not eloquence.
-
-</div>
 
 Basic RAG is a vector nearest-neighbor lookup plus a prompt. Production RAG is closer to a **search system**: inverted indices, multi-stage ranking, query understanding, freshness, and offline metrics.
 
@@ -542,5 +545,7 @@ Also: [Curated resources](../reference/resources.md) → RAG & embeddings.
 - **Catalog:** [EX-09 — Hybrid retrieval](../reference/exercises.md#ex-09)
 - **Prove:** Hybrid Hit@5 / MRR is reported against dense-only on a labeled slice.
 - **Test:** `pytest tests/test_rag.py -v`
+
+**Return to the case:** Hybrid retrieval and reranking recover the rare identifier, and Hit@k shows whether the retrieval path improved before changing the generator. Success on this query does not guarantee coverage of the whole corpus.
 
 **Next:** [Module 10 — Cost optimization](10-cost-optimization.md)

@@ -10,6 +10,16 @@ description: Apply chain-of-thought, few-shot, and self-consistency deliberately
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+2:14am: on-call gets paged because the invoice pipeline can’t `json.loads` again. Yesterday’s “quality” PR stacked CoT + eight few-shots + self-consistency on every ticket “to be safe.” Latency 3×, bill spike, parse rate still broken—because nobody measured which lever fixed the real failure. Techniques without a decision map are load-bearing cargo cult.
+
+</div>
+
+**Case question:** Which single technique fixes the parse failure first, and what measurement would justify paying for any additional prompting strategy?
+
 ## Learning objectives
 
 - Apply Chain-of-Thought (CoT), few-shot, role, and self-consistency **deliberately**—and know when to skip them
@@ -20,13 +30,6 @@ description: Apply chain-of-thought, few-shot, and self-consistency deliberately
 
 ---
 
-## Why this matters (CS engineer view)
-
-<div class="aieng-story" markdown>
-
-2:14am: on-call gets paged because the invoice pipeline can’t `json.loads` again. Yesterday’s “quality” PR stacked CoT + eight few-shots + self-consistency on every ticket “to be safe.” Latency 3×, bill spike, parse rate still broken—because nobody measured which lever fixed the real failure. Techniques without a decision map are load-bearing cargo cult.
-
-</div>
 
 Module 01 got you a clear contract. Advanced prompting is about **reliability under complexity**: multi-step policy decisions, messy extraction, and outputs that must plug into typed code. The trap is collecting techniques like trading cards until latency and cost explode and quality barely moves.
 
@@ -415,5 +418,7 @@ poetry run python -c "from src.prompts import render; print(render('classify', l
 - **Catalog:** [EX-03 — Structured extract](../reference/exercises.md#ex-03)
 - **Prove:** Messy inputs parse into a schema; `parse_success_rate` is a measured number, not a vibe.
 - **Test:** `pytest tests/test_prompts.py -v`
+
+**Return to the case:** Schema validation fixes the parser contract, and measured technique choices avoid paying for every prompting trick at once. A parseable answer can still be wrong, so Module 04 adds behavioral evaluation.
 
 **Next:** [Module 04 — Testing & evals](04-testing-evals.md)

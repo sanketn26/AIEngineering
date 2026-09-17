@@ -30,6 +30,8 @@ Do not scaffold a full VS Code extension on day 1. Open [`tracks/starters/agenti
 
 ## Incident: the agent that “fixed” the repo without you
 
+<div class="aieng-story" markdown>
+
 11:40 p.m. Demo command: **“AI: Improve this module.”** The model renames three public APIs and—because `write_file` was treated like `read_file`—applies the patch immediately. Tests go red. Git is a crime scene.
 
 Postmortem:
@@ -39,6 +41,10 @@ Postmortem:
 3. **Fuzzy secrets and trust.** API key in `settings.json`; an MCP server ran at the same trust level as a linter.
 
 This track exists so you never ship that product. **Never auto-apply diffs without the user.** MCP servers are **untrusted binaries**. Secrets live **only** in `SecretStorage`.
+
+</div>
+
+**Case question:** At each phase, which runtime control prevents the original write from reaching the repository, and what test or approval artifact proves that control is enforced outside the model?
 
 ---
 
@@ -107,6 +113,8 @@ The extension decides *whether* a write may run; the agent may only *request* it
 | 81–90 | MCP optional + beta | Pinned MCP; engine pick; hardened README |
 
 Each phase: **Guide** · **Explainer** · **Code** · **Hints** · **Exit**.
+
+Return to the incident at every exit: first prove the agent cannot write, then prove a proposed diff remains isolated, then prove only an explicit approval can apply it. Later model or MCP choices must preserve those same denial-path tests.
 
 ---
 

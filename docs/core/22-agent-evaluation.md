@@ -10,6 +10,16 @@ description: Score agent trajectories instead of only final answers, separate pr
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Golden-set extract accuracy is 94%. Leadership ships the new “agentic” support bot. A week later, tickets close slower and the bill is 6×. Extract evals are still green — the bot still parses invoices. What died was the **path**: 18 tool calls instead of 3, two hallucinated tools per session, $0.40 vs $0.04, and a 40-second p95. Single-turn evals never saw a trajectory. The regression was **silent on the only dashboard you had**.
+
+</div>
+
+**Case question:** Which trajectory metrics expose the slower, costlier path even when the final extraction score remains green?
+
 ## Learning objectives
 
 - Score **trajectories**, not only final strings
@@ -19,13 +29,6 @@ description: Score agent trajectories instead of only final answers, separate pr
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Golden-set extract accuracy is 94%. Leadership ships the new “agentic” support bot. A week later, tickets close slower and the bill is 6×. Extract evals are still green — the bot still parses invoices. What died was the **path**: 18 tool calls instead of 3, two hallucinated tools per session, $0.40 vs $0.04, and a 40-second p95. Single-turn evals never saw a trajectory. The regression was **silent on the only dashboard you had**.
-
-</div>
 
 Module 04 is necessary and insufficient. Agents fail **in the middle**. If you only assert the final JSON, you will promote a loop that lucks into the right answer.
 
@@ -315,5 +318,7 @@ poetry run pytest tests/test_agent_evals.py tests/test_reliability.py -v
 - **Catalog:** [EX-22 — Trajectory evals](../reference/exercises.md#ex-22)
 - **Prove:** Looping-success scores worse than clean success; `regression_delta` can fail CI.
 - **Test:** `pytest tests/test_agent_evals.py -v`
+
+**Return to the case:** Trajectory scoring exposes the extra calls, hallucinated tools, latency, and spend that final-answer accuracy hid. Composite scores aid promotion decisions but must keep their component metrics visible.
 
 **Next:** [Module 23 — Prompt & config drift](23-prompt-drift.md)

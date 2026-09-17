@@ -4,6 +4,10 @@ description: Build the AI engineering capstone project, an evaluated, authorized
 
 # Capstone — An Evaluated, Authorized, Tool-Using Production AI Service
 
+The service already runs, which is why its failures are dangerous. A request can hang forever, a mixed billing-and-shipping ticket is misrouted, retrieval returns no evidence, authorization approves everyone, and every request pays for the large model. Your task is to close those planted holes one gate at a time and produce evidence that each failure is now bounded.
+
+This is the course case in executable form: the story belongs to your test results, traces, denial paths, and measurements. Keep the specification as the source of truth; no fictional incident can substitute for a passing failure injection.
+
 **Start from [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter)** at the repo root — a runnable support-ticket triage service with a mock model (no API keys) and four planted holes. Do not scaffold a new framework. Close the holes using the [five-gate checkpoints](capstone-gates.md). Learner ticks: [`capstone-starter/PROGRESS.md`](https://github.com/sanketn26/AIEngineering/blob/main/capstone-starter/PROGRESS.md).
 
 ```bash

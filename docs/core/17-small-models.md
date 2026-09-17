@@ -10,6 +10,16 @@ description: Match small language models to tasks they can own, run local infere
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Finance wants the bill cut in half. The team swaps every call to a 3B local model “because demos looked fine,” then quantizes to Q4 so it fits on a laptop GPU. Schema pass rate on extraction collapses; the agent loops on tools the small model cannot plan. There was no **router**, no **re-eval after quant**, and no list of tasks the SLM actually owns. Cost went down; product quality and on-call load went up. The fix was not “bigger GPU” — it was **specialist first-line + escalate**, with golden metrics as the gate.
+
+</div>
+
+**Case question:** Which tasks still meet their quality contract on the small model, and what explicit failure sends the rest to a stronger tier?
+
 ## Learning objectives
 
 - Match small language models (SLMs) to tasks they can actually own
@@ -18,21 +28,14 @@ description: Match small language models to tasks they can own, run local infere
 - Size a model to **limited hardware** (RAM/VRAM, KV cache, one resident model) so the laptop stays out of swap
 - Build a router that sends easy work to SLMs and hard work to larger models
 
+---
+
 ## What you can build
 
 - Offline / private assistant over local files
 - Cheap classifier or router in front of a large model
 - Quantized deployment on a laptop or small GPU with measured quality
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Finance wants the bill cut in half. The team swaps every call to a 3B local model “because demos looked fine,” then quantizes to Q4 so it fits on a laptop GPU. Schema pass rate on extraction collapses; the agent loops on tools the small model cannot plan. There was no **router**, no **re-eval after quant**, and no list of tasks the SLM actually owns. Cost went down; product quality and on-call load went up. The fix was not “bigger GPU” — it was **specialist first-line + escalate**, with golden metrics as the gate.
-
-</div>
 
 Not every token deserves a frontier model. Most production traffic is **classification, routing, extraction, short rewrite, and retrieval-augmented lookup** — tasks where a 1B–8B-class model (or a “mini” cloud tier) wins on **latency, cost, and privacy**. CS engineers who only know one cloud chat API overspend and cannot ship air-gapped or VPC-only features.
 
@@ -510,5 +513,7 @@ poetry run pytest tests/test_local_agents.py -v
 - **Catalog:** [EX-17 — Local SLM vs mini](../reference/exercises.md#ex-17)
 - **Prove:** Local vs mini is scored; the local model fits `recommend_local_setup` for your RAM (no swap).
 - **Test:** `pytest tests/test_local_agents.py -v`
+
+**Return to the case:** Measured routing keeps narrow work on the small model and escalates cases whose schema or quality fails. Quantization and lower cost do not excuse reusing the large-model threshold blindly.
 
 **Next:** [Module 18 — Agent design patterns](18-agent-design-patterns.md) · or jump to a [specialization track](../tracks/index.md)

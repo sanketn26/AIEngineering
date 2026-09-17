@@ -10,6 +10,16 @@ description: Implement a plan-act-observe agent loop with hard stops, an allowli
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Overnight, a “helpful research agent” leaves 400+ tool calls in the logs: same `search` query, same empty hits, same optimistic retry. No `max_steps`. No repeated-signature abort. Morning bill: four figures for zero tickets closed. The demo had a charming persona and a ReAct prompt. It did not have a **state machine with circuit breakers**. Personality does not terminate; code does.
+
+</div>
+
+**Case question:** Which state, budget, and repeated-call rule must live outside the model so this loop stops predictably?
+
 ## Learning objectives
 
 By the end of this module you will be able to:
@@ -22,13 +32,6 @@ By the end of this module you will be able to:
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Overnight, a “helpful research agent” leaves 400+ tool calls in the logs: same `search` query, same empty hits, same optimistic retry. No `max_steps`. No repeated-signature abort. Morning bill: four figures for zero tickets closed. The demo had a charming persona and a ReAct prompt. It did not have a **state machine with circuit breakers**. Personality does not terminate; code does.
-
-</div>
 
 An “agent” is not a personality. It is a **state machine** that repeatedly:
 
@@ -530,5 +533,7 @@ Use `src.agents.Agent` as the baseline; extend only if you need new abort reason
 - **Catalog:** [EX-11 — Agent loop](../reference/exercises.md#ex-11)
 - **Prove:** The stub calls `add` then `final`; repeated identical tool calls abort in code.
 - **Test:** `pytest tests/test_agents.py -v`
+
+**Return to the case:** A state machine with typed actions, repeated-call detection, and a hard step cap stops the overnight loop. It bounds execution; it does not make every selected action correct.
 
 **Next:** [Module 12 — Multi-agent systems](12-multi-agents.md)

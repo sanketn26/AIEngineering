@@ -10,6 +10,16 @@ description: Name the agent failure taxonomy — runaway loops, tool hallucinati
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Friday 17:10. The “research crew” has been “almost done” for ninety minutes. Logs show the same `search` signature 140 times, then a hallucinated `run_sql` that your allowlist never declared — except one intern had wired `**kwargs` through to a helper. Meanwhile a second worker wrote three of five planned tickets and crashed; the UI showed a green check because `done=True` was set on the first success. Cost: $186. Customer-visible quality: a 12-point drop vs last week’s golden set, no pager, because the HTTP layer still returned 200. Personality did not fail. **Controls** were missing.
+
+</div>
+
+**Case question:** Which named detector catches this failure before the budget is gone, and what state lets the system abort or recover safely?
+
 ## Learning objectives
 
 - Name a **failure taxonomy** for agents: runaway loops, tool hallucination, state corruption, partial execution, cost explosions, silent degradation
@@ -19,13 +29,6 @@ description: Name the agent failure taxonomy — runaway loops, tool hallucinati
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Friday 17:10. The “research crew” has been “almost done” for ninety minutes. Logs show the same `search` signature 140 times, then a hallucinated `run_sql` that your allowlist never declared — except one intern had wired `**kwargs` through to a helper. Meanwhile a second worker wrote three of five planned tickets and crashed; the UI showed a green check because `done=True` was set on the first success. Cost: $186. Customer-visible quality: a 12-point drop vs last week’s golden set, no pager, because the HTTP layer still returned 200. Personality did not fail. **Controls** were missing.
-
-</div>
 
 Module 11 taught `max_steps` and repeated-signature abort. That is the minimum viable circuit breaker. Production agents fail in **families**. If you cannot name the family, you will patch the last incident forever.
 
@@ -331,5 +334,7 @@ poetry run pytest tests/test_reliability.py tests/test_agents.py -v
 - **Catalog:** [EX-20 — Failure detectors](../reference/exercises.md#ex-20)
 - **Prove:** Loop, hallucinated tool, and tripped breaker each have a test that would have caught the incident.
 - **Test:** `pytest tests/test_reliability.py -v`
+
+**Return to the case:** Named detectors and circuit breakers turn loops, hallucinated tools, partial work, and cost spikes into observable failure states. A breaker limits damage; recovery and root-cause work remain necessary.
 
 **Next:** [Module 21 — Secure tool use & sandboxing](21-secure-tool-use.md)

@@ -8,6 +8,16 @@ description: Treat the context window as a scarce token budget, design a packing
 
 <span data-module-id="05" hidden></span>
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Day 19 of a “simple” support chat: the system policy still says never invent account IDs. The window is 90% old tool JSON and small talk. The model invents an account ID anyway—not because the policy vanished from the product, but because it drowned under clutter on the desk. Cost per turn climbed; nobody owned the packer.
+
+</div>
+
+**Case question:** When the window overflows, which context survives, which context is compressed or dropped, and how will you show that policy stayed visible?
+
 ## Learning objectives
 
 - Treat the **context window as a scarce, ordered resource** with hard token budgets
@@ -16,13 +26,8 @@ description: Treat the context window as a scarce token budget, design a packing
 - Use `SessionMemory` / `src.context_memory` to budget and assemble messages in code
 - Distinguish **context engineering** from **prompt engineering** and know when each fails
 
-## Why this matters (CS engineer view)
+---
 
-<div class="aieng-story" markdown>
-
-Day 19 of a “simple” support chat: the system policy still says never invent account IDs. The window is 90% old tool JSON and small talk. The model invents an account ID anyway—not because the policy vanished from the product, but because it drowned under clutter on the desk. Cost per turn climbed; nobody owned the packer.
-
-</div>
 
 *The [running app](index.md#the-running-app) enters Gate 3 here: it's tested and evaluated, but still ignorant of anything outside training data — this module and [07](07-tools-and-rag.md)/[09](09-advanced-rag.md) are what ground it.*
 
@@ -402,5 +407,7 @@ Curated reading (concepts — verify current URLs and versions):
 - **Catalog:** [EX-05 — Memory budget](../reference/exercises.md#ex-05)
 - **Prove:** Session memory stays bounded; `fit_budget` drops low-priority history instead of silent truncation.
 - **Test:** `pytest tests/test_context_memory.py -v`
+
+**Return to the case:** A budgeted packer keeps policy and high-signal evidence ahead of stale history and tool dumps. Packing preserves attention; it cannot supply facts that were never retrieved.
 
 **Next:** [Module 06 — Fine-tuning](06-fine-tuning.md) · or jump to [Tools & basic RAG](07-tools-and-rag.md) on a faster path (you will still need context packing).

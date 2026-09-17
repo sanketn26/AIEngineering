@@ -8,6 +8,16 @@ description: Decide when fine-tuning beats prompting and RAG, build a mental mod
 
 <span data-module-id="06" hidden></span>
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Leadership wanted the bot to “know the catalog.” The team fine-tuned on last quarter’s PDF dump. Train loss looked great. Three product launches later the model still confidently recommends retired SKUs—because weekly facts were baked into weights instead of fetched. Rollback meant another training cycle, not a config flip.
+
+</div>
+
+**Case question:** Is the missing capability stable behavior or changing knowledge, and what held-out comparison earns the cost of changing weights?
+
 ## Learning objectives
 
 - Decide **when not to fine-tune** — and when PEFT is the right lever
@@ -16,13 +26,8 @@ description: Decide when fine-tuning beats prompting and RAG, build a mental mod
 - Sketch a **PEFT** training path (conceptual, provider-agnostic for 2026)
 - Compare **base vs adapter** with task metrics, not only train loss
 
-## Why this matters (CS engineer view)
+---
 
-<div class="aieng-story" markdown>
-
-Leadership wanted the bot to “know the catalog.” The team fine-tuned on last quarter’s PDF dump. Train loss looked great. Three product launches later the model still confidently recommends retired SKUs—because weekly facts were baked into weights instead of fetched. Rollback meant another training cycle, not a config flip.
-
-</div>
 
 Fine-tuning is a product decision with ops cost: data pipelines, GPU time, eval gates, versioning, and regression risk. Many teams fine-tune because it feels “more ML,” then discover that **prompting + RAG + tools** would have shipped faster with fresher facts.
 
@@ -357,5 +362,7 @@ When **inference cost/latency/privacy** dominate and the teacher’s behavior is
 - **Catalog:** [EX-06 — Fine-tune or not](../reference/exercises.md#ex-06)
 - **Prove:** You can defend FT vs RAG/tools on paper, with a held-out eval — not a LoRA screenshot.
 - **Test:** `pytest tests/test_evals.py -v` (eval floor before any FT)
+
+**Return to the case:** The decision record keeps changing catalog facts out of weights and reserves fine-tuning for stable behavioral gaps. The chosen approach still needs held-out evaluation and an operational update path.
 
 **Next:** [Module 07 — Tools & basic RAG](07-tools-and-rag.md)

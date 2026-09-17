@@ -10,6 +10,16 @@ description: Serve LLMs behind stable APIs with timeouts, retries, and fallbacks
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Friday 16:40. Support chat p95 jumps from 1.2s to “hung.” The provider is rate-limiting; your SDK default has **no timeout**. Workers pile up, health checks still pass (process is “up”), autoscaler adds pods that also hang, and the bill spikes from retries without jitter. Nobody can answer “what did user X see?” because logs have no shared `request_id` — only “the bot was weird.” Someone had also hot-edited the system prompt in the dashboard that morning; there is no version pin to roll back.
+
+</div>
+
+**Case question:** Which deadline, request identifier, version record, and service metric would let on-call reconstruct and contain this incident?
+
 ## Learning objectives
 
 - Serve models behind stable APIs with timeouts, retries, and fallbacks
@@ -17,21 +27,14 @@ description: Serve LLMs behind stable APIs with timeouts, retries, and fallbacks
 - Version prompts and model IDs so deploys are reproducible and roll-backable
 - Ship a containerized inference service with a realistic CI gate
 
+---
+
 ## What you can build
 
 - FastAPI (or similar) inference service with `/healthz` and `/v1/generate`
 - Latency / error / token dashboards wired to request IDs
 - Blue/green or canary prompt versions with eval gates in CI
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Friday 16:40. Support chat p95 jumps from 1.2s to “hung.” The provider is rate-limiting; your SDK default has **no timeout**. Workers pile up, health checks still pass (process is “up”), autoscaler adds pods that also hang, and the bill spikes from retries without jitter. Nobody can answer “what did user X see?” because logs have no shared `request_id` — only “the bot was weird.” Someone had also hot-edited the system prompt in the dashboard that morning; there is no version pin to roll back.
-
-</div>
 
 *Gate 5 of the [running app](index.md#the-running-app): everything above worked on a laptop with one user. This is the failure that forces the rest — every other Gate-5 module exists to make this incident debuggable instead of mysterious.*
 
@@ -473,5 +476,7 @@ Capture: p95 latency under a small load script, and a greppable `request_id` fro
 - **Catalog:** [EX-13 — Production endpoint](../reference/exercises.md#ex-13)
 - **Prove:** `/healthz` plus a generate/triage path with a deadline and a mapped fallback. Prefer growing [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter) over a greenfield app.
 - **Test:** `cd capstone-starter && pytest tests/test_api.py -v`
+
+**Return to the case:** Deadlines, request IDs, version pins, and service-level telemetry make the hung request diagnosable and recoverable. Observability reveals failure; it does not eliminate provider outages.
 
 **Next:** [Module 14 — Compliance & governance](14-compliance.md)

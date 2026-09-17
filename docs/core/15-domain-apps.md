@@ -13,6 +13,16 @@ description: Prototype vertical LLM assistants for regulated domains with policy
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+A pilot “wellness assistant” ships with a warm tone and a footer: *not medical advice*. Demo day goes well. Two weeks later a user asks for a dose “for tonight”; the model answers fluently from training cut-off noise. There was no **must-refuse** case in the eval set, no clinician loop, and the only “control” was a disclaimer. Leadership freezes the feature. The failure was not model size — it was **missing layers**: policy, approved knowledge, action bounds, evidence, and human authority.
+
+</div>
+
+**Case question:** Where must this domain application answer, cite, defer, or escalate—and which evaluation demonstrates that boundary on hard cases?
+
 ## Learning objectives
 
 - Map domain constraints onto the core stack (security, RAG, audit, production)
@@ -20,21 +30,14 @@ description: Prototype vertical LLM assistants for regulated domains with policy
 - Separate product UX (helpful language) from regulated decisioning (human authority)
 - Design must-refuse cases and escalation paths before feature polish
 
+---
+
 ## What you can build
 
 - A domain-shaped **prototype** with refuse-and-escalate behavior
 - A 10-case eval set including must-refuse scenarios
 - Citation + audit wiring for knowledge answers
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-A pilot “wellness assistant” ships with a warm tone and a footer: *not medical advice*. Demo day goes well. Two weeks later a user asks for a dose “for tonight”; the model answers fluently from training cut-off noise. There was no **must-refuse** case in the eval set, no clinician loop, and the only “control” was a disclaimer. Leadership freezes the feature. The failure was not model size — it was **missing layers**: policy, approved knowledge, action bounds, evidence, and human authority.
-
-</div>
 
 Generic chatbots fail in verticals for non-ML reasons: **wrong authority**, **wrong sources**, **missing audit**, and **no human ownership**. A CS engineer who only optimizes BLEU or thumbs-up will ship something that looks fluent and is operationally unsafe.
 
@@ -378,5 +381,7 @@ Do **not** claim your prototype is deployable in production regulated settings.
 - **Catalog:** [EX-15 — Vertical refuse path](../reference/exercises.md#ex-15)
 - **Prove:** Must-refuse cases fail closed with an audit event — fluency is not authority.
 - **Test:** `pytest tests/test_security.py -v`
+
+**Return to the case:** The domain boundary determines when the application may answer, defer, cite, or escalate. Guardrails and evaluation reduce risk; they do not turn a general model into a licensed expert.
 
 **Next:** [Module 16 — Integration patterns](16-integration-patterns.md)

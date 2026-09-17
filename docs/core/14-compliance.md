@@ -13,6 +13,16 @@ description: Map LLM product data flows for privacy and security review, build a
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Enterprise security questionnaire, week before renewal. They ask: *Where does customer text go? How long do you keep it? Which model version answered ticket #88421 last Tuesday?* Your team discovers prompts in the default log stream, no data inventory for the vector index, and a system prompt last changed by “someone on-call” with no PR. Legal cannot answer “are we allowed to send this field to Vendor X?” because engineering never drew the map. The deal stalls — not because the model is weak, but because **controls and provenance** were an afterthought.
+
+</div>
+
+**Case question:** What deployed evidence answers where ticket data went, which version acted on it, and whether the organization was allowed to send it?
+
 ## Learning objectives
 
 - Map product data flows so privacy and security reviews have a single diagram of truth
@@ -20,21 +30,14 @@ description: Map LLM product data flows for privacy and security review, build a
 - Establish lightweight change management for prompts, tools, and model pins
 - Classify data and route it according to policy (without inventing legal conclusions)
 
+---
+
 ## What you can build
 
 - Audit log schema for prompts/actions (hashes + redaction), using `src.audit`
 - Data inventory table: training, RAG, logs, evals, vendors
 - Model/prompt change approval checklist tied to eval evidence
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Enterprise security questionnaire, week before renewal. They ask: *Where does customer text go? How long do you keep it? Which model version answered ticket #88421 last Tuesday?* Your team discovers prompts in the default log stream, no data inventory for the vector index, and a system prompt last changed by “someone on-call” with no PR. Legal cannot answer “are we allowed to send this field to Vendor X?” because engineering never drew the map. The deal stalls — not because the model is weak, but because **controls and provenance** were an afterthought.
-
-</div>
 
 You already version APIs and database migrations. LLM systems introduce **new artifact types** that change behavior without a classic “code deploy”:
 
@@ -405,5 +408,7 @@ Wire routing in code (Module 16) so the table is enforced, not a wiki wish.
 - **Catalog:** [EX-14 — Audit log](../reference/exercises.md#ex-14)
 - **Prove:** Tool events are hashed to JSONL; raw secrets never appear on disk.
 - **Test:** `pytest tests/test_audit.py -v`
+
+**Return to the case:** A data inventory, provenance record, retention policy, and auditable control owner let the team answer the questionnaire with evidence. Documentation is not certification and must match the deployed path.
 
 **Next:** [Module 15 — Domain applications](15-domain-apps.md)

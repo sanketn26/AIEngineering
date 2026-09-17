@@ -10,6 +10,16 @@ description: Learn LLM harness engineering, the control layer of tools, verifica
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Gate 3 packed the refund policy into context. Gate 4 gave the triage bot `lookup_order` and `write_note`. The prompt said “cite the policy and stop.” Tuesday the bot wrote six drafts, never attached a policy id, and burned the step budget on `lookup_order` with the same args. The prompt was fine. The context had the docs. Nothing **outside the model** checked the note, saved progress, or refused a repeated tool. Shipping a smarter model the next week did not help: same loop, more fluent drafts. **The missing product was the harness.**
+
+</div>
+
+**Case question:** Which checks, persistent state, permissions, and stop conditions must the harness enforce when the prompt and context are already adequate?
+
 ## Learning objectives
 
 - Name **prompt**, **context**, and **harness** as three nested layers, not synonyms
@@ -18,19 +28,12 @@ description: Learn LLM harness engineering, the control layer of tools, verifica
 - Persist **progress outside the context window** so a long job survives a new session
 - Change the harness before you change the model when the same weights fail a long task
 
+---
+
 !!! important "What this module is"
     **Discipline taught:** harness engineering — the software around an LLM loop.
     **Last verified:** 2026-08-27 against public lab/write-up language (Anthropic long-running agents; OpenAI Codex harness notes; LangChain deep-agent harness results). The *label* is young; the *controls* are the ones you already built in Modules 05, 11, 20–23, 25. This chapter names the layer and forbids collapsing it back into “a better prompt.”
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Gate 3 packed the refund policy into context. Gate 4 gave the triage bot `lookup_order` and `write_note`. The prompt said “cite the policy and stop.” Tuesday the bot wrote six drafts, never attached a policy id, and burned the step budget on `lookup_order` with the same args. The prompt was fine. The context had the docs. Nothing **outside the model** checked the note, saved progress, or refused a repeated tool. Shipping a smarter model the next week did not help: same loop, more fluent drafts. **The missing product was the harness.**
-
-</div>
 
 *Same failure the [running app](index.md#the-running-app) hits once it can act: grounded ≠ safe to act, and “act” is not a prompt instruction — it is a control loop with stop conditions.*
 
@@ -332,5 +335,7 @@ Change the harness first: cap repeated identical tool calls (Module 20), add a v
 - **Catalog:** [EX-27 — Harness](../reference/exercises.md#ex-27)
 - **Prove:** Stop, disk, and grader live outside the prompt: no verifier → stop; unknown tool denied; progress reloads.
 - **Test:** `pytest tests/test_harness.py -v`
+
+**Return to the case:** The harness rejects repeated calls, verifies the note, persists progress, and stops on enforced conditions outside the model. Better control makes completion testable; it does not guarantee that the model generated the right content.
 
 **Next:** [Module 22 — Evaluating agentic systems](22-agent-evaluation.md) — score the path the harness actually ran.

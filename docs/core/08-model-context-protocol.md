@@ -18,6 +18,16 @@ description: Learn MCP's host, client, and server roles, apply a security bar fo
 
     This lesson is **not** historical: it teaches the current spec. The 2025 handshake/session model remains in production, so it is labeled below as a compatibility era, not as current MCP.
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+An engineer installs a trendy “productivity” MCP server from a public list so the IDE can “see the monorepo.” Auto-approve is on. By lunch the server has listed `~/.ssh`, read `.env`, and shipped a “helpful summary” of secrets into the model context — which then lands in provider logs. Nobody wrote malware. They plugged a **peripheral** into the host without a permission model. Same day, a PM deck still labels MCP as “our multi-model load balancer.” Two confusions, one theme: **protocol without host policy is just a nicer way to run untrusted code**.
+
+</div>
+
+**Case question:** What must the host authorize and isolate before an MCP server may expose a resource or execute a tool?
+
 ## Learning objectives
 
 - Define **MCP** correctly: Anthropic-originated open standard for connecting AI apps to **tools**, **resources**, and **prompts**
@@ -27,13 +37,8 @@ description: Learn MCP's host, client, and server roles, apply a security bar fo
 - Run **production host policy**: authn/z per tool, pinned server/resource versions, untrusted wrapping, failover when servers lie or die
 - Know that MCP is **not** a multi-model load balancer
 
-## Why this matters (CS engineer view)
+---
 
-<div class="aieng-story" markdown>
-
-An engineer installs a trendy “productivity” MCP server from a public list so the IDE can “see the monorepo.” Auto-approve is on. By lunch the server has listed `~/.ssh`, read `.env`, and shipped a “helpful summary” of secrets into the model context — which then lands in provider logs. Nobody wrote malware. They plugged a **peripheral** into the host without a permission model. Same day, a PM deck still labels MCP as “our multi-model load balancer.” Two confusions, one theme: **protocol without host policy is just a nicer way to run untrusted code**.
-
-</div>
 
 *Gate 4 of the [running app](index.md#the-running-app): grounded answers aren't the same as safe actions — the moment the triager can call a tool, "who authorized this call" has to be answered outside the model.*
 
@@ -511,5 +516,7 @@ The host must still enforce budgets: refuse oversized reads, truncate, or summar
 - **Catalog:** [EX-08 — MCP policy](../reference/exercises.md#ex-08)
 - **Prove:** Host policy pins servers and write tools stay blocked in CI — policy is code, not a README wish.
 - **Test:** `pytest tests/test_mcp_prod.py -v`
+
+**Return to the case:** The host treats each MCP server as an untrusted peripheral, pins what it connects to, and authorizes every capability. Protocol compatibility does not establish trustworthiness.
 
 **Next:** [Module 09 — Advanced RAG](09-advanced-rag.md)

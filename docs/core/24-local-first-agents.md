@@ -10,6 +10,16 @@ description: Build cost-aware agents that run local small models first and escal
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+A weekend hack ships a “personal repo agent” that calls a flagship model for `list_dir`. Four hours of thrash: $40, a warm laptop, and a summary you could have gotten from `rg`. The SLM on Ollama would have classified and extracted; the cloud model was only needed when JSON failed twice. There was no **token budget**, no **tier**, and no admission control. Local-first is not charity. It is the same routing idea as Module 10, applied to **agents that otherwise loop**.
+
+</div>
+
+**Case question:** Which steps belong on the local model, what explicit failure permits escalation, and where does the runtime refuse to exceed budget?
+
 ## Learning objectives
 
 - Run a **useful** agent on a laptop: local/SLM first, cloud only on escalate
@@ -19,13 +29,6 @@ description: Build cost-aware agents that run local small models first and escal
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-A weekend hack ships a “personal repo agent” that calls a flagship model for `list_dir`. Four hours of thrash: $40, a warm laptop, and a summary you could have gotten from `rg`. The SLM on Ollama would have classified and extracted; the cloud model was only needed when JSON failed twice. There was no **token budget**, no **tier**, and no admission control. Local-first is not charity. It is the same routing idea as Module 10, applied to **agents that otherwise loop**.
-
-</div>
 
 Module 17 taught how to *run* small models. This module teaches how to *assign work* to them inside a plan–act–observe loop without lighting money on fire when they fail.
 
@@ -281,5 +284,7 @@ poetry run pytest tests/test_local_agents.py tests/test_cost.py -v
 - **Catalog:** [EX-24 — Local-first](../reference/exercises.md#ex-24)
 - **Prove:** `TokenBudget` refuses overflow; classify stays local; a tiny meter aborts with a budget reason.
 - **Test:** `pytest tests/test_local_agents.py -v`
+
+**Return to the case:** The runtime assigns narrow steps locally, escalates on explicit failure, and refuses work beyond the token budget. Local-first routing saves resources only while task-level quality remains measured.
 
 **Next:** [Module 25 — Durable orchestration](25-durable-orchestration.md)

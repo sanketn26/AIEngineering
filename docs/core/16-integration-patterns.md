@@ -10,12 +10,24 @@ description: Embed LLMs into event-driven architectures with queues and streamin
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Product wants “chat that researches the whole corpus.” Engineering puts a multi-tool agent behind `POST /chat` with a 120s gateway timeout. Users refresh when the spinner stalls; each refresh starts a **new** agent run. Load balancers kill connections mid-flight; workers keep spending tokens; support cannot find which run belongs to which ticket because `request_id` dies at the first hop. Fixing it is not “a faster model” — it is **jobs, queues, and progressive delivery**, the same patterns you use for video encoding or report generation.
+
+</div>
+
+**Case question:** Which interaction belongs on the request path, which belongs in a durable job, and how does one request ID survive both?
+
 ## Learning objectives
 
 - Embed LLMs into event-driven and microservice architectures without blocking the UX tier
 - Choose sync vs async vs batch generation paths with clear SLIs
 - Route by **data class** in hybrid cloud / on-prem designs
 - Stream tokens safely and version contracts between services
+
+---
 
 ## What you can build
 
@@ -24,15 +36,6 @@ description: Embed LLMs into event-driven architectures with queues and streamin
 - LLM microservice boundaries with gateway policies
 - SSE/WebSocket streaming path with `request_id` propagation
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Product wants “chat that researches the whole corpus.” Engineering puts a multi-tool agent behind `POST /chat` with a 120s gateway timeout. Users refresh when the spinner stalls; each refresh starts a **new** agent run. Load balancers kill connections mid-flight; workers keep spending tokens; support cannot find which run belongs to which ticket because `request_id` dies at the first hop. Fixing it is not “a faster model” — it is **jobs, queues, and progressive delivery**, the same patterns you use for video encoding or report generation.
-
-</div>
 
 A single FastAPI handler that calls the model synchronously is fine for demos and low-QPS chat. Real platforms have **spikes**, **multi-minute agents**, **tenant isolation**, and **data residency**. If you bolt an LLM into a monolith request thread, you will hit: worker exhaustion, double-billing on retries, cross-tenant data leaks in shared caches, and “the API felt down” when only the model was slow.
 
@@ -406,5 +409,7 @@ Load-test **p95 latency** and **error rate** separately for API tier vs worker t
 - **Catalog:** [EX-16 — Jobs or hybrid route](../reference/exercises.md#ex-16)
 - **Prove:** `request_id` survives the hop (gateway → worker, or two stub backends).
 - **Test:** `pytest tests/test_orchestrators.py -v`
+
+**Return to the case:** The long request becomes a bounded job with idempotency, queue state, and a request ID that survives every hop. Asynchrony prevents refresh storms but introduces state, retry, and cancellation responsibilities.
 
 **Next:** [Module 17 — Small & local models](17-small-models.md)

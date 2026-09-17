@@ -10,6 +10,16 @@ description: Compare custom loops, LangGraph, CrewAI, and MCP hosts on control, 
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+Two teams ship “multi-agent.” Team A copies a CrewAI demo: five personas, unbounded debate, $9/ticket, no step ids. Team B copies LangGraph: a 40-node graph nobody can draw, checkpoints on, still no spend guard, still auto-merge. Team C writes a 200-line custom loop, then rediscovers durable HITL the hard way. None of them can answer **“which worker spent the money on step 7?”** Frameworks are not villains. **Unmeasured topology** is.
+
+</div>
+
+**Case question:** Which engine best fits the required control and durability, and can every dollar and millisecond still be attributed to a named step?
+
 ## Learning objectives
 
 - Compare **custom loops**, **LangGraph**, **CrewAI**, and **MCP hosts** with explicit trade-offs (control, HITL, durability, lock-in)
@@ -19,13 +29,6 @@ description: Compare custom loops, LangGraph, CrewAI, and MCP hosts on control, 
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-Two teams ship “multi-agent.” Team A copies a CrewAI demo: five personas, unbounded debate, $9/ticket, no step ids. Team B copies LangGraph: a 40-node graph nobody can draw, checkpoints on, still no spend guard, still auto-merge. Team C writes a 200-line custom loop, then rediscovers durable HITL the hard way. None of them can answer **“which worker spent the money on step 7?”** Frameworks are not villains. **Unmeasured topology** is.
-
-</div>
 
 Module 11 said learn the loop before LangGraph. This module is the **comparison you can put in a design doc**, plus the production numbers that make the comparison falsifiable.
 
@@ -261,5 +264,7 @@ poetry run pytest tests/test_orchestrators.py -v
 - **Catalog:** [EX-26 — Orchestrator pick](../reference/exercises.md#ex-26)
 - **Prove:** A written pick (custom vs hosted) plus per-agent cost and traces that include `agent`.
 - **Test:** `pytest tests/test_orchestrators.py -v`
+
+**Return to the case:** The design comparison ties framework choice to control, durability, human gates, lock-in, and per-step cost. No engine supplies breakers, sandboxing, evals, or attribution automatically.
 
 **Next:** [Specialization tracks](../tracks/index.md) — add hardening, security review, and eval harnesses to the 90-day projects.

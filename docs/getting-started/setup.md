@@ -4,6 +4,8 @@ description: Prerequisites and environment setup for the course, Python version,
 
 # Prerequisites & Setup
 
+Treat setup as the first operational checkpoint: get one clean test run before changing the service. That baseline is what lets later incidents tell you whether your prompt, retriever, authorization rule, or runtime actually improved the system.
+
 ## What you need
 
 **Skills**

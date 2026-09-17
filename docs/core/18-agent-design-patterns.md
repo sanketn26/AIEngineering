@@ -10,6 +10,16 @@ description: Decompose agent workflows into testable subroutines, add gates and 
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+A team builds an agent to scan a missing person's hard drive: one big "reason and act" loop reading file after file, deciding what's relevant, summarizing as it goes. It works on the demo laptop with 200 files. On a real 400GB drive it blows the context window by lunch, drifts off-task after a few hundred files, and takes eleven hours because every step waits on the last one. The fix isn't a bigger context window — it's decomposition: a **subroutine** that extracts facts from one file at a time (parallelizable, stateless, disposable reasoning), a **guardrail** that keeps PII out of the running case file, a **rejection sampler** that guarantees each extraction parses as JSON, and a **retriever** that means the agent never has to "read everything" to answer "did we see a passport photo."
+
+</div>
+
+**Case question:** Which leaf patterns make one file independently testable and disposable without losing the evidence needed by the larger investigation?
+
 ## Learning objectives
 
 - Decompose an agent workflow into small, testable, single-purpose units instead of one long reasoning loop
@@ -17,6 +27,8 @@ description: Decompose agent workflows into testable subroutines, add gates and 
 - Use **rejection sampling** to enforce format and quality contracts cheaply, and know when it can't fix a real bug
 - Use **consensus** (parallel independent runs + deterministic reconciliation) to raise reliability and estimate confidence
 - Use a two-stage **retriever** (cheap recall → expensive precision) to keep massive corpora out of the context window
+
+---
 
 ## What you can build
 
@@ -26,15 +38,6 @@ description: Decompose agent workflows into testable subroutines, add gates and 
 - A consensus ensemble that reports both an answer and a confidence score
 - A hybrid retriever with reciprocal rank fusion and an adaptive re-query loop
 
----
-
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-A team builds an agent to scan a missing person's hard drive: one big "reason and act" loop reading file after file, deciding what's relevant, summarizing as it goes. It works on the demo laptop with 200 files. On a real 400GB drive it blows the context window by lunch, drifts off-task after a few hundred files, and takes eleven hours because every step waits on the last one. The fix isn't a bigger context window — it's decomposition: a **subroutine** that extracts facts from one file at a time (parallelizable, stateless, disposable reasoning), a **guardrail** that keeps PII out of the running case file, a **rejection sampler** that guarantees each extraction parses as JSON, and a **retriever** that means the agent never has to "read everything" to answer "did we see a passport photo."
-
-</div>
 
 Single-agent loops (Module 11) and multi-agent topologies (Module 12) tell you *when* to split work into roles. This module is about the smaller-grained patterns you reach for **inside** a role, or at the seams between roles, once you already know a split is justified — the load-bearing engineering primitives, not the org chart.
 
@@ -514,5 +517,7 @@ def adaptive_retrieve(query: str, max_reformulations: int = 2) -> list[Candidate
 - **Catalog:** [EX-18 — Leaf patterns](../reference/exercises.md#ex-18)
 - **Prove:** Three leaf patterns, each named to the failure it closes — not three slogans.
 - **Test:** `pytest tests/test_agents.py -v`
+
+**Return to the case:** The large scan becomes small, validated, disposable subroutines behind gates, retrieval, and deterministic reconciliation. Decomposition controls scope; it cannot repair a badly chosen split or shared model blind spot.
 
 **Next:** [Module 19 — Orchestration patterns](19-orchestration-patterns.md)

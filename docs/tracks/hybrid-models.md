@@ -22,6 +22,8 @@ Do not stand up a GPU training stack on day 1. Open [`tracks/starters/hybrid-mod
 
 ## The incident (why hybrids exist)
 
+<div class="aieng-story" markdown>
+
 It is 2:14 a.m. Your team shipped a “Transformer for everything” demand model. Sequences looked rich: 90 days of price, volume, weather. Val loss was gorgeous. Production MAE collapsed.
 
 Postmortem: static fields that actually moved the needle—SKU category, warehouse region, promo flags—were stuffed into a flat token stream. Attention was supposed to “figure it out.” It did not. The old tabular baseline still beat you on half the SKUs.
@@ -34,6 +36,10 @@ The fix was not a bigger Transformer. It was a **two-path brain**:
 4. **Task head** — maps the fused vector to the label.
 
 By day 90 you defend every block with an **ablation**, not a slide about “SOTA fusion.”
+
+</div>
+
+**Case question:** Does each path earn its place against MLP-only and Transformer-only baselines on leakage-safe data, and can the ablation evidence survive deployment constraints?
 
 ---
 
@@ -96,6 +102,8 @@ flowchart LR
 | 57–70 | **Ablations & optimize** | Frozen recipe + measured tradeoffs |
 | 71–84 | **Deploy** | CLI or FastAPI + shape tests |
 | 85–90 | **Publish** | Public repo, diagram, honest write-up |
+
+Return to the incident at every exit: compare the same held-out slices, record which SKUs or cohorts each path helps, and keep a single-path baseline beside the hybrid. A lower training loss is not the resolution; reproducible held-out performance and honest ablations are.
 
 ---
 

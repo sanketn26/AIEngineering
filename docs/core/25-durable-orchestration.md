@@ -10,6 +10,16 @@ description: Design durable workflow orchestration with a persistent coordinator
 
 ---
 
+<span id="why-this-matters-cs-engineer-view"></span>
+
+<div class="aieng-story" markdown>
+
+A “codebase investigator” is supposed to find why billing double-charges. It chats for forty minutes, holds the hypothesis in free-form CoT, writes the user’s tree directly, dies on a laptop sleep, and comes back with no memory. A junior re-runs it; it files a PR that fails tests; merge is a Slack thumbs-up. Durable orchestration is the opposite design: **coordinator with a log**, **tree of claims with scores**, **photocopy worktree**, **tests + approval before merge**, **HITL as a state**, not a hope.
+
+</div>
+
+**Case question:** What must be persisted, isolated, tested, and approved so the investigation can resume after interruption without corrupting the user tree?
+
 ## Learning objectives
 
 - Run a **long-running coordinator** that persists phases and can pause/resume
@@ -20,13 +30,6 @@ description: Design durable workflow orchestration with a persistent coordinator
 
 ---
 
-## Why this matters (CS engineer)
-
-<div class="aieng-story" markdown>
-
-A “codebase investigator” is supposed to find why billing double-charges. It chats for forty minutes, holds the hypothesis in free-form CoT, writes the user’s tree directly, dies on a laptop sleep, and comes back with no memory. A junior re-runs it; it files a PR that fails tests; merge is a Slack thumbs-up. Durable orchestration is the opposite design: **coordinator with a log**, **tree of claims with scores**, **photocopy worktree**, **tests + approval before merge**, **HITL as a state**, not a hope.
-
-</div>
 
 Modules 18–19 gave leaf patterns and workflow *shape*. This module is the **end-to-end machine**: something that can survive a restart and refuse to merge junk.
 
@@ -288,5 +291,7 @@ poetry run pytest tests/test_durable.py tests/test_sandbox.py -v
 - **Catalog:** [EX-25 — Durable graph](../reference/exercises.md#ex-25)
 - **Prove:** Pause/resume from JSONL; a denied HITL does not run the next phase; merge gate blocks failed tests.
 - **Test:** `pytest tests/test_durable.py -v`
+
+**Return to the case:** An append-only log, isolated worktree, tests, and a human merge state let the investigation survive interruption without writing directly to the user tree. Durability preserves state; it does not validate the hypothesis by itself.
 
 **Next:** [Module 26 — Orchestrators in production](26-orchestrator-comparison.md)

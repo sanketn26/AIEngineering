@@ -1,6 +1,6 @@
 # Plan: Make the tutorials hold attention through storytelling
 
-**Status:** Module 01 pilot implemented; content checks passed; visual and reader validation pending. See [pilot evidence record](tutorial-storytelling-pilot.md).
+**Status:** rollout implemented across the core curriculum after approval of the Module 01 treatment; verification recorded in this plan
 **Branch:** `plan/tutorial-storytelling`
 **Scope:** improve how the curriculum connects problems, decisions, practice, and results while preserving what it teaches
 **Non-goals:** a compulsory fictional serial, rewriting Python APIs or eval fixtures, replacing existing labs/quizzes, or substantially lengthening pages
@@ -171,7 +171,7 @@ Do not claim this lab patches a `triage.py` implementation or fixes refund autho
 | File | Change |
 |---|---|
 | `docs/core/01-prompt-engineering.md` | Implement §8; compare opening order, early action, case-to-lab continuity, and close |
-| `plans/tutorial-storytelling-pilot.md` (new during implementation) | Record baseline, artifact mapping, participant tasks, findings, route map, and go/revise decision |
+| `plans/tutorial-storytelling.md` | Keep rollout evidence, route rules, and follow-up findings in this plan instead of a separate pilot document |
 | `docs/assets/css/gamify.css` | Only if rendered pilot review identifies a styling need; test scoped treatment before a global change |
 | `docs/core/02-security-privacy.md`, `03-advanced-prompting.md` | Extend after Module 01 review; test continuity without requiring earlier plot recall |
 | `docs/core/19-orchestration-patterns.md` or `27-harness-engineering.md` | Test standalone entry before broad rollout; record which was selected and why |
@@ -218,9 +218,9 @@ Do not claim this lab patches a `triage.py` implementation or fixes refund autho
 | 25 Durable | Match the interruption/resume incident to actual coordinator, worktree, and approval-state material |
 | 26 Orchestrators | Compare engines on one workflow and observable cost/step ownership, with a self-contained entry |
 
-### 9.5 Framing, capstone, setup, and tracks — P1 / P2
+### 9.5 Framing, capstone, setup, and tracks — implemented
 
-| Surface | Change after pilot evidence |
+| Surface | Rollout treatment |
 |---|---|
 | `docs/core/index.md` | Clarify running-case capabilities, entry/exit/residual failures, and routes; retain gate criteria |
 | `docs/index.md` | Optional brief problem-to-result promise consistent with the tested teaching approach |
@@ -246,27 +246,24 @@ Keep reference documents as lookup material. Do not story-wrap `src/`, tests, or
 6. A standalone reader can follow the case, and next steps respect prerequisites and supported paths.
 7. The narrative and total-growth budgets in §5 are met; names, opener word minima, think-box counts, and cliffhangers are not completion gates.
 8. Headings, anchors, links, code readability, and rendered desktop/mobile light/dark layouts remain usable.
-9. Pilot evidence meets §15 before the treatment becomes a course-wide default. Read-aloud is an editorial check, not sufficient acceptance evidence.
+9. Reader evidence in §15 remains the post-rollout validation bar. Read-aloud is an editorial check, not sufficient acceptance evidence.
 
 ## 11. Boundaries
 
 No character illustrations, comic panels, real-person likenesses, or claims of real outages. Keep this plan internal to the repository, outside MkDocs navigation. Do not change production code or evaluation fixtures in this workstream. If a proposed narrative needs new functionality to be true, revise the narrative or raise a separate scoped implementation proposal.
 
-## 12. Implementation sequence and review gates
+## 12. Implementation record and follow-up gates
 
-| PR | Scope | Entry / exit condition |
+| Scope | Status | Follow-up |
 |---|---|---|
-| PR1 | Module 01 pilot and pilot record; minimal scoped styling only if needed | Record baseline and comparison tasks, draft artifact mapping, render/check links, then reader comparison |
-| PR2 | Modules 02–03 continuity pilot | Proceed after 01 gives directional evidence of improvement without learning/lookup regressions; test skipped-entry comprehension |
-| PR3 | Standalone-entry pilot on 19 or 27; finalize route rules and reusable guidance | Proceed after PR2 review; preserve existing case strengths and test an advanced/search arrival |
-| PR4 | Core framing and optional names/canon/global CSS | Only after pilot evidence supports these choices; no full cast or global panel rollout as a prerequisite to learning from PR1 |
-| PR5 | Gates 2–3: 04–07, 09 | Apply tested functional guidance; each module gets an artifact mapping and route check |
-| PR6 | Remaining Gate 4 modules | Exclude whichever advanced pilot is already done; use small independently reviewable batches |
-| PR7 | Gate 5 modules | Apply the same checks; keep domain/repo cases where clearer |
-| PR8 | Capstone and getting started | Preserve starter entry conditions and first-command/lookup usability |
-| PR9 | Tracks | Build on milestones and existing reflective activities; no automatic scene-wrapper pass |
+| Module 01 | Implemented and approved as the rollout reference | Retain its case-to-lab alignment and early prediction |
+| Modules 02–27 | Implemented: incident before objectives, module-specific case question, closing resolution and limitation | Review any weak case-to-artifact links with readers; refine individually rather than expanding prose uniformly |
+| Core framing and CSS | Implemented: self-contained running-case rules, gate transitions, full story panel | Inspect desktop/mobile and light/dark rendering when browser access is available |
+| Capstone and getting started | Implemented with light case framing; operational checklists preserved | Validate first-command and lookup usability |
+| Tracks | Implemented with track-specific case questions and phase-return guidance | Preserve existing milestones and measure the appropriate evidence for each domain |
+| Reference, source, and tests | Deliberately unchanged | Keep them optimized for lookup and execution |
 
-Pause expansion after each pilot for actual reader evidence. If readers are unavailable, complete a reviewable pilot and its technical/rendered checks, record reader validation as pending, and do not treat elapsed time or self-review as a passed gate. No outreach is part of this plan unless separately authorized.
+Reader sessions now evaluate the rollout rather than gate its existence. Record and fix material regressions before treating the template as stable guidance for future modules. No outreach is part of this work unless separately authorized.
 
 ## 13. Decisions and hypotheses
 
@@ -274,26 +271,26 @@ Pause expansion after each pilot for actual reader evidence. If readers are unav
 |---|---|
 | Diagnosis | Structural continuity is a supported hypothesis; reader behavior is still to be observed |
 | Teaching form | Self-contained cases with optional recurring context |
-| Opening order | Test concise problem before objectives in Module 01 |
+| Opening order | Concrete problem before objectives across all core modules |
 | Protagonist | Learner's engineering decision and artifact; Helix/cast optional |
 | Existing varied domains | Preserve where they teach the concept clearly |
-| Visual treatment | Decide from rendered pilot evidence, not CSS alone |
-| Rollout | 01 → 02–03 → advanced standalone entry → broader adoption |
-| Track treatment | Strengthen existing milestone progression before adding fiction |
+| Visual treatment | Story panel promoted from italic aside; rendered review remains required |
+| Rollout | Complete across core, framing, capstone/getting started, and tracks |
+| Track treatment | Existing milestone progression retained and tied back to each track's own case |
 
-## 14. Questions to resolve during the pilot
+## 14. Questions to resolve during rollout review
 
 1. Where did original readers disengage, and were they studying, skimming, or solving a specific problem?
 2. Which intended readers can compare versions, including newcomers, experienced engineers, and search/short-path arrivals?
 3. Does early action or reduced repetition help more than adding narrative? Record which changes were bundled so their effects are not falsely separated.
 4. Does a recurring name help comprehension or just story recall? Keep the unnamed case as a valid outcome.
-5. Which advanced module best tests standalone use, and how should route links handle existing catalog/gate differences?
+5. Do advanced standalone entries such as 19 and 27 remain understandable without earlier case context, and do route links handle existing catalog/gate differences?
 
-Names and company branding do not block the first pilot. Reader evidence does block broad standardization.
+Names and company branding remain optional. Reader evidence determines which parts of this rollout become stable guidance for future content.
 
 ## 15. Success measures and reader protocol
 
-Before sessions, record the original version, participant context, tasks, intended outcomes, and go/revise criteria in the pilot record. Use a small mix of intended readers. Preserve the original for comparison; where someone sees both versions, vary order and account for familiarity. Small samples provide directional evidence, not statistical proof.
+Before sessions, record the original version, participant context, tasks, intended outcomes, and go/revise criteria in this plan or the resulting issue/PR. Use a small mix of intended readers. Preserve the original in Git for comparison; where someone sees both versions, vary order and account for familiarity. Small samples provide directional evidence, not statistical proof.
 
 Ask readers to study normally before asking about the fiction. Record confusing/skippable passages and where they stop. Then ask them to explain the technical choice, attempt the existing lab, apply the idea to a fresh related scenario, and find a particular answer as a returning reader. Include a standalone entry and a shortened reading route during the later pilots. Read-aloud may supplement these tasks but must not replace silent reading and code use.
 
@@ -353,4 +350,4 @@ Baseline: source reviewed at `e4d0f8c`. Lines use Python `splitlines()`; story w
 
 ## 17. Next action
 
-Complete the pending visual and reader checks in the [pilot evidence record](tutorial-storytelling-pilot.md), then compare with the original before extending the approach to Modules 02–03. The content build and generated-link checks have passed; they do not substitute for reader evidence.
+Review the rendered rollout with readers and record any module-specific regressions. Source/build checks establish structure and link integrity; they do not substitute for evidence about attention, understanding, transfer, or lookup use.

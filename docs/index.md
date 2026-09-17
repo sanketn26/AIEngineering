@@ -28,6 +28,8 @@ hide:
   </div>
 </div>
 
+<p class="course-story-promise">Follow concrete engineering failures from a soft prompt contract to an evaluated, authorized, observable service. Each core module opens with an incident, asks you to make the decision that closes it, and returns to the evidence that would prove the fix. Cases stand alone, so shorter learning paths and search arrivals still work.</p>
+
 <div class="course-proof" aria-label="Course overview">
   <div><strong>27</strong><span>Core modules</span></div>
   <div><strong>3</strong><span>Specialization tracks</span></div>
@@ -47,7 +49,7 @@ Whether you have a weekend or want a complete engineering foundation, begin with
     <p>Learn prompt contracts, basic retrieval, and evaluation by shipping a small working application.</p>
     <span class="path-card__link">Follow the Weekend path →</span>
   </a>
-  <a class="path-card path-card--featured" href="getting-started/paths/#professional-developer-12-weeks">
+  <a class="path-card path-card--featured" href="getting-started/paths/#professional-developer-812-weeks">
     <span class="path-card__tag">Most complete</span>
     <span class="path-card__icon">02</span>
     <span class="path-card__time">8–12 weeks</span>

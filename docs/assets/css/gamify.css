@@ -474,11 +474,35 @@
 }
 
 .aieng-story {
-  font-style: italic;
-  opacity: 0.95;
-  margin: 0.35rem 0 0.75rem;
-  padding-left: 0.75rem;
-  border-left: 3px solid rgba(245, 158, 11, 0.7);
+  margin: 1rem 0 0.85rem;
+  padding: 1rem 1.1rem;
+  border: 1px solid rgba(245, 158, 11, 0.35);
+  border-left: 4px solid rgba(245, 158, 11, 0.85);
+  border-radius: 10px;
+  background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), transparent 62%);
+}
+
+.aieng-story::before {
+  content: "Case file";
+  display: block;
+  margin-bottom: 0.45rem;
+  color: var(--xp-muted);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.aieng-story > :first-child { margin-top: 0; }
+.aieng-story > :last-child { margin-bottom: 0; }
+
+.course-story-promise {
+  max-width: 880px;
+  margin: 1.25rem auto;
+  padding: 0 1rem;
+  color: var(--xp-muted);
+  text-align: center;
+}
 }
 
 [data-md-color-scheme="slate"] .aieng-think,
