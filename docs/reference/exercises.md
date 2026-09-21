@@ -60,6 +60,7 @@ No extra package code — use the Module 03 lab:
 2. Write a `predict(text) -> dict` heuristic (regex is fine).  
 
 3. Use `run_suite` and print accuracy; improve until ≥ 0.66 on the fixture.
+4. Run `python -m examples.evaluation.compare` and explain each verdict.
 
 **Check:** `pytest tests/test_evals.py -v`
 
@@ -85,7 +86,7 @@ No extra package code — use the Module 03 lab:
 
 3. Baseline score on the 10 (API or local). GPU LoRA is optional.  
 
-4. Rows pass `src.finetune_data.validate_example`; split with `split_by_company` (`pytest tests/test_finetune_data.py`). GPU path: [QLoRA hands-on](fine-tuning/hands-on.md).
+4. Rows pass `src.finetune_data.validate_example`; split with `split_by_company` (`pytest tests/test_finetune_data.py`). GPU path: [QLoRA lab](../core/06-qlora.md).
 
 ---
 
@@ -119,6 +120,7 @@ No extra package code — use the Module 03 lab:
 2. Dense-only vs `rrf` hybrid **Hit@5** and **MRR**.  
 
 3. Log intermediate queries for 5 multi-hop items.
+4. On the course fixture, separate retrieval rank, source support, and whether the answer addresses the question.
 
 **Check:** `pytest tests/test_rag.py -v`
 
@@ -238,6 +240,7 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 1. Register a read tool and a write tool with `requires_approval=True`.
 2. Deny without grant; deny without human; allow after approval.
 3. `WorktreeExecutor`: edit a copy; assert the source file is unchanged.
+4. Show that `cwd` does not block an absolute path read. With Docker, `python -m examples.isolation.run` must pass; without it, record the experiment as unavailable.
 
 **Check:** `pytest tests/test_sandbox.py -v`
 

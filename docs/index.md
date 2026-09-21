@@ -14,7 +14,7 @@ hide:
       <a class="course-button course-button--secondary" href="getting-started/paths/">Explore learning paths</a>
       <a class="course-button course-button--coffee" href="https://buymeacoffee.com/sanketn">☕ Support this course</a>
     </div>
-    <p class="course-hero__note">27 core modules · Interactive labs and quizzes · Learn at your own pace</p>
+    <p class="course-hero__note">28 core modules · Interactive labs and quizzes · Learn at your own pace</p>
   </div>
   <div class="course-terminal" aria-label="Course outcomes">
     <div class="course-terminal__bar"><i></i><i></i><i></i><span>ai-engineering / roadmap</span></div>
@@ -31,8 +31,9 @@ hide:
 <p class="course-story-promise">Follow concrete engineering failures from a soft prompt contract to an evaluated, authorized, observable service. Each core module opens with an incident, asks you to make the decision that closes it, and returns to the evidence that would prove the fix. Cases stand alone, so shorter learning paths and search arrivals still work.</p>
 
 <div class="course-proof" aria-label="Course overview">
-  <div><strong>27</strong><span>Core modules</span></div>
+  <div><strong>28</strong><span>Core modules</span></div>
   <div><strong>3</strong><span>Specialization tracks</span></div>
+  <div><strong>3</strong><span>Capstones</span></div>
   <div><strong>100%</strong><span>Open source</span></div>
   <div><strong>Local</strong><span>Private progress tracking</span></div>
 </div>
@@ -121,6 +122,7 @@ The modules move from dependable model interactions to complete production syste
       <li><a href="core/14-compliance/">Compliance</a></li>
       <li><a href="core/15-domain-apps/">Domain-specific applications</a></li>
       <li><a href="core/17-small-models/">Small & local models</a></li>
+      <li><a href="core/28-inference-serving/">Inference serving</a></li>
       <li><a href="core/22-agent-evaluation/">Evaluating agents</a></li>
       <li><a href="core/23-prompt-drift/">Prompt &amp; config drift</a></li>
       <li><a href="core/24-local-first-agents/">Local-first agents</a></li>
@@ -132,6 +134,28 @@ The modules move from dependable model interactions to complete production syste
 
 <p class="course-inline-link"><a href="core/#gate-1-dependable-model-service">See exit criteria for each gate →</a></p>
 <p class="course-inline-link"><a href="reference/progression/">View the complete capability map →</a></p>
+
+## Prove all five gates on one system
+
+Three capstones. Each starts from a runnable repository with planted holes, and each closes the same five gates on a deliberately different shape of system.
+
+<div class="curriculum-grid">
+  <div class="curriculum-stage">
+    <div class="curriculum-stage__head"><span>Capstone</span><strong>Triage service</strong></div>
+    <p>One request path, end to end: a model classifies a ticket, policy evidence gates a refund, and an authenticated human approves it without double-charging anyone.</p>
+    <p class="course-inline-link"><a href="core/capstone/">Build specification →</a></p>
+  </div>
+  <div class="curriculum-stage">
+    <div class="curriculum-stage__head"><span>Capstone</span><strong>Command runtime</strong></div>
+    <p>A 4B model may propose a patch; deterministic checks decide whether that patch is legal. The specification is frozen before any code is generated.</p>
+    <p class="course-inline-link"><a href="core/capstone-command/">Build specification →</a></p>
+  </div>
+  <div class="curriculum-stage">
+    <div class="curriculum-stage__head"><span>Capstone</span><strong>Divide, solve, and join</strong></div>
+    <p>A task a 20B model fails as one prompt, finished by splitting the work, solving each part, and joining the parts under checks you wrote first.</p>
+    <p class="course-inline-link"><a href="core/capstone-decompose/">Build specification →</a></p>
+  </div>
+</div>
 
 ## Learn by building, not by collecting vocabulary
 

@@ -15,7 +15,7 @@ and avoid doing the same work twice. A more eloquent prompt solves none of them.
 
 The [completed reference service](https://github.com/sanketn26/AIEngineering/tree/main/examples/production_triage)
 puts all five course gates on one request path. Keep the original
-[student capstone](../../core/capstone.md) for your own implementation; open this
+[student capstone](capstone.md) for your own implementation; open this
 reference when you want to compare mechanisms and evidence.
 
 ## Start with a prediction

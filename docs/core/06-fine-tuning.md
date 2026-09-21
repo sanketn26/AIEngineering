@@ -233,7 +233,7 @@ model.print_trainable_parameters()
 ```
 
 !!! example "Runnable version"
-    [Hands-on — fine-tune a small model on your own data](../reference/fine-tuning/hands-on.md) turns this sketch into a working QLoRA pipeline: rights gate, cleaning, numeric-grounding checks, company-level splits, `train_qlora.py` (Colab-ready), and a base-vs-adapter scorecard. The data-hygiene half runs on CPU with `src/finetune_data.py`.
+    The [QLoRA lab](06-qlora.md) turns this sketch into a working pipeline: rights gate, cleaning, numeric-grounding checks, company-level splits, and a base-vs-adapter scorecard. Sections 0–7 run on CPU with `src/finetune_data.py`. Sections 8–14 are the optional GPU run.
 
 Serving options (conceptual):
 
@@ -317,8 +317,9 @@ Promotion rule example: ship only if task metric ≥ baseline + δ **and** no cr
    - Include at least 3 refusal / edge cases
    - No PII
 3. **Baseline:** Score the base model (or API model) on the 10 held-out with a simple metric (exact field match or rubric 1–5).
-4. **Optional hardware path:** One epoch LoRA on an open SLM; report metric delta vs baseline. If no GPU, stop at dataset + baseline — that is still a valid lab. The [hands-on QLoRA walkthrough](../reference/fine-tuning/hands-on.md) supplies `prepare_data.py`, `train_qlora.py`, and `evaluate.py`; run every row through `validate_example` and split with `split_by_company`.
-5. Store artifacts: `data/train.jsonl`, `data/eval.jsonl`, `notes/decision.md`.
+4. **Data path (required):** Follow [QLoRA on your own data](06-qlora.md) through section 7. Run every row through `validate_example` and split with `split_by_company`. No GPU is required.
+5. **GPU path (optional):** One epoch of QLoRA from sections 8–14 of the same lab; report the metric delta against the prompt-only baseline. Stopping after the data path is still a finished lab.
+6. Store artifacts: `data/train.jsonl`, `data/eval.jsonl`, `notes/decision.md`, and the split manifest.
 </div>
 
 ## Knowledge check
@@ -362,7 +363,7 @@ When **inference cost/latency/privacy** dominate and the teacher’s behavior is
 
 1. [Hugging Face PEFT](https://github.com/huggingface/peft) — LoRA / QLoRA adapters  
 2. [Hugging Face TRL](https://github.com/huggingface/trl) — SFT / preference training loops  
-   - Course walkthrough: [QLoRA on your own data](../reference/fine-tuning/hands-on.md), adapted from [Rahul's full guide](https://x.com/sairahul1/status/2100882424343265527)  
+   - Course lab: [QLoRA on your own data](06-qlora.md), adapted from [Rahul's full guide](https://x.com/sairahul1/status/2100882424343265527)  
 3. [bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes) — quantization building blocks for QLoRA-style stacks  
 4. [Axolotl](https://github.com/axolotl-ai-cloud/axolotl) / [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) — practical training configs (verify currency)  
 5. [Unsloth](https://github.com/unslothai/unsloth) — efficient fine-tuning tooling (ecosystem option)  
@@ -374,6 +375,7 @@ When **inference cost/latency/privacy** dominate and the teacher’s behavior is
 - [ ] Dataset schema is validated; held-out set is clean  
 - [ ] Eval is **task-based**, not only train loss  
 - [ ] You know LoRA vs full FT at a systems level  
+- [ ] Sample rows pass `validate_example`, and the split is by company  
 
 <div class="aieng-complete" data-module-id="06" data-xp="120" markdown>
 <p>When the checklist is true — decision memo + data hygiene + eval plan — mark complete.</p>

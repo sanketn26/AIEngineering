@@ -1,10 +1,10 @@
 ---
-description: Overview of the 27-module core curriculum, organized into five production gates from dependable model serving through operating agents live.
+description: Overview of the 28-module core curriculum, organized into five production gates from dependable model serving through operating agents live.
 ---
 
 # Core Modules
 
-Twenty-seven modules, five **gates**. Each gate is a working-system exit criterion: you don't advance because you finished reading, you advance because the previous gate's residual failure mode forced the next capability. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module's **Depends on** line is the real prerequisite — gates group modules by *which production failure they close*, not by topic family, so a module you'd expect to sit elsewhere (cost optimization, MCP) may be grouped by the failure it actually prevents rather than the technology it uses.
+Twenty-eight modules, five **gates**. Each gate is a working-system exit criterion: you don't advance because you finished reading, you advance because the previous gate's residual failure mode forced the next capability. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module's **Depends on** line is the real prerequisite — gates group modules by *which production failure they close*, not by topic family, so a module you'd expect to sit elsewhere (cost optimization, MCP) may be grouped by the failure it actually prevents rather than the technology it uses.
 
 ```mermaid
 flowchart LR
@@ -127,6 +127,7 @@ Everything above works on a laptop with one user. Production means real traffic,
 - [ ] Prompt/model/config version is recorded per request and roll-backable
 - [ ] Dashboards track latency (p50/p95/p99), cost/request, success rate, retry rate
 - [ ] Prompt/config drift is detected by a system, not discovered by a user complaint
+- [ ] A serving change is kept only when a controlled comparison still meets quality and latency targets
 
 | Module | Time |
 |---|---|
@@ -135,6 +136,7 @@ Everything above works on a laptop with one user. Production means real traffic,
 | [14 — Compliance](14-compliance.md) | 3–5 days |
 | [15 — Domain-specific applications](15-domain-apps.md) | 1–2 weeks |
 | [17 — Small & local models](17-small-models.md) | 5–7 days |
+| [28 — Inference serving](28-inference-serving.md) | 2–4 days |
 | [22 — Evaluating agentic systems](22-agent-evaluation.md) | 5–7 days |
 | [23 — Prompt & config drift](23-prompt-drift.md) | 3–5 days |
 | [24 — Local-first, cost-aware agents](24-local-first-agents.md) | 4–6 days |
@@ -143,7 +145,7 @@ Everything above works on a laptop with one user. Production means real traffic,
 
 ---
 
-Ready to prove all five gates work together? Start from [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter) and walk the [Capstone](capstone.md) spec plus the [gate checkpoints](capstone-gates.md).
+Ready to prove all five gates work together? There are three capstones. The [triage service](capstone.md) starts from [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter). The [command runtime](capstone-command.md) starts from [`capstone-command/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-command): a 4B model may propose a patch, and the runtime decides whether it is legal. [Divide, solve, and join](capstone-decompose.md) starts from [`capstone-decompose/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-decompose): a 20B model fails the task as one prompt, and can finish it by dividing the work, solving the parts, and joining them under checks you wrote.
 
 Full skill-by-skill breakdown: [Capability progression](../reference/progression.md). Prefer a guided route instead of the full list? See [Learning paths](../getting-started/paths.md).
 

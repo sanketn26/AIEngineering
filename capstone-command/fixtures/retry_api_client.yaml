@@ -1,0 +1,51 @@
+schema_version: "1.0"
+task_id: retry-api-client
+command: code.patch
+goal: "Retry transient failures in fetch_data without changing its public API."
+scope:
+  allowed_files:
+    - client.py
+    - test_client.py
+  max_files_changed: 2
+  max_added_lines: 120
+requirements:
+  - id: R1
+    statement: "Retry TimeoutError and ConnectionError."
+    priority: must
+  - id: R2
+    statement: "Make at most three total attempts."
+    priority: must
+  - id: R3
+    statement: "Use exponential delays of 0.1 and 0.2 seconds."
+    priority: must
+  - id: R4
+    statement: "Immediately propagate non-transient exceptions."
+    priority: must
+acceptance_criteria:
+  - id: AC1
+    given: "The first two calls raise TimeoutError"
+    when: "fetch_data is called"
+    then: "The third successful value is returned"
+    verification: "pytest test_client.py::test_retries_transient_errors"
+    maps_to: [R1, R2]
+  - id: AC2
+    given: "The operation raises ValueError"
+    when: "fetch_data is called"
+    then: "ValueError is raised after one attempt"
+    verification: "pytest test_client.py::test_does_not_retry_value_error"
+    maps_to: [R4]
+  - id: AC3
+    given: "Two timeouts then success"
+    when: "the delays are recorded"
+    then: "The recorded delays are 0.1 then 0.2 seconds"
+    verification: "pytest test_client.py::test_backoff"
+    maps_to: [R3]
+non_goals:
+  - "Adding configurable retry policies"
+  - "Changing logging infrastructure"
+constraints:
+  allow_new_dependencies: false
+  network_access: false
+  preserve_public_api: true
+unknowns: []
+risk_level: low

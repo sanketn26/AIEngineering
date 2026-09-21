@@ -34,7 +34,9 @@
     { id: "23", title: "Prompt & config drift", xp: 100 },
     { id: "24", title: "Local-first agents", xp: 110 },
     { id: "25", title: "Durable orchestration", xp: 130 },
-    { id: "26", title: "Orchestrators in production", xp: 120 }
+    { id: "26", title: "Orchestrators in production", xp: 120 },
+    { id: "27", title: "Harness engineering", xp: 120 },
+    { id: "28", title: "Inference serving", xp: 120 }
   ];
 
   var BADGES = [
@@ -157,9 +159,9 @@
       id: "full-core",
       icon: "🏆",
       name: "Full Core",
-      desc: "Complete all 27 core modules",
+      desc: "Complete all 28 core modules",
       test: function (s) {
-        return Object.keys(s.modules || {}).length >= 27;
+        return Object.keys(s.modules || {}).length >= MODULES.length;
       }
     },
     {
@@ -460,7 +462,7 @@
       stat("Level", lvl) +
       stat("Total XP", state.xp) +
       stat("To next level", XP_PER_LEVEL - into) +
-      stat("Modules", mods + " / 19") +
+      stat("Modules", mods + " / " + MODULES.length) +
       stat("Quizzes", quizzes) +
       stat("Badges", badges + " / " + BADGES.length) +
       "</div>" +

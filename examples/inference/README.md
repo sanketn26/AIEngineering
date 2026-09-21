@@ -1,7 +1,7 @@
 # Inference experiments
 
 Run from the repository root. The full walkthrough, interpretation, GPU commands,
-and limitations are in [the hands-on lesson](../../docs/reference/inference/hands-on.md).
+and limitations are in [the Module 28 hands-on](../../docs/core/inference/hands-on.md).
 
 ```bash
 python3.11 -m venv .venv-inference

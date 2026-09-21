@@ -4,7 +4,7 @@ description: Distinguish query heads from KV heads, compare MHA, GQA, and MQA, a
 
 # Grouped-query attention — share keys and values
 
-**Prerequisite:** [KV cache](kv-cache.md). **Return to:** [Inference performance](../inference-performance.md).
+**Prerequisite:** [KV cache](kv-cache.md). **Return to:** [Module 28](../28-inference-serving.md).
 
 <div class="aieng-story" markdown>
 
@@ -103,7 +103,7 @@ Apply `2 × 24 × KV_heads × 64 × 4096 × 2` bytes. The results are 384 MiB, 9
 
 </details>
 
-Before selecting a local model, write down both head counts and explain why only one of them appears in this cache formula. Then check the [Module 17 capacity checkpoint](../../core/17-small-models.md#estimate-kv-separately-from-weights).
+Before selecting a local model, write down both head counts and explain why only one of them appears in this cache formula. Then check the [Module 17 capacity checkpoint](../17-small-models.md#estimate-kv-separately-from-weights).
 
 <div class="aieng-case-checkpoint" markdown>
 <p class="label">Return to the incident</p>
@@ -114,4 +114,4 @@ The engineer can now explain the cache difference using KV-head count. The exerc
 
 </div>
 
-**Optional primary reference:** [GQA paper](https://arxiv.org/abs/2305.13245). See the [source trail](../inference-performance.md#source-trail-and-scope).
+**Optional primary reference:** [GQA paper](https://arxiv.org/abs/2305.13245). See the [source trail](../28-inference-serving.md#source-trail-and-scope).

@@ -151,7 +151,7 @@ Escalation happens **at most once per step** with the same schema — the local 
 
 This router selects which model owns an answer. **Speculative decoding** uses a cheaper proposer for draft tokens and keeps the target model in the verification path. Correct acceptance/correction rules can preserve the target distribution; delegating a whole answer to a local model makes no such promise. See the [original paper](https://arxiv.org/abs/2211.17192).
 
-Do not load a second model onto a constrained laptop just because draft generation sounds cheaper. Benchmark the extra memory and draft overhead against observed decode savings. For a short classification, the overhead may dominate. Use the [inference experiment guide](../reference/inference-performance.md#5-select-one-experiment) to choose between reducing calls, routing calls, and optimizing generation within a call.
+Do not load a second model onto a constrained laptop just because draft generation sounds cheaper. Benchmark the extra memory and draft overhead against observed decode savings. For a short classification, the overhead may dominate. [Module 28](28-inference-serving.md#5-select-one-experiment) is how you choose between reducing calls, routing calls, and optimizing generation within a call.
 
 ### 3. Wrap the Module 11 agent
 

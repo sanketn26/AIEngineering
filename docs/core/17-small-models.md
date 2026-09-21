@@ -4,7 +4,7 @@ description: Match small language models to tasks they can own, run local infere
 
 # Module 17 — Small & Local LLM Models
 
-**Time:** 5–7 days · **Depends on:** [01 Prompt engineering](01-prompt-engineering.md), [05 Context engineering](05-context-engineering.md), [10 Cost](10-cost-optimization.md) · **Pairs with:** tracks using Phi / Ollama · **Next:** [Evaluating agents](22-agent-evaluation.md) · **Agents on SLMs:** [24 Local-first](24-local-first-agents.md)
+**Time:** 5–7 days · **Depends on:** [01 Prompt engineering](01-prompt-engineering.md), [05 Context engineering](05-context-engineering.md), [10 Cost](10-cost-optimization.md) · **Pairs with:** tracks using Phi / Ollama · **Next:** [Inference serving](28-inference-serving.md) · **Agents on SLMs:** [24 Local-first](24-local-first-agents.md)
 
 <span data-module-id="17" hidden></span>
 
@@ -343,9 +343,9 @@ Weights are mostly **fixed**. The KV cache is **per token of context** (keys and
 
 #### Estimate KV separately from weights
 
-For a uniform full-attention decoder, estimate `2 × layers × KV_heads × head_dimension × bytes_per_element × total_active_tokens`. The [worked capacity exercise](../reference/inference-performance.md#2-kv-cache-saved-computation-occupies-memory) turns this into GiB for one and eight users. Actual allocation also includes overhead and architecture-specific behavior; verify peak usage on your runtime.
+For a uniform full-attention decoder, estimate `2 × layers × KV_heads × head_dimension × bytes_per_element × total_active_tokens`. The [worked capacity exercise](28-inference-serving.md#2-kv-cache-saved-computation-occupies-memory) in Module 28 turns this into GiB for one and eight users. Actual allocation also includes overhead and architecture-specific behavior; verify peak usage on your runtime.
 
-Read the checkpoint's **KV-head count**, not only its query-head count. GQA shares keys and values among groups of query heads, reducing cache size relative to otherwise comparable MHA. It is part of the trained architecture, not a free conversion flag. Weight quantization and KV-cache quantization are separate decisions, each requiring runtime support and quality evaluation; the [cache dtype and sliding-window exercise](../reference/inference/kv-cache.md#two-axes-the-base-formula-hides) works both through. [GQA paper](https://arxiv.org/abs/2305.13245).
+Read the checkpoint's **KV-head count**, not only its query-head count. GQA shares keys and values among groups of query heads, reducing cache size relative to otherwise comparable MHA. It is part of the trained architecture, not a free conversion flag. Weight quantization and KV-cache quantization are separate decisions, each requiring runtime support and quality evaluation; the [cache dtype and sliding-window exercise](inference/kv-cache.md#two-axes-the-base-formula-hides) works both through. [GQA paper](https://arxiv.org/abs/2305.13245).
 
 **Capacity checkpoint:** record model revision, weight precision, KV dtype, context/output caps, intended concurrency, estimated KV GiB, and measured peak memory. If you only computed an estimate, label it as such. Leave runtime and OS headroom before declaring the model fits.
 
@@ -541,4 +541,4 @@ poetry run pytest tests/test_local_agents.py -v
 
 **Return to the case:** Measured routing keeps narrow work on the small model and escalates cases whose schema or quality fails. Quantization and lower cost do not excuse reusing the large-model threshold blindly.
 
-**Next:** [Evaluating agents](22-agent-evaluation.md) — score the path an agent actually ran · or jump to a [specialization track](../tracks/index.md)
+**Next:** [Inference serving](28-inference-serving.md) — keep a serving change only when the measured bottleneck moves · or jump to a [specialization track](../tracks/index.md)

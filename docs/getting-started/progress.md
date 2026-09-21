@@ -40,7 +40,7 @@ Progress is saved under `localStorage` key `aieng-progress-v1`. Clearing site da
 | ⚡ Half Stack | 10 modules |
 | 🧯 Agent Hardening | Modules 20–22 |
 | 🧰 Harness | Modules 21 + 27 |
-| 🏆 Full Core | All 27 modules |
+| 🏆 Full Core | All 28 modules |
 | ⭐ Level 5 | Reach level 5 |
 
 ---
