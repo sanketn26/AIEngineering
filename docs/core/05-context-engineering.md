@@ -177,6 +177,12 @@ Both fail. Cost scales with input tokens every turn; accuracy fails as attention
 </details>
 </div>
 
+### Context length also consumes serving memory
+
+The token budget is also a capacity decision. During causal generation, the runtime retains keys and values for processed tokens; longer histories increase this **KV cache**. Conversation summaries and retrieved documents are application context, while KV tensors are runtime state. Saving a conversation in a database does not preserve those tensors across arbitrary model calls.
+
+Before increasing a context limit, measure first-token latency and memory at expected concurrency. A request fitting the model's advertised window does not establish that twenty such requests fit the server. Work through the [KV memory exercise](../reference/inference-performance.md#2-kv-cache-saved-computation-occupies-memory) after Module 17. See the [runtime explanation](https://huggingface.co/docs/transformers/main/en/cache_explanation) for how cached state is reused.
+
 ### 4. Memory tiers
 
 | Tier | Contents | Lifetime | Storage |

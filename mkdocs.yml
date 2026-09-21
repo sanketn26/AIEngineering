@@ -160,4 +160,15 @@ nav:
       - Exercise catalog: reference/exercises.md
       - Assessment rubrics: reference/assessment.md
       - Troubleshooting: reference/troubleshooting.md
+      - Fine-tuning:
+          - QLoRA on your own data: reference/fine-tuning/hands-on.md
+      - Inference performance:
+          - Overview & benchmark lab: reference/inference-performance.md
+          - Hands-on experiments: reference/inference/hands-on.md
+          - KV cache: reference/inference/kv-cache.md
+          - PagedAttention: reference/inference/paged-attention.md
+          - FlashAttention: reference/inference/flash-attention.md
+          - Grouped-query attention: reference/inference/grouped-query-attention.md
+          - Speculative decoding: reference/inference/speculative-decoding.md
+          - Continuous batching: reference/inference/continuous-batching.md
       - Further resources: reference/resources.md

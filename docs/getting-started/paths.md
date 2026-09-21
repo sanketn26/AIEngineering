@@ -85,6 +85,10 @@ Tracks can run **in parallel** with later core modules if you already code comfo
 
 ---
 
+## Optional serving-performance extension
+
+After Modules **10, 13, and 17**, spend 60–90 minutes on [Inference performance](../reference/inference-performance.md). Professional developers can focus on timing and caching; enterprise/self-hosting learners should also complete the capacity and scheduling exercises, then benchmark their runtime. The paper exercises need no GPU or API keys. Keep the hybrid track's encoder use case distinct from autoregressive generation.
+
 ## Daily cadence (any path)
 
 1. **Review** (10–15 min) — previous notes / `PROGRESS.md` + [Progress dashboard](progress.md)

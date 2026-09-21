@@ -232,6 +232,9 @@ model.print_trainable_parameters()
 # → save adapter weights; optionally merge for serving
 ```
 
+!!! example "Runnable version"
+    [Hands-on — fine-tune a small model on your own data](../reference/fine-tuning/hands-on.md) turns this sketch into a working QLoRA pipeline: rights gate, cleaning, numeric-grounding checks, company-level splits, `train_qlora.py` (Colab-ready), and a base-vs-adapter scorecard. The data-hygiene half runs on CPU with `src/finetune_data.py`.
+
 Serving options (conceptual):
 
 - **Runtime adapter load** — swap adapters per tenant/task (multi-tenant platforms)
@@ -272,6 +275,8 @@ Promotion rule example: ship only if task metric ≥ baseline + δ **and** no cr
 | Forgets general skills | Aggressive FT / bad mix | Lower LR, fewer epochs, mix general data |
 | Toxic or leaky outputs | Contaminated data | PII scrub; safety suite |
 | “Works in notebook” only | Data leakage from eval | Strict held-out; version pin |
+| Fluent but wrong numbers | OCR errors “fixed” or metrics invented in targets | Never auto-correct numbers; reject targets with numbers absent from source |
+| Eval looks great, prod doesn't | Same company in train and test | Split by entity (company/customer), not by row or page |
 | Adapter soup | No versioning | Adapter IDs + eval report per release |
 
 ## Common failure modes
@@ -312,7 +317,7 @@ Promotion rule example: ship only if task metric ≥ baseline + δ **and** no cr
    - Include at least 3 refusal / edge cases
    - No PII
 3. **Baseline:** Score the base model (or API model) on the 10 held-out with a simple metric (exact field match or rubric 1–5).
-4. **Optional hardware path:** One epoch LoRA on an open SLM; report metric delta vs baseline. If no GPU, stop at dataset + baseline — that is still a valid lab.
+4. **Optional hardware path:** One epoch LoRA on an open SLM; report metric delta vs baseline. If no GPU, stop at dataset + baseline — that is still a valid lab. The [hands-on QLoRA walkthrough](../reference/fine-tuning/hands-on.md) supplies `prepare_data.py`, `train_qlora.py`, and `evaluate.py`; run every row through `validate_example` and split with `split_by_company`.
 5. Store artifacts: `data/train.jsonl`, `data/eval.jsonl`, `notes/decision.md`.
 </div>
 
@@ -357,6 +362,7 @@ When **inference cost/latency/privacy** dominate and the teacher’s behavior is
 
 1. [Hugging Face PEFT](https://github.com/huggingface/peft) — LoRA / QLoRA adapters  
 2. [Hugging Face TRL](https://github.com/huggingface/trl) — SFT / preference training loops  
+   - Course walkthrough: [QLoRA on your own data](../reference/fine-tuning/hands-on.md), adapted from [Rahul's full guide](https://x.com/sairahul1/status/2100882424343265527)  
 3. [bitsandbytes](https://github.com/bitsandbytes-foundation/bitsandbytes) — quantization building blocks for QLoRA-style stacks  
 4. [Axolotl](https://github.com/axolotl-ai-cloud/axolotl) / [LLaMA-Factory](https://github.com/hiyouga/LLaMA-Factory) — practical training configs (verify currency)  
 5. [Unsloth](https://github.com/unslothai/unsloth) — efficient fine-tuning tooling (ecosystem option)  
@@ -378,7 +384,7 @@ When **inference cost/latency/privacy** dominate and the teacher’s behavior is
 
 - **Catalog:** [EX-06 — Fine-tune or not](../reference/exercises.md#ex-06)
 - **Prove:** You can defend FT vs RAG/tools on paper, with a held-out eval — not a LoRA screenshot.
-- **Test:** `pytest tests/test_evals.py -v` (eval floor before any FT)
+- **Test:** `pytest tests/test_evals.py tests/test_finetune_data.py -v` (eval floor + data hygiene before any FT)
 
 **Return to the case:** The decision record keeps changing catalog facts out of weights and reserves fine-tuning for stable behavioral gaps. The chosen approach still needs held-out evaluation and an operational update path.
 

@@ -267,6 +267,8 @@ class MLPOnly(nn.Module):
 
 ## Transformer-only (encoder usage)
 
+**Optional inference background:** the [attention optimization supplement](../reference/inference-performance.md#4-different-optimizations-fix-different-work) explains why attention kernels and memory traffic matter. This track uses an encoder to produce a regression output: autoregressive KV caching, continuous decode batching, and speculative decoding do not directly apply. Profile the encoder's actual forward pass and check prediction parity before adopting a supported optimized attention backend.
+
 ```python
 class TransformerOnly(nn.Module):
     def __init__(self, f_seq, d_model, n_heads, n_layers, n_out, max_len=512):

@@ -208,3 +208,13 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Optional inference lab environments and local benchmark reports
+.venv-inference/
+.venv-vllm/
+results/inference/
+
+# Fine-tuning lab outputs (private data, adapters, reports)
+/data/
+/artifacts/
+results/fine-tuning/

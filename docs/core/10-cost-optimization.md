@@ -210,6 +210,10 @@ Success rate likely fell: more retries, more human escalations, or longer sessio
 
 Cache **identical** expensive work: embeddings of unchanged docs, pure functions, idempotent tool GETs, deterministic classifications.
 
+**Choose the cache layer first.** The `MemoryCache` below stores application results. Runtime **KV caching** reuses attention state during generation; cross-request **prefix caching** reuses compatible state for identical starting tokens and still generates a fresh answer. Prefix reuse mainly avoids repeated prefill work, so it will not remove the cost of a long output. See [vLLM's prefix-caching documentation](https://docs.vllm.ai/en/latest/features/automatic_prefix_caching/) and the [three-cache comparison](../reference/inference-performance.md#3-three-caches-with-different-contracts).
+
+**Mini-experiment:** keep stable instructions first and ticket-specific text afterward, without changing instruction priority. Compare a cold request, a repeated-prefix request, and one with a changed opening prefix. Record actual cached-input usage where exposed, TTFT, output length, quality, and billed cost. Keep cache-miss and cache-hit populations separate; a latency reduction is not proof of a billing discount.
+
 Course `MemoryCache` (keep this pattern; swap Redis in production):
 
 ```python

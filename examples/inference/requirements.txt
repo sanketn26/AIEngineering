@@ -1,0 +1,4 @@
+# Optional lab environment, independent of the stdlib course sandbox.
+# Install a torch wheel appropriate for your device if the default is unsuitable.
+torch>=2.6,<3
+transformers==4.57.1

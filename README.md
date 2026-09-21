@@ -64,6 +64,10 @@ poetry run pytest tests/ -v
 
 Exercises: [docs/reference/exercises.md](docs/reference/exercises.md) · Rubrics: [docs/reference/assessment.md](docs/reference/assessment.md)
 
+**Optional fine-tuning lab:** a [QLoRA walkthrough](docs/reference/fine-tuning/hands-on.md) for a 1.5B model — rights gate, cleaning, numeric-grounding checks, and company-level splits in stdlib `src/finetune_data.py`, plus Colab-ready training and base-vs-adapter eval in [`examples/fine-tuning/`](examples/fine-tuning/README.md).
+
+**Optional inference lab:** [runnable optimization experiments](docs/reference/inference/hands-on.md) compare KV caching, attention backends, and speculative decoding, with GPU extensions for prefix reuse and batching. Start with `--smoke` for real forward passes without downloading weights; install its separate dependencies from [`examples/inference/`](examples/inference/README.md).
+
 ---
 
 ## Quick start — capstone starter
