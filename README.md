@@ -85,6 +85,17 @@ Gates: [docs/core/capstone-gates.md](docs/core/capstone-gates.md) · spec: [docs
 
 ---
 
+## Follow the experiments
+
+A higher score, a real citation, and a saved approval can each hide a failure.
+These labs let you catch it:
+
+- [Did the score really improve?](docs/reference/evaluation-uncertainty.md) — paired cases and an uncertainty-aware release gate.
+- [The citation was real. The answer was wrong.](docs/reference/retrieval-comparison.md) — four retrieval paths on one labeled corpus.
+- [The room had a sign, but no lock.](docs/reference/isolation-lab.md) — prove filesystem and network restrictions.
+- [A refund is suggested. Who gets to say yes?](docs/reference/production/reference-capstone.md) — a completed five-gate instructor service alongside the student starter.
+- `python -m examples.durability.crash` — interrupt a workflow after the effect and before its receipt; explain why the retry stays safe.
+
 ## Curriculum map
 
 **Core modules:** prompting → security → advanced prompts → evals → context engineering → fine-tuning → tools/RAG → MCP → advanced RAG → cost → agents → multi-agent → production → compliance → domains → integration → small/local models → agent design patterns → orchestration patterns → **reliability → secure tool use → harness engineering → agent evals → prompt drift → local-first agents → durable orchestration → orchestrator comparison**.

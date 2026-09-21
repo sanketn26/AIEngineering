@@ -483,6 +483,10 @@ poetry run pytest tests/test_rag.py -v
 
 ---
 
+## Compare the paths on one corpus
+
+The assistant cites A71 when the customer asked about A17. The citation exists; the answer still fails. [The retrieval comparison lab](../reference/retrieval-comparison.md) puts sparse, dense, hybrid, and reranked search on the same labeled cases, then separates source support from answering the question. Start with transparent fixtures, then repeat with pinned embedding and reranking models.
+
 ## Quizzes
 
 <div class="aieng-quiz" data-quiz-id="09-q1" data-xp="25" data-success="Correct — ranks are comparable across heterogeneous scorers." data-fail="Re-read the RRF section: we fuse ranks, not raw cosine/BM25 scores." markdown>

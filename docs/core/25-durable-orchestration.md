@@ -38,7 +38,7 @@ Modules 18–19 gave leaf patterns and workflow *shape*. This module is the **en
 <div class="aieng-intuition" markdown>
 <p class="label">Intuition lock</p>
 
-**Sticky picture:** The coordinator is a **job queue with named phases**. The hypothesis tree is a **bug tracker**: children prove or kill the parent. A worktree is a **scratch branch**. The merge gate is **CI + CODEOWNERS**. Durable JSONL is the **WAL**. HITL is a **paused coroutine**, not a print statement.
+**Sticky picture:** The coordinator is a **job queue with named phases**. The hypothesis tree is a **bug tracker**: children prove or kill the parent. A worktree is a **scratch branch**. The merge gate is **CI + CODEOWNERS**. The journal is a **receipt book**: a finished line records one decision; an unfinished last line is not a receipt. HITL is a **paused coroutine**, not a print statement.
 
 <div class="kill" markdown>
 **Kill this idea:** “Long-running means a bigger context window and a while loop.” → **Replace with:** Persist events, isolate side effects, gate merges, pause for humans, resume from the log.
@@ -62,26 +62,50 @@ flowchart TB
   Coord --> Eval[Module 22 dashboard]
 ```
 
-**Invariant:** crash + replay of the JSONL yields the same `current_phase()`. Side effects live in the worktree until the gate opens.
+**Invariant:** replay preserves each complete, committed decision. An unfinished final record is discarded; corruption in a complete record fails closed. A worker interrupted before completion may run again, so its side effects need stable idempotency keys. The journal has one writer; it is not a multi-worker database.
 
 ---
 
 ## Core tutorial
 
-### 1. Durable store = write-ahead log
+### 1. The crash between “yes” and “done”
+
+A human clicks **Deny**. You write “approval resolved” to disk. Before you write
+“workflow aborted,” the process dies. On restart, the program sees no pending
+approval and no abort. Which fact should it believe?
+
+The problem is that one decision was split into two writes. `Coordinator.resume`
+now records a single `hitl_resolved` event containing the boolean decision, phase,
+and structured result. Replay derives the next state from that event. There is no
+second write it must hope survived.
 
 ```python
-from src.durable import DurableStore, Coordinator
+from pathlib import Path
+from src.durable import DurableStore
 
-store = DurableStore(path)
-# restart:
-store = DurableStore(path)
-assert store.last("phase_done") is not None
+store = DurableStore(Path("events.jsonl"))
+store.append("hitl", {"phase": "review", "result": {"facts": ["duplicate charge"]}})
+store.append("hitl_resolved", {"phase": "review", "approved": False})
+# Restart: the denial itself is sufficient to recover the aborted state.
+store = DurableStore(Path("events.jsonl"))
 ```
 
-Kinds you should actually emit: `phase_done`, `hitl`, `hitl_resolved`, `merge_blocked`. Do not persist raw chain-of-thought if you can persist **structured results**.
+`append` writes a complete newline-terminated record, flushes it, and calls `fsync`
+before acknowledging success. In-memory state advances only after that succeeds.
+On restart, an unfinished final line is removed before another append; a malformed
+complete line is an error, not something the loader quietly skips. The loader reports
+`recovered_tail_bytes` so a torn write is visible.
 
----
+A failure during `fsync` is an **uncertain commit**: the caller cannot assume the
+record is absent. Stop and reopen the journal to recover its state. Do not keep
+appending from stale memory. The directory should already be on persistent storage;
+this example does not establish guarantees for network filesystems or failing disks.
+Only one process may own a journal at a time. Use a transactional store and leases
+when workers can race.
+
+**Predict:** what if the worker already sent the refund, but crashed before recording
+`phase_done`? The journal cannot infer whether the recipient received it. We will
+make that awkward moment happen in the lab below.
 
 ### 2. Coordinator: run until a gate
 
@@ -99,21 +123,21 @@ resumed = c.resume({}, {"approved": True})   # next phase runs
 # c.resume({}, {"approved": False}) → status "denied"; write never runs
 ```
 
-`ask_human` does **not** record `phase_done`. Approval writes `phase_done` then runs the next phase. **Denial aborts** — it must not advance into the write worker. Timeouts on pending approvals should **deny** (Module 21). HITL is an event plus a resume API, not `input()` inside a tool.
+`ask_human` does **not** complete the phase. One `hitl_resolved` event records the decision: approval completes that phase; denial aborts. Only a real boolean is accepted—`"false"` is a nonempty string, not permission. Replayed results are available in `context["phase_results"]`. An application must schedule approval expiry and submit a denial; this coordinator has no background timeout scheduler.
 
 ```mermaid
 stateDiagram-v2
   [*] --> running
   running --> paused: phase returns ask_human (HITL event persisted)
-  paused --> running: resume(approved=True) → phase_done, next phase starts
+  paused --> running: one approved decision event, next phase starts
   paused --> denied: resume(approved=False)
-  paused --> denied: approval times out (deny by default, Module 21)
+  paused --> denied: application records expiry as denial
   denied --> [*]
   running --> done: last phase completes
   done --> [*]
 ```
 
-The key property: a crash while `paused` loses nothing, because the pause itself is a durable event, not in-memory state. Replaying the JSONL after a restart lands you back in `paused` with the same pending question, not at `running` with amnesia.
+Once the pause event has committed, a restart recovers the pending question. Once the decision event has committed, it recovers that decision. Killing the process between those states leaves it paused; killing it after the denial leaves it denied. The tests terminate a real child process to check this boundary.
 
 ---
 
@@ -238,7 +262,7 @@ You persisted **the wrong artifact**. Durable events should carry **compressed r
 ## Lab
 
 1. `HypothesisTree`: child evidence raises parent score; `frontier()` returns leaves.
-2. `DurableStore` on a temp JSONL; new instance sees `phase_done`.
+2. `DurableStore` on a temp JSONL; new instance sees the committed event. Append half a final record and restart: recovery reports discarded bytes. Corrupt a complete record: recovery must refuse it.
 3. Coordinator pauses on `ask_human`; **denial does not run the next phase**; approval then resumes.
 4. `MergeGate`: fail tests → `allow` false; tests + approval → true.
 5. Stretch: run a worktree write + gate in one script (no live model).
@@ -246,6 +270,46 @@ You persisted **the wrong artifact**. Durable events should carry **compressed r
 ```bash
 poetry run pytest tests/test_durable.py tests/test_sandbox.py -v
 ```
+
+---
+
+## Crash experiment — the receipt arrived, the notebook did not
+
+Before running, choose a prediction: zero refunds, one refund, or two?
+
+```bash
+python -m examples.durability.crash
+```
+
+The first process commits a simulated effect at the receiver, then exits before
+writing `phase_done`. The next process replays the workflow and runs the worker
+again. There are **two attempts but one effect**: the receiver stores the stable
+operation ID `ticket-7:refund` under a unique constraint in the same transaction
+as its effect. A fresh UUID on every retry would defeat that protection.
+
+```mermaid
+sequenceDiagram
+  participant W as Worker
+  participant R as Receiver
+  participant J as Journal
+  W->>R: refund(ticket-7:refund)
+  R-->>W: committed once
+  Note over W,J: Worker dies before phase_done
+  W->>J: replay after restart
+  J-->>W: refund phase incomplete
+  W->>R: refund(ticket-7:refund) again
+  R-->>W: existing receipt; no second effect
+  W->>J: phase_done
+```
+
+Change the receiver's idempotency handling in a scratch copy and repeat. Explain
+why a durable coordinator alone does not buy exactly-once effects. For a remote
+payment API, the receiver must honor the key; if it cannot, you need reconciliation
+or a human decision for uncertain outcomes.
+
+**Prove:** terminate immediately after approval or denial commits; restart and verify
+the correct phase. Also interrupt between the simulated effect and completion.
+`tests/test_durable.py` and the experiment cover different crash windows.
 
 ---
 

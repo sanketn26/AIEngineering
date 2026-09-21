@@ -8,7 +8,7 @@ The service already runs, which is why its failures are dangerous. A request can
 
 This is the course case in executable form: the story belongs to your test results, traces, denial paths, and measurements. Keep the specification as the source of truth; no fictional incident can substitute for a passing failure injection.
 
-**Start from [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter)** at the repo root — a runnable support-ticket triage service with a mock model (no API keys) and four planted holes. Do not scaffold a new framework. Close the holes using the [five-gate checkpoints](capstone-gates.md). Learner ticks: [`capstone-starter/PROGRESS.md`](https://github.com/sanketn26/AIEngineering/blob/main/capstone-starter/PROGRESS.md).
+**Start from [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter)** at the repo root — a runnable support-ticket triage service with a mock model (no API keys) and five planted holes. Do not scaffold a new framework. Close the holes using the [five-gate checkpoints](capstone-gates.md). Learner ticks: [`capstone-starter/PROGRESS.md`](https://github.com/sanketn26/AIEngineering/blob/main/capstone-starter/PROGRESS.md).
 
 ```bash
 cd capstone-starter
@@ -58,3 +58,7 @@ Operational checkpoints (entry, build, eval, failure injection, exit, artifact) 
 ## What "done" is not
 
 A capstone that only has a happy-path demo has not closed Gate 4 or Gate 5 — those gates exist specifically because happy-path demos are where most production AI systems stop and where most production AI incidents start. Budget real time for the failure demo; it is graded, not optional.
+
+## Compare with the instructor reference
+
+After making your own predictions, inspect the [completed five-gate reference](../reference/production/reference-capstone.md). It adds authenticated principals, bounded model calls, a release gate, policy evidence, persisted approval with an idempotent simulated ledger, request traces, load measurement, and rollback. The student starter keeps its planted failures.

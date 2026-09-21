@@ -443,6 +443,10 @@ Capture: p95 latency under a small load script, and a greppable `request_id` fro
 
 ---
 
+## Follow a completed request through all five gates
+
+A human clicks Approve twice after a restart. How many refunds appear? The [reference capstone](../reference/production/reference-capstone.md) turns that question into a transaction test, alongside authenticated requests, deadline failures, a release eval, measured load, and rollback. Follow its request ID before adding another framework.
+
 ## Quizzes
 
 <div class="aieng-quiz" data-quiz-id="13-q1" data-xp="25" data-success="Yes — timeouts contain blast radius on every egress dependency." data-fail="Re-read §2: production LLM calls are remote I/O and must be bounded." markdown>

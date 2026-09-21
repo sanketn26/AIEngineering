@@ -242,6 +242,10 @@ Use them when your spreadsheet-and-JSONL workflow becomes painful—not before y
 
 Avoid optimizing on 5 cherry-picked examples. Avoid changing model, prompt, and retriever in one experiment—you will not know what worked.
 
+### The score moved. Is that enough?
+
+A prompt goes from 16/20 to 17/20, then drops on the next run. Which result gets the release button? Work through [The score went up](../reference/evaluation-uncertainty.md): paired cases, repeated runs, uncertainty intervals, and a rule that can honestly return **inconclusive**. Run `python -m examples.evaluation.compare` before looking at its predictions.
+
 ### 6. LLM-as-judge (use carefully)
 
 When exact match fails (open-ended answers), a second model can score with a rubric. Pitfalls:

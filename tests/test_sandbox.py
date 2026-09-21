@@ -119,3 +119,34 @@ def test_worktree_does_not_mutate_source(tmp_path: Path):
         snap = wt.snapshot_files()
         assert snap["a.txt"] == "changed"
     assert (src / "a.txt").read_text(encoding="utf-8") == "orig"
+
+
+def test_fixed_cwd_does_not_confine_absolute_reads(tmp_path: Path):
+    outside = tmp_path / "fictional-secret.txt"
+    outside.write_text("canary, not a real secret")
+    root = tmp_path / "work"
+    root.mkdir()
+    result = ProcessSandbox(root).run(
+        [
+            sys.executable,
+            "-c",
+            "import sys; print(open(sys.argv[1]).read())",
+            str(outside),
+        ]
+    )
+    assert result.returncode == 0
+    assert "canary" in result.stdout  # Demonstrates the LIMIT, not a sandbox guarantee.
+
+
+def test_worktree_write_api_rejects_traversal_and_symlink(tmp_path: Path):
+    source = tmp_path / "source"
+    source.mkdir()
+    outside = tmp_path / "outside"
+    outside.mkdir()
+    with WorktreeExecutor(source) as worktree:
+        with pytest.raises(PrivilegeError):
+            worktree.write_file("../escape.txt", "no")
+        (worktree.path / "link").symlink_to(outside, target_is_directory=True)
+        with pytest.raises(PrivilegeError):
+            worktree.write_file("link/escape.txt", "no")
+    assert not (outside / "escape.txt").exists()

@@ -1,0 +1,24 @@
+{
+  "documents": [
+    {"id":"billing-duplicate", "text":"A duplicate charge is reviewed by support before a refund is approved.", "claims":["duplicate_requires_review"]},
+    {"id":"shipping-track", "text":"Shipping and delivery dates come from tracking. Do not promise a date without tracking.", "claims":["delivery_requires_tracking"]},
+    {"id":"account-reset", "text":"A locked account uses the password reset flow. Never ask for the current password.", "claims":["locked_uses_reset"]},
+    {"id":"refund-window", "text":"Unused items have a 30 day refund window in this fictional policy.", "claims":["unused_window_30_days"]},
+    {"id":"order-a17", "text":"Order A17 is held at the warehouse for address verification.", "claims":["a17_address_check"]},
+    {"id":"order-a71", "text":"Order A71 has shipped and has a tracking link.", "claims":["a71_shipped"]}
+  ],
+  "queries": [
+    {"id":"q1", "text":"I was charged twice. Can you reimburse me?", "must_have":["billing-duplicate"], "claim":"duplicate_requires_review"},
+    {"id":"q2", "text":"When will my parcel arrive?", "must_have":["shipping-track"], "claim":"delivery_requires_tracking"},
+    {"id":"q3", "text":"I lost access to my login", "must_have":["account-reset"], "claim":"locked_uses_reset"},
+    {"id":"q4", "text":"What is the refund window for unused items?", "must_have":["refund-window"], "claim":"unused_window_30_days"},
+    {"id":"q5", "text":"What happened to order A17?", "must_have":["order-a17"], "claim":"a17_address_check"},
+    {"id":"q6", "text":"What happened to order A71?", "must_have":["order-a71"], "claim":"a71_shipped"},
+    {"id":"q7", "text":"Should support review a duplicate charge?", "must_have":["billing-duplicate"], "claim":"duplicate_requires_review"},
+    {"id":"q8", "text":"Can shipping promise a delivery date?", "must_have":["shipping-track"], "claim":"delivery_requires_tracking"},
+    {"id":"q9", "text":"My password is not working and I am locked out", "must_have":["account-reset"], "claim":"locked_uses_reset"},
+    {"id":"q10", "text":"I want money back for an unused item", "must_have":["refund-window"], "claim":"unused_window_30_days"},
+    {"id":"q11", "text":"Is there a warranty for six years?", "must_have":[], "claim":"six_year_warranty"},
+    {"id":"q12", "text":"What is the weather tomorrow?", "must_have":[], "claim":"tomorrow_weather"}
+  ]
+}

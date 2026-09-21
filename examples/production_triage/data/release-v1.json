@@ -1,0 +1,13 @@
+{
+  "version": "triage-v1",
+  "provider": "mock",
+  "small_model": "mock-small",
+  "large_model": "mock-large",
+  "deadline_s": 2.0,
+  "attempts": 2,
+  "max_output_tokens": 128,
+  "request_budget_usd": 0.05,
+  "input_usd_per_million": 0,
+  "output_usd_per_million": 0,
+  "requests_per_minute": 120
+}

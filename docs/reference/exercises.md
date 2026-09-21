@@ -276,8 +276,10 @@ Apply **three** of: Map-Reduce, Router, Planner, ReAct, Memory, Duet to **one** 
 ## EX-25 — Durable graph (`src.durable`) {#ex-25}
 
 1. Child evidence raises parent score on `HypothesisTree`.
-2. `DurableStore` round-trips `phase_done` from JSONL.
-3. Coordinator pauses on `ask_human`; denial must not run the next phase; `MergeGate` blocks failed tests.
+2. Replay a committed JSONL event; repair an unfinished tail; refuse corruption in a complete record.
+3. Kill a process just after a decision commits: denial still aborts; approval advances once.
+4. Run `python -m examples.durability.crash`: two attempts produce one effect through receiver-enforced idempotency. Explain why replay alone is insufficient.
+5. `MergeGate` blocks failed tests.
 
 **Check:** `pytest tests/test_durable.py -v`
 

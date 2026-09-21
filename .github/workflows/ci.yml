@@ -38,3 +38,44 @@ jobs:
           poetry run pytest tracks/starters/stock-recommender/tests -v
           poetry run pytest tracks/starters/agentic-plugin/tests -v
           poetry run pytest tracks/starters/hybrid-models/tests -v
+
+      - name: Durability crash and evaluation experiments
+        run: |
+          poetry run python -m examples.durability.crash
+          poetry run python -m examples.evaluation.compare
+          poetry run python -m examples.retrieval.compare
+
+  reference-service:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r examples/production_triage/requirements.txt
+      - run: python -m pytest examples/production_triage/tests -q
+      - run: python -m examples.production_triage.evaluate
+      - run: python -m examples.production_triage.rehearse
+      - name: Build the reference deployment image
+        run: docker build -f examples/production_triage/Dockerfile -t triage-reference .
+
+  isolation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: docker pull python:3.11-slim
+      - name: Probe the restricted container
+        run: python -m examples.isolation.run
+
+  docs:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -r requirements-docs.txt
+      - run: mkdocs build --strict

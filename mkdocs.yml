@@ -149,6 +149,7 @@ nav:
       - Capstone:
           - Build specification: core/capstone.md
           - Gate checkpoints: core/capstone-gates.md
+          - Completed reference: reference/production/reference-capstone.md
   - Specialization Tracks:
       - Track overview: tracks/index.md
       - Stock research assistant: tracks/stock-recommender.md
@@ -160,6 +161,9 @@ nav:
       - Exercise catalog: reference/exercises.md
       - Assessment rubrics: reference/assessment.md
       - Troubleshooting: reference/troubleshooting.md
+      - Evaluation uncertainty: reference/evaluation-uncertainty.md
+      - Retrieval comparison: reference/retrieval-comparison.md
+      - Isolation experiment: reference/isolation-lab.md
       - Fine-tuning:
           - QLoRA on your own data: reference/fine-tuning/hands-on.md
       - Inference performance:
