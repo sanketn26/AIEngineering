@@ -41,12 +41,12 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 | 01 | Structured prompt + temperature experiment log |
 | 02 | Sanitization or redaction on hostile inputs |
 | 03 | Schema-validated output (or Pydantic parse) |
-| 04 | Golden set with pass/fail threshold |
+| 04 | Golden set with pass/fail threshold; paired release comparison that can return inconclusive |
 | 05 | Token budget or rolling summary in code |
 | 06 | Written fine-tune vs RAG decision |
 | 07 | Tool allowlist **or** RAG with citations |
 | 08 | MCP security policy (allowed servers) |
-| 09 | Hybrid/rerank **or** multi-hop eval numbers |
+| 09 | Hybrid/rerank **or** multi-hop eval numbers; distinguish citation validity, source support, and question relevance |
 | 10 | Cost or token log + one optimization |
 | 11 | Agent with `max_steps` + tool log |
 | 12 | Multi-role handoff with budget |
@@ -58,11 +58,11 @@ Use these rubrics to judge **module exercises** and **day-90 track demos**. Scor
 | 18 | At least three leaf patterns (subroutine, gate, sampler, consensus, or retriever) with a named failure each one fixes |
 | 19 | At least three orchestration patterns (map-reduce, router, planner, ReAct, memory, or duet) on one workflow |
 | 20 | Detector hits at least two failure modes on a stub trajectory; circuit breaker unit test |
-| 21 | Least-privilege registry + approval on a write + isolated worktree or process |
+| 21 | Least-privilege registry + approval on a write; explain why cwd is not confinement; container extension verifies forbidden access |
 | 22 | Process + outcome scores and a regression_delta that fails a worsened suite |
 | 23 | Prompt bundle hash; silent edit detected; eval gate on a metric drop |
 | 24 | Token budget abort + local vs strong routing stub |
-| 25 | Durable pause/resume + merge gate refusing failed tests |
+| 25 | Crash-tested approval/denial replay, torn-tail recovery, receiver idempotency + merge gate refusing failed tests |
 | 26 | Written orchestrator pick with ranks + per-agent cost events |
 | 27 | Harness with allowlisted tools, external verifier, step/cost caps; “done” is not a model sentence |
 

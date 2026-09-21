@@ -218,3 +218,13 @@ results/inference/
 /data/
 /artifacts/
 results/fine-tuning/
+
+# Reference service runtime state and optional environments
+.venv-reference/
+.venv-retrieval/
+results/production/
+results/retrieval/
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm

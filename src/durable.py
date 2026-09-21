@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from dataclasses import asdict, dataclass, field
 from pathlib import Path
 from typing import Any, Callable
@@ -64,24 +65,61 @@ class DurableEvent:
 
 
 class DurableStore:
-    """Append-only JSONL state. Restart = replay."""
+    """Single-writer JSONL journal; one newline-terminated event is a transition.
+
+    fsync before acknowledging an append. On restart, discard only an unfinished
+    final record; corruption in a committed record fails closed. This is not a
+    multi-worker database or an exactly-once executor for external side effects.
+    """
 
     def __init__(self, path: Path | None = None) -> None:
-        self.path = path
+        self.path = Path(path) if path is not None else None
         self.events: list[DurableEvent] = []
-        if path is not None and path.exists():
-            for line in path.read_text(encoding="utf-8").splitlines():
-                if line.strip():
-                    raw = json.loads(line)
-                    self.events.append(DurableEvent(**raw))
+        self._failed = False
+        self.recovered_tail_bytes = 0
+        if self.path is not None and self.path.exists():
+            data = self.path.read_bytes()
+            end = data.rfind(b"\n") + 1
+            # Parse first: never silently repair corruption in a complete record.
+            for line in data[:end].splitlines():
+                if not line.strip():
+                    continue
+                ev = DurableEvent(**json.loads(line))
+                if ev.seq != len(self.events) + 1:
+                    raise ValueError("journal sequence is corrupt")
+                self.events.append(ev)
+            self.recovered_tail_bytes = len(data) - end
+            if self.recovered_tail_bytes:
+                with self.path.open("r+b") as f:
+                    f.truncate(end)
+                    f.flush()
+                    os.fsync(f.fileno())
 
     def append(self, kind: str, payload: dict[str, Any]) -> DurableEvent:
-        ev = DurableEvent(seq=len(self.events) + 1, kind=kind, payload=payload)
-        self.events.append(ev)
+        if self._failed:
+            raise RuntimeError("append failed; reopen the journal before continuing")
+        # Snapshot mutable caller data and validate serialization before writing.
+        ev = DurableEvent(len(self.events) + 1, kind, json.loads(json.dumps(payload)))
+        record = (json.dumps(asdict(ev)) + "\n").encode("utf-8")
         if self.path is not None:
             self.path.parent.mkdir(parents=True, exist_ok=True)
-            with self.path.open("a", encoding="utf-8") as f:
-                f.write(json.dumps(asdict(ev)) + "\n")
+            created = not self.path.exists()
+            try:
+                with self.path.open("ab") as f:
+                    f.write(record)
+                    f.flush()
+                    os.fsync(f.fileno())
+                # Persist a newly created directory entry on POSIX too.
+                if created and os.name == "posix":
+                    fd = os.open(self.path.parent, os.O_RDONLY)
+                    try:
+                        os.fsync(fd)
+                    finally:
+                        os.close(fd)
+            except OSError:
+                self._failed = True
+                raise
+        self.events.append(ev)
         return ev
 
     def last(self, kind: str | None = None) -> DurableEvent | None:
@@ -127,17 +165,44 @@ class Coordinator:
         self.phases = phases
         self.workers = workers
 
+    def _denial(self) -> DurableEvent | None:
+        """First event that ended the run, if any."""
+        for ev in self.store.events:
+            if ev.kind == "aborted" or (
+                ev.kind == "hitl_resolved" and not ev.payload.get("approved")
+            ):
+                return ev
+        return None
+
     def current_phase(self) -> str:
-        last = self.store.last()
-        if last is not None and last.kind == "aborted":
+        if self._denial() is not None:
             return "aborted"
-        ev = self.store.last("phase_done")
-        if ev is None:
-            return self.phases[0]
-        idx = self.phases.index(ev.payload["phase"])
-        if idx + 1 >= len(self.phases):
+        completed: set[str] = set()
+        for ev in self.store.events:
+            if ev.kind == "hitl_resolved":
+                # Old journals may hold any truthy 'approved'; new ones hold bools.
+                completed.add(ev.payload["phase"])
+            elif ev.kind == "phase_done":
+                completed.add(ev.payload["phase"])
+        if all(phase in completed for phase in self.phases):
             return "done"
-        return self.phases[idx + 1]
+        return next(phase for phase in self.phases if phase not in completed)
+
+    def restored_context(self, context: dict[str, Any]) -> dict[str, Any]:
+        """Recover completed results without letting caller data override history."""
+        results: dict[str, Any] = {}
+        restored = dict(context)
+        for ev in self.store.events:
+            if ev.kind == "phase_done" or (
+                ev.kind == "hitl_resolved" and ev.payload.get("approved")
+            ):
+                results[ev.payload["phase"]] = json.loads(
+                    json.dumps(ev.payload.get("result", {}))
+                )
+            if ev.kind == "hitl_resolved":
+                restored["human"] = {"approved": ev.payload.get("approved")}
+        restored["phase_results"] = results
+        return restored
 
     def pending_hitl(self) -> DurableEvent | None:
         hitl = self.store.last("hitl")
@@ -149,9 +214,10 @@ class Coordinator:
         return hitl
 
     def run_until_gate(self, context: dict[str, Any]) -> dict[str, Any]:
-        last = self.store.last()
-        if last is not None and last.kind == "aborted":
-            return {"status": "denied", "phase": last.payload.get("phase")}
+        denial = self._denial()
+        if denial is not None:
+            return {"status": "denied", "phase": denial.payload.get("phase")}
+        context = self.restored_context(context)
         pending = self.pending_hitl()
         if pending is not None:
             return {
@@ -185,17 +251,19 @@ class Coordinator:
         if pending is None:
             raise ValueError("no pending human approval")
         phase = pending.payload["phase"]
-        self.store.append("hitl_resolved", {**human, "phase": phase})
-        approved = bool(human.get("approved"))
-        if not approved:
-            self.store.append(
-                "aborted",
-                {"phase": phase, "reason": "denied_by_human"},
-            )
-            return {"status": "denied", "phase": phase}
+        approved = human.get("approved")
+        if type(approved) is not bool:
+            raise ValueError("approved must be a boolean")
+        # One authoritative event: a crash cannot split 'resolved' from its
+        # consequence. Old two-record journals replay through current_phase too.
         self.store.append(
-            "phase_done",
-            {"phase": phase, "result": pending.payload.get("result") or {}},
+            "hitl_resolved",
+            {
+                "phase": phase,
+                "approved": approved,
+                "result": pending.payload.get("result") or {},
+            },
         )
-        context = {**context, "human": human}
+        if not approved:
+            return {"status": "denied", "phase": phase}
         return self.run_until_gate(context)

@@ -1,0 +1,5 @@
+[
+  {"id":"refund-v1", "category":"billing", "expires":"2030-01-01", "text":"A support agent reviews duplicate-charge refund requests; approval is required before a simulated refund is recorded."},
+  {"id":"shipping-v1", "category":"shipping", "expires":"2030-01-01", "text":"Check tracking before promising a delivery date. This fixture has no live tracking feed."},
+  {"id":"account-v1", "category":"account", "expires":"2030-01-01", "text":"Use the password-reset flow. Never request a user's password."}
+]

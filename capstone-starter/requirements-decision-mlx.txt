@@ -1,0 +1,3 @@
+# Optional Gate 6 (stretch) Apple-silicon backend. Use its own environment:
+# mlx-lm requires a newer transformers than requirements-decision.txt pins.
+mlx-lm==0.31.3

@@ -1,0 +1,4 @@
+{"id": "dev-00", "text": "Please review this invoice", "expect": {"category": "billing", "priority": "medium", "citations": ["refund-v1"]}}
+{"id": "dev-01", "text": "Password help please", "expect": {"category": "account", "priority": "medium", "citations": ["account-v1"]}}
+{"id": "dev-02", "text": "Find my shipping details", "expect": {"category": "shipping", "priority": "medium", "citations": ["shipping-v1"]}}
+{"id": "dev-03", "text": "Hello there", "expect": {"category": "other", "priority": "low", "citations": []}}

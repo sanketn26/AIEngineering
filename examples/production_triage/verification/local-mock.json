@@ -1,0 +1,33 @@
+{
+  "provider": "mock",
+  "restart_and_duplicate_approval": "passed",
+  "ledger_entries": 1,
+  "config_rollback": {
+    "candidate_status": 429,
+    "restored_status": 200
+  },
+  "load": {
+    "n": 30,
+    "concurrency": 4,
+    "successes": 30,
+    "errors": 0,
+    "elapsed_s": 0.08818908299872419,
+    "successful_requests_per_s": 340.1781601520225,
+    "latency_includes_failures": true,
+    "p50_ms": 8.695291999174515,
+    "p95_ms": 20.38229200115893,
+    "p99_ms": 45.31233300076565
+  },
+  "metrics_before_rollback_experiment": {
+    "n": 31,
+    "successes": 31,
+    "errors": 0,
+    "p50_ms": 4.227,
+    "p95_ms": 13.767,
+    "p99_ms": 41.394,
+    "cost_usd": 0.0,
+    "estimated_cost_requests": 0,
+    "model_calls": 31,
+    "digest": "b974c294b67d460c2a7220dd84e28df1ebad29f9727a65d6aecb8899dee44be6"
+  }
+}

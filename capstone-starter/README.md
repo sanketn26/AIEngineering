@@ -70,4 +70,6 @@ Full entry/build/eval/failure/exit/artifact for each gate: [capstone-gates.md](.
 4. **Authorized actions** — `refund_customer` denied for viewer/missing actor; writes still not executed here unless you add a dry-run ledger.
 5. **Operate and optimize** — `request_id` traces, route trivial classify to `mock-small`, cost/latency you can quote.
 
+6. *(Stretch)* **Make the model pick, not write** — fast enough to decide while the user waits. Applications and limits: [`decision/README.md`](decision/README.md).
+
 Work the gates in order. A beautiful agent loop on top of a hanging model call is costume jewelry.

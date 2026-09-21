@@ -82,3 +82,15 @@ Starter holes (do not delete the comments that mark them until the gate is close
 - [ ] Known failures written down
 - [ ] Live failure demo (hang, injection, or empty retrieval)
 - [ ] Operations and security rows demonstrated, not slid
+
+## Gate 6 (stretch) — Make the model pick, not write
+
+**Entry:** Gate 2 exit. `pytest tests/test_decision.py` is green.
+
+- [ ] I chose a real-time moment and wrote its list of answers, including `other`
+- [ ] Picking runs on a real small model, and I timed it against writing
+- [ ] I reversed the options and know whether my model chooses by letter
+- [ ] Removing `other` forces the injection ticket into a real category (and I put it back)
+- [ ] My rule for unsure answers is in code: automate, bigger model, or human
+
+**Artifact:** *"My decision takes X ms, is right Y% of the time, and when it's unsure, Z happens."* Plus one business scenario where I'd use picking and one where I wouldn't, using the quick test.

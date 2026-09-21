@@ -182,7 +182,7 @@ Production extras: JSON schema on structured tools, URL allowlists on `fetch_url
 
 ### 4. Process isolation (the laptop-friendly sandbox)
 
-You do not need gVisor to get 80% of the value:
+Start by separating process hygiene from security isolation:
 
 ```python
 from src.sandbox import ProcessSandbox
@@ -201,6 +201,10 @@ proc = box.run(["pytest", "tests/test_foo.py", "-q"])  # argv list, no shell
 Still not a security boundary against a malicious binary with the same UID. It **is** a boundary against “the model concatenated a string into bash.” The gap: any process running as your UID can read your files, use your credentials, and ptrace your other processes — a fixed `cwd` and scrubbed env do not stop that, they only stop *accidental* reach. Closing it needs a UID the untrusted work does not share with you: a dedicated non-root runner user, or a container (drop capabilities, read-only root, no network) whose namespace the host process cannot cross.
 
 ---
+
+### Can the process open the file next door?
+
+Predict what happens when `ProcessSandbox` opens an absolute path outside its `cwd`. Then test it using fictional files. The [isolation lab](../reference/isolation-lab.md) follows that surprise with a restricted container and explicit filesystem, environment, and network probes. A passing in-directory read is only a positive control; it cannot prove forbidden access fails.
 
 ### 5. Worktrees: copy, mutate, merge-gate
 
@@ -326,7 +330,8 @@ poetry run pytest tests/test_sandbox.py -v
 - [ ] Writes require approval; reads do not spam the human  
 - [ ] Tool output is size-capped and scanned  
 - [ ] At least one isolated executor (process **or** worktree) has a test  
-- [ ] Paths cannot escape the sandbox root  
+- [ ] The worktree write API rejects escaping paths; subprocess `cwd` alone is not confinement
+- [ ] Container extension: forbidden filesystem access and network egress fail the isolation probes
 
 <div class="aieng-complete" data-module-id="21" data-xp="120" markdown>
 <p>Mark complete when a write cannot land without a manifest, a grant, and (if required) a human.</p>

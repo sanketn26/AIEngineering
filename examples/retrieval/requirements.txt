@@ -1,0 +1,2 @@
+# Optional real-model path, in a separate environment.
+sentence-transformers>=3,<6
