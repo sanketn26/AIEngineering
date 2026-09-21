@@ -204,7 +204,26 @@ Still not a security boundary against a malicious binary with the same UID. It *
 
 ### Can the process open the file next door?
 
-Predict what happens when `ProcessSandbox` opens an absolute path outside its `cwd`. Then test it using fictional files. The [isolation lab](../reference/isolation-lab.md) follows that surprise with a restricted container and explicit filesystem, environment, and network probes. A passing in-directory read is only a positive control; it cannot prove forbidden access fails.
+`cwd` tells a process where it starts looking. It does not tell the operating system which files the process may open. Predict the result, then test it with fictional files. Do not use real credentials.
+
+```python
+from pathlib import Path
+import sys
+
+from src.sandbox import ProcessSandbox
+
+root = Path("/tmp/isolation-demo/work")
+outside = Path("/tmp/isolation-demo/host-only.txt")
+root.mkdir(parents=True, exist_ok=True)
+outside.write_text("fictional canary")
+
+result = ProcessSandbox(root).run(
+    [sys.executable, "-c", "import sys; print(open(sys.argv[1]).read())", str(outside)]
+)
+assert result.stdout.strip() == "fictional canary"  # cwd did not confine the read
+```
+
+The read succeeds under the same user permissions. A clean environment, fixed argv, and timeout still help, but they answer different questions. None creates a filesystem allowlist. `WorktreeExecutor.write_file` separately confines its own Python write method; arbitrary code inside the copied tree does not inherit that restriction. A passing in-directory read is only a positive control; it cannot prove forbidden access fails.
 
 ### 5. Worktrees: copy, mutate, merge-gate
 
@@ -231,6 +250,66 @@ A container with a network and a mounted Docker socket is a **root-equivalent** 
 
 </details>
 </div>
+
+---
+
+### 6. A boundary the operating system can enforce
+
+A container is the next probe, and it needs a running Docker daemon. Allow 30–45 minutes.
+
+```bash
+python -m examples.isolation.run
+```
+
+The runner deliberately constructs the container command as an argument list. These are the lines that turn the intended boundary into runtime policy:
+
+```python
+command = [
+    "docker", "run", "--rm",
+    "--network=none",
+    "--read-only",
+    "--user=65534:65534",
+    "--cap-drop=ALL",
+    "--security-opt=no-new-privileges",
+    "--pids-limit=32",
+    "--memory=128m",
+    "--cpus=0.5",
+    "--tmpfs=/tmp:rw,noexec,nosuid,size=16m,mode=1777",
+    "--mount", f"type=bind,src={mounted},dst=/work,readonly",
+    image,
+    "python", "/work/probe.py",
+]
+```
+
+The full runner fixes the image, mount source, environment, and program itself. Do not accept those values from model output and call the result an isolation boundary.
+
+The runner creates a host-only canary file and mounts only a separate fixture directory. It executes a fixed probe with:
+
+- a non-root UID, all capabilities dropped, and no privilege escalation;
+- a read-only root and fixture mount, with a small writable scratch directory;
+- no container network, no Docker socket, and no host credentials passed through;
+- process, memory, CPU, and wall-clock bounds.
+
+The probe needs both positive and negative controls:
+
+| Attempt | Required observation |
+|---|---|
+| Read the mounted fixture | Succeeds — the runner actually works |
+| Write scratch data | Succeeds — intended work remains possible |
+| Read the host-only canary | Fails |
+| Change the mounted fixture or root filesystem | Fails |
+| Connect to a public network address | Fails |
+| Read the host's canary environment variable | Absent |
+
+All checks must pass. A nonzero exit or missing Docker daemon is a failed or unavailable experiment, never evidence that isolation worked. The network connection failure alone is weak evidence if the host is offline; interpret it together with Docker's explicit `--network=none` configuration. Save the engine and platform version and the image digest when recording results; `--image python@sha256:...` pins the image.
+
+A container is a concrete boundary, not a proof against every kernel or runtime escape. Changing mounts, enabling network, or exposing a privileged socket changes what you have tested. Re-run the probes after such a change.
+
+The corrected sentence is: “This process may read these mounted files and write this scratch area; these probes verify that configuration.”
+
+**Artifact:** the JSON probe output, Docker and image versions, and the sibling-file read that explains why `cwd` was insufficient. In CI, the Linux isolation job runs this same probe. Locally, `pytest tests/test_sandbox.py -q` also demonstrates the weaker process wrapper's actual boundary.
+
+The [Docker run reference](https://docs.docker.com/engine/containers/run/) documents the runtime flags used by the probe. Inspect the actual mounts and privileges whenever you change them.
 
 ---
 
@@ -278,6 +357,7 @@ A container with a network and a mounted Docker socket is a **root-equivalent** 
 3. `ProcessSandbox` on a temp dir: run `sys.executable -c` that reads a file **in** the dir; confirm.
 4. `WorktreeExecutor`: mutate a copy; assert the source file is unchanged.
 5. Stretch: wrap `run_tests` as `EXEC` with a fixed argv, timeout 30s.
+6. Where Docker is available, run `python -m examples.isolation.run` and keep the probe output. A missing daemon is an unavailable experiment, not a pass.
 
 ```bash
 poetry run pytest tests/test_sandbox.py -v

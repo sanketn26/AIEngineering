@@ -35,7 +35,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Foundations | 01 → 04 |
 | Knowledge | 05, 07, 09 |
 | Connectors & cost | 08, 10 |
-| Ship | 11 (optional), 13 |
+| Ship | 11 (optional), 13, 17, 28 |
 | Production agents (optional) | 20, 21, 27, 22 |
 
 **Prerequisites:** API experience; basic cloud or container familiarity.
@@ -50,7 +50,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 |-------|---------|
 | Full core | 01 → 14 |
 | Integration | 15, 16 |
-| Local/hybrid | 17 |
+| Local/hybrid | 17, 28 |
 | Patterns (optional) | 18, 19 |
 | Production agents | 20–27 |
 
@@ -67,7 +67,7 @@ You will not have Module 05 (context packing) yet. Cap pasted documents by hand 
 | Theory + practice | 03, 05, 06 |
 | Retrieval frontier | 09 |
 | Agents | 11, 12 |
-| SLMs | 17 |
+| SLMs | 17, 28 |
 | Production agents (optional) | 20, 22, 24, 26, 27 |
 | Track | Hybrid models or stock research stack |
 
@@ -85,9 +85,7 @@ Tracks can run **in parallel** with later core modules if you already code comfo
 
 ---
 
-## Optional serving-performance extension
-
-After Modules **10, 13, and 17**, spend 60–90 minutes on [Inference performance](../reference/inference-performance.md). Professional developers can focus on timing and caching; enterprise/self-hosting learners should also complete the capacity and scheduling exercises, then benchmark their runtime. The paper exercises need no GPU or API keys. Keep the hybrid track's encoder use case distinct from autoregressive generation.
+Module 28 follows 10, 13, and 17. The worked exercises need no GPU or API key. The hands-on GPU runs stay optional. The hybrid track's encoder does not use autoregressive KV caching, continuous decode batching, or speculative decoding.
 
 ## Daily cadence (any path)
 

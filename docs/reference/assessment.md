@@ -162,9 +162,11 @@ Five levels, one per depth of understanding — use these to check whether a stu
 
 ## Capstone oral (optional, 15 min)
 
+The same defense fits the [triage service](../core/capstone.md), the [command runtime](../core/capstone-command.md), or [divide, solve, and join](../core/capstone-decompose.md). For the runtime, the failure demo is a free-form sentence that must not produce a patch, or a diff that leaves the allowlist. For the divide-solve-join capstone, the failure demo is a one-shot 20B result that must not count as done, or two green parts whose join fails the check you wrote.
+
 1. Architecture sketch (2 min)  
 2. Live happy path (5 min)  
-3. Failure demo (injection, empty retrieval, or tool error) (3 min)  
+3. Failure demo (a denied action, an empty retrieval, a sentence that must not patch, a diff outside the allowlist, or a join that fails the check you wrote) (3 min)  
 4. What you would build next (2 min)  
 5. Q&A (3 min)  
 

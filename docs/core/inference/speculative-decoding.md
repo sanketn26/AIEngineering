@@ -4,7 +4,7 @@ description: Learn draft-and-verify generation, the difference between greedy an
 
 # Speculative decoding — make proposals cheap
 
-**Prerequisite:** [KV cache and decode](kv-cache.md). **Return to:** [Inference performance](../inference-performance.md).
+**Prerequisite:** [KV cache and decode](kv-cache.md). **Return to:** [Module 28](../28-inference-serving.md).
 
 <div class="aieng-story" markdown>
 
@@ -80,7 +80,7 @@ High acceptance can still lose if the proposer is expensive or both models compe
 
 ## Keep the guarantees separate
 
-[Model routing](../../core/24-local-first-agents.md) chooses a model to answer a request. Speculation keeps target verification inside token generation. Neither establishes factual correctness, validates JSON, or authorizes a tool call. Preserve the course's external quality and safety checks.
+[Model routing](../24-local-first-agents.md) chooses a model to answer a request. Speculation keeps target verification inside token generation. Neither establishes factual correctness, validates JSON, or authorizes a tool call. Preserve the course's external quality and safety checks.
 
 ## Run draft-assisted generation
 
@@ -116,4 +116,4 @@ The engineer measures committed tokens per unit time, including the draft's over
 
 </div>
 
-**Optional primary reference:** [Speculative decoding paper](https://arxiv.org/abs/2211.17192). See the [source trail](../inference-performance.md#source-trail-and-scope).
+**Optional primary reference:** [Speculative decoding paper](https://arxiv.org/abs/2211.17192). See the [source trail](../28-inference-serving.md#source-trail-and-scope).

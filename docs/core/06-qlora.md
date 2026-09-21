@@ -2,9 +2,11 @@
 description: End-to-end QLoRA walkthrough for a small open model — data rights, extraction, cleaning, company-level splits, Colab training, baseline comparison, serving, monitoring, and retraining.
 ---
 
-# Hands-on — fine-tune a small model on your own data
+# Hands-on — QLoRA on your own data
 
-**Prerequisites:** [Module 06](../../core/06-fine-tuning.md) and [Module 04](../../core/04-testing-evals.md). Run commands from the repository root. **Time:** 1 hour for the data pipeline on CPU; 1–3 hours of GPU time for one QLoRA run.
+**Part of:** [Module 06](06-fine-tuning.md) · **Also uses:** [Module 04](04-testing-evals.md). Run commands from the repository root. **Time:** 1 hour for the data pipeline on any machine; 1–3 hours of GPU time for the optional training run.
+
+Sections 0–7 are the Module 06 lab: rights, cleaning, numeric grounding, and a company-level split. Sections 8–14 are the optional GPU path: training, Colab, evaluation against the prompt-only baseline, serving, and retraining. A machine without a GPU still finishes the module.
 
 <div class="aieng-story" markdown>
 
@@ -48,7 +50,7 @@ flowchart LR
 2. **Prompt + retrieval.** Adds evidence for any facts the copy needs.
 3. **Fine-tuned small model.** Build this only after baselines 1–2 fail at something specific that you can name.
 
-If baseline 1 already passes your eval, you are done and can skip training. This is the [Module 06 decision tree](../../core/06-fine-tuning.md#1-when-not-to-fine-tune) applied to a concrete task.
+If baseline 1 already passes your eval, you are done and can skip training. This is the [Module 06 decision tree](06-fine-tuning.md#1-when-not-to-fine-tune) applied to a concrete task.
 
 ## 1. Pick a small base model
 
@@ -157,7 +159,7 @@ A small CPU VPS is a good API gateway: TLS, auth, rate limiting, queueing, Redis
 
 ## 9. Train with QLoRA
 
-QLoRA loads the frozen base in 4-bit NF4 and trains only a small LoRA adapter. It needs much less memory than full fine-tuning (see the [LoRA / QLoRA mental model](../../core/06-fine-tuning.md#4-lora-qlora-mental-model)).
+QLoRA loads the frozen base in 4-bit NF4 and trains only a small LoRA adapter. It needs much less memory than full fine-tuning (see the [LoRA / QLoRA mental model](06-fine-tuning.md#4-lora-qlora-mental-model)).
 
 ```bash
 PYTHONPATH=. accelerate launch examples/fine-tuning/train_qlora.py \
@@ -252,9 +254,9 @@ flowchart LR
 
 ## 14. Monitor quality, and retrain only on reviewed data
 
-Track these from the first day: request latency, queue time, GPU memory and utilization, error rate, empty outputs, tokens per request, user retry rate, unsupported-claim reports, and **model + adapter version** on every request ([Module 13](../../core/13-production.md), [Module 23](../../core/23-prompt-drift.md)).
+Track these from the first day: request latency, queue time, GPU memory and utilization, error rate, empty outputs, tokens per request, user retry rate, unsupported-claim reports, and **model + adapter version** on every request ([Module 13](13-production.md), [Module 23](23-prompt-drift.md)).
 
-- Collect user data for retraining only with **explicit opt-in**. Even then, strip phone numbers, emails, customer names, private revenue figures, fundraising terms, and investor contacts before storing anything ([Module 02](../../core/02-security-privacy.md)).
+- Collect user data for retraining only with **explicit opt-in**. Even then, strip phone numbers, emails, customer names, private revenue figures, fundraising terms, and investor contacts before storing anything ([Module 02](02-security-privacy.md)).
 - Keep production-derived training data separate from evaluation data.
 - Retrain only when you have a meaningful number of **reviewed** examples, a documented failure pattern, a stable eval set, a versioned dataset, and a rollback plan. A sensible progression: v0 prompt-only → v1 200 reviewed → v2 1,000 reviewed → v3 more data + retrieval.
 

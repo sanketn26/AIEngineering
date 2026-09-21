@@ -23,7 +23,7 @@ Prefer primary documentation and high-signal open-source curricula over random b
 
 ## Inference performance reading route
 
-Start with the course's [inference performance supplement](inference-performance.md), integrated into **05, 10, 13, 17, and 24**. Its [six self-contained lessons](inference-performance.md#self-contained-lessons) include the explanations, worked exercises, and answers locally. [Amit Shekhar's inference article](https://x.com/amitiitbhu/status/2054100147546837154) motivated the additions; its links are attribution, not required reading.
+Start with [Module 28 — Inference serving](../core/28-inference-serving.md). Its [six lessons](../core/28-inference-serving.md#the-six-lessons) include the explanations, worked exercises, and answers. Modules **05, 10, 13, 17, and 24** point at the sections they use. [Amit Shekhar's inference article](https://x.com/amitiitbhu/status/2054100147546837154) motivated the module; its links are attribution, not required reading.
 
 Application developers should prioritize prefill/decode timing, cache distinctions, and context/concurrency budgets. Self-hosting learners can continue into paged allocation, continuous batching, attention kernels, and speculative decoding. Kernel implementation and GQA uptraining are optional specialist topics.
 
@@ -78,7 +78,7 @@ Application developers should prioritize prefill/decode timing, cache distinctio
 - [PEFT](https://huggingface.co/docs/peft/index)
 - [TRL](https://huggingface.co/docs/trl)
 - QLoRA paper: https://arxiv.org/abs/2305.14314
-- Course walkthrough: [QLoRA on your own data](fine-tuning/hands-on.md) — adapted from [Rahul's small-LLM fine-tuning guide](https://x.com/sairahul1/status/2100882424343265527) (attribution; the lesson is self-contained)
+- Course lab: [QLoRA on your own data](../core/06-qlora.md) — adapted from [Rahul's small-LLM fine-tuning guide](https://x.com/sairahul1/status/2100882424343265527) (attribution; the lesson is self-contained)
 - [vLLM LoRA serving](https://docs.vllm.ai/en/latest/features/lora.html)
 
 ---

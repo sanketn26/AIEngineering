@@ -122,7 +122,9 @@ nav:
           - 04 Testing & evals: core/04-testing-evals.md
       - "Gate 3 — External knowledge":
           - 05 Context engineering: core/05-context-engineering.md
-          - 06 Fine-tuning: core/06-fine-tuning.md
+          - 06 Fine-tuning:
+              - Overview: core/06-fine-tuning.md
+              - Hands-on — QLoRA on your own data: core/06-qlora.md
           - 07 Tools & basic RAG: core/07-tools-and-rag.md
           - 09 Advanced RAG: core/09-advanced-rag.md
       - "Gate 4 — Actions and agents":
@@ -141,15 +143,28 @@ nav:
           - 14 Compliance: core/14-compliance.md
           - 15 Domain apps: core/15-domain-apps.md
           - 17 Small & local models: core/17-small-models.md
+          - 28 Inference serving:
+              - Overview: core/28-inference-serving.md
+              - Hands-on experiments: core/inference/hands-on.md
+              - KV cache: core/inference/kv-cache.md
+              - PagedAttention: core/inference/paged-attention.md
+              - FlashAttention: core/inference/flash-attention.md
+              - Grouped-query attention: core/inference/grouped-query-attention.md
+              - Speculative decoding: core/inference/speculative-decoding.md
+              - Continuous batching: core/inference/continuous-batching.md
           - 22 Evaluating agents: core/22-agent-evaluation.md
           - 23 Prompt & config drift: core/23-prompt-drift.md
           - 24 Local-first agents: core/24-local-first-agents.md
           - 25 Durable orchestration: core/25-durable-orchestration.md
           - 26 Orchestrators in production: core/26-orchestrator-comparison.md
       - Capstone:
-          - Build specification: core/capstone.md
-          - Gate checkpoints: core/capstone-gates.md
-          - Completed reference: reference/production/reference-capstone.md
+          - Triage service: core/capstone.md
+          - Triage gates: core/capstone-gates.md
+          - Completed triage service: core/reference-capstone.md
+          - Command runtime: core/capstone-command.md
+          - Command-runtime gates: core/capstone-command-gates.md
+          - Divide, solve, and join: core/capstone-decompose.md
+          - Divide-solve-join gates: core/capstone-decompose-gates.md
   - Specialization Tracks:
       - Track overview: tracks/index.md
       - Stock research assistant: tracks/stock-recommender.md
@@ -161,18 +176,4 @@ nav:
       - Exercise catalog: reference/exercises.md
       - Assessment rubrics: reference/assessment.md
       - Troubleshooting: reference/troubleshooting.md
-      - Evaluation uncertainty: reference/evaluation-uncertainty.md
-      - Retrieval comparison: reference/retrieval-comparison.md
-      - Isolation experiment: reference/isolation-lab.md
-      - Fine-tuning:
-          - QLoRA on your own data: reference/fine-tuning/hands-on.md
-      - Inference performance:
-          - Overview & benchmark lab: reference/inference-performance.md
-          - Hands-on experiments: reference/inference/hands-on.md
-          - KV cache: reference/inference/kv-cache.md
-          - PagedAttention: reference/inference/paged-attention.md
-          - FlashAttention: reference/inference/flash-attention.md
-          - Grouped-query attention: reference/inference/grouped-query-attention.md
-          - Speculative decoding: reference/inference/speculative-decoding.md
-          - Continuous batching: reference/inference/continuous-batching.md
       - Further resources: reference/resources.md

@@ -2,7 +2,7 @@
 
 Run from the repository root. The full walkthrough — data rights, cleaning,
 company-level splits, Colab, evaluation, serving, and retraining — is in
-[the hands-on lesson](../../docs/reference/fine-tuning/hands-on.md).
+[the Module 06 lab](../../docs/core/06-qlora.md).
 
 ```bash
 # 1. Data hygiene: stdlib only, runs anywhere

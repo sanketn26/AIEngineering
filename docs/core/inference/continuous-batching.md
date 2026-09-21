@@ -4,7 +4,7 @@ description: Understand iteration-level scheduling, the interaction of prefill a
 
 # Continuous batching — admit work between iterations
 
-**Prerequisite:** [Prefill and decode](../inference-performance.md#1-two-phases-several-clocks). **Return to:** [Inference performance](../inference-performance.md).
+**Prerequisite:** [Prefill and decode](../28-inference-serving.md#1-two-phases-several-clocks). **Return to:** [Module 28](../28-inference-serving.md).
 
 <div class="aieng-story" markdown>
 
@@ -103,15 +103,15 @@ X: 90 qualifying requests per interval versus 70. Y has higher raw completions b
 
 </details>
 
-Complete the [benchmark lab](../inference-performance.md#6-lab-earn-the-optimization) before choosing a scheduler configuration for production.
+Complete the [benchmark lab](../28-inference-serving.md#6-lab-earn-the-optimization) before choosing a scheduler configuration for production.
 
 <div class="aieng-case-checkpoint" markdown>
 <p class="label">Return to the incident</p>
 
 C finishes earlier in the drawn schedule, but that alone does not prove the server meets its contract under load. The final exercise makes the production decision: 90 answers meeting quality and latency targets are more useful than 100 completions with only 70 qualifying.
 
-**Return to the service:** use the [benchmark lab](../inference-performance.md#6-lab-earn-the-optimization) to measure the bottleneck you actually changed, including failures and the requests left waiting.
+**Return to the service:** use the [benchmark lab](../28-inference-serving.md#6-lab-earn-the-optimization) to measure the bottleneck you actually changed, including failures and the requests left waiting.
 
 </div>
 
-**Optional primary references:** [Orca](https://www.usenix.org/conference/osdi22/presentation/yu) and [vLLM tuning](https://docs.vllm.ai/en/latest/configuration/optimization/). See the [source trail](../inference-performance.md#source-trail-and-scope).
+**Optional primary references:** [Orca](https://www.usenix.org/conference/osdi22/presentation/yu) and [vLLM tuning](https://docs.vllm.ai/en/latest/configuration/optimization/). See the [source trail](../28-inference-serving.md#source-trail-and-scope).

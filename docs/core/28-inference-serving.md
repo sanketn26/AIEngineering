@@ -2,9 +2,13 @@
 description: Diagnose LLM serving bottlenecks with prefill and decode metrics, KV memory estimates, batching, attention kernels, and controlled experiments.
 ---
 
-# Inference performance — from symptom to experiment
+# Module 28 — Inference Serving
 
-**Use after:** [10 Cost](../core/10-cost-optimization.md), [13 Production](../core/13-production.md), and [17 Local models](../core/17-small-models.md). **Time:** 60–90 minutes for the worked exercises; optional serving benchmark afterward.
+**Time:** 2–4 days · **Depends on:** [10 Cost](10-cost-optimization.md), [13 Production](13-production.md), [17 Small models](17-small-models.md) · **Next:** [Evaluating agents](22-agent-evaluation.md)
+
+<span data-module-id="28" hidden></span>
+
+---
 
 <div class="aieng-story" markdown>
 
@@ -16,9 +20,16 @@ You will follow those decisions through six short lessons. Each begins with a fa
 
 </div>
 
-**Learning outcome:** choose an optimization from a measured bottleneck, predict which metric should change, and retain it only if quality and latency targets still pass.
+**Case question:** Which measured bottleneck — repeated work, stored state, data movement, or a queue beside idle capacity — should change first, and which metric has to move before you keep that change?
 
-## Self-contained lessons
+## Learning objectives
+
+- Separate prefill from decode, and read time-to-first-token, time-per-output-token, throughput, and goodput as different clocks
+- Estimate KV-cache capacity and tell it apart from conversation memory and prefix reuse
+- Match one serving failure to paging, FlashAttention, grouped-query attention, speculative decoding, or continuous batching
+- Keep an optimization only when a controlled comparison still meets the quality and latency gates
+
+## The six lessons
 
 ### Choose the failure you can see
 
@@ -84,7 +95,7 @@ An SSE event can contain several tokens. Without token timestamps, report **chun
 
 ## 2. KV cache: saved computation occupies memory
 
-For causal attention, earlier tokens' keys and values can be reused when a new token arrives. The current query still attends over applicable past state; caching does **not** make that attention free or constant-cost as context grows. This is model execution state, separate from the conversation history in [Module 05](../core/05-context-engineering.md). See [Hugging Face's explanation](https://huggingface.co/docs/transformers/main/en/cache_explanation).
+For causal attention, earlier tokens' keys and values can be reused when a new token arrives. The current query still attends over applicable past state; caching does **not** make that attention free or constant-cost as context grows. This is model execution state, separate from the conversation history in [Module 05](05-context-engineering.md). See [Hugging Face's explanation](https://huggingface.co/docs/transformers/main/en/cache_explanation).
 
 For a conventional decoder with uniform full-attention layers:
 
@@ -122,7 +133,7 @@ for users, tokens in [(1, 8192), (8, 8192), (8, 16384)]:
 
 Prefix reuse saves repeated prefill work; it does not skip generation of a new answer. Put genuinely stable instructions and examples before changing ticket content, preserving instruction priority. Similar meaning is not an exact token prefix. Avoid changing a timestamp at the start of every otherwise identical prompt. Measure cold and warm runs separately. See [vLLM automatic prefix caching](https://docs.vllm.ai/en/latest/features/automatic_prefix_caching/).
 
-Apply the [security and privacy boundary](../core/02-security-privacy.md) to all retained state. A cache hit must never stand in for authorization. Follow the selected service's isolation and retention contract; keep response-cache keys scoped as taught in [Module 10](../core/10-cost-optimization.md#4-caching-with-safe-keys).
+Apply the [security and privacy boundary](02-security-privacy.md) to all retained state. A cache hit must never stand in for authorization. Follow the selected service's isolation and retention contract; keep response-cache keys scoped as taught in [Module 10](10-cost-optimization.md#4-caching-with-safe-keys).
 
 ## 4. Different optimizations fix different work
 
@@ -150,7 +161,7 @@ Long prefills can interrupt ongoing streams. **Chunked prefill** divides that wo
 
 A cheaper proposer drafts tokens; the target model verifies multiple positions together. Correct speculative sampling preserves the target distribution using acceptance and correction rules. Greedy token matching is a special case, not a replacement for those rules under sampling. Distribution preservation does not promise an identical sampled string for the same seed. Gains depend on acceptance, draft overhead, memory, and load; published speedups are workload results. [Speculative decoding paper](https://arxiv.org/abs/2211.17192).
 
-This differs from [Module 24's routing](../core/24-local-first-agents.md): routing lets a smaller model answer some requests, whereas speculative decoding keeps target-model verification in generation. It does not validate factual claims or authorize tools.
+This differs from [Module 24's routing](24-local-first-agents.md): routing lets a smaller model answer some requests, whereas speculative decoding keeps target-model verification in generation. It does not validate factual claims or authorize tools.
 
 ## 5. Select one experiment
 
@@ -194,15 +205,22 @@ Use your existing service or an approved local runtime; no GPU or paid API is re
 
 ## Source trail and scope
 
-This supplement was prompted by [Amit Shekhar's May 12, 2026 article](https://x.com/amitiitbhu/status/2054100147546837154). Its six linked explainers were reviewed on September 21, 2026; technical teaching above is grounded in the primary papers and runtime documentation linked beside each topic. The external links below preserve attribution only. If they disappear, the internal lessons and exercises remain usable.
+This module was prompted by [Amit Shekhar's May 12, 2026 article](https://x.com/amitiitbhu/status/2054100147546837154). Its six linked explainers were reviewed on September 21, 2026; the teaching above is grounded in the primary papers and runtime documentation linked beside each topic. The external links preserve attribution. The lessons in this module stay usable if those articles disappear.
 
-| Article-linked explainer | Course placement |
+| Article-linked explainer | Course lesson |
 |---|---|
-| [KV cache](https://outcomeschool.com/blog/kv-cache-in-llms) | Modules 05/17: context and capacity; worked memory exercise here |
-| [Paged attention](https://outcomeschool.com/blog/paged-attention-in-llms) | Modules 13/17: self-hosted serving capacity |
-| [FlashAttention](https://outcomeschool.com/blog/decoding-flash-attention) | Optional kernel background here; relevant attention background for the hybrid track |
-| [GQA](https://outcomeschool.com/blog/grouped-query-attention) | Module 17: model selection and KV-head accounting |
-| [Speculative decoding](https://outcomeschool.com/blog/speculative-decoding) | Modules 13/24: latency experiments and distinction from routing |
-| [Continuous batching](https://outcomeschool.com/blog/continuous-batching-in-llms) | Module 13: load, scheduling, and latency trade-offs |
+| [KV cache](https://outcomeschool.com/blog/kv-cache-in-llms) | [KV cache](inference/kv-cache.md); capacity preview in Modules 05 and 17 |
+| [Paged attention](https://outcomeschool.com/blog/paged-attention-in-llms) | [PagedAttention](inference/paged-attention.md) |
+| [FlashAttention](https://outcomeschool.com/blog/decoding-flash-attention) | [FlashAttention](inference/flash-attention.md); encoder background for the hybrid track |
+| [GQA](https://outcomeschool.com/blog/grouped-query-attention) | [Grouped-query attention](inference/grouped-query-attention.md); head counts also used in Module 17 |
+| [Speculative decoding](https://outcomeschool.com/blog/speculative-decoding) | [Speculative decoding](inference/speculative-decoding.md); distinct from routing in Module 24 |
+| [Continuous batching](https://outcomeschool.com/blog/continuous-batching-in-llms) | [Continuous batching](inference/continuous-batching.md) |
 
 The follow-on topics of prefill/decode, prefix caching, and chunked prefill are included because they connect those techniques to observable behavior. CUDA kernel implementation, FlashAttention generation-by-generation tuning, GQA uptraining, and a full compression survey remain optional specialist work. The hybrid track's encoder regression model does not generate tokens autoregressively, so decoder KV caches and speculative decoding are not requirements for that track.
+
+<div class="aieng-complete" data-module-id="28" data-xp="120" markdown>
+<p>Mark Module 28 complete when you can name the bottleneck you measured and the metric that had to move before you kept the change.</p>
+<button type="button">Complete module · +120 XP</button>
+</div>
+
+**Next:** [Evaluating agents](22-agent-evaluation.md)

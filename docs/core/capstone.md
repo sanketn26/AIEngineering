@@ -44,6 +44,15 @@ flowchart TB
 | **Security** | Authorization enforced outside the model (not a prompt instruction), parameter validation on every tool call, resilience to a prompt-injection test case, least privilege on anything that writes | 1, 4 | 02, 08, 21 |
 | **Decision path** *(stretch)* | A real-time decision where the model picks from known options instead of writing: timed against writing, checked for letter bias, with a rule for unsure answers | 6 (optional) | 03, 04, 06, 17 |
 
+??? tip "Where teams lose the most time, and how to avoid it"
+    **The failure demo is the graded part.** Gate 4 and Gate 5 are the reason this capstone exists, and they are the work that gets deferred. Kill the dependency and inject the payload early, while there is still time to change the design — not the night before.
+
+    **Build the evaluation before the knowledge layer.** Without Gate 2's numbers, you cannot tell whether retrieval helped, and "the demo looked better" is not a measured decision. The Knowledge row explicitly asks whether retrieval is needed at all; that question only has an answer if quality was measured without it first.
+
+    **Authorization is a code path, not a prompt paragraph.** Any instruction in a system prompt can be argued with by a sufficiently determined ticket. If the check is not a function the model cannot reach, Gate 4 is still open.
+
+    **The architecture diagram must match the code.** It is checked against what you built, not what you intended. Draw it last, or redraw it when the design moves.
+
 ## Definition of done
 
 - [ ] Demo runs from a clean clone with documented setup
@@ -61,4 +70,8 @@ A capstone that only has a happy-path demo has not closed Gate 4 or Gate 5 — t
 
 ## Compare with the instructor reference
 
-After making your own predictions, inspect the [completed five-gate reference](../reference/production/reference-capstone.md). It adds authenticated principals, bounded model calls, a release gate, policy evidence, persisted approval with an idempotent simulated ledger, request traces, load measurement, and rollback. The student starter keeps its planted failures.
+After making your own predictions, inspect the [completed five-gate service](reference-capstone.md). It adds authenticated principals, bounded model calls, a release gate, policy evidence, persisted approval with an idempotent simulated ledger, request traces, load measurement, and rollback. The student starter keeps its planted failures.
+
+## The other capstone
+
+[A specification-gated coding runtime](capstone-command.md) takes the same five gates onto a different system: a 4B model may propose a patch, and the runtime decides whether the patch is legal. The triage service remains the capstone for one request path. The command runtime is the capstone for a 4B coding loop. [Gate 6](capstone-gates.md#gate-6-stretch-make-the-model-pick-not-write) on the triage checkpoints is the typed decision. The command runtime is what you build when the artifact still has to be written. [Divide, solve, and join](capstone-decompose.md) is the third capstone: a task a 20B model fails in one prompt, finished by splitting the work and joining the parts under checks you wrote.

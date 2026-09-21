@@ -1,0 +1,46 @@
+schema_version: "1.0"
+task_id: idempotent-refund
+goal: "A repeated approval writes one ledger entry, a viewer cannot approve, and approve_refund(proposal_id, actor) stays."
+requirements:
+  - id: R1
+    statement: "Approving the same refund twice yields one ledger entry."
+    priority: must
+  - id: R2
+    statement: "A viewer cannot approve a refund."
+    priority: must
+  - id: R3
+    statement: "approve_refund keeps the signature (proposal_id, actor)."
+    priority: must
+verification:
+  - id: V1
+    scope: part
+    maps_to: [R1]
+    runner: pytest
+    target: tests/test_ledger.py::test_duplicate_approval_one_entry
+  - id: V2
+    scope: part
+    maps_to: [R2]
+    runner: pytest
+    target: tests/test_auth.py::test_viewer_cannot_approve
+  - id: V3
+    scope: part
+    maps_to: [R3]
+    runner: pytest
+    target: tests/test_api.py::test_signature_unchanged
+  - id: V4
+    scope: join
+    maps_to: [R1, R2, R3]
+    runner: pytest
+    target: tests/test_refund_flow.py
+scope:
+  allowed_files:
+    - api.py
+    - ledger.py
+    - auth.py
+    - tests/test_ledger.py
+    - tests/test_auth.py
+    - tests/test_api.py
+    - tests/test_refund_flow.py
+  max_files_changed: 7
+  max_added_lines: 400
+unknowns: []

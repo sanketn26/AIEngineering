@@ -4,7 +4,7 @@ description: Understand causal KV caching, prefill and decode, memory sizing, an
 
 # KV cache — reuse the past, budget its memory
 
-**Prerequisites:** [Context engineering](../../core/05-context-engineering.md). **Return to:** [Inference performance](../inference-performance.md).
+**Prerequisites:** [Context engineering](../05-context-engineering.md). **Return to:** [Module 28](../28-inference-serving.md).
 
 <div class="aieng-story" markdown>
 
@@ -79,7 +79,7 @@ Reserve future output growth when admitting work. A request can fit now and fail
 
 ### Two axes the base formula hides
 
-**Cache dtype is its own decision.** `element_bytes` is set by the KV representation, not by the weight file. A four-bit weight checkpoint served with a 16-bit cache still spends two bytes per element. Taking the example above from two-byte to one-byte cache elements halves 1 GiB to 512 MiB per 8,192-token sequence — but KV quantization needs explicit runtime support and its own quality evaluation, exactly like weight quantization. Record both precisions separately in the [Module 17 capacity checkpoint](../../core/17-small-models.md#estimate-kv-separately-from-weights).
+**Cache dtype is its own decision.** `element_bytes` is set by the KV representation, not by the weight file. A four-bit weight checkpoint served with a 16-bit cache still spends two bytes per element. Taking the example above from two-byte to one-byte cache elements halves 1 GiB to 512 MiB per 8,192-token sequence — but KV quantization needs explicit runtime support and its own quality evaluation, exactly like weight quantization. Record both precisions separately in the [Module 17 capacity checkpoint](../17-small-models.md#estimate-kv-separately-from-weights).
 
 **Sliding-window layers stop growing.** A full-attention layer caches every processed token, so its state grows with the conversation. A layer attending to a fixed window of `W` positions caches at most `W`, so replace the sequence length with `min(processed_tokens, W)` for those layers. Hybrid models interleave the two and must be summed per layer type:
 
@@ -98,7 +98,7 @@ Check which case you are in before budgeting: a config naming a `sliding_window`
 
 ## Cache lifetime is not conversation memory
 
-Application history is text or structured records that can be packed into a future request. KV state is tied to the exact model execution and prefix. Restarting a process or switching model weights does not magically preserve it. Cross-request reuse requires explicit [prefix caching](../inference-performance.md#3-three-caches-with-different-contracts), compatibility checks, and appropriate isolation.
+Application history is text or structured records that can be packed into a future request. KV state is tied to the exact model execution and prefix. Restarting a process or switching model weights does not magically preserve it. Cross-request reuse requires explicit [prefix caching](../28-inference-serving.md#3-three-caches-with-different-contracts), compatibility checks, and appropriate isolation.
 
 Evicting old KV positions is also different from summarizing conversation text. Arbitrarily removing full-attention history can change the answer; use only supported strategies and reevaluate quality.
 
@@ -116,7 +116,7 @@ The runner changes `model.generate(use_cache=False)` to `use_cache=True`, warms 
 
 ## Exercise and checkpoint
 
-Run the [memory calculation](../inference-performance.md#2-kv-cache-saved-computation-occupies-memory). Then answer: if a 16 GiB device already needs 10 GiB for everything except KV, can it host eight of these 8,192-token sequences?
+Run the [memory calculation](../28-inference-serving.md#2-kv-cache-saved-computation-occupies-memory). Then answer: if a 16 GiB device already needs 10 GiB for everything except KV, can it host eight of these 8,192-token sequences?
 
 <details markdown>
 <summary>Reveal</summary>
@@ -147,4 +147,4 @@ The engineer stopped recomputing the prefix, but did not make eight histories fr
 
 </div>
 
-**Optional primary reference:** [Hugging Face cache documentation](https://huggingface.co/docs/transformers/main/en/cache_explanation). This lesson is self-contained; the [source trail](../inference-performance.md#source-trail-and-scope) records its motivation.
+**Optional primary reference:** [Hugging Face cache documentation](https://huggingface.co/docs/transformers/main/en/cache_explanation). This lesson is self-contained; the [source trail](../28-inference-serving.md#source-trail-and-scope) records its motivation.

@@ -1,5 +1,5 @@
 ---
-description: A module-by-module map of the skills and shippable systems you gain after each of the 27 core modules, with rough time estimates for each.
+description: A module-by-module map of the skills and shippable systems you gain after each of the 28 core modules, with rough time estimates for each.
 ---
 
 # Capability Progression Summary
@@ -25,6 +25,7 @@ What you should be able to build after each module. Times are rough calendar est
 | 15 Domains | Vertical patterns | Prototypes with refuses | 7–14 days |
 | 16 Integration | Events, hybrid | Platform-style LLM I/O | 10–14 days |
 | 17 Small models | Local SLMs, quant + re-eval, limited-hardware fit | Offline / cheap tiers on a laptop | 5–7 days |
+| 28 Inference serving | Prefill/decode, KV capacity, one measured optimization | A serving change kept only when quality and latency still pass | 2–4 days |
 | 18 Agent design patterns | Subroutine, guardrail, resampler, consensus, retriever | Composable, testable agent internals | 5–8 days |
 | 19 Orchestration patterns | Map-reduce, router, planner, ReAct, memory, duet | Large-input, multi-step, persistent workflows | 6–9 days |
 | 20 Agent reliability | Failure taxonomy, detectors, circuit breakers | Bounded loops that abort on named modes | 4–6 days |
@@ -46,6 +47,7 @@ What you should be able to build after each module. Times are rough calendar est
 | 12–14 | Coordinated, observable, governable systems |
 | 15–19 | Vertical + platform + local/edge + composable-pattern + orchestration options |
 | 20–27 | Production agents: named failures, sandboxes, harness, trajectory evals, drift, durable graphs |
-| All 27 | [Capstone](../core/capstone.md)-ready: an evaluated, authorized, tool-using production AI service |
+| 13, 17, 28 | A service whose latency and memory choices come from a measured bottleneck |
+| All 28 | Ready for one of three capstones: the [triage service](../core/capstone.md), the [command runtime](../core/capstone-command.md), or [divide, solve, and join](../core/capstone-decompose.md) |
 
 Use this table in `PROGRESS.md` to mark completion honestly (demo > notes).

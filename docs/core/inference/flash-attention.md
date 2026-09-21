@@ -4,7 +4,7 @@ description: Understand attention IO, tiling, online softmax, and why FlashAtten
 
 # FlashAttention — avoid writing the giant intermediate
 
-**Prerequisite:** [KV cache and attention vectors](kv-cache.md). **Return to:** [Inference performance](../inference-performance.md).
+**Prerequisite:** [KV cache and attention vectors](kv-cache.md). **Return to:** [Module 28](../28-inference-serving.md).
 
 <div class="aieng-story" markdown>
 
@@ -112,4 +112,4 @@ The engineer's kernel change targets intermediate IO. In the worked service exam
 
 </div>
 
-**Optional primary reference:** [FlashAttention paper](https://arxiv.org/abs/2205.14135). The [source trail](../inference-performance.md#source-trail-and-scope) records the motivating article.
+**Optional primary reference:** [FlashAttention paper](https://arxiv.org/abs/2205.14135). The [source trail](../28-inference-serving.md#source-trail-and-scope) records the motivating article.

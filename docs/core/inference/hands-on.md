@@ -4,7 +4,7 @@ description: Run cache, attention, speculative decoding, prefix reuse, and batch
 
 # Hands-on — make the improvement measurable
 
-**Prerequisites:** [Inference performance](../inference-performance.md). Run commands from the repository root. **Time:** 1–2 hours for local experiments, plus optional GPU setup and load testing.
+**Prerequisites:** [Module 28](../28-inference-serving.md). Run commands from the repository root. **Time:** 1–2 hours for local experiments, plus optional GPU setup and load testing.
 
 <div class="aieng-story" markdown>
 
@@ -167,7 +167,7 @@ PY
 | Field | Interpretation |
 |---|---|
 | `median_ms`, `p95_ms` | Generation-only wall time; a small sample gives a weak p95 estimate |
-| `median_local_ttft_ms` | In-process prefill time: request start to first available logits. Not a served [TTFT](../inference-performance.md#1-two-phases-several-clocks): no queueing, network, or tokenization. `null` for speculative runs |
+| `median_local_ttft_ms` | In-process prefill time: request start to first available logits. Not a served [TTFT](../28-inference-serving.md#1-two-phases-several-clocks): no queueing, network, or tokenization. `null` for speculative runs |
 | `median_local_tpot_ms` | Remaining wall time divided by committed tokens minus one; `null` for a single-token response and for speculative runs |
 | `tpot_sample_count` | How many rows could define a TPOT; compare it to `requests` before trusting the median |
 | `output_tokens_per_second` | Sum of output tokens divided by sum of generation time; includes prefill |
@@ -184,7 +184,7 @@ Every raw row includes input length/hash and generated token IDs/text. Repeats a
 - Raising `--prompt-repeats` should move first-token time most, because it adds prefill work. It can raise per-token decode cost too — attention still reads a longer history every step, and sharply so with `--experiment cache` on its uncached baseline.
 - Raising `--new-tokens` mainly extends **total decode duration**. Average time per token may barely move, since each step does roughly the same work. A rising `median_ms` with a flat `median_local_tpot_ms` is the expected shape, not a null result.
 
-Report total decode duration (`median_ms` minus TTFT) separately from the per-token average; one workload can change either without the other. That split is the whole point of [§1's metric table](../inference-performance.md#1-two-phases-several-clocks), and it is the one serving metric this CPU lab can honestly produce.
+Report total decode duration (`median_ms` minus TTFT) separately from the per-token average; one workload can change either without the other. That split is the whole point of [§1's metric table](../28-inference-serving.md#1-two-phases-several-clocks), and it is the one serving metric this CPU lab can honestly produce.
 
 `--experiment speculative` reports **no** local TTFT or TPOT. Assisted generation calls logits processors while drafting and verifying, so the first call can precede any committed token; both metrics derive from that timestamp and would misstate user-visible timing. Compare its `median_ms` and committed `output_tokens` instead.
 

@@ -4,7 +4,7 @@ description: Learn how block-based KV allocation reduces waste, how logical toke
 
 # PagedAttention — grow the allocation with the sequence
 
-**Prerequisite:** [KV cache](kv-cache.md). **Return to:** [Inference performance](../inference-performance.md).
+**Prerequisite:** [KV cache](kv-cache.md). **Return to:** [Module 28](../28-inference-serving.md).
 
 <div class="aieng-story" markdown>
 
@@ -129,4 +129,4 @@ The allocation sketch falls from 48 reserved positions to 36 while holding the s
 
 </div>
 
-**Optional primary reference:** [PagedAttention paper](https://arxiv.org/abs/2309.06180). See the [source trail](../inference-performance.md#source-trail-and-scope) for attribution.
+**Optional primary reference:** [PagedAttention paper](https://arxiv.org/abs/2309.06180). See the [source trail](../28-inference-serving.md#source-trail-and-scope) for attribution.

@@ -1,0 +1,24 @@
+schema_version: "1.0"
+task_id: delay-unspecified
+command: code.patch
+goal: "Retry transient failures in fetch_data."
+scope:
+  allowed_files: [client.py]
+  max_files_changed: 1
+  max_added_lines: 40
+requirements:
+  - id: R1
+    statement: "Retry TimeoutError."
+    priority: must
+acceptance_criteria:
+  - id: AC1
+    given: "the first call times out"
+    when: "fetch_data is called"
+    then: "a later attempt can succeed"
+    verification: "pytest"
+    maps_to: [R1]
+non_goals:
+  - "New dependencies"
+unknowns:
+  - "Delay between attempts is unspecified"
+risk_level: low

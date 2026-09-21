@@ -14,6 +14,8 @@ The published course is available at **[sanketn26.github.io/AIEngineering](https
 | **Originals (archived)** | [`archive/`](archive/) — provenance only, not the curriculum |
 | **Python sandbox** | [`src/`](src/) + Poetry (`pyproject.toml`) |
 | **Capstone starter** | [`capstone-starter/`](capstone-starter/) — triage service; mock model; five gates |
+| **Command-runtime capstone** | [`capstone-command/`](capstone-command/) — a 4B model may propose a patch; the runtime decides |
+| **Divide, solve, and join** | [`capstone-decompose/`](capstone-decompose/) — a 20B one-shot fails; dividing and joining can finish the task |
 | **Track starters** | [`tracks/starters/`](tracks/starters/) — one vertical slice per track, not the 90-day solution |
 
 ---
@@ -64,9 +66,9 @@ poetry run pytest tests/ -v
 
 Exercises: [docs/reference/exercises.md](docs/reference/exercises.md) · Rubrics: [docs/reference/assessment.md](docs/reference/assessment.md)
 
-**Optional fine-tuning lab:** a [QLoRA walkthrough](docs/reference/fine-tuning/hands-on.md) for a 1.5B model — rights gate, cleaning, numeric-grounding checks, and company-level splits in stdlib `src/finetune_data.py`, plus Colab-ready training and base-vs-adapter eval in [`examples/fine-tuning/`](examples/fine-tuning/README.md).
+**Fine-tuning lab:** the [QLoRA walkthrough](docs/core/06-qlora.md) for a 1.5B model — rights gate, cleaning, numeric-grounding checks, and company-level splits in stdlib `src/finetune_data.py`. Training and base-vs-adapter eval in [`examples/fine-tuning/`](examples/fine-tuning/README.md) are the optional GPU half.
 
-**Optional inference lab:** [runnable optimization experiments](docs/reference/inference/hands-on.md) compare KV caching, attention backends, and speculative decoding, with GPU extensions for prefix reuse and batching. Start with `--smoke` for real forward passes without downloading weights; install its separate dependencies from [`examples/inference/`](examples/inference/README.md).
+**Inference lab:** [Module 28](docs/core/28-inference-serving.md) and its [experiments](docs/core/inference/hands-on.md) compare KV caching, attention backends, and speculative decoding, with GPU extensions for prefix reuse and batching. Start with `--smoke` for real forward passes without downloading weights; install its separate dependencies from [`examples/inference/`](examples/inference/README.md).
 
 ---
 
@@ -85,20 +87,52 @@ Gates: [docs/core/capstone-gates.md](docs/core/capstone-gates.md) · spec: [docs
 
 ---
 
+## Quick start — command-runtime capstone
+
+A second capstone. A mock diff stands in for a 4B code model. No API keys.
+
+```bash
+cd capstone-command
+pip install -r requirements.txt
+python cmdai.py spec check fixtures/retry_api_client.yaml
+python cmdai.py run --intent "Add retry support"
+pytest tests/ -v
+```
+
+Spec: [docs/core/capstone-command.md](docs/core/capstone-command.md) · gates: [docs/core/capstone-command-gates.md](docs/core/capstone-command-gates.md)
+
+---
+
+## Quick start — divide, solve, and join
+
+A third capstone. One prompt to a 20B model fails. The starter still treats that prompt as success. No API keys.
+
+```bash
+cd capstone-decompose
+pip install -r requirements.txt
+python divide.py check fixtures/refund_task.yaml
+python divide.py run fixtures/refund_task.yaml
+pytest tests/ -v
+```
+
+Spec: [docs/core/capstone-decompose.md](docs/core/capstone-decompose.md) · gates: [docs/core/capstone-decompose-gates.md](docs/core/capstone-decompose-gates.md)
+
+---
+
 ## Follow the experiments
 
 A higher score, a real citation, and a saved approval can each hide a failure.
 These labs let you catch it:
 
-- [Did the score really improve?](docs/reference/evaluation-uncertainty.md) — paired cases and an uncertainty-aware release gate.
-- [The citation was real. The answer was wrong.](docs/reference/retrieval-comparison.md) — four retrieval paths on one labeled corpus.
-- [The room had a sign, but no lock.](docs/reference/isolation-lab.md) — prove filesystem and network restrictions.
-- [A refund is suggested. Who gets to say yes?](docs/reference/production/reference-capstone.md) — a completed five-gate instructor service alongside the student starter.
+- [Did the score really improve?](docs/core/04-testing-evals.md#the-score-moved-is-that-enough) — paired cases and an uncertainty-aware release gate, inside Module 04.
+- [The citation was real. The answer was wrong.](docs/core/09-advanced-rag.md#compare-the-paths-on-one-corpus) — four retrieval paths on one labeled corpus, inside Module 09.
+- [The room had a sign, but no lock.](docs/core/21-secure-tool-use.md#6-a-boundary-the-operating-system-can-enforce) — filesystem and network probes, inside Module 21.
+- [A refund is suggested. Who gets to say yes?](docs/core/reference-capstone.md) — a completed five-gate service alongside the student starter.
 - `python -m examples.durability.crash` — interrupt a workflow after the effect and before its receipt; explain why the retry stays safe.
 
 ## Curriculum map
 
-**Core modules:** prompting → security → advanced prompts → evals → context engineering → fine-tuning → tools/RAG → MCP → advanced RAG → cost → agents → multi-agent → production → compliance → domains → integration → small/local models → agent design patterns → orchestration patterns → **reliability → secure tool use → harness engineering → agent evals → prompt drift → local-first agents → durable orchestration → orchestrator comparison**.
+**Core modules:** prompting → security → advanced prompts → evals → context engineering → fine-tuning → tools/RAG → MCP → advanced RAG → cost → agents → multi-agent → production → compliance → domains → integration → small/local models → **inference serving** → agent design patterns → orchestration patterns → **reliability → secure tool use → harness engineering → agent evals → prompt drift → local-first agents → durable orchestration → orchestrator comparison**.
 
 **Tracks (90 days):** start from the slice, not a blank repo.
 
@@ -124,11 +158,14 @@ The workflow is [`.github/workflows/deploy-docs.yml`](.github/workflows/deploy-d
 ```text
 docs/                      # Course site (source of truth)
   getting-started/
-  core/                    # Modules 01–27
+  core/                    # Modules 01–28, plus three capstones
   tracks/                  # 90-day specializations
   reference/
 archive/source/            # Pre-restructure markdown (provenance)
 src/ tests/                # Optional Poetry project
+capstone-starter/          # Triage service with five planted holes
+capstone-command/          # Specification-gated coding runtime
+capstone-decompose/       # 20B divide, solve, and join
 mkdocs.yml
 requirements-docs.txt
 .github/workflows/deploy-docs.yml

@@ -8,7 +8,7 @@ Ninety-day, **project-shaped tutorials** that reuse the [core modules](../index.
 
 Complete [Setup](../getting-started/setup.md) first. Close core gaps listed on the track before you start building.
 
-Tracks are domain-specific; the [Capstone](../core/capstone.md) is domain-agnostic and can run instead of or alongside a track — it proves the six generic parts (service, evals, knowledge, agent, ops, security) hold together, without committing to a vertical.
+Tracks are domain-specific. The [triage capstone](../core/capstone.md) is domain-agnostic and can run instead of or alongside a track — it proves the six generic parts (service, evals, knowledge, agent, ops, security) hold together, without committing to a vertical. The [command-runtime capstone](../core/capstone-command.md) is the same five gates applied to a 4B coding loop. [Divide, solve, and join](../core/capstone-decompose.md) is the agentic capstone: a 20B model fails one prompt, then divides the work, solves the parts, and joins them under checks you wrote.
 
 Each track keeps its own case because its evidence is different: time-safe claims and citations for stock research, ablations for hybrid models, and approval-gated writes for the editor plugin. Return to that case at each phase exit; the artifact and measurement are the resolution.
 

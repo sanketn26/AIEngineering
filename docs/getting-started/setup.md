@@ -172,6 +172,29 @@ pytest tests/test_api.py tests/test_eval.py -v
 
 Walk the [five gates](../core/capstone-gates.md). Track day-1 slices: `tracks/starters/`.
 
+The command-runtime capstone is a second skeleton. A mock diff stands in for a 4B code model:
+
+```bash
+cd capstone-command
+pip install -r requirements.txt
+python cmdai.py spec check fixtures/retry_api_client.yaml
+pytest tests/ -v
+```
+
+Walk the [command-runtime gates](../core/capstone-command-gates.md). `run --intent` still returns a patch; Gate 1 closes that.
+
+The third capstone is a task a 20B model fails as one prompt. The starter still trusts that prompt:
+
+```bash
+cd capstone-decompose
+pip install -r requirements.txt
+python divide.py check fixtures/refund_task.yaml
+python divide.py run fixtures/refund_task.yaml
+pytest tests/ -v
+```
+
+Walk the [divide-solve-join gates](../core/capstone-decompose-gates.md). `run` prints `one_shot` and `done`; Gate 1 makes that a baseline failure, and Gate 4 is the join.
+
 ### Recommended layout for *your* track work
 
 ```text
