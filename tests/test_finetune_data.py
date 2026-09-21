@@ -33,7 +33,7 @@ def test_rights_gate_blocks_assumed_permission():
 
 
 def test_clean_text_keeps_numbers_untouched():
-    raw = "Revenue\x00  grew to $12.SM\n\n\n\nnext"
+    raw = "Revenue\x00  grew\u00a0to $12.SM\n\n\n\nnext"
     assert clean_text(raw) == "Revenue grew to $12.SM\n\nnext"
 
 

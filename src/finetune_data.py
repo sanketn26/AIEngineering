@@ -43,7 +43,7 @@ def sha256_bytes(data: bytes) -> str:
 def clean_text(text: str) -> str:
     """Remove extraction noise only. Never rewrites words or numbers."""
     text = unicodedata.normalize("NFKC", text)
-    text = text.replace("\x00", "").replace(" ", " ")
+    text = text.replace("\x00", "").replace("\u00a0", " ")
     text = re.sub(r"[ \t]+", " ", text)
     text = re.sub(r"\n{3,}", "\n\n", text)
     return text.strip()
@@ -101,7 +101,7 @@ def validate_example(row: dict[str, Any]) -> list[str]:
 
 def _bucket(company_id: str, seed: str) -> float:
     digest = hashlib.sha256(f"{seed}:{company_id}".encode()).hexdigest()
-    return int(digest[:8], 16) / 0xFFFFFFFF
+    return int(digest[:8], 16) / 0x100000000
 
 
 def split_by_company(

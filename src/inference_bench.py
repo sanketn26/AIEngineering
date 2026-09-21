@@ -221,13 +221,13 @@ def run(args):
         """
 
         def __init__(self):
-            self.first_call_ms = None
+            self.first_call_s = None
 
         def __call__(self, input_ids, scores):
-            if self.first_call_ms is None:
+            if self.first_call_s is None:
                 # Without this the CUDA timestamp records kernel launch, not result.
                 sync()
-                self.first_call_ms = time.perf_counter()
+                self.first_call_s = time.perf_counter()
             return scores
 
     def generate(item, candidate):
@@ -265,8 +265,8 @@ def run(args):
         # output token. Both metrics derive from that timestamp, so both are
         # left unset here rather than reported as a misleading speedup.
         ttft_ms = None
-        if args.experiment != "speculative" and clock.first_call_ms is not None:
-            ttft_ms = (clock.first_call_ms - start) * 1000
+        if args.experiment != "speculative" and clock.first_call_s is not None:
+            ttft_ms = (clock.first_call_s - start) * 1000
         # Undefined below two tokens: one token has no inter-token interval.
         tpot_ms = (
             (elapsed - ttft_ms) / (len(ids) - 1)

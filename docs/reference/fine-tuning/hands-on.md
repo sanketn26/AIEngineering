@@ -101,7 +101,7 @@ Cleaning removes extraction noise. It does not make the text nicer.
 ```python
 from src.finetune_data import clean_text, numeric_strings
 
-clean_text("Revenue\x00  grew to $12.SM\n\n\n\nnext")
+clean_text("Revenue\x00  grew\u00a0to $12.SM\n\n\n\nnext")
 # 'Revenue grew to $12.SM\n\nnext'   ← the OCR error survives on purpose
 numeric_strings("We grew 80% to $12.5M in 2024.")
 # {'80%', '$12.5M', '2024'}
