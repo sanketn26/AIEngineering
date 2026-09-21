@@ -48,6 +48,7 @@ Qwen2.5-0.5B-Instruct on an Apple M-series laptop, 100 tickets. Yours will diffe
 Faster *and* more accurate on a small model. Two surprises are worth the capstone on their own:
 
 - **The model liked the letter B.** It picked "shipping" (option B) for 16 of 25 tickets. Reverse the list and it picked "product" (now option B) 20 times. A confident answer can be a habit, not a judgement.
+- **Bigger models have habits too.** The 1.5B model leaned toward option A instead. Just reversing the list moved it from 72% to 88% right. Same model, same tickets, different order.
 - **Bigger models change the trade-off.** On a 1.5B model, a single pick was right 72% of the time and writing was right 84%. Picking was still 6× faster. Fixing the letter habit (next section) lifted picking to 88%, at most of the speed cost.
 
 ## Where it helps
