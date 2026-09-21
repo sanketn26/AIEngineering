@@ -341,6 +341,14 @@ Apple Silicon: **Metal** is the reason 7–8B Q4 is pleasant. x86 laptop CPU: ex
 Weights are mostly **fixed**. The KV cache is **per token of context** (keys and values for every layer). Doubling `num_ctx` can add more RAM than dropping one quant level saves. A “32k context” 7B on 16 GB often loses to a 4k context 7B that actually stays resident. Module 05 packing is a **hardware** feature here: retrieve 3 chunks, not 30.
 </div>
 
+#### Estimate KV separately from weights
+
+For a uniform full-attention decoder, estimate `2 × layers × KV_heads × head_dimension × bytes_per_element × total_active_tokens`. The [worked capacity exercise](../reference/inference-performance.md#2-kv-cache-saved-computation-occupies-memory) turns this into GiB for one and eight users. Actual allocation also includes overhead and architecture-specific behavior; verify peak usage on your runtime.
+
+Read the checkpoint's **KV-head count**, not only its query-head count. GQA shares keys and values among groups of query heads, reducing cache size relative to otherwise comparable MHA. It is part of the trained architecture, not a free conversion flag. Weight quantization and KV-cache quantization are separate decisions, each requiring runtime support and quality evaluation; the [cache dtype and sliding-window exercise](../reference/inference/kv-cache.md#two-axes-the-base-formula-hides) works both through. [GQA paper](https://arxiv.org/abs/2305.13245).
+
+**Capacity checkpoint:** record model revision, weight precision, KV dtype, context/output caps, intended concurrency, estimated KV GiB, and measured peak memory. If you only computed an estimate, label it as such. Leave runtime and OS headroom before declaring the model fits.
+
 #### Knobs that matter on a laptop
 
 | Knob | What to do | Why |

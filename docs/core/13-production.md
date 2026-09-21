@@ -282,6 +282,16 @@ You cannot debug “the bot was weird yesterday” without three signals sharing
 
 **Tools to know:** OpenTelemetry (vendor-neutral instrumentation), Prometheus/Grafana, Langfuse / Phoenix / Helicone (LLM-specific), provider dashboards.
 
+#### Separate first-token delay from generation speed
+
+For streaming inference, record **TTFT** (request sent to first content token), **TPOT** (first-to-last-token duration divided by output tokens minus one), and complete validated-response latency. Report TPOT as undefined for fewer than two tokens. If your API provides chunks instead of token timestamps, label observed gaps as chunk latency. Keep retrieval, queue, prefill, and decode spans separate when server instrumentation is available.
+
+Higher total tokens/second can coexist with worse user latency. Set first-token and completion targets before tuning concurrency; include timeouts and rejected requests when reporting useful capacity. For the non-streaming capstone, measure full triage latency rather than inventing token timings.
+
+Read the [inference performance supplement](../reference/inference-performance.md) for the six serving techniques and worked exercises. Continuous batching changes which requests run together; chunked prefill controls how long new prompts interrupt existing streams. PagedAttention addresses KV allocation, while FlashAttention addresses attention IO. These are serving-runtime choices, not features enabled by adding more FastAPI workers. Primary references: [Orca](https://www.usenix.org/conference/osdi22/presentation/yu), [PagedAttention](https://arxiv.org/abs/2309.06180), [FlashAttention](https://arxiv.org/abs/2205.14135), and [runtime tuning](https://docs.vllm.ai/en/latest/configuration/optimization/).
+
+**Serving lab extension:** run the supplement's [controlled benchmark](../reference/inference-performance.md#6-lab-earn-the-optimization), changing one setting against a fixed workload and quality gate. Hosted API users measure client behavior; self-hosted users also report memory, backend, and scheduler configuration.
+
 #### Minimal structured log shape
 
 ```python

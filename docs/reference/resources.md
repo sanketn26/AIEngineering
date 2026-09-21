@@ -21,6 +21,12 @@ Prefer primary documentation and high-signal open-source curricula over random b
 
 ---
 
+## Inference performance reading route
+
+Start with the course's [inference performance supplement](inference-performance.md), integrated into **05, 10, 13, 17, and 24**. Its [six self-contained lessons](inference-performance.md#self-contained-lessons) include the explanations, worked exercises, and answers locally. [Amit Shekhar's inference article](https://x.com/amitiitbhu/status/2054100147546837154) motivated the additions; its links are attribution, not required reading.
+
+Application developers should prioritize prefill/decode timing, cache distinctions, and context/concurrency budgets. Self-hosting learners can continue into paged allocation, continuous batching, attention kernels, and speculative decoding. Kernel implementation and GQA uptraining are optional specialist topics.
+
 ## Models & providers
 
 - [OpenAI docs](https://platform.openai.com/docs)

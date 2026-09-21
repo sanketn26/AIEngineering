@@ -64,6 +64,8 @@ poetry run pytest tests/ -v
 
 Exercises: [docs/reference/exercises.md](docs/reference/exercises.md) · Rubrics: [docs/reference/assessment.md](docs/reference/assessment.md)
 
+**Optional inference lab:** [runnable optimization experiments](docs/reference/inference/hands-on.md) compare KV caching, attention backends, and speculative decoding, with GPU extensions for prefix reuse and batching. Start with `--smoke` for real forward passes without downloading weights; install its separate dependencies from [`examples/inference/`](examples/inference/README.md).
+
 ---
 
 ## Quick start — capstone starter

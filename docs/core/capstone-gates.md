@@ -95,6 +95,8 @@ Modules: [10](10-cost-optimization.md), [13](13-production.md), [17](17-small-mo
 
 ---
 
+**Optional real-model extension:** when replacing the mock, attach an [inference benchmark report](../reference/inference-performance.md#6-lab-earn-the-optimization) to the Gate 5 ops note. Compare representative prompt/output lengths and bounded load; report quality, latency, errors, and cost per successful request. Mock timings establish application behavior, not GPU or provider performance. This extension does not change the starter's required gates.
+
 ## How this maps to the six capstone parts
 
 | Capstone part | Closed by gate(s) |
