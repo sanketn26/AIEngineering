@@ -83,7 +83,9 @@ No extra package code — use the Module 03 lab:
 
 2. 30 train + 10 held-out instruction rows, no PII.  
 
-3. Baseline score on the 10 (API or local). GPU LoRA is optional.
+3. Baseline score on the 10 (API or local). GPU LoRA is optional.  
+
+4. Rows pass `src.finetune_data.validate_example`; split with `split_by_company` (`pytest tests/test_finetune_data.py`). GPU path: [QLoRA hands-on](fine-tuning/hands-on.md).
 
 ---
 

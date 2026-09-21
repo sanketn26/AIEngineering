@@ -160,6 +160,8 @@ nav:
       - Exercise catalog: reference/exercises.md
       - Assessment rubrics: reference/assessment.md
       - Troubleshooting: reference/troubleshooting.md
+      - Fine-tuning:
+          - QLoRA on your own data: reference/fine-tuning/hands-on.md
       - Inference performance:
           - Overview & benchmark lab: reference/inference-performance.md
           - Hands-on experiments: reference/inference/hands-on.md

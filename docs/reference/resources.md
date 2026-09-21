@@ -78,6 +78,8 @@ Application developers should prioritize prefill/decode timing, cache distinctio
 - [PEFT](https://huggingface.co/docs/peft/index)
 - [TRL](https://huggingface.co/docs/trl)
 - QLoRA paper: https://arxiv.org/abs/2305.14314
+- Course walkthrough: [QLoRA on your own data](fine-tuning/hands-on.md) — adapted from [Rahul's small-LLM fine-tuning guide](https://x.com/sairahul1/status/2100882424343265527) (attribution; the lesson is self-contained)
+- [vLLM LoRA serving](https://docs.vllm.ai/en/latest/features/lora.html)
 
 ---
 

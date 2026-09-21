@@ -213,3 +213,8 @@ __marimo__/
 .venv-inference/
 .venv-vllm/
 results/inference/
+
+# Fine-tuning lab outputs (private data, adapters, reports)
+/data/
+/artifacts/
+results/fine-tuning/

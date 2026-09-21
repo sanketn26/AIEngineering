@@ -1,0 +1,12 @@
+# Optional QLoRA lab, independent of the stdlib course sandbox.
+# bitsandbytes 4-bit needs a CUDA GPU (Colab T4 is enough for a 1.5B base).
+# Pin exact versions after your first working run: pip freeze > configs/training-environment.txt
+torch>=2.6,<3
+transformers>=4.57,<5
+datasets>=3.0
+accelerate>=1.0
+peft>=0.17
+trl>=0.23
+bitsandbytes>=0.45
+sentencepiece
+safetensors
