@@ -97,6 +97,25 @@ Modules: [10](10-cost-optimization.md), [13](13-production.md), [17](17-small-mo
 
 **Optional real-model extension:** when replacing the mock, attach an [inference benchmark report](../reference/inference-performance.md#6-lab-earn-the-optimization) to the Gate 5 ops note. Compare representative prompt/output lengths and bounded load; report quality, latency, errors, and cost per successful request. Mock timings establish application behavior, not GPU or provider performance. This extension does not change the starter's required gates.
 
+## Gate 6 (stretch) — Make the model pick, not write
+
+Optional. Modules: [03](03-advanced-prompting.md), [04](04-testing-evals.md), [06](06-fine-tuning.md), [17](17-small-models.md). Code and applications: [`capstone-starter/decision/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter/decision).
+
+When the answer is one of a few known options, don't make the model write — make it pick. The model reads the ticket once and scores each option; nothing is generated. On a laptop that took about 0.1 s against about 1 s for writing, which is fast enough to run while a user waits. It also tells you how sure the model is, and writing does not.
+
+| | |
+|---|---|
+| **Entry condition** | Gate 2 exit: a set of labelled examples you trust. |
+| **Build** | Choose a real-time moment and its list of answers, including `other`. Run `decision.decide()` with the mock, then with a real small model (`--backend transformers`, or `mlx` on Apple silicon). Write the rule for unsure answers: automate, bigger model, or human. |
+| **Evaluation** | `python -m decision.bench`: time and accuracy of picking vs writing on the same model. `python -m decision.calibration`: when it says it's sure, is it right? |
+| **Failure injection** | Reverse the order of the options. If answers change, the model is choosing by letter. Remove `other` and show a prompt-injection ticket forced into a real category. |
+| **Exit criteria** | You can say: *"My decision takes X ms, is right Y% of the time, and when it's unsure, Z happens."* |
+| **Artifact produced** | That sentence with your numbers; one business scenario where you would use picking and one where you would not, judged with the quick test. |
+
+**Where it helps:** businesses that make the same decision thousands of times a day while someone waits: support routing in e-commerce, payment approval in banking, claim triage in insurance, voice-line routing in telecom, moderation on marketplaces. **Where it doesn't:** writing content or replies, contract review, invoice extraction, clinical or regulated credit decisions that need a stated reason, overnight batch work. **Quick test:** can you list every answer on one page, is someone waiting, and do you do it thousands of times? Full tables in the [package README](https://github.com/sanketn26/AIEngineering/blob/main/capstone-starter/decision/README.md).
+
+---
+
 ## How this maps to the six capstone parts
 
 | Capstone part | Closed by gate(s) |

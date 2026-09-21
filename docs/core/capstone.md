@@ -42,6 +42,7 @@ flowchart TB
 | **Agent** | Tool use with an enforced permission boundary, loop/step/cost caps, persisted state, human approval on at least one write action, a verifier that is not the model | 4 | 08, 10, 11, 12, 20, 21, 27 |
 | **Operations** | Traces tied to a `request_id`, a cost dashboard, p50/p95/p99 latency, a documented fallback path, one rehearsed incident scenario | 5 | 13, 17, 22, 23 |
 | **Security** | Authorization enforced outside the model (not a prompt instruction), parameter validation on every tool call, resilience to a prompt-injection test case, least privilege on anything that writes | 1, 4 | 02, 08, 21 |
+| **Decision path** *(stretch)* | A real-time decision where the model picks from known options instead of writing: timed against writing, checked for letter bias, with a rule for unsure answers | 6 (optional) | 03, 04, 06, 17 |
 
 ## Definition of done
 

@@ -1,0 +1,4 @@
+# Optional Gate 6 (stretch) real-model backend. The mock scorer needs none of this.
+# Same stack as examples/inference/. CPU is fine for Qwen2.5-0.5B.
+torch>=2.6,<3
+transformers==4.57.1
