@@ -38,6 +38,24 @@
   font-weight: 750;
 }
 
+.md-typeset img.course-figure {
+  display: block;
+  width: 100%;
+  height: auto;
+  margin: 1.2rem auto 0.35rem;
+  padding: 0.35rem;
+  background: #f8fafc;
+  border: 1px solid var(--course-line);
+  border-radius: 14px;
+}
+
+.md-typeset .course-caption {
+  margin: 0 0 1.4rem;
+  font-size: 0.86rem;
+  line-height: 1.45;
+  color: var(--md-default-fg-color--light);
+}
+
 /* Landing page */
 .md-content:has(.course-hero) .md-content__inner {
   max-width: 72rem;

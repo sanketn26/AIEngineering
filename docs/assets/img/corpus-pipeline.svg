@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 420" role="img" aria-labelledby="cpTitle cpDesc">
+  <title id="cpTitle">Corpus pipeline</title>
+  <desc id="cpDesc">A split refund policy retrieves the wrong clause. A parent chunk keeps the exception attached, and only a changed content hash is re-embedded.</desc>
+  <rect width="980" height="420" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">The exception has to travel with the rule</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="28" y="68" font-size="13" font-weight="700" fill="#be123c">Split windows</text>
+    <rect x="28" y="80" width="280" height="150" rx="12" fill="#fff" stroke="#fecdd3"/>
+    <rect x="44" y="96" width="248" height="52" rx="8" fill="#ffe4e6"/>
+    <text x="56" y="118" font-size="13" fill="#881337">Chunk A · “Refunds: 30 days”</text>
+    <text x="56" y="136" font-size="11" fill="#9f1239">Retrieved. Citation looks real.</text>
+    <rect x="44" y="158" width="248" height="52" rx="8" fill="#f1f5f9"/>
+    <text x="56" y="180" font-size="13" fill="#334155">Chunk B · “Enterprise SKUs: 14 days”</text>
+    <text x="56" y="198" font-size="11" fill="#64748b">Never retrieved for this question.</text>
+    <text x="360" y="68" font-size="13" font-weight="700" fill="#0f766e">Parent + child</text>
+    <rect x="360" y="80" width="300" height="150" rx="12" fill="#fff" stroke="#99f6e4"/>
+    <rect x="376" y="96" width="268" height="70" rx="8" fill="#ccfbf1"/>
+    <text x="388" y="122" font-size="13" fill="#134e4a">Parent · refund-window</text>
+    <text x="388" y="142" font-size="12" fill="#115e59">“Refunds: 30 days” + pointer to children</text>
+    <rect x="392" y="176" width="236" height="38" rx="8" fill="#ecfdf5" stroke="#0f766e"/>
+    <text x="404" y="200" font-size="12" fill="#115e59">Child · enterprise exception · 14 days</text>
+    <text x="700" y="68" font-size="13" font-weight="700" fill="#4338ca">What gets re-embedded</text>
+    <rect x="700" y="80" width="252" height="150" rx="12" fill="#fff" stroke="#c7d2fe"/>
+    <text x="716" y="112" font-size="13" fill="#312e81">content hash unchanged</text>
+    <text x="716" y="132" font-size="12" fill="#64748b">skip the embedding call</text>
+    <text x="716" y="164" font-size="13" fill="#312e81">content hash changed</text>
+    <text x="716" y="184" font-size="12" fill="#64748b">re-embed this doc only</text>
+    <text x="716" y="210" font-size="12" fill="#64748b">keep the previous hash to roll back</text>
+  </g>
+  <text x="28" y="268" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="700" fill="#0f172a">Two clauses can both cite cleanly and still disagree</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="13">
+    <rect x="28" y="286" width="250" height="64" rx="12" fill="#e0e7ff"/>
+    <text x="153" y="314" text-anchor="middle" fill="#312e81">Clause v3 · 30 days</text>
+    <text x="153" y="334" text-anchor="middle" font-size="11" fill="#4338ca">superseded_by → v4</text>
+    <rect x="330" y="286" width="250" height="64" rx="12" fill="#fef3c7"/>
+    <text x="455" y="314" text-anchor="middle" fill="#78350f">Clause v4 · 14 days for this SKU</text>
+    <text x="455" y="334" text-anchor="middle" font-size="11" fill="#92400e">human-reviewed edge</text>
+    <rect x="632" y="286" width="320" height="64" rx="12" fill="#ffe4e6"/>
+    <text x="792" y="314" text-anchor="middle" fill="#9f1239">Answer cites v3 anyway</text>
+    <text x="792" y="334" text-anchor="middle" font-size="11" fill="#be123c">faithfulness can pass and still be stale</text>
+  </g>
+  <text x="28" y="392" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#475569">Score the repair with Hit@k on the enterprise question and a faithfulness check that the cited clause is the one still in force.</text>
+</svg>

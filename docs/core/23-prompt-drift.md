@@ -141,7 +141,7 @@ Hash detects **unreviewed** change. Eval detects **reviewed but harmful** change
 
 <details data-think-id="23-t1"><summary>Reveal a strong answer</summary>
 
-Upstream of the bundle: retrieved corpus, MCP server version, tool implementation, tokenizer, provider silent model swap behind the same API id, or the eval set itself. Pin those too (corpus content hash, `MCPServerSpec.version`, tool image digest). Module 08’s `assert_version` and Module 13’s model pin are the same pattern. If the provider won’t pin, treat the model id as unreliable and watch evals harder.
+Upstream of the bundle: retrieved corpus, MCP server version, tool implementation, tokenizer, provider silent model swap behind the same API id, or the eval set itself. Pin those too (corpus content hash, `MCPServerSpec.version`, tool image digest). Module 08’s `assert_version` and Module 13’s model pin are the same pattern. If the provider won’t pin, treat the model id as unreliable and watch evals harder. When the score drop is a real miss rather than a bad pin, the [eval flywheel](eval-flywheel.md) is how that `request_id` becomes a quarantined row instead of a Slack thread.
 
 </details>
 </div>

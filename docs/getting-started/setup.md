@@ -26,6 +26,8 @@ Treat setup as the first operational checkpoint: get one clean test run before c
 
 Fit weights + KV cache + OS headroom — details in [Module 17 §7](../core/17-small-models.md#7-working-effectively-on-limited-hardware). A 7B that swaps is worse than a 3B that stays resident.
 
+Cloud-API path = laptop. Learn ML’s no-GPU laptop is that row. A local 7B Q4 uses the 16 GB minimum when the weights stay resident; the comfortable column adds a GPU.
+
 **Accounts (pick what you need)**
 
 - At least one LLM provider: [OpenAI](https://platform.openai.com/), [Anthropic](https://www.anthropic.com/), [Google AI](https://ai.google.dev/), or free local via [Ollama](https://ollama.com/)

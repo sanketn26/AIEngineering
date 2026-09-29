@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 520" role="img" aria-labelledby="kTitle kDesc">
+  <title id="kTitle">Knowledge context graph</title>
+  <desc id="kDesc">Observed facts about the work select a legal shape. Illegal edges, such as a verifier that can see the worker transcript, are refused before the call.</desc>
+  <rect width="980" height="520" rx="18" fill="#f8fafc"/>
+  <text x="28" y="38" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Facts pick the shape. The runtime refuses the other edges.</text>
+  <text x="28" y="62" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#475569">The model may describe the task. It does not choose the topology.</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="13">
+    <rect x="28" y="90" width="280" height="250" rx="14" fill="#fff" stroke="#c7d2fe"/>
+    <text x="48" y="118" font-weight="700" fill="#312e81">Observed facts</text>
+    <text x="48" y="148" fill="#334155">Steps share no data</text>
+    <text x="48" y="174" fill="#334155">Many items, one schema</text>
+    <text x="48" y="200" fill="#334155">Merge would overflow</text>
+    <text x="48" y="226" fill="#334155">Risk differs by item</text>
+    <text x="48" y="252" fill="#334155">Two writers, one file</text>
+    <text x="48" y="278" fill="#334155">Size unknown until inside</text>
+    <text x="48" y="310" fill="#64748b" font-size="12">Same facts, same shape, every time.</text>
+    <rect x="500" y="90" width="450" height="250" rx="14" fill="#fff" stroke="#99f6e4"/>
+    <text x="520" y="118" font-weight="700" fill="#134e4a">Legal shape</text>
+    <text x="520" y="148" fill="#115e59">Cut the edge · fan out · join at the real dependency</text>
+    <text x="520" y="174" fill="#115e59">Map, then reduce in code</text>
+    <text x="520" y="200" fill="#115e59">Insert a summary layer</text>
+    <text x="520" y="226" fill="#115e59">Router, then two subgraphs</text>
+    <text x="520" y="252" fill="#115e59">Shard · one owner · merge gate</text>
+    <text x="520" y="278" fill="#115e59">Cycle with a seen-set and three stops</text>
+    <text x="520" y="310" fill="#64748b" font-size="12">The branch is code once the facts are known.</text>
+  </g>
+  <g stroke="#94a3b8" stroke-width="1.6" fill="none">
+    <path d="M308 148 H500"/>
+    <path d="M308 174 H500"/>
+    <path d="M308 200 H500"/>
+    <path d="M308 226 H500"/>
+    <path d="M308 252 H500"/>
+    <path d="M308 278 H500"/>
+  </g>
+  <rect x="28" y="364" width="924" height="124" rx="14" fill="#fff1f2" stroke="#fecdd3"/>
+  <text x="48" y="396" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="700" fill="#9f1239">Refused before the call</text>
+  <text x="48" y="424" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#881337">Verifier wired to the worker’s transcript · synthesizer handed the raw pile · cycle with no seen-set</text>
+  <text x="48" y="448" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#881337">Two writers on one path · fan-out when p is low · a node with no output schema</text>
+  <text x="48" y="472" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#9f1239">Plan time rejects the edge. Node start rejects the live payload.</text>
+</svg>

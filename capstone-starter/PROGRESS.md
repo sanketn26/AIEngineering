@@ -85,6 +85,8 @@ Starter holes (do not delete the comments that mark them until the gate is close
 
 ## Gate 6 (stretch) — Make the model pick, not write
 
+Stretch only. Done is Gates 1–5 above. This section is outside that checklist and off the XP track.
+
 **Entry:** Gate 2 exit. `pytest tests/test_decision.py` is green.
 
 - [ ] I chose a real-time moment and wrote its list of answers, including `other`

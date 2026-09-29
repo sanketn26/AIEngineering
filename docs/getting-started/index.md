@@ -2,7 +2,7 @@
 description: Three quick stops before Module 01, set up your environment, choose a learning pace, and see how the in-browser progress tracker works.
 ---
 
-# Getting Started
+# Start here
 
 You will learn through concrete failures and the artifacts that close them: a prompt contract, a regression gate, grounded evidence, an authorized action, and an observable service. Each module's case stands alone, so choose the pace that matches your goal and follow its **Depends on** line.
 

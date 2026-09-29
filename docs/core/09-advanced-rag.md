@@ -4,7 +4,7 @@ description: Diagnose why naive dense retrieval fails, build hybrid BM25-plus-de
 
 # Module 09 — Advanced RAG & Knowledge Systems
 
-**Time:** 7–10 days · **Depends on:** [07 Tools & RAG](07-tools-and-rag.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md) if retrieval is exposed as a server · **Next:** [MCP](08-model-context-protocol.md)
+**Time:** 7–10 days · **Depends on:** [07 Tools & RAG](07-tools-and-rag.md) · **Pairs with:** [08 MCP](08-model-context-protocol.md) if retrieval is exposed as a server · **Corpus:** [Corpus engineering](09-corpus.md) · **Next:** [MCP](08-model-context-protocol.md)
 
 <span data-module-id="09" hidden></span>
 
@@ -278,7 +278,7 @@ Benefits:
 - Better parent context (section headers survive)  
 - Cheaper fine retrieval when constrained to a doc set  
 
-Implementation tip: store `parent_id` / `doc_id` metadata on every chunk; never drop it in the vector payload.
+Implementation tip: store `parent_id` / `doc_id` metadata on every chunk; never drop it in the vector payload. The [corpus lesson](09-corpus.md) is the pipeline that produces those ids: the exception stays stapled to the rule, and a content hash decides whether the vectors are still valid.
 
 ---
 
@@ -430,7 +430,9 @@ Retrieval now finds the right docs, but generation may still fail: wrong span in
 - **PDFs:** use layout-aware parsers; keep tables as tables, not garbled line soup  
 - **Images:** caption-then-embed or vision embeddings; store modality in metadata  
 - **Code:** chunk by symbol / AST, not fixed 500-char windows  
-- Never mix incompatible embedding spaces without an explicit routing plan  
+- Never mix incompatible embedding spaces without an explicit routing plan
+
+Those four lines are the reminder. The [corpus lesson](09-corpus.md) is the worked pipeline: layout-aware parse, parent and child chunks, re-embed on content hash, and a reviewed relation when two cited clauses disagree.  
 
 ---
 
@@ -665,4 +667,4 @@ Also: [Curated resources](../reference/resources.md) → RAG & embeddings.
 
 **Return to the case:** Hybrid retrieval and reranking recover the rare identifier, and Hit@k shows whether the retrieval path improved before changing the generator. Success on this query does not guarantee coverage of the whole corpus.
 
-**Next:** [MCP](08-model-context-protocol.md)
+**Next:** [MCP](08-model-context-protocol.md). The [corpus lesson](09-corpus.md) is the parent/child and content-hash pipeline this module’s Hit@k assumes.

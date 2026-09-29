@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 300" role="img" aria-labelledby="tbTitle tbDesc">
+  <title id="tbTitle">Thinking budget on the cost router</title>
+  <desc id="tbDesc">Easy tickets stay on the cheap path. A thinking budget is spent only when a golden-set delta still fits the latency and dollar caps. Humans remain the last lane.</desc>
+  <rect width="980" height="300" rx="18" fill="#f8fafc"/>
+  <text x="28" y="40" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Spend thinking tokens only when the set says they buy a success</text>
+  <rect x="28" y="100" width="160" height="70" rx="12" fill="#0f172a"/>
+  <text x="108" y="140" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" fill="#fff">Router</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="280" y="64" width="420" height="52" rx="10" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="300" y="96" font-size="14" fill="#134e4a">Cheap path — schema check passes, no extra thinking</text>
+    <rect x="280" y="132" width="420" height="64" rx="10" fill="#e0e7ff" stroke="#4f46e5"/>
+    <text x="300" y="158" font-size="14" font-weight="700" fill="#312e81">Thinking budget — hard ticket only</text>
+    <text x="300" y="178" font-size="12" fill="#4338ca">cap tokens · cap latency · require a golden-set delta</text>
+    <rect x="280" y="212" width="420" height="52" rx="10" fill="#fef3c7" stroke="#d97706"/>
+    <text x="300" y="244" font-size="14" fill="#78350f">Human — anchor still fails after the budget</text>
+  </g>
+  <g stroke="#94a3b8" stroke-width="2" fill="none">
+    <path d="M188 130 C230 130, 240 90, 280 90"/>
+    <path d="M188 135 H280"/>
+    <path d="M188 145 C230 160, 240 238, 280 238"/>
+  </g>
+  <text x="720" y="168" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#64748b">Same cost-per-success</text>
+  <text x="720" y="188" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#64748b">table as cache and</text>
+  <text x="720" y="208" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#64748b">small-model routing.</text>
+</svg>

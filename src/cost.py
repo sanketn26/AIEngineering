@@ -74,3 +74,31 @@ class UsageLedger:
             "cost_usd": self.by_user[user_id],
             "tokens": self.tokens_by_user[user_id],
         }
+
+
+def route_thinking(
+    *,
+    schema_ok: bool,
+    samples_disagree: bool,
+    hard_task: bool,
+    golden_delta: float | None,
+    within_latency: bool,
+    within_budget: bool,
+) -> str:
+    """Cheap path, thinking budget, or human.
+
+    Thinking tokens are spent only when a positive golden-set delta still
+    fits the latency and dollar caps. An easy ticket stays on the cheap path.
+    """
+    easy = schema_ok and not samples_disagree and not hard_task
+    if easy:
+        return "cheap"
+    justified = (
+        golden_delta is not None
+        and golden_delta > 0
+        and within_latency
+        and within_budget
+    )
+    if justified:
+        return "think"
+    return "human"

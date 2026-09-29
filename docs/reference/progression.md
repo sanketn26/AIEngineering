@@ -51,3 +51,5 @@ What you should be able to build after each module. Times are rough calendar est
 | All 28 | Ready for one of three capstones: the [triage service](../core/capstone.md), the [command runtime](../core/capstone-command.md), or [divide, solve, and join](../core/capstone-decompose.md) |
 
 Use this table in `PROGRESS.md` to mark completion honestly (demo > notes).
+
+Child lessons sit inside the modules above and do not add a module or an exercise number. The [answer contract](../core/07-answer-contract.md) is part of Module 07. [Corpus engineering](../core/09-corpus.md) is part of Module 09. The [orchestration graph](../core/19-orchestration-graph.md) — diamond, speedup ceiling, and knowledge context graph — is part of Module 19. The [eval flywheel](../core/eval-flywheel.md) is the Gate 5 loop that feeds the golden set. Module 10’s router includes a thinking-budget row.

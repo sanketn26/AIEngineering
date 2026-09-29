@@ -4,7 +4,7 @@ description: Apply Map-Reduce, Router, Planner, and ReAct orchestration patterns
 
 # Module 19 — Orchestration Patterns
 
-**Time:** 6–9 days · **Depends on:** [18 Agent design patterns](18-agent-design-patterns.md) · **Pairs with:** [12 Multi-agent systems](12-multi-agents.md) · **Next:** [Agent reliability](20-agent-reliability.md)
+**Time:** 6–9 days · **Depends on:** [18 Agent design patterns](18-agent-design-patterns.md) · **Pairs with:** [12 Multi-agent systems](12-multi-agents.md) · **Graph:** [Orchestration graph](19-orchestration-graph.md) · **Next:** [Agent reliability](20-agent-reliability.md)
 
 <span data-module-id="19" hidden></span>
 
@@ -585,6 +585,6 @@ Pick **three** of the six patterns and apply them to one workflow (do not build 
 - **Prove:** Three orchestration shapes on *one* workflow, with the combo rule from the lab.
 - **Test:** `pytest tests/test_orchestrators.py -v`
 
-**Return to the case:** Map-Reduce, planning, routing, and bounded loops give the contract audit an explicit execution shape and reproducible trail. The workflow still needs failure detectors, budgets, and evaluation.
+**Return to the case:** Map-Reduce, planning, routing, and bounded loops give the contract audit an explicit execution shape and reproducible trail. The workflow still needs failure detectors, budgets, and evaluation. The [graph lesson](19-orchestration-graph.md) draws the diamond, the speedup ceiling, and the knowledge context graph that refuses an illegal edge before the call.
 
 **Next:** [Agent reliability](20-agent-reliability.md)

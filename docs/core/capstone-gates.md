@@ -8,7 +8,7 @@ The [core overview](index.md) explains *why* the five gates exist. This page is 
 
 Work them in order. Each gate has an entry condition so you do not skip a residual failure (a hanging model call, an unevaluated heuristic, an empty index, an ungated write, an unmeasured bill).
 
-The build spec — six parts, definition of done, what "done" is not — stays on [Capstone](capstone.md). Your ticks live in [`capstone-starter/PROGRESS.md`](https://github.com/sanketn26/AIEngineering/blob/main/capstone-starter/PROGRESS.md).
+The build spec — six parts, definition of done, what "done" is not — stays on [Capstone](capstone.md). Done is Gates 1–5. Gate 6 on this page is a stretch and stays outside that definition. The command-runtime capstone uses the same five gates. Your ticks live in [`capstone-starter/PROGRESS.md`](https://github.com/sanketn26/AIEngineering/blob/main/capstone-starter/PROGRESS.md).
 
 ```mermaid
 flowchart LR
@@ -148,6 +148,8 @@ Modules: [10](10-cost-optimization.md), [13](13-production.md), [17](17-small-mo
 **Optional real-model extension:** when replacing the mock, attach an [inference benchmark report](28-inference-serving.md#6-lab-earn-the-optimization) from Module 28 to the Gate 5 ops note. Compare representative prompt/output lengths and bounded load; report quality, latency, errors, and cost per successful request. Mock timings establish application behavior, not GPU or provider performance. This extension does not change the starter's required gates.
 
 ## Gate 6 (stretch) — Make the model pick, not write
+
+Stretch only. Done is Gates 1–5. This section is outside that checklist, and it awards no XP.
 
 Optional. Modules: [03](03-advanced-prompting.md), [04](04-testing-evals.md), [06](06-fine-tuning.md), [17](17-small-models.md). Code and applications: [`capstone-starter/decision/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter/decision).
 

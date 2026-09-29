@@ -404,6 +404,8 @@ poetry run pytest tests/test_security.py tests/test_prompts.py tests/test_evals.
 - Drift alarms (parse rate drop, tool error spike)  
 - Human review queue for low-confidence paths  
 
+Those three lines are the door. The [eval flywheel](eval-flywheel.md) is how a sampled trace becomes the next held-out row: redact it, freeze the corpus hash and the tool fixtures, and keep it out of this week’s score. The [answer contract](07-answer-contract.md) is the decision those rows should grade.  
+
 Do not block every commit on a $40 eval bill unless the team agreed to that budget.
 
 ### 8. End-to-end sketch tying modules together

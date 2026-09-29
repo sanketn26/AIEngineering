@@ -334,6 +334,6 @@ poetry run pytest tests/test_agent_evals.py tests/test_reliability.py -v
 - **Prove:** Looping-success scores worse than clean success; `regression_delta` can fail CI.
 - **Test:** `pytest tests/test_agent_evals.py -v`
 
-**Return to the case:** Trajectory scoring exposes the extra calls, hallucinated tools, latency, and spend that final-answer accuracy hid. Composite scores aid promotion decisions but must keep their component metrics visible.
+**Return to the case:** Trajectory scoring exposes the extra calls, hallucinated tools, latency, and spend that final-answer accuracy hid. Composite scores aid promotion decisions but must keep their component metrics visible. A live miss becomes the next suite through the [eval flywheel](eval-flywheel.md), not by pasting one trace into the prompt.
 
 **Next:** [Prompt & config drift](23-prompt-drift.md)

@@ -4,7 +4,7 @@ description: Overview of the 28-module core curriculum, organized into five prod
 
 # Core Modules
 
-Twenty-eight modules, five **gates**. Each gate is a working-system exit criterion: you don't advance because you finished reading, you advance because the previous gate's residual failure mode forced the next capability. Complete [Setup](../getting-started/setup.md) first. Numbering is the catalog order, not a strict chain: a module's **Depends on** line is the real prerequisite — gates group modules by *which production failure they close*, not by topic family, so a module you'd expect to sit elsewhere (cost optimization, MCP) may be grouped by the failure it actually prevents rather than the technology it uses.
+Twenty-eight modules, five **gates**. Sidebar numbers are stable IDs, not reading order. Each gate is a working-system exit criterion: you don't advance because you finished reading, you advance because the previous gate's residual failure mode forced the next capability. Complete [Setup](../getting-started/setup.md) first. A module's **Depends on** line is the real prerequisite — gates group modules by *which production failure they close*, not by topic family, so a module you'd expect to sit elsewhere (cost optimization, MCP) may be grouped by the failure it actually prevents rather than the technology it uses.
 
 ```mermaid
 flowchart LR
@@ -20,7 +20,7 @@ flowchart LR
 
 One thread ties the five gates together: a fictional support-ticket triage service. Each gate begins with a failure the current system cannot handle, adds an engineering capability, and leaves a narrower limitation that motivates later work. The incidents are teaching scenarios, not vendor postmortems.
 
-Modules remain self-contained because this curriculum supports several reading paths. Each case states the system state it needs; callbacks add continuity but never require you to remember characters or read every earlier module. Follow **Depends on** for prerequisites—the module number is catalog order, not a compulsory episode order.
+Modules remain self-contained because this curriculum supports several reading paths. Each case states the system state it needs; callbacks add continuity but never require you to remember characters or read every earlier module. Follow **Depends on** for prerequisites. Sidebar numbers are stable IDs, not reading order.
 
 | Gate | Problem entering the gate | Capability at exit | Residual limitation |
 |---|---|---|---|
@@ -89,6 +89,8 @@ A well-tested model that only knows its training data is still wrong about anyth
 | [07 — Tools & basic RAG](07-tools-and-rag.md) | 5–7 days |
 | [09 — Advanced RAG](09-advanced-rag.md) | 7–10 days |
 
+The [answer contract](07-answer-contract.md) is part of Module 07: one ticket leaves through answer, clarify, abstain, or escalate, including when the policy chunk and the billing tool disagree. [Corpus engineering](09-corpus.md) is part of Module 09: parent and child chunks, content hashes, and clauses that cite cleanly and still disagree. Neither page adds a module.
+
 ---
 
 ## Gate 4 — Actions and Agents
@@ -115,6 +117,8 @@ Grounded answers are not the same as safe actions. Once the system can call tool
 | [21 — Secure tool use & sandboxing](21-secure-tool-use.md) | 5–7 days |
 | [27 — Harness engineering](27-harness-engineering.md) | 4–6 days |
 
+The [graph lesson](19-orchestration-graph.md) sits on Module 19: the diamond, the speedup ceiling, and the knowledge context graph that refuses an illegal edge before the call. It does not add a module. Module 10’s router also carries a [thinking-budget](10-cost-optimization.md#budgeted-test-time-compute) row: extra thinking tokens are spent only when a golden-set delta still fits the latency and dollar caps.
+
 ---
 
 ## Gate 5 — Operate It
@@ -131,7 +135,7 @@ Everything above works on a laptop with one user. Production means real traffic,
 
 | Module | Time |
 |---|---|
-| [13 — Production-grade systems](13-production.md) | 2–3 weeks (alongside a real project) |
+| [13 — Production-grade systems](13-production.md) | 2–3 weeks alongside a project. Weekend path: `GET /healthz` plus one trace that carries a `request_id` |
 | [16 — Integration patterns](16-integration-patterns.md) | 1–2 weeks |
 | [14 — Compliance](14-compliance.md) | 3–5 days |
 | [15 — Domain-specific applications](15-domain-apps.md) | 1–2 weeks |
@@ -142,6 +146,8 @@ Everything above works on a laptop with one user. Production means real traffic,
 | [24 — Local-first, cost-aware agents](24-local-first-agents.md) | 4–6 days |
 | [25 — Durable orchestration](25-durable-orchestration.md) | 7–10 days |
 | [26 — Orchestrators in production](26-orchestrator-comparison.md) | 5–7 days |
+
+The [eval flywheel](eval-flywheel.md) is the Gate 5 loop that turns a `request_id` into a redacted, frozen, quarantined golden row. It is not a 29th module.
 
 ---
 

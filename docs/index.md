@@ -14,7 +14,7 @@ hide:
       <a class="course-button course-button--secondary" href="getting-started/paths/">Explore learning paths</a>
       <a class="course-button course-button--coffee" href="https://buymeacoffee.com/sanketn">☕ Support this course</a>
     </div>
-    <p class="course-hero__note">28 core modules · Interactive labs and quizzes · Learn at your own pace</p>
+    <p class="course-hero__note">28 modules · 27 exercises · Learn at your own pace</p>
   </div>
   <div class="course-terminal" aria-label="Course outcomes">
     <div class="course-terminal__bar"><i></i><i></i><i></i><span>ai-engineering / roadmap</span></div>
@@ -31,7 +31,7 @@ hide:
 <p class="course-story-promise">Follow concrete engineering failures from a soft prompt contract to an evaluated, authorized, observable service. Each core module opens with an incident, asks you to make the decision that closes it, and returns to the evidence that would prove the fix. Cases stand alone, so shorter learning paths and search arrivals still work.</p>
 
 <div class="course-proof" aria-label="Course overview">
-  <div><strong>28</strong><span>Core modules</span></div>
+  <div><strong>28</strong><span>Modules · 27 exercises</span></div>
   <div><strong>3</strong><span>Specialization tracks</span></div>
   <div><strong>3</strong><span>Capstones</span></div>
   <div><strong>100%</strong><span>Open source</span></div>

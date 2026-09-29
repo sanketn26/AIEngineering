@@ -4,7 +4,7 @@ description: Serve LLMs behind stable APIs with timeouts, retries, and fallbacks
 
 # Module 13 — Production-Grade Systems
 
-**Time:** 2–3 weeks (alongside a real project) · **Depends on:** [04 Testing & evals](04-testing-evals.md), [07 Tools & RAG](07-tools-and-rag.md), [10 Cost](10-cost-optimization.md) · **Next:** [Integration patterns](16-integration-patterns.md)
+**Time:** 2–3 weeks alongside a real project · **Weekend slice:** `GET /healthz` plus one trace that carries a `request_id` · **Depends on:** [04 Testing & evals](04-testing-evals.md), [07 Tools & RAG](07-tools-and-rag.md), [10 Cost](10-cost-optimization.md) · **Next:** [Integration patterns](16-integration-patterns.md)
 
 <span data-module-id="13" hidden></span>
 
@@ -508,6 +508,6 @@ A human clicks Approve twice after a restart. How many refunds appear? The [comp
 - **Prove:** `/healthz` plus a generate/triage path with a deadline and a mapped fallback. Prefer growing [`capstone-starter/`](https://github.com/sanketn26/AIEngineering/tree/main/capstone-starter) over a greenfield app.
 - **Test:** `cd capstone-starter && pytest tests/test_api.py -v`
 
-**Return to the case:** Deadlines, request IDs, version pins, and service-level telemetry make the hung request diagnosable and recoverable. Observability reveals failure; it does not eliminate provider outages.
+**Return to the case:** Deadlines, request IDs, version pins, and service-level telemetry make the hung request diagnosable and recoverable. Observability reveals failure; it does not eliminate provider outages. The [eval flywheel](eval-flywheel.md) is what you do with a `request_id` after the incident: redact it, freeze the snapshot, and quarantine the row.
 
 **Next:** [Integration patterns](16-integration-patterns.md)

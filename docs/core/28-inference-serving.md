@@ -4,7 +4,7 @@ description: Diagnose LLM serving bottlenecks with prefill and decode metrics, K
 
 # Module 28 — Inference Serving
 
-**Time:** 2–4 days · **Depends on:** [10 Cost](10-cost-optimization.md), [13 Production](13-production.md), [17 Small models](17-small-models.md) · **Next:** [Evaluating agents](22-agent-evaluation.md)
+**Time:** 2–4 days · **Depends on:** [10 Cost](10-cost-optimization.md), [13 Production](13-production.md), [17 Small models](17-small-models.md) · **Next:** [Triage capstone](capstone.md) · or [Evaluating agents](22-agent-evaluation.md) when you still owe modules 22–26
 
 <span data-module-id="28" hidden></span>
 
@@ -223,4 +223,4 @@ The follow-on topics of prefill/decode, prefix caching, and chunked prefill are 
 <button type="button">Complete module · +120 XP</button>
 </div>
 
-**Next:** [Evaluating agents](22-agent-evaluation.md)
+**Next:** [Triage capstone](capstone.md) — the production branch exits here · or continue at [Evaluating agents](22-agent-evaluation.md) when you still owe modules 22–26

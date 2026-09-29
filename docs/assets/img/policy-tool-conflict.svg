@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 280" role="img" aria-labelledby="ptTitle ptDesc">
+  <title id="ptTitle">Policy and tool disagree</title>
+  <desc id="ptDesc">The policy chunk and the billing tool both succeed and disagree. The contract abstains or escalates instead of citing the 30-day clause.</desc>
+  <rect width="980" height="280" rx="18" fill="#f8fafc"/>
+  <text x="28" y="40" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Both calls succeeded. They disagree.</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="28" y="70" width="250" height="110" rx="12" fill="#e0e7ff" stroke="#4f46e5"/>
+    <text x="153" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#312e81">Policy chunk</text>
+    <text x="153" y="132" text-anchor="middle" font-size="18" font-weight="700" fill="#312e81">30 days</text>
+    <text x="153" y="156" text-anchor="middle" font-size="12" fill="#4338ca">citation resolves</text>
+    <rect x="360" y="70" width="250" height="110" rx="12" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="485" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#134e4a">Billing tool</text>
+    <text x="485" y="132" text-anchor="middle" font-size="18" font-weight="700" fill="#134e4a">SKU · 14 days</text>
+    <text x="485" y="156" text-anchor="middle" font-size="12" fill="#0f766e">live entitlement</text>
+    <rect x="690" y="70" width="262" height="110" rx="12" fill="#fef3c7" stroke="#d97706"/>
+    <text x="821" y="108" text-anchor="middle" font-size="13" font-weight="700" fill="#78350f">Decision</text>
+    <text x="821" y="132" text-anchor="middle" font-size="16" font-weight="700" fill="#78350f">Abstain or escalate</text>
+    <text x="821" y="156" text-anchor="middle" font-size="12" fill="#92400e">do not cite 30 days</text>
+  </g>
+  <g stroke="#94a3b8" stroke-width="2" fill="none">
+    <path d="M278 125 H360"/>
+    <path d="M610 125 H690"/>
+  </g>
+  <text x="28" y="230" font-family="Inter, system-ui, sans-serif" font-size="14" fill="#475569">A false answer cites the wiki. A false escalation hands a human a ticket the tool already settled.</text>
+  <text x="28" y="254" font-family="Inter, system-ui, sans-serif" font-size="14" fill="#475569">The golden set needs both slices.</text>
+</svg>

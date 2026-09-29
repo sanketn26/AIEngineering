@@ -17,18 +17,21 @@ The opening cases are self-contained. A shorter path does not require story cont
 | Day | Focus | Modules |
 |-----|-------|---------|
 | 1 | Prompts + safety basics | 01, 02 (skim) |
-| 2 | Tools or basic RAG | 07 |
-| 3 | Minimal eval + ship | 04 (unit smoke), 13 (`capstone-starter/` `/healthz` + `/v1/triage`) |
+| 2 | Tools or basic RAG | 07 (weekend slice) |
+| 3 | Minimal eval + one trace | 04 (unit smoke), 13 (weekend slice) |
 
 **Skip for now:** Fine-tuning, multi-agent, compliance deep-dives.
 
-You will not have Module 05 (context packing) yet. Cap pasted documents by hand — do not dump whole PDFs into the prompt. Treat that cap as a stand-in for the packer you will build later.
+**Path overrides.** These slices are smaller than the module time boxes and dependency lines.
+
+- **Module 07.** The full module depends on 01–05. This weekend slice depends on Module 01 and a skim of 02. Cap pasted documents by hand. Finish 03–05 before Advanced RAG.
+- **Module 13.** The full module is 2–3 weeks alongside a project. This weekend slice is `GET /healthz` plus one trace that carries a `request_id`.
 
 ---
 
 ## Professional Developer (8–12 weeks)
 
-**Goal:** Production-minded app with tests, caching, and observability. Times below assume ~1 focused hour most weekdays, matching the module time boxes — not a two-week cram.
+**Goal:** Production-minded app with tests, caching, and observability. Times below assume ~1 focused hour most weekdays, matching the module time boxes. Module 13’s 2–3 weeks sits inside Ship and inside this 8–12 week total, worked alongside the app. Modules 17 (5–7 days) and 28 (2–4 days) are additional Ship time. The Production agents row sits outside the 8–12 weeks. Module 11 is optional inside Ship. The weekend slice of Module 13 is `GET /healthz` plus one trace that carries a `request_id`.
 
 | Phase | Modules |
 |-------|---------|

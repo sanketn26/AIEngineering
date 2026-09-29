@@ -4,7 +4,7 @@ description: Build a safe function-calling loop with allowlists and a minimal re
 
 # Module 07 — Tool Integration & Basic RAG
 
-**Time:** 5–7 days · **Depends on:** [01](01-prompt-engineering.md)–[05](05-context-engineering.md) · **Next:** [Advanced RAG](09-advanced-rag.md)
+**Time:** 5–7 days · **Depends on:** [01](01-prompt-engineering.md)–[05](05-context-engineering.md) · **Weekend slice:** [01](01-prompt-engineering.md) and a skim of [02](02-security-privacy.md); cap pasted documents by hand · **Contract:** [Answer contract](07-answer-contract.md) · **Next:** [Advanced RAG](09-advanced-rag.md)
 
 <span data-module-id="07" hidden></span>
 
@@ -290,6 +290,8 @@ def route_knowledge(query: str) -> str:
 
 Real systems use classifiers or the model itself with constrained tool choice — still keep **hard allowlists** underneath.
 
+The sketch sends “policy” one way and “status” another. A refund question is both. The [answer contract](07-answer-contract.md) is the decision object for that collision: answer, clarify, abstain, or escalate, with a golden row for the false answer and a golden row for the false escalation.
+
 ### 7. Packing tools + RAG into the window
 
 From Module 05: tools and retrieved chunks are **high-signal but capped**.
@@ -420,4 +422,4 @@ If the need is **calling** the API (actions, live reads), use **tools**, not doc
 
 **Return to the case:** Retrieval supplies evidence and typed tools expose live state or actions; neither grants the model authority. Citation checks, allowlists, validation, and approval remain runtime responsibilities.
 
-**Next:** [Advanced RAG](09-advanced-rag.md) — retrieval you can measure, not just wire up.
+**Next:** [Advanced RAG](09-advanced-rag.md) — retrieval you can measure, not just wire up. The [answer contract](07-answer-contract.md) is the decision this module’s router has to emit when the wiki and the tool disagree.

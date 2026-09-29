@@ -1,15 +1,15 @@
 ---
-description: Lookup reference for the course — capability progression, exercise catalog, assessment rubrics, troubleshooting, and curated resources.
+description: Lookup reference for the course — capability progression, assessment rubrics, troubleshooting, and curated resources. The exercise catalog lives under Practice.
 ---
 
 # Reference
 
-Lookup material for while you're working through the curriculum — not meant to be read front to back.
+Lookup material for while you're working through the curriculum. The exercise catalog and the capstones live under Practice. This section is the lookup set: progression, rubrics, troubleshooting, and further reading.
 
 | Page | What it's for |
 |---|---|
 | [Progression](progression.md) | Skill-by-skill map of what you can build after each module |
-| [Exercises](exercises.md) | The runnable `src/` package that pairs with each core module |
+| [Exercises](exercises.md) | EX-01–EX-27. Module 28 has experiments and no exercise number. Practice holds this catalog. |
 | [Assessment rubrics](assessment.md) | How to score module exercises and day-90 track demos honestly |
 | [Troubleshooting](troubleshooting.md) | Symptom → cause → inspect → what not to change yet (structured output through eval drift) |
 | [Resources](resources.md) | Curated primary docs and high-signal external material |

@@ -24,7 +24,7 @@ The published course is available at **[sanketn26.github.io/AIEngineering](https
 
 | Before | After |
 |--------|--------|
-| 11k-line scrambled LLM guide | 27 ordered core modules |
+| 11k-line scrambled LLM guide | 28 core modules · 27 exercises |
 | Three disconnected 90-day plans | Tracks linked to shared core |
 | “MCP” misused (load balancer / compression) | Correct Model Context Protocol + clear compression naming |
 | gpt-3.5-centric examples | Provider-agnostic, 2026-oriented stack |
@@ -44,7 +44,7 @@ pip install -r requirements-docs.txt
 mkdocs serve
 ```
 
-Open the printed local URL. Navigation: Home → Getting started → Core modules → Tracks.
+Open the printed local URL. Navigation: Home → Start here → Learn → Practice → Reference.
 
 ---
 
