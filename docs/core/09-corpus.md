@@ -25,6 +25,7 @@ The refund policy is one PDF page. The first paragraph says 30 days. The second 
 ## Learning objectives
 
 - Keep an exception attached to the rule it modifies
+- Add a parent prefix to a child chunk when the labeled miss is in the vector
 - Re-embed a document only when its content hash changes, and keep the previous hash for rollback
 - Treat two cited clauses that disagree as a corpus defect, not as a generator failure
 - Measure the repair with the same Hit@k and faithfulness split as Module 09
@@ -115,6 +116,18 @@ An enterprise question whose gold id is the child, and whose packed context is m
 
 ---
 
+## Context on the stored chunk
+
+Packing the parent changes what the generator sees. It does not change the vector. A child whose text is only “The company introduced it in 2024” will not sit near a query for “hybrid work policy,” because those words were never embedded.
+
+![A short chunk stored again with the policy name filled in](../assets/img/rag-contextual.svg){ .course-figure }
+
+<p class="course-caption">The original chunk is legal and useless as a vector. The stored text keeps the same fact and adds the words a search would use. Write that prefix from the parent. Do it when a labeled query hits the parent and misses the child.</p>
+
+The default in this lesson stays `pack_with_parents`: the child is retrieved, and the parent rides along inside the token budget. Add the stored prefix when the labeled miss is in the vector, which Hit@k will show and a packing change will not move.
+
+---
+
 ## When two citations disagree
 
 A later page can supersede an earlier one and both can still sit in the index. Faithfulness to the chunk you retrieved will pass. The customer still gets the old window.
@@ -193,6 +206,7 @@ Add one unanswerable question whose gold is abstain, so a corpus with no support
 ## Checkpoint
 
 - [ ] Every exception chunk has a `parent_id`, and packing can see the parent
+- [ ] A stored context prefix is a response to a Hit@k miss, and the parent is still packed with the child
 - [ ] Re-embed is gated on a content hash, with the previous hash kept
 - [ ] A superseded clause is a reviewed relation, not a hope that the model compares dates
 - [ ] The enterprise question and the stale-clause question are in the labeled set

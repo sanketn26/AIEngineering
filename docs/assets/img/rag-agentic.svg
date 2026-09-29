@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 250" role="img" aria-labelledby="agTitle agDesc">
+  <title id="agTitle">Agentic RAG</title>
+  <desc id="agDesc">The model chooses a search, a database read, or an API call. It can search again, and a step limit ends the loop.</desc>
+  <rect width="980" height="250" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">The model chooses the next lookup</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="14">
+    <rect x="28" y="100" width="170" height="56" rx="12" fill="#fff" stroke="#e2e8f0"/>
+    <text x="113" y="133" text-anchor="middle" font-weight="700" fill="#0f172a">User question</text>
+    <rect x="250" y="92" width="180" height="72" rx="12" fill="#e0e7ff" stroke="#c7d2fe"/>
+    <text x="340" y="124" text-anchor="middle" font-weight="700" fill="#312e81">Agent</text>
+    <text x="340" y="144" text-anchor="middle" font-size="12" fill="#4338ca">step budget</text>
+    <rect x="520" y="56" width="160" height="44" rx="10" fill="#fef3c7"/>
+    <text x="600" y="84" text-anchor="middle" fill="#78350f">Search</text>
+    <rect x="520" y="112" width="160" height="44" rx="10" fill="#ccfbf1"/>
+    <text x="600" y="140" text-anchor="middle" fill="#134e4a">Database</text>
+    <rect x="520" y="168" width="160" height="44" rx="10" fill="#ffe4e6"/>
+    <text x="600" y="196" text-anchor="middle" fill="#9f1239">API</text>
+    <rect x="740" y="100" width="212" height="56" rx="12" fill="#ecfdf5" stroke="#0f766e"/>
+    <text x="846" y="133" text-anchor="middle" font-weight="700" fill="#115e59">Final answer</text>
+    <path d="M198 128 H242" stroke="#94a3b8" stroke-width="2" marker-end="url(#agArrow)"/>
+    <path d="M430 110 C470 110 490 78 512 78" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#agArrow)"/>
+    <path d="M430 128 H512" stroke="#94a3b8" stroke-width="2" marker-end="url(#agArrow)"/>
+    <path d="M430 150 C470 150 490 190 512 190" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#agArrow)"/>
+    <path d="M680 134 H732" stroke="#94a3b8" stroke-width="2" marker-end="url(#agArrow)"/>
+    <text x="250" y="196" font-size="12" fill="#64748b">Search again while steps remain</text>
+  </g>
+  <defs>
+    <marker id="agArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

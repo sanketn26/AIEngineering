@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 250" role="img" aria-labelledby="mqTitle mqDesc">
+  <title id="mqTitle">Multi-query retrieval</title>
+  <desc id="mqDesc">One question becomes several searches. Their hits are deduplicated before the model sees them.</desc>
+  <rect width="980" height="250" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Several searches, then one deduped set</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="14">
+    <rect x="28" y="60" width="180" height="36" rx="8" fill="#e0e7ff"/>
+    <text x="118" y="84" text-anchor="middle" fill="#312e81">Query 1</text>
+    <rect x="28" y="106" width="180" height="36" rx="8" fill="#e0e7ff"/>
+    <text x="118" y="130" text-anchor="middle" fill="#312e81">Query 2</text>
+    <rect x="28" y="152" width="180" height="36" rx="8" fill="#e0e7ff"/>
+    <text x="118" y="176" text-anchor="middle" fill="#312e81">Query 3</text>
+    <rect x="28" y="198" width="180" height="36" rx="8" fill="#e0e7ff"/>
+    <text x="118" y="222" text-anchor="middle" fill="#312e81">Query 4</text>
+    <rect x="320" y="108" width="200" height="64" rx="12" fill="#fff" stroke="#c7d2fe"/>
+    <text x="420" y="146" text-anchor="middle" font-weight="700" fill="#312e81">Retrieval</text>
+    <rect x="580" y="108" width="180" height="64" rx="12" fill="#ffe4e6" stroke="#fecdd3"/>
+    <text x="670" y="146" text-anchor="middle" font-weight="700" fill="#9f1239">Dedupe</text>
+    <rect x="810" y="108" width="142" height="64" rx="12" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="881" y="146" text-anchor="middle" font-weight="700" fill="#115e59">LLM</text>
+    <path d="M208 78 C270 78 290 118 318 118" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#mqArrow)"/>
+    <path d="M208 124 H318" stroke="#94a3b8" stroke-width="2" marker-end="url(#mqArrow)"/>
+    <path d="M208 170 H318" stroke="#94a3b8" stroke-width="2" marker-end="url(#mqArrow)"/>
+    <path d="M208 216 C270 216 290 162 318 162" fill="none" stroke="#94a3b8" stroke-width="2" marker-end="url(#mqArrow)"/>
+    <path d="M520 140 H572" stroke="#94a3b8" stroke-width="2" marker-end="url(#mqArrow)"/>
+    <path d="M760 140 H802" stroke="#94a3b8" stroke-width="2" marker-end="url(#mqArrow)"/>
+  </g>
+  <defs>
+    <marker id="mqArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

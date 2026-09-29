@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 240" role="img" aria-labelledby="cragTitle cragDesc">
+  <title id="cragTitle">Corrective RAG</title>
+  <desc id="cragDesc">After retrieval, a judge either sends the shortlist to the model or sends the question back to be rewritten. An empty second pass abstains.</desc>
+  <rect width="980" height="240" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Judge the shortlist before you generate</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="14">
+    <rect x="28" y="88" width="160" height="56" rx="12" fill="#e0e7ff"/>
+    <text x="108" y="122" text-anchor="middle" font-weight="700" fill="#312e81">Retrieve</text>
+    <polygon points="360,70 470,118 360,166 250,118" fill="#fef3c7" stroke="#fde68a"/>
+    <text x="360" y="114" text-anchor="middle" font-weight="700" fill="#78350f">Good</text>
+    <text x="360" y="132" text-anchor="middle" font-size="12" fill="#92400e">shortlist?</text>
+    <rect x="560" y="56" width="220" height="56" rx="12" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="670" y="90" text-anchor="middle" font-weight="700" fill="#115e59">Yes · LLM</text>
+    <rect x="560" y="140" width="392" height="64" rx="12" fill="#ffe4e6" stroke="#fecdd3"/>
+    <text x="756" y="168" text-anchor="middle" font-weight="700" fill="#9f1239">No · rewrite or expand</text>
+    <text x="756" y="188" text-anchor="middle" font-size="12" fill="#be123c">then retrieve again, inside the step cap</text>
+    <path d="M188 116 H242" stroke="#94a3b8" stroke-width="2" marker-end="url(#cragArrow)"/>
+    <path d="M470 100 H552" stroke="#94a3b8" stroke-width="2" marker-end="url(#cragArrow)"/>
+    <path d="M470 140 H552" stroke="#94a3b8" stroke-width="2" marker-end="url(#cragArrow)"/>
+  </g>
+  <defs>
+    <marker id="cragArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

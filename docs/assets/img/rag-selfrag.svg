@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 280" role="img" aria-labelledby="srTitle srDesc">
+  <title id="srTitle">Self-RAG checklist</title>
+  <desc id="srDesc">Five questions in order: whether to retrieve, whether the chunk is relevant, whether the evidence is enough, what to answer, and whether the draft holds up.</desc>
+  <rect width="980" height="280" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">A checklist between the question and the draft</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="15">
+    <rect x="220" y="56" width="540" height="36" rx="8" fill="#e0e7ff"/>
+    <text x="490" y="80" text-anchor="middle" fill="#312e81">Should I retrieve?</text>
+    <rect x="220" y="100" width="540" height="36" rx="8" fill="#ccfbf1"/>
+    <text x="490" y="124" text-anchor="middle" fill="#134e4a">Is this chunk relevant?</text>
+    <rect x="220" y="144" width="540" height="36" rx="8" fill="#fef3c7"/>
+    <text x="490" y="168" text-anchor="middle" fill="#78350f">Do I have enough evidence?</text>
+    <rect x="220" y="188" width="540" height="36" rx="8" fill="#fff" stroke="#e2e8f0"/>
+    <text x="490" y="212" text-anchor="middle" fill="#0f172a">Generate the answer</text>
+    <rect x="220" y="232" width="540" height="32" rx="8" fill="#ffe4e6"/>
+    <text x="490" y="254" text-anchor="middle" fill="#9f1239">Critique the draft</text>
+  </g>
+</svg>

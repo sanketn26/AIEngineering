@@ -12,6 +12,7 @@ class Chunk:
     id: str
     text: str
     source: str
+    meta: dict[str, str] | None = None
 
 
 def simple_chunks(text: str, source: str, size: int = 50) -> list[Chunk]:
@@ -44,6 +45,22 @@ def cosine(a: dict[str, float], b: dict[str, float]) -> float:
     return dot / (na * nb)
 
 
+def metadata_matches(meta: dict[str, str] | None, where: dict[str, str]) -> bool:
+    """True when every pair in where is present. A missing key does not match."""
+    fields = meta or {}
+    return all(fields.get(key) == value for key, value in where.items())
+
+
+def filter_by_metadata(chunks: list[Chunk], where: dict[str, str]) -> list[Chunk]:
+    """Keep chunks whose metadata matches every pair in where.
+
+    An empty where keeps every chunk. Callers apply this before top-k.
+    """
+    if not where:
+        return list(chunks)
+    return [chunk for chunk in chunks if metadata_matches(chunk.meta, where)]
+
+
 def rrf(rank_lists: list[list[str]], k: int = 60) -> list[str]:
     """Reciprocal Rank Fusion over ranked id lists."""
     scores: dict[str, float] = {}
@@ -59,16 +76,20 @@ class TinyRAG:
         self.vecs = [bag_of_words(c.text) for c in self.chunks]
         self._by_id = {c.id: c for c in self.chunks}
 
-    def retrieve(self, query: str, k: int = 3) -> list[Chunk]:
+    def retrieve(
+        self, query: str, k: int = 3, *, where: dict[str, str] | None = None
+    ) -> list[Chunk]:
+        """Nearest chunks inside the metadata filter. The filter runs before top-k."""
         if not self.chunks:
             return []
+        paired = list(zip(self.chunks, self.vecs))
+        if where:
+            paired = [(c, v) for c, v in paired if metadata_matches(c.meta, where)]
+        if not paired:
+            return []
         qv = bag_of_words(query)
-        scored = sorted(
-            zip(self.chunks, self.vecs),
-            key=lambda cv: cosine(qv, cv[1]),
-            reverse=True,
-        )
-        return [c for c, _ in scored[:k]]
+        paired.sort(key=lambda cv: cosine(qv, cv[1]), reverse=True)
+        return [c for c, _ in paired[:k]]
 
     def retrieve_ids(self, query: str, k: int = 3) -> list[str]:
         return [c.id for c in self.retrieve(query, k=k)]

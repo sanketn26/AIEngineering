@@ -1,5 +1,5 @@
 ---
-description: Diagnose why naive dense retrieval fails, build hybrid BM25-plus-dense search with reciprocal rank fusion and reranking, and evaluate retrieval separately.
+description: Diagnose why naive dense retrieval fails, filter candidates before top-k, build hybrid BM25-plus-dense search with reciprocal rank fusion and reranking, and evaluate retrieval separately.
 ---
 
 # Module 09 — Advanced RAG & Knowledge Systems
@@ -25,6 +25,7 @@ Ops bot answers “what does `ERR_INV_88421` mean?” with a confident essay abo
 ## Learning objectives
 
 - Diagnose **why** naive top-k dense retrieval fails on real corpora
+- Filter the candidate set with **metadata** before top-k
 - Build **hybrid** retrieval (BM25 + dense) fused with **Reciprocal Rank Fusion (RRF)**
 - Apply **cross-encoder reranking** after a cheap first-stage retrieve
 - Design **hierarchical** indices (doc → section → span) and **agentic** multi-step retrieval
@@ -87,7 +88,7 @@ flowchart LR
 | Misses keyword SKUs / IDs | Dense-only; rare tokens | Hybrid BM25 + dense |
 | Right doc, wrong span | Chunks too big or overlapping poorly | Smaller / structure-aware chunks + rerank |
 | Multi-hop fails | One-shot query | Decomposition / agentic loop |
-| Contradictory sources | No time/version filter | Metadata filters + conflict-aware prompt |
+| Contradictory sources | No time/version filter | [Metadata filter](#metadata-filtering) before rank, then a conflict-aware prompt |
 | Stale answers | Index drift | Freshness TTL, re-embed policy |
 | Fluent wrong answer | No faithfulness gate | Cite + verify against context |
 
@@ -107,6 +108,75 @@ That is a good lab baseline and a bad production default.
 A **cross-encoder** (rerank stage) reads query and passage *together*. It is slower and cannot precompute the whole corpus, which is why it only sees a shortlist.
 
 </div>
+
+---
+
+### Metadata filtering
+
+Similarity will rank a clause from the wrong tier, and it will rank a clause the reader is not allowed to see. Both failures happen before the model writes a word. Apply the filter in the retriever, then take top-k from what remains.
+
+The refund page has two chunks. “Standard refund window is 30 days.” overlaps the query “refund window.” “Enterprise SKUs: 14 days.” shares almost none of those tokens. Top-1 on the unfiltered corpus returns the 30-day sentence. Filtering `tier=enterprise` first leaves the exception as the candidate, and the 30-day sentence never enters the prompt.
+
+Metadata is a hard constraint. Department, year, document type, and access level live on the chunk. Every pair in `where` has to match. A missing key excludes the chunk. An empty `where` keeps the whole corpus, which is the right lab default and the wrong production call when audiences are mixed.
+
+![A tier filter drops the other rows before ranking](../assets/img/rag-metadata.svg){ .course-figure }
+
+<p class="course-caption">The enterprise row is the search space. The standard window and the payroll note are gone before similarity runs, so the model cannot cite them.</p>
+
+`src/rag.py` applies the filter inside `TinyRAG.retrieve` before the score sort. `pytest tests/test_rag.py -v`.
+
+```python
+def metadata_matches(meta: dict[str, str] | None, where: dict[str, str]) -> bool:
+    """True when every pair in where is present. A missing key does not match."""
+    fields = meta or {}
+    return all(fields.get(key) == value for key, value in where.items())
+
+
+def filter_by_metadata(chunks: list[Chunk], where: dict[str, str]) -> list[Chunk]:
+    """Keep chunks whose metadata matches every pair in where.
+
+    An empty where keeps every chunk. Callers apply this before top-k.
+    """
+    if not where:
+        return list(chunks)
+    return [chunk for chunk in chunks if metadata_matches(chunk.meta, where)]
+```
+
+```python
+from src.rag import Chunk, TinyRAG
+
+chunks = [
+    Chunk(
+        "refund-window",
+        "Standard refund window is 30 days.",
+        "policy",
+        {"tier": "standard", "department": "support"},
+    ),
+    Chunk(
+        "refund-window-enterprise",
+        "Enterprise SKUs: 14 days.",
+        "policy",
+        {"tier": "enterprise", "department": "support"},
+    ),
+    Chunk(
+        "payroll",
+        "Payroll runs on Friday.",
+        "hr",
+        {"tier": "standard", "department": "hr"},
+    ),
+]
+rag = TinyRAG(chunks)
+assert rag.retrieve("refund window", k=1)[0].id == "refund-window"
+hits = rag.retrieve(
+    "refund window",
+    k=1,
+    where={"tier": "enterprise", "department": "support"},
+)
+assert [c.id for c in hits] == ["refund-window-enterprise"]
+assert rag.retrieve("refund window", k=3, where={"department": "legal"}) == []
+```
+
+A support agent’s `where` includes `department=support`. The payroll chunk never reaches `build_prompt`. The same rule as the tool allowlist in Module 07: the runtime decides what is visible. Values are strings, so store the year as `"2024"`. Live tier for *this* customer still comes from the billing tool. The filter uses that value. It does not ask the model to guess it.
 
 ---
 
@@ -132,6 +202,10 @@ def parse_queries(model_json: str) -> list[str]:
     return list(data.get("queries") or [])
 ```
 
+![Four queries fan into one deduped shortlist](../assets/img/rag-multiquery.svg){ .course-figure }
+
+<p class="course-caption">Each query is a separate search. Dedupe the hits before packing, or the generator spends its budget on four copies of the same paragraph.</p>
+
 Other useful rewrites:
 
 | Technique | Idea | When |
@@ -142,6 +216,10 @@ Other useful rewrites:
 | **Filter extract** | Pull `product=`, `date>` from natural language | Structured metadata exists |
 
 Always log the **rewritten** queries. Eval failures often come from bad rewrites, not bad embeddings.
+
+![A vague question rewritten into a searchable one](../assets/img/rag-rewrite.svg){ .course-figure }
+
+<p class="course-caption">The rewrite is a search string. Keep the original question in the log, and skip the rewrite when the raw query already contains an identifier you cannot afford to lose.</p>
 
 <div class="aieng-think" markdown>
 <p class="label">Think about it</p>
@@ -158,6 +236,10 @@ At least two conceptual hops: (1) 2024 refund policy text for the new window, (2
 ---
 
 ### 3. Hybrid search: dense + sparse
+
+![Vector search and keyword search merge into one shortlist](../assets/img/rag-hybrid.svg){ .course-figure }
+
+<p class="course-caption">One list chases meaning. The other chases exact tokens. Fusion uses rank position, because a cosine and a BM25 score are different units.</p>
 
 **Dense path:** embedding model → ANN index (FAISS, Qdrant, Pinecone, pgvector).  
 **Sparse path:** BM25 / Elasticsearch / OpenSearch / sparse vectors (SPLADE-style).
@@ -231,6 +313,10 @@ def rrf(rank_lists: list[list[str]], k: int = 60) -> list[str]:
 
 ### 5. Reranking (second stage)
 
+![A wide shortlist is reranked down to five passages](../assets/img/rag-rerank.svg){ .course-figure }
+
+<p class="course-caption">The first stage spends its budget on recall. The reranker reads the query and the passage together and keeps the few passages that fit the window.</p>
+
 Cross-encoders score `(query, passage)` jointly. They are **too slow** for millions of docs, so run them on a small first-stage shortlist rather than the full corpus.
 
 ```text
@@ -260,6 +346,10 @@ Bi-encoders (dense retrieval) embed query and doc **independently** so you can p
 
 ### 6. Hierarchical RAG
 
+![Small children are searched, and the parent is packed with the hit](../assets/img/rag-parent-child.svg){ .course-figure }
+
+<p class="course-caption">The search hits the 14-day exception. Packing still includes the 30-day rule it modifies. The corpus lesson is the pipeline that writes those ids.</p>
+
 Index at multiple granularities:
 
 1. **Doc-level** summaries — route *which* documents matter  
@@ -284,6 +374,10 @@ Implementation tip: store `parent_id` / `doc_id` metadata on every chunk; never 
 
 ### 7. Graph-oriented retrieval (when relationships matter)
 
+![A service edge to the system it depends on and the team that owns it](../assets/img/rag-graph.svg){ .course-figure }
+
+<p class="course-caption">The question is about the edge. Walk one or two hops, then pull the text for the nodes you land on.</p>
+
 Use entity/graph structure when questions are about **edges**, not bags of text:
 
 - “Who owns service X and what depends on it?”  
@@ -301,6 +395,10 @@ Start with an **entity linking table** + SQL/Cypher before a full GraphRAG produ
 ---
 
 ### 8. Agentic RAG
+
+![The agent picks a search, a database read, or an API call](../assets/img/rag-agentic.svg){ .course-figure }
+
+<p class="course-caption">The model proposes the next lookup. Your runtime executes it. The loop ends at the step budget, or earlier when the notes are still empty.</p>
 
 When one retrieve is not enough, wrap retrieval in a **bounded loop**:
 
@@ -349,6 +447,26 @@ Raw dense-retrieval similarity scores are **not calibrated confidence** — a 0.
 (1) **Repeated-query abort** (normalize query text / embedding near-duplicates) so thrash ends after 1–2 identical retrieves. (2) **Early exit on empty evidence** — if notes stay empty, answer “I don’t know” or escalate instead of spending remaining steps. Bonus: cache retrieve(query)→ids, lower max_steps for single-fact classifiers, and log intermediate queries so offline eval can see the loop.
 </details>
 </div>
+
+---
+
+### Corrective RAG
+
+![A good shortlist goes to the model, and a bad one goes back to search](../assets/img/rag-crag.svg){ .course-figure }
+
+<p class="course-caption">The judge sits after retrieval. A shortlist that contains the gold id proceeds. A shortlist that misses it is rewritten or expanded, still inside the step cap.</p>
+
+The branch in the figure is the evidence check in the agentic loop. A raw cosine score is not the judge. On a labeled set, a missing gold id means rewrite or expand and retrieve again. A present gold id means generate. When the second pass is still empty, the [answer contract](07-answer-contract.md) abstains.
+
+---
+
+### Self-RAG
+
+![Five checks from “should I retrieve?” through a critique of the draft](../assets/img/rag-selfrag.svg){ .course-figure }
+
+<p class="course-caption">The checklist is split across pieces you already run. Routing decides whether to retrieve. The reranker and the packer decide which chunks are worth the window. The contract decides whether the evidence is enough. The critique is the last step of the bounded loop.</p>
+
+“Should I retrieve?” is the tools / RAG / weights route in Module 07. “Is this chunk relevant?” is the reranker and the packer’s dedupe. “Do I have enough?” is the answer contract: answer, clarify, abstain, or escalate. “Critique the draft” is the agentic loop’s last look, and `max_steps` still ends it.
 
 ---
 
@@ -476,6 +594,7 @@ Those four lines are the reminder. The [corpus lesson](09-corpus.md) is the work
 5. Optional: add a tiny rerank (even a lexical overlap score) and show delta.  
 6. For 5 multi-hop items, run a 2-step decompose → retrieve → answer; log intermediate queries.
 7. Run the four-path comparison below. Keep retrieval rank, source support, and “does this answer the question?” in separate columns, and include one case where the citation is real and the answer is still wrong.
+8. On one query, pass a metadata `where` before top-k. Show that the unfiltered top-1 was the wrong tier, and that a missing key returns nothing.
 
 ```bash
 # sanity: RRF unit behavior lives next to TinyRAG
@@ -646,6 +765,7 @@ Also: [Curated resources](../reference/resources.md) → RAG & embeddings.
 ## Checkpoint
 
 - [ ] You can explain hybrid search + RRF in one clear paragraph  
+- [ ] A metadata filter runs before top-k, and a missing key excludes the chunk  
 - [ ] You rerank or fuse — not only single-vector top-k  
 - [ ] You measure **retrieval** (Hit@k / MRR) separately from generation  
 - [ ] Multi-hop path has a **step budget** and logged intermediate queries  

@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 200" role="img" aria-labelledby="rwTitle rwDesc">
+  <title id="rwTitle">Query rewriting</title>
+  <desc id="rwDesc">A vague question is rewritten into a concrete search query before retrieval. The original wording stays in the log.</desc>
+  <rect width="980" height="200" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Rewrite a vague question into a search</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="28" y="68" font-size="12" font-weight="700" fill="#64748b">Original</text>
+    <rect x="28" y="80" width="400" height="88" rx="12" fill="#fff" stroke="#e2e8f0"/>
+    <text x="48" y="116" font-size="15" fill="#0f172a">“What about that thing we</text>
+    <text x="48" y="140" font-size="15" fill="#0f172a">discussed earlier?”</text>
+    <text x="552" y="68" font-size="12" font-weight="700" fill="#0f766e">Rewritten</text>
+    <rect x="552" y="80" width="400" height="88" rx="12" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="572" y="116" font-size="15" fill="#134e4a">“What is the company’s</text>
+    <text x="572" y="140" font-size="15" fill="#134e4a">remote work policy?”</text>
+    <path d="M440 124 H540" stroke="#94a3b8" stroke-width="2" marker-end="url(#rwArrow)"/>
+  </g>
+  <defs>
+    <marker id="rwArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>
