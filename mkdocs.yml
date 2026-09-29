@@ -107,12 +107,12 @@ extra_javascript:
 
 nav:
   - Home: index.md
-  - Getting Started:
+  - Start Here:
       - Start here: getting-started/index.md
       - Install & setup: getting-started/setup.md
       - Learning paths: getting-started/paths.md
       - Progress & XP: getting-started/progress.md
-  - Core Curriculum:
+  - Learn:
       - Core overview: core/index.md
       - "Gate 1 — Dependable model service":
           - 01 Prompt engineering: core/01-prompt-engineering.md
@@ -124,16 +124,22 @@ nav:
           - 05 Context engineering: core/05-context-engineering.md
           - 06 Fine-tuning:
               - Overview: core/06-fine-tuning.md
-              - Hands-on — QLoRA on your own data: core/06-qlora.md
-          - 07 Tools & basic RAG: core/07-tools-and-rag.md
-          - 09 Advanced RAG: core/09-advanced-rag.md
+              - Hands-on — QLoRA: core/06-qlora.md
+          - 07 Tools & basic RAG:
+              - Overview: core/07-tools-and-rag.md
+              - Answer contract: core/07-answer-contract.md
+          - 09 Advanced RAG:
+              - Overview: core/09-advanced-rag.md
+              - Corpus engineering: core/09-corpus.md
       - "Gate 4 — Actions and agents":
           - 08 Model Context Protocol: core/08-model-context-protocol.md
           - 10 Cost optimization: core/10-cost-optimization.md
           - 11 Single agents: core/11-single-agents.md
           - 12 Multi-agent systems: core/12-multi-agents.md
           - 18 Agent design patterns: core/18-agent-design-patterns.md
-          - 19 Orchestration patterns: core/19-orchestration-patterns.md
+          - 19 Orchestration patterns:
+              - Patterns: core/19-orchestration-patterns.md
+              - Graph lesson: core/19-orchestration-graph.md
           - 20 Agent reliability: core/20-agent-reliability.md
           - 21 Secure tool use: core/21-secure-tool-use.md
           - 27 Harness engineering: core/27-harness-engineering.md
@@ -154,26 +160,27 @@ nav:
               - Continuous batching: core/inference/continuous-batching.md
           - 22 Evaluating agents: core/22-agent-evaluation.md
           - 23 Prompt & config drift: core/23-prompt-drift.md
+          - Eval flywheel: core/eval-flywheel.md
           - 24 Local-first agents: core/24-local-first-agents.md
           - 25 Durable orchestration: core/25-durable-orchestration.md
           - 26 Orchestrators in production: core/26-orchestrator-comparison.md
-      - Capstone:
-          - Triage service: core/capstone.md
-          - Triage gates: core/capstone-gates.md
-          - Completed triage service: core/reference-capstone.md
-          - Command runtime: core/capstone-command.md
-          - Command-runtime gates: core/capstone-command-gates.md
-          - Divide, solve, and join: core/capstone-decompose.md
-          - Divide-solve-join gates: core/capstone-decompose-gates.md
-  - Specialization Tracks:
-      - Track overview: tracks/index.md
-      - Stock research assistant: tracks/stock-recommender.md
-      - Hybrid models from scratch: tracks/hybrid-models.md
-      - Agentic VS Code plugin: tracks/agentic-plugin.md
+      - Specialization tracks:
+          - Track overview: tracks/index.md
+          - Stock research assistant: tracks/stock-recommender.md
+          - Hybrid models from scratch: tracks/hybrid-models.md
+          - Agentic VS Code plugin: tracks/agentic-plugin.md
+  - Practice:
+      - Exercise catalog: reference/exercises.md
+      - Triage service: core/capstone.md
+      - Triage gates: core/capstone-gates.md
+      - Completed triage service: core/reference-capstone.md
+      - Command runtime: core/capstone-command.md
+      - Command-runtime gates: core/capstone-command-gates.md
+      - Divide, solve, and join: core/capstone-decompose.md
+      - Divide-solve-join gates: core/capstone-decompose-gates.md
   - Reference:
       - Reference overview: reference/index.md
       - Capability progression: reference/progression.md
-      - Exercise catalog: reference/exercises.md
       - Assessment rubrics: reference/assessment.md
       - Troubleshooting: reference/troubleshooting.md
       - Further resources: reference/resources.md

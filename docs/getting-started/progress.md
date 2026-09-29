@@ -43,6 +43,8 @@ Progress is saved under `localStorage` key `aieng-progress-v1`. Clearing site da
 | 🏆 Full Core | All 28 modules |
 | ⭐ Level 5 | Reach level 5 |
 
+Capstones are off the XP track. Full Core is the 28 module-complete marks. EX-01–EX-27 pair with modules 01–27. Module 28 has experiments and no exercise number. The exercise catalog and a capstone, including Gate 6, sit outside the badge.
+
 ---
 
 ## Honest use for CS engineers

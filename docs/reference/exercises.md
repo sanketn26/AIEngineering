@@ -6,6 +6,8 @@ description: Hands-on exercises in the repo's src package that pair with each co
 
 Complete these alongside the matching core module. Numbered `src.*` exercises hit the teaching package; the others are the module labs (no extra library required). Grow the production path in `capstone-starter/` (own `requirements.txt`, mock model, no Poetry) — especially EX-13 and the [five gates](../core/capstone-gates.md).
 
+**28 modules · 27 exercises.** This catalog is EX-01 through EX-27. Module 28 is taught with its own experiments and has no EX-28.
+
 ```bash
 poetry install
 poetry run pytest tests/ -v

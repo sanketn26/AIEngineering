@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 300" role="img" aria-labelledby="efTitle efDesc">
+  <title id="efTitle">Eval flywheel</title>
+  <desc id="efDesc">Six steps from a live trace to a quarantined golden row: sample, redact, freeze, quarantine, name the lever, calibrate the judge.</desc>
+  <rect width="980" height="300" rx="18" fill="#f8fafc"/>
+  <text x="32" y="40" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">A live miss becomes the next held-out row</text>
+  <text x="32" y="64" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#475569">The row mined this week cannot grade the prompt that produced it.</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="13" font-weight="650">
+    <rect x="28" y="96" width="130" height="78" rx="12" fill="#e0e7ff" stroke="#4f46e5"/>
+    <text x="93" y="128" text-anchor="middle" fill="#312e81">1 · Sample</text>
+    <text x="93" y="148" text-anchor="middle" font-size="11" font-weight="500" fill="#4338ca">by failure slice</text>
+    <rect x="184" y="96" width="130" height="78" rx="12" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="249" y="128" text-anchor="middle" fill="#134e4a">2 · Redact</text>
+    <text x="249" y="148" text-anchor="middle" font-size="11" font-weight="500" fill="#0f766e">before anyone labels</text>
+    <rect x="340" y="96" width="130" height="78" rx="12" fill="#e0e7ff" stroke="#4f46e5"/>
+    <text x="405" y="128" text-anchor="middle" fill="#312e81">3 · Freeze</text>
+    <text x="405" y="148" text-anchor="middle" font-size="11" font-weight="500" fill="#4338ca">corpus + tool fixtures</text>
+    <rect x="496" y="96" width="140" height="78" rx="12" fill="#fef3c7" stroke="#d97706"/>
+    <text x="566" y="128" text-anchor="middle" fill="#78350f">4 · Quarantine</text>
+    <text x="566" y="148" text-anchor="middle" font-size="11" font-weight="500" fill="#92400e">not this week's grade</text>
+    <rect x="662" y="96" width="140" height="78" rx="12" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="732" y="128" text-anchor="middle" fill="#134e4a">5 · Name lever</text>
+    <text x="732" y="148" text-anchor="middle" font-size="11" font-weight="500" fill="#0f766e">prompt, chunk, tool…</text>
+    <rect x="828" y="96" width="124" height="78" rx="12" fill="#e0e7ff" stroke="#4f46e5"/>
+    <text x="890" y="128" text-anchor="middle" fill="#312e81">6 · Calibrate</text>
+    <text x="890" y="148" text-anchor="middle" font-size="11" font-weight="500" fill="#4338ca">judge vs labels</text>
+  </g>
+  <g stroke="#94a3b8" stroke-width="2" fill="none">
+    <path d="M158 135 H184"/>
+    <path d="M314 135 H340"/>
+    <path d="M470 135 H496"/>
+    <path d="M636 135 H662"/>
+    <path d="M802 135 H828"/>
+  </g>
+  <path d="M890 174 C890 230, 93 230, 93 174" fill="none" stroke="#4f46e5" stroke-width="2" stroke-dasharray="5 4"/>
+  <text x="490" y="222" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#4338ca">Next release is graded on the quarantined set, then the cycle repeats</text>
+  <text x="32" y="270" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#64748b">Slices: parse failure · missing citation · tool error · reopen · downvote · abstain</text>
+</svg>

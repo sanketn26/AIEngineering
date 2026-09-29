@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1040 500" role="img" aria-labelledby="dTitle dDesc">
+  <title id="dTitle">Fan out, reduce, verify, synthesize</title>
+  <desc id="dDesc">Independent workers fan out, plain code reduces, fresh-context verifiers try to kill findings, and one synthesizer writes the answer.</desc>
+  <rect width="1040" height="500" rx="18" fill="#f8fafc"/>
+  <text x="28" y="38" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Fan out → reduce → verify → synthesize</text>
+  <text x="28" y="60" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#475569">Parallel exploration. Deterministic reduction. Independent verification. One final answer.</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="12" font-weight="700">
+    <text x="36" y="100" fill="#4338ca">1 · INPUT</text>
+    <text x="200" y="100" fill="#0f766e">2 · FAN OUT</text>
+    <text x="430" y="100" fill="#92400e">3 · REDUCE</text>
+    <text x="620" y="100" fill="#9f1239">4 · VERIFY</text>
+    <text x="860" y="100" fill="#4338ca">5 · SYNTHESIZE</text>
+  </g>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="28" y="200" width="130" height="78" rx="12" fill="#e0e7ff" stroke="#4f46e5"/>
+    <text x="93" y="234" text-anchor="middle" font-size="13" font-weight="700" fill="#312e81">One task</text>
+    <text x="93" y="254" text-anchor="middle" font-size="11" fill="#4338ca">schema in, schema out</text>
+    <rect x="200" y="128" width="170" height="58" rx="10" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="285" y="152" text-anchor="middle" font-size="13" font-weight="700" fill="#134e4a">Angle 1</text>
+    <text x="285" y="170" text-anchor="middle" font-size="11" fill="#0f766e">cheap model · own schema</text>
+    <rect x="200" y="208" width="170" height="58" rx="10" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="285" y="232" text-anchor="middle" font-size="13" font-weight="700" fill="#134e4a">Angle 2</text>
+    <text x="285" y="250" text-anchor="middle" font-size="11" fill="#0f766e">no shared scratch</text>
+    <rect x="200" y="288" width="170" height="58" rx="10" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="285" y="312" text-anchor="middle" font-size="13" font-weight="700" fill="#134e4a">Angle 3</text>
+    <text x="285" y="330" text-anchor="middle" font-size="11" fill="#0f766e">one job only</text>
+    <rect x="420" y="188" width="160" height="100" rx="12" fill="#fef3c7" stroke="#d97706"/>
+    <text x="500" y="224" text-anchor="middle" font-size="14" font-weight="700" fill="#78350f">Reduce</text>
+    <text x="500" y="246" text-anchor="middle" font-size="12" fill="#92400e">code, not a model</text>
+    <text x="500" y="266" text-anchor="middle" font-size="12" fill="#92400e">dedupe · filter · free</text>
+    <rect x="630" y="128" width="180" height="54" rx="10" fill="#ffe4e6" stroke="#e11d48"/>
+    <text x="720" y="150" text-anchor="middle" font-size="13" font-weight="700" fill="#9f1239">Skeptic · correctness</text>
+    <text x="720" y="168" text-anchor="middle" font-size="11" fill="#be123c">fresh context</text>
+    <rect x="630" y="198" width="180" height="54" rx="10" fill="#ffe4e6" stroke="#e11d48"/>
+    <text x="720" y="220" text-anchor="middle" font-size="13" font-weight="700" fill="#9f1239">Skeptic · recency</text>
+    <text x="720" y="238" text-anchor="middle" font-size="11" fill="#be123c">finding only, no transcript</text>
+    <rect x="630" y="268" width="180" height="54" rx="10" fill="#ffe4e6" stroke="#e11d48"/>
+    <text x="720" y="290" text-anchor="middle" font-size="13" font-weight="700" fill="#9f1239">Skeptic · sources</text>
+    <text x="720" y="308" text-anchor="middle" font-size="11" fill="#be123c">keep or drop</text>
+    <rect x="860" y="176" width="150" height="78" rx="12" fill="#e0e7ff" stroke="#4f46e5"/>
+    <text x="935" y="208" text-anchor="middle" font-size="13" font-weight="700" fill="#312e81">Synthesize</text>
+    <text x="935" y="228" text-anchor="middle" font-size="11" fill="#4338ca">survivors only</text>
+    <text x="935" y="244" text-anchor="middle" font-size="11" fill="#4338ca">strong model</text>
+  </g>
+  <g stroke="#94a3b8" stroke-width="1.7" fill="none">
+    <path d="M158 230 C180 230, 180 157, 200 157"/>
+    <path d="M158 239 H200"/>
+    <path d="M158 248 C180 248, 180 317, 200 317"/>
+    <path d="M370 157 C395 157, 400 210, 420 220"/>
+    <path d="M370 237 H420"/>
+    <path d="M370 317 C395 317, 400 270, 420 258"/>
+    <path d="M580 220 C605 180, 610 155, 630 155"/>
+    <path d="M580 238 H630"/>
+    <path d="M580 256 C605 280, 610 295, 630 295"/>
+    <path d="M810 155 C835 155, 840 190, 860 200"/>
+    <path d="M810 225 C835 225, 840 215, 860 215"/>
+    <path d="M810 295 C835 295, 840 240, 860 240"/>
+  </g>
+  <rect x="28" y="390" width="984" height="80" rx="12" fill="#fff" stroke="#e2e8f0"/>
+  <text x="48" y="422" font-family="Inter, system-ui, sans-serif" font-size="14" font-weight="700" fill="#0f172a">The anchor sits after the skeptics</text>
+  <text x="48" y="446" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#475569">A keep vote is a filter. A test, a ledger row, or a frozen rule is the only node allowed to say the work is done.</text>
+</svg>

@@ -4,7 +4,7 @@ description: Learn LLM harness engineering, the control layer of tools, verifica
 
 # Module 27 — Harness Engineering
 
-**Time:** 4–6 days · **Depends on:** [05 Context](05-context-engineering.md), [11 Single agents](11-single-agents.md), [20 Reliability](20-agent-reliability.md), [21 Secure tool use](21-secure-tool-use.md) · **Pairs with:** [04 Evals](04-testing-evals.md), [22 Agent evals](22-agent-evaluation.md) · **Next:** [Production](13-production.md)
+**Time:** 4–6 days · **Depends on:** [05 Context](05-context-engineering.md), [11 Single agents](11-single-agents.md), [20 Reliability](20-agent-reliability.md), [21 Secure tool use](21-secure-tool-use.md) · **Pairs with:** [04 Evals](04-testing-evals.md), [22 Agent evals](22-agent-evaluation.md) · **Next:** [Production](13-production.md) · **Agent evals:** [Evaluating agents](22-agent-evaluation.md)
 
 <span data-module-id="27" hidden></span>
 
@@ -517,4 +517,4 @@ Change the harness first: cap repeated identical tool calls (Module 20), add a v
 
 **Return to the case:** The harness rejects repeated calls, verifies the note, persists progress, and stops on enforced conditions outside the model. Better control makes completion testable; it does not guarantee that the model generated the right content — and every control you added should be re-tested for deletion the next time the model improves.
 
-**Next:** [Production](13-production.md) — the control loop works on your laptop; now make it survive real traffic.
+**Next:** [Production](13-production.md) — the control loop works on your laptop; now make it survive real traffic · or continue at [Evaluating agents](22-agent-evaluation.md) for modules 22–26.

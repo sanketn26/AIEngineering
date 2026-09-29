@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 340" role="img" aria-labelledby="lfTitle lfDesc">
+  <title id="lfTitle">Layered fan-in</title>
+  <desc id="lfDesc">Pouring a thousand raw results into one synthesizer makes the answer vaguer. Batch, summarize, then synthesize from the summaries.</desc>
+  <rect width="980" height="340" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">The final node reads summaries, not the raw pile</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="28" y="68" font-size="13" font-weight="700" fill="#be123c">One pour</text>
+    <rect x="28" y="80" width="120" height="70" rx="10" fill="#ffe4e6"/>
+    <text x="88" y="120" text-anchor="middle" font-size="13" fill="#9f1239">1,000 raw</text>
+    <rect x="200" y="80" width="150" height="70" rx="10" fill="#fff" stroke="#fecdd3"/>
+    <text x="275" y="112" text-anchor="middle" font-size="13" fill="#9f1239">One synthesizer</text>
+    <text x="275" y="132" text-anchor="middle" font-size="11" fill="#be123c">window overflows</text>
+    <rect x="400" y="80" width="70" height="70" rx="10" fill="#fecdd3"/>
+    <text x="435" y="120" text-anchor="middle" font-size="12" fill="#881337">vague</text>
+    <text x="28" y="196" font-size="13" font-weight="700" fill="#0f766e">Layered</text>
+    <rect x="28" y="210" width="120" height="70" rx="10" fill="#ccfbf1"/>
+    <text x="88" y="250" text-anchor="middle" font-size="13" fill="#134e4a">1,000 raw</text>
+    <rect x="180" y="200" width="90" height="36" rx="8" fill="#ecfdf5" stroke="#0f766e"/>
+    <text x="225" y="222" text-anchor="middle" font-size="11" fill="#115e59">batch 40</text>
+    <rect x="180" y="242" width="90" height="36" rx="8" fill="#ecfdf5" stroke="#0f766e"/>
+    <text x="225" y="264" text-anchor="middle" font-size="11" fill="#115e59">batch 40</text>
+    <rect x="180" y="284" width="90" height="28" rx="8" fill="#f0fdfa" stroke="#99f6e4"/>
+    <text x="225" y="302" text-anchor="middle" font-size="11" fill="#115e59">…</text>
+    <rect x="300" y="214" width="130" height="78" rx="10" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="365" y="248" text-anchor="middle" font-size="13" font-weight="700" fill="#134e4a">25 summaries</text>
+    <text x="365" y="268" text-anchor="middle" font-size="11" fill="#0f766e">one call each</text>
+    <rect x="470" y="214" width="160" height="78" rx="10" fill="#e0e7ff" stroke="#4f46e5"/>
+    <text x="550" y="248" text-anchor="middle" font-size="13" font-weight="700" fill="#312e81">Synthesize</text>
+    <text x="550" y="268" text-anchor="middle" font-size="11" fill="#4338ca">from summaries only</text>
+  </g>
+  <g stroke="#94a3b8" stroke-width="2" fill="none">
+    <path d="M148 115 H200"/>
+    <path d="M350 115 H400"/>
+    <path d="M148 245 H180"/>
+    <path d="M270 222 H300"/>
+    <path d="M430 253 H470"/>
+  </g>
+  <text x="680" y="250" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#475569">No exception.</text>
+  <text x="680" y="272" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#475569">The answer just</text>
+  <text x="680" y="294" font-family="Inter, system-ui, sans-serif" font-size="13" fill="#475569">gets worse as N grows.</text>
+</svg>

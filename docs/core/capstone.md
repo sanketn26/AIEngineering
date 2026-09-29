@@ -34,6 +34,8 @@ flowchart TB
 
 ## The six parts
 
+The six parts are the build checklist. **Done means Gates 1–5.** The decision-path row is Gate 6, and Gate 6 is a stretch, outside done. Capstones are off the XP track: the Full Core badge is the 28 modules, and finishing this service awards no XP.
+
 | Part | You must ship | Gate(s) it proves | Modules to have completed |
 |---|---|---|---|
 | **Core service** | Provider abstraction, structured/schema-valid output, deadlines on every model call, retries, fail-closed validation | 1 | 01, 02, 03, 13 |

@@ -129,6 +129,8 @@ Peer graph:    Agents message on channels / shared store
 
 Frameworks to **study** (concepts first): **LangGraph**, **CrewAI**, **AutoGen/AG2**, provider agent SDKs. Adopt a framework when the topology is clear — not to discover the topology. Measurable trade-offs (HITL, durability, lock-in, $/step) are [Module 26](26-orchestrator-comparison.md); failure modes and sandboxes are [20](20-agent-reliability.md)–[21](21-secure-tool-use.md).
 
+**Study order:** Framework intuition → Learn ML. Topology, evaluation, and the harness → this course. Learn ML starts from CrewAI and LangGraph. Here those libraries are implementations you pick after the topology is already drawn.
+
 <div class="aieng-explainer" markdown>
 <p class="label">Explainer</p>
 

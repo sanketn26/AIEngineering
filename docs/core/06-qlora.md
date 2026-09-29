@@ -4,9 +4,11 @@ description: End-to-end QLoRA walkthrough for a small open model — data rights
 
 # Hands-on — QLoRA on your own data
 
-**Part of:** [Module 06](06-fine-tuning.md) · **Also uses:** [Module 04](04-testing-evals.md). Run commands from the repository root. **Time:** 1 hour for the data pipeline on any machine; 1–3 hours of GPU time for the optional training run.
+**Time:** about 1 hour on any machine; 1–3 hours of GPU time for the optional training run · **Depends on:** [01](01-prompt-engineering.md)–[05](05-context-engineering.md) · **Next:** [Module 06](06-fine-tuning.md)
 
-Sections 0–7 are the Module 06 lab: rights, cleaning, numeric grounding, and a company-level split. Sections 8–14 are the optional GPU path: training, Colab, evaluation against the prompt-only baseline, serving, and retraining. A machine without a GPU still finishes the module.
+**Part of:** [Module 06](06-fine-tuning.md) · **Also uses:** [Module 04](04-testing-evals.md). Run commands from the repository root.
+
+Sections 0–7 are the Module 06 lab: rights, cleaning, numeric grounding, and a company-level split. Sections 8–14 are the optional GPU path: training, Colab, evaluation against the prompt-only baseline, serving, and retraining. A machine without a GPU still finishes this lab. The checkpoint and EX-06 stay on Module 06.
 
 <div class="aieng-story" markdown>
 

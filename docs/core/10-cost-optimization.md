@@ -204,6 +204,45 @@ Success rate likely fell: more retries, more human escalations, or longer sessio
 </details>
 </div>
 
+#### Budgeted test-time compute {#budgeted-test-time-compute}
+
+A thinking budget is another row on this router, beside cache, a small model, and a human. Some tickets get more tokens to reason. That spend is justified only when three numbers still hold: the golden set moved, the latency cap held, and the dollar cap held. A longer chain of thought that does not move `cost_per_success` is the same failure as the mini-model route above.
+
+![Cheap path, thinking budget, and human as three router lanes](../assets/img/thinking-budget.svg){ .course-figure }
+
+<p class="course-caption">The middle lane is a cap, not a model brand. Easy tickets stay on the cheap path. The human lane remains the last stop when the anchor still fails.</p>
+
+Route into the thinking lane on a signal you can check: schema validation failed, two cheap samples disagreed, or the task type is on the strong list. Do not route into it because the model said it was unsure. Record thinking tokens separately from the answer tokens, or the bill will hide them inside “completion.”
+
+`route_thinking` in `src/cost.py` is that row. An easy ticket stays cheap even when a thinking budget would have been justified for a harder one.
+
+```python
+def route_thinking(*, schema_ok, samples_disagree, hard_task,
+                   golden_delta, within_latency, within_budget) -> str:
+    easy = schema_ok and not samples_disagree and not hard_task
+    if easy:
+        return "cheap"
+    justified = golden_delta is not None and golden_delta > 0 and within_latency and within_budget
+    if justified:
+        return "think"
+    return "human"
+
+assert route_thinking(
+    schema_ok=True, samples_disagree=False, hard_task=False,
+    golden_delta=0.2, within_latency=True, within_budget=True,
+) == "cheap"
+assert route_thinking(
+    schema_ok=True, samples_disagree=True, hard_task=False,
+    golden_delta=0.2, within_latency=True, within_budget=True,
+) == "think"
+assert route_thinking(
+    schema_ok=False, samples_disagree=True, hard_task=True,
+    golden_delta=0.2, within_latency=True, within_budget=False,
+) == "human"
+```
+
+`pytest tests/test_cost.py -v` covers this lane together with the existing router, cache, and ledger.
+
 ---
 
 ### 4. Caching (with safe keys)

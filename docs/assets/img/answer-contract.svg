@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 360" role="img" aria-labelledby="acTitle acDesc">
+  <title id="acTitle">Answer contract</title>
+  <desc id="acDesc">One ticket produces exactly one decision: answer with citations, ask one question, abstain, or escalate with a packet.</desc>
+  <rect width="980" height="360" rx="18" fill="#f8fafc"/>
+  <text x="28" y="38" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">One ticket, one decision</text>
+  <rect x="390" y="130" width="200" height="72" rx="14" fill="#0f172a"/>
+  <text x="490" y="160" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="15" font-weight="700" fill="#fff">Incoming ticket</text>
+  <text x="490" y="180" text-anchor="middle" font-family="Inter, system-ui, sans-serif" font-size="12" fill="#cbd5e1">evidence in, decision out</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="28" y="70" width="210" height="88" rx="12" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="133" y="104" text-anchor="middle" font-size="15" font-weight="700" fill="#134e4a">Answer</text>
+    <text x="133" y="126" text-anchor="middle" font-size="12" fill="#115e59">citations that resolve</text>
+    <rect x="742" y="70" width="210" height="88" rx="12" fill="#e0e7ff" stroke="#4f46e5"/>
+    <text x="847" y="104" text-anchor="middle" font-size="15" font-weight="700" fill="#312e81">Clarify</text>
+    <text x="847" y="126" text-anchor="middle" font-size="12" fill="#4338ca">one question, then stop</text>
+    <rect x="28" y="240" width="210" height="88" rx="12" fill="#fef3c7" stroke="#d97706"/>
+    <text x="133" y="274" text-anchor="middle" font-size="15" font-weight="700" fill="#78350f">Abstain</text>
+    <text x="133" y="296" text-anchor="middle" font-size="12" fill="#92400e">empty or contradictory</text>
+    <rect x="742" y="240" width="210" height="88" rx="12" fill="#ffe4e6" stroke="#e11d48"/>
+    <text x="847" y="274" text-anchor="middle" font-size="15" font-weight="700" fill="#9f1239">Escalate</text>
+    <text x="847" y="296" text-anchor="middle" font-size="12" fill="#be123c">packet, not a shrug</text>
+  </g>
+  <g stroke="#94a3b8" stroke-width="2" fill="none">
+    <path d="M390 150 C300 150, 250 114, 238 114"/>
+    <path d="M590 150 C680 150, 730 114, 742 114"/>
+    <path d="M390 182 C300 210, 250 270, 238 284"/>
+    <path d="M590 182 C680 210, 730 270, 742 284"/>
+  </g>
+</svg>
