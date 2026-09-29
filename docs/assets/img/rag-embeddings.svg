@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 240" role="img" aria-labelledby="embTitle embDesc">
+  <title id="embTitle">Embeddings</title>
+  <desc id="embDesc">A sentence becomes a vector. Chunks with a similar meaning sit near each other, and a different topic sits apart.</desc>
+  <rect width="980" height="240" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Similar meaning lands nearby</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="28" y="58" width="420" height="156" rx="12" fill="#fff" stroke="#e2e8f0"/>
+    <text x="48" y="92" font-size="14" fill="#0f172a">“How can I work remotely?”</text>
+    <text x="48" y="124" font-size="13" fill="#64748b">becomes a vector</text>
+    <rect x="48" y="140" width="380" height="48" rx="8" fill="#e0e7ff"/>
+    <text x="238" y="170" text-anchor="middle" font-size="16" fill="#312e81">[0.12, −0.42, 0.87, …]</text>
+    <rect x="468" y="58" width="484" height="156" rx="12" fill="#fff" stroke="#e2e8f0"/>
+    <circle cx="620" cy="120" r="10" fill="#0f766e"/>
+    <circle cx="648" cy="142" r="10" fill="#0f766e"/>
+    <circle cx="600" cy="150" r="10" fill="#0f766e"/>
+    <circle cx="636" cy="112" r="10" fill="#14b8a6"/>
+    <circle cx="820" cy="150" r="10" fill="#e11d48"/>
+    <circle cx="848" cy="168" r="10" fill="#e11d48"/>
+    <circle cx="800" cy="176" r="10" fill="#fb7185"/>
+    <text x="624" y="188" text-anchor="middle" font-size="12" fill="#0f766e">remote-work policy</text>
+    <text x="824" y="204" text-anchor="middle" font-size="12" fill="#be123c">payroll calendar</text>
+  </g>
+</svg>

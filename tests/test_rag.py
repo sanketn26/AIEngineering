@@ -1,4 +1,12 @@
-from src.rag import Chunk, TinyRAG, bag_of_words, cosine, rrf, simple_chunks
+from src.rag import (
+    Chunk,
+    TinyRAG,
+    bag_of_words,
+    cosine,
+    filter_by_metadata,
+    rrf,
+    simple_chunks,
+)
 
 
 def test_simple_chunks():
@@ -37,3 +45,39 @@ def test_rrf():
     fused = rrf([["a", "b", "c"], ["b", "a", "d"]])
     assert fused[0] in {"a", "b"}
     assert "d" in fused
+
+
+def test_metadata_filter_runs_before_top_k():
+    chunks = [
+        Chunk(
+            "refund-window",
+            "Standard refund window is 30 days.",
+            "policy",
+            {"tier": "standard", "department": "support"},
+        ),
+        Chunk(
+            "refund-window-enterprise",
+            "Enterprise SKUs: 14 days.",
+            "policy",
+            {"tier": "enterprise", "department": "support"},
+        ),
+        Chunk(
+            "payroll",
+            "Payroll runs on Friday.",
+            "hr",
+            {"tier": "standard", "department": "hr"},
+        ),
+    ]
+    rag = TinyRAG(chunks)
+    assert rag.retrieve("refund window", k=1)[0].id == "refund-window"
+    hits = rag.retrieve(
+        "refund window",
+        k=1,
+        where={"tier": "enterprise", "department": "support"},
+    )
+    assert [c.id for c in hits] == ["refund-window-enterprise"]
+    assert rag.retrieve("refund window", k=3, where={"department": "hr"})[0].id == "payroll"
+    assert rag.retrieve("refund window", k=3, where={"department": "legal"}) == []
+    assert filter_by_metadata(chunks, {}) == chunks
+    hidden = Chunk("secret", "executive compensation", "hr", None)
+    assert filter_by_metadata([hidden], {"department": "hr"}) == []

@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 248" role="img" aria-labelledby="pcTitle pcDesc">
+  <title id="pcTitle">Parent-child retrieval</title>
+  <desc id="pcDesc">Search matches the small child chunks. The packed context includes the larger parent so the exception stays attached to the rule.</desc>
+  <rect width="980" height="248" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Search the child, pack the parent</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="14">
+    <rect x="28" y="56" width="700" height="48" rx="12" fill="#e0e7ff" stroke="#c7d2fe"/>
+    <text x="378" y="86" text-anchor="middle" font-weight="700" fill="#312e81">Parent · refund rule · 30 days</text>
+    <rect x="28" y="148" width="200" height="48" rx="10" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="128" y="177" text-anchor="middle" fill="#134e4a">Child · 14 days</text>
+    <rect x="278" y="148" width="200" height="48" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="378" y="177" text-anchor="middle" fill="#475569">Child · example</text>
+    <rect x="528" y="148" width="200" height="48" rx="10" fill="#f8fafc" stroke="#e2e8f0"/>
+    <text x="628" y="177" text-anchor="middle" fill="#475569">Child · table</text>
+    <path d="M128 148 V104" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M378 148 V104" stroke="#94a3b8" stroke-width="2"/>
+    <path d="M628 148 V104" stroke="#94a3b8" stroke-width="2"/>
+    <text x="760" y="160" font-size="13" fill="#0f766e">Search hits</text>
+    <text x="760" y="180" font-size="13" fill="#0f766e">the small chunk.</text>
+    <text x="760" y="208" font-size="13" fill="#312e81">Packing adds</text>
+    <text x="760" y="228" font-size="13" fill="#312e81">the parent.</text>
+  </g>
+</svg>

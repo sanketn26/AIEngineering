@@ -123,6 +123,7 @@ No extra package code — use the Module 03 lab:
 
 3. Log intermediate queries for 5 multi-hop items.
 4. On the course fixture, separate retrieval rank, source support, and whether the answer addresses the question.
+5. One query filtered with `where` before top-k, including a missing-key case that returns nothing.
 
 **Check:** `pytest tests/test_rag.py -v`
 

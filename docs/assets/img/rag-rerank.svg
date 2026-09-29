@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 230" role="img" aria-labelledby="rrTitle rrDesc">
+  <title id="rrTitle">Reranking</title>
+  <desc id="rrDesc">A fast vector search returns a wide shortlist. A slower reranker reads the query with each passage and keeps a handful for the model.</desc>
+  <rect width="980" height="230" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Retrieve wide, then rerank a few</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="14">
+    <rect x="28" y="78" width="180" height="64" rx="12" fill="#fff" stroke="#e2e8f0"/>
+    <text x="118" y="116" text-anchor="middle" font-weight="700" fill="#0f172a">Query</text>
+    <rect x="250" y="64" width="220" height="92" rx="12" fill="#e0e7ff" stroke="#c7d2fe"/>
+    <text x="360" y="106" text-anchor="middle" font-weight="700" fill="#312e81">Vector search</text>
+    <text x="360" y="128" text-anchor="middle" font-size="12" fill="#4338ca">top 20 · cheap recall</text>
+    <rect x="512" y="64" width="220" height="92" rx="12" fill="#ffe4e6" stroke="#fecdd3"/>
+    <text x="622" y="106" text-anchor="middle" font-weight="700" fill="#9f1239">Reranker</text>
+    <text x="622" y="128" text-anchor="middle" font-size="12" fill="#be123c">query + passage together</text>
+    <rect x="774" y="78" width="178" height="64" rx="12" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="863" y="106" text-anchor="middle" font-weight="700" fill="#115e59">Top 5</text>
+    <text x="863" y="126" text-anchor="middle" font-size="12" fill="#0f766e">to the LLM</text>
+    <path d="M208 110 H242" stroke="#94a3b8" stroke-width="2" marker-end="url(#rrArrow)"/>
+    <path d="M470 110 H504" stroke="#94a3b8" stroke-width="2" marker-end="url(#rrArrow)"/>
+    <path d="M732 110 H766" stroke="#94a3b8" stroke-width="2" marker-end="url(#rrArrow)"/>
+  </g>
+  <defs>
+    <marker id="rrArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

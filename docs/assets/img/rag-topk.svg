@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 300" role="img" aria-labelledby="topkTitle topkDesc">
+  <title id="topkTitle">Top-k retrieval</title>
+  <desc id="topkDesc">Five chunks are ordered by similarity score and passed to the model. The sixth stays out of the prompt.</desc>
+  <rect width="980" height="300" rx="18" fill="#f8fafc"/>
+  <text x="28" y="34" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Keep the first k, in score order</text>
+  <g font-family="Inter, system-ui, sans-serif" font-size="14">
+    <rect x="28" y="52" width="560" height="32" rx="8" fill="#ccfbf1"/>
+    <text x="48" y="73" fill="#134e4a">1 · Chunk A · 0.91</text>
+    <rect x="28" y="90" width="560" height="32" rx="8" fill="#ccfbf1"/>
+    <text x="48" y="111" fill="#134e4a">2 · Chunk D · 0.87</text>
+    <rect x="28" y="128" width="560" height="32" rx="8" fill="#ccfbf1"/>
+    <text x="48" y="149" fill="#134e4a">3 · Chunk B · 0.82</text>
+    <rect x="28" y="166" width="560" height="32" rx="8" fill="#e0e7ff"/>
+    <text x="48" y="187" fill="#312e81">4 · Chunk F · 0.76</text>
+    <rect x="28" y="204" width="560" height="32" rx="8" fill="#e0e7ff"/>
+    <text x="48" y="225" fill="#312e81">5 · Chunk C · 0.71</text>
+    <rect x="620" y="52" width="332" height="184" rx="12" fill="#fff" stroke="#0f766e"/>
+    <text x="786" y="136" text-anchor="middle" font-size="16" font-weight="700" fill="#115e59">Top 5</text>
+    <text x="786" y="160" text-anchor="middle" font-size="13" fill="#0f766e">go to the LLM</text>
+    <rect x="28" y="248" width="560" height="32" rx="8" fill="#f1f5f9"/>
+    <text x="48" y="269" fill="#94a3b8">6 · Chunk E · 0.42 · left behind</text>
+  </g>
+</svg>

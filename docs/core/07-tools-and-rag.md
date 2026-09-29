@@ -168,6 +168,10 @@ Ingest → Chunk → Embed → Index
 User query → Embed → Retrieve top-k → Prompt with sources → Answer + citations
 ```
 
+![Naive RAG is an index, then nearest chunks](../assets/img/rag-naive.svg){ .course-figure }
+
+<p class="course-caption">The top row is written once. The bottom row runs on every question and ends with a source the citation check can resolve.</p>
+
 **Ingest** is an offline (or async) path. **Query** is online and must stay under your context budget (Module 05).
 
 #### Chunking heuristics
@@ -179,6 +183,10 @@ User query → Embed → Retrieve top-k → Prompt with sources → Answer + cit
 | Tables | Keep row groups together |
 | Markdown | Split on headings when possible |
 
+![Overlapping windows cut from one document](../assets/img/rag-chunking.svg){ .course-figure }
+
+<p class="course-caption">The amber bands are the overlap. A heading, a symbol, or a table is a better boundary than a fixed word count when the document has one.</p>
+
 Bad chunking → retrieval of half-sentences and wrong neighbors. Oversize chunks → waste tokens and dilute similarity.
 
 <div class="aieng-think" markdown>
@@ -188,7 +196,7 @@ Bad chunking → retrieval of half-sentences and wrong neighbors. Oversize chunk
 
 <details data-think-id="07-t3"><summary>Reveal a strong answer</summary>
 
-Retrieval may return only A (high lexical match on “refund” / “30 days”). Generation then confidently answers 30 days with a real citation — **wrong for this customer tier**. Product trust fails because the cite looks legitimate. Fix structure: keep exception clauses with their parent rule (heading-aware or larger parent+child chunks), metadata filters on tier, and hybrid/keyword paths for SKU-like tokens (Module 09). Chunking is not a preprocessing detail; it defines what truth can enter the window.
+Retrieval may return only A (high lexical match on “refund” / “30 days”). Generation then confidently answers 30 days with a real citation — **wrong for this customer tier**. Product trust fails because the cite looks legitimate. Fix structure: keep exception clauses with their parent rule (heading-aware or larger parent+child chunks), [filter on tier before top-k](09-advanced-rag.md#metadata-filtering), and use hybrid/keyword paths for SKU-like tokens (Module 09). Chunking is not a preprocessing detail; it defines what truth can enter the window.
 </details>
 </div>
 
@@ -214,19 +222,27 @@ What the scaffold teaches:
 
 | Piece | Role |
 |-------|------|
-| `Chunk(id, text, source)` | Stable IDs for citations |
+| `Chunk(id, text, source, meta=None)` | Stable IDs for citations. `meta` is the filter payload (Module 09) |
 | `simple_chunks` | Naive word windows (replace with better splitters). IDs are `{source}:{word_offset}` (e.g. `notes:0`, `notes:50`), not 0, 1, 2 |
 | `bag_of_words` + `cosine` | Stand-in for embeddings |
-| `retrieve` / `retrieve_ids` | Top-k by similarity |
+| `retrieve` / `retrieve_ids` | Top-k by similarity, after an optional metadata filter |
 | `build_prompt` | “Answer only from sources; cite ids” |
 | `validate_citations` | Reject `(cite: evil)` not in corpus |
 | `rrf` | Fuse multiple ranked lists (hybrid search later) |
+
+![Ranked chunks, with the first five passed to the model](../assets/img/rag-topk.svg){ .course-figure }
+
+<p class="course-caption">Score order decides who enters the prompt. A later chunk can be a near miss and still stay out, which is why k is a budget you measure.</p>
 
 <div class="aieng-explainer" markdown>
 <p class="label">Explainer</p>
 
 **What is an embedding?** A model maps a string to a list of numbers (a vector) so that *similar meaning* lands nearby in that space. “cat sat in the sun” and “feline napping in a sunbeam” should be close; “refund policy 30 days” should not. **Bag-of-words** (what TinyRAG uses) only counts overlapping tokens — fine for teaching cosine and citations, blind to paraphrase. **Dense embeddings** are the production stand-in: you embed each chunk once, embed the query, and take nearest neighbors. You still need stable chunk ids so citations can be checked.
 </div>
+
+![A question becomes a vector near related chunks](../assets/img/rag-embeddings.svg){ .course-figure }
+
+<p class="course-caption">The left card is one string. The right card is the space it lands in: remote-work sentences cluster, and the payroll calendar sits somewhere else.</p>
 
 #### Production upgrades (concepts)
 
@@ -240,6 +256,10 @@ Replace linear scan with an **index**:
 - **FAISS** — high-performance similarity search  
 - **Chroma** — developer-friendly embedding DB  
 - **Qdrant / Pinecone / pgvector** — managed or SQL-adjacent options  
+
+![One index row is an id, a vector, the text, and metadata](../assets/img/rag-vector-db.svg){ .course-figure }
+
+<p class="course-caption">The vector is what similarity searches. The text is what the model reads. The metadata is what a later filter can require.</p>
 
 The *loop* stays: retrieve → pack → generate → validate citations.
 

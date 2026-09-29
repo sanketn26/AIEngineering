@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 210" role="img" aria-labelledby="ctxTitle ctxDesc">
+  <title id="ctxTitle">Contextual retrieval</title>
+  <desc id="ctxDesc">A short chunk that says only “introduced it” is stored again with the surrounding policy name, so the vector carries the missing words.</desc>
+  <rect width="980" height="210" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">Put the surrounding words into the stored chunk</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <text x="28" y="68" font-size="12" font-weight="700" fill="#64748b">Original chunk</text>
+    <rect x="28" y="80" width="380" height="96" rx="12" fill="#fff" stroke="#e2e8f0"/>
+    <text x="48" y="118" font-size="15" fill="#0f172a">“The company introduced</text>
+    <text x="48" y="142" font-size="15" fill="#0f172a">it in 2024.”</text>
+    <text x="500" y="68" font-size="12" font-weight="700" fill="#0f766e">Stored with context</text>
+    <rect x="500" y="80" width="452" height="96" rx="12" fill="#ccfbf1" stroke="#0f766e"/>
+    <text x="520" y="118" font-size="15" fill="#134e4a">“The company introduced its</text>
+    <text x="520" y="142" font-size="15" fill="#134e4a">hybrid work policy in 2024.”</text>
+    <path d="M420 128 H488" stroke="#94a3b8" stroke-width="2" marker-end="url(#ctxArrow)"/>
+  </g>
+  <defs>
+    <marker id="ctxArrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+</svg>

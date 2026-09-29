@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 220" role="img" aria-labelledby="chunkTitle chunkDesc">
+  <title id="chunkTitle">Chunking with overlap</title>
+  <desc id="chunkDesc">A long document is split into windows. An overlap band sits in both neighbors so a boundary sentence is not cut in half.</desc>
+  <rect width="980" height="220" rx="18" fill="#f8fafc"/>
+  <text x="28" y="36" font-family="Inter, system-ui, sans-serif" font-size="18" font-weight="700" fill="#0f172a">A long document becomes overlapping windows</text>
+  <g font-family="Inter, system-ui, sans-serif">
+    <rect x="28" y="56" width="924" height="36" rx="8" fill="#e2e8f0"/>
+    <text x="490" y="79" text-anchor="middle" font-size="13" fill="#334155">Large document</text>
+    <rect x="28" y="114" width="250" height="64" rx="10" fill="#e0e7ff" stroke="#c7d2fe"/>
+    <text x="153" y="142" text-anchor="middle" font-size="14" font-weight="700" fill="#312e81">Chunk 1</text>
+    <text x="153" y="162" text-anchor="middle" font-size="12" fill="#4338ca">fixed window</text>
+    <rect x="290" y="122" width="70" height="48" rx="8" fill="#fde68a"/>
+    <text x="325" y="151" text-anchor="middle" font-size="11" fill="#92400e">overlap</text>
+    <rect x="372" y="114" width="250" height="64" rx="10" fill="#ccfbf1" stroke="#99f6e4"/>
+    <text x="497" y="142" text-anchor="middle" font-size="14" font-weight="700" fill="#134e4a">Chunk 2</text>
+    <text x="497" y="162" text-anchor="middle" font-size="12" fill="#0f766e">next window</text>
+    <rect x="634" y="122" width="70" height="48" rx="8" fill="#fde68a"/>
+    <text x="669" y="151" text-anchor="middle" font-size="11" fill="#92400e">overlap</text>
+    <rect x="716" y="114" width="236" height="64" rx="10" fill="#fef3c7" stroke="#fde68a"/>
+    <text x="834" y="142" text-anchor="middle" font-size="14" font-weight="700" fill="#78350f">Chunk 3</text>
+    <text x="834" y="162" text-anchor="middle" font-size="12" fill="#92400e">heading or table</text>
+  </g>
+</svg>
